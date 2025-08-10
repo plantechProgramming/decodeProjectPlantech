@@ -11,6 +11,20 @@ import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Elevator;
 import org.firstinspires.ftc.teamcode.OpMode;
 
+import android.util.Size;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
+import org.firstinspires.ftc.vision.opencv.ColorRange;
+import org.firstinspires.ftc.vision.opencv.ImageRegion;
+import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor;
+import org.opencv.core.RotatedRect;
+
+import java.util.List;
+
+
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOp extends OpMode {
@@ -83,9 +97,10 @@ public class TeleOp extends OpMode {
             telemetry.addData("eH",EH.getCurrentPosition());
 
             telemetry.update();
-
         }
         EH.setPower(0);
+
+
     }
 
     @Override
