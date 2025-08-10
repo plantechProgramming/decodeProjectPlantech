@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -13,10 +14,13 @@ import org.firstinspires.ftc.teamcode.OpMode;
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOp extends OpMode {
+    @Override
+    protected void postInit() {
+        Imu.resetYaw();
+    }
 
     @Override
-    public void runOpMode(){
-
+    public void run(){
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
         Elevator lift = new Elevator(EA, EH, intake_center_angle,IntakeL,IntakeR, telemetry);
 
@@ -84,10 +88,9 @@ public class TeleOp extends OpMode {
         EH.setPower(0);
     }
 
-//    @Override
-//    protected void end() {
-//
-//    }
+    @Override
+    protected void end() {
 
+    }
 
 }

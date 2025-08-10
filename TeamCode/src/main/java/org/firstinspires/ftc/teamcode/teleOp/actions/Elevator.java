@@ -40,7 +40,7 @@ public class Elevator{
     Telemetry telemetry;
     public double radToTicks = Math.PI/3000;
 
-
+    // wtf is a type parameter
     public <roni2_intake> Elevator(DcMotorEx EA, DcMotorEx EH, Servo intake_center_angle,CRServo IntakeL,CRServo IntakeR, Telemetry telemetry){
         this.EH = EH;
         this.EA = EA;

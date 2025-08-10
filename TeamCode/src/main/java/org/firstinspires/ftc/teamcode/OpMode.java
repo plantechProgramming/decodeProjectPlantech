@@ -63,10 +63,6 @@ public abstract class OpMode extends LinearOpMode {
         EH.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         EH.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-
-
-
-
         intake_center_angle = hardwareMap.get(Servo.class,"intA");
         intake_center_angle.setPosition(0.7);
 
@@ -83,5 +79,25 @@ public abstract class OpMode extends LinearOpMode {
 
     }
 
+    @Override
+    public void runOpMode() throws InterruptedException  {
+        initialize();
+        waitForStart();
+        postInit();
+
+        dashboard = FtcDashboard.getInstance();
+        if (opModeIsActive()) {
+            run();
+        }
+
+        end();
+    }
+
+    protected void postInit() {
+
+    }
+    protected abstract void run();
+
+    protected abstract void end();
 }
 
