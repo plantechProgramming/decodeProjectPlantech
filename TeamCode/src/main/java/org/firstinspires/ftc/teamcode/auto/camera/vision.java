@@ -33,6 +33,7 @@ import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
 import org.firstinspires.ftc.vision.opencv.ColorRange;
 import org.firstinspires.ftc.vision.opencv.ImageRegion;
 
+import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor;
 import org.opencv.core.RotatedRect;
 
 import java.util.List;
@@ -84,11 +85,22 @@ public class vision extends LinearOpMode
          *                                    "pixels" in the range of 2-4 are suitable for low res images.
          */
         ColorBlobLocatorProcessor colorLocator = new ColorBlobLocatorProcessor.Builder()
-                .setTargetColorRange(ColorRange.YELLOW)         // use a predefined color match
+                .setTargetColorRange(ColorRange.BLUE)         // use a predefined color match
                 .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)    // exclude blobs inside blobs
-                .setRoi(ImageRegion.asUnityCenterCoordinates(-0.5, 0.5, 0.5, -0.5))  // search central 1/4 of camera view
+                .setRoi(ImageRegion.asUnityCenterCoordinates(-0.9, 0.9, 0.9, -0.9))  // search central 1/4 of camera view
                 .setDrawContours(true)                        // Show contours on the Stream Preview
                 .setBlurSize(5)                               // Smooth the transitions between different colors in image
+                .setErodeSize(43 )
+                .build();
+
+        PredominantColorProcessor colorSensor = new PredominantColorProcessor.Builder()
+                .setRoi(ImageRegion.asUnityCenterCoordinates(-0.1, 0.1, 0.1, -0.1))
+                .setSwatches(
+                        PredominantColorProcessor.Swatch.RED,
+                        PredominantColorProcessor.Swatch.BLUE,
+                        PredominantColorProcessor.Swatch.YELLOW,
+                        PredominantColorProcessor.Swatch.BLACK,
+                        PredominantColorProcessor.Swatch.WHITE)
                 .build();
 
 
@@ -106,6 +118,7 @@ public class vision extends LinearOpMode
          */
         VisionPortal portal = new VisionPortal.Builder()
                 .addProcessor(colorLocator)
+                .addProcessor(colorSensor)
                 .setCameraResolution(new Size(320, 240))
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam"))
                 .build();
@@ -124,7 +137,7 @@ public class vision extends LinearOpMode
 
                     ColorBlobLocatorProcessor.Util.filterByCriteria(
                             ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA,
-                            100, 20000, blobs);  // filter out very small blobs.
+                            50, 20000, blobs);  // filter out very small blobs.
 
 
                     telemetry.addLine("Area Density Aspect Arc Circle Center");

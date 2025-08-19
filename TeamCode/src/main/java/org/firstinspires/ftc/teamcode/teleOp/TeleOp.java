@@ -94,7 +94,6 @@ public class TeleOp extends OpMode {
             if(gamepad1.back){Imu.resetYaw();}
 
             telemetry.addData("ea",EA.getCurrentPosition());
-            telemetry.addData("eH",EH.getCurrentPosition());
 
             telemetry.update();
         }

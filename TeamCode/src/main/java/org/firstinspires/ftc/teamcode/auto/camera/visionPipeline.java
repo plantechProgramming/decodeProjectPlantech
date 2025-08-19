@@ -28,8 +28,8 @@ public class visionPipeline implements VisionProcessor {
     public ColorRange colorRange;
     Scalar min;
     Scalar max;
-    int state;
     Mat mask = new Mat();
+
 
     public visionPipeline(Scalar min, Scalar max){
         this.colorRange = new ColorRange(ColorSpace.YCrCb,min,max);
@@ -45,6 +45,7 @@ public class visionPipeline implements VisionProcessor {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
+
         Core.inRange(frame,min,max,mask);
         return null;
     }
