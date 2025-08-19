@@ -19,12 +19,10 @@
  * SOFTWARE.
  */
 
-package org.firstinspires.ftc.teamcode.auto.test;
+package org.firstinspires.ftc.teamcode.auto.camera;
 
 import android.util.Size;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -34,35 +32,13 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
 import org.firstinspires.ftc.vision.opencv.ColorRange;
 import org.firstinspires.ftc.vision.opencv.ImageRegion;
+
 import org.opencv.core.RotatedRect;
 
 import java.util.List;
 
-/*
- * This OpMode illustrates how to use a video source (camera) to locate specifically colored regions
- *
- * Unlike a "color sensor" which determines the color of an object in the field of view, this "color locator"
- * will search the Region Of Interest (ROI) in a camera image, and find any "blobs" of color that match the requested color range.
- * These blobs can be further filtered and sorted to find the one most likely to be the item the user is looking for.
- *
- * To perform this function, a VisionPortal runs a ColorBlobLocatorProcessor process.
- *   The ColorBlobLocatorProcessor process is created first, and then the VisionPortal is built to use this process.
- *   The ColorBlobLocatorProcessor analyses the ROI and locates pixels that match the ColorRange to form a "mask".
- *   The matching pixels are then collected into contiguous "blobs" of pixels.  The outer boundaries of these blobs are called its "contour".
- *   For each blob, the process then creates the smallest possible rectangle "boxFit" that will fully encase the contour.
- *   The user can then call getBlobs() to retrieve the list of Blobs, where each Blob contains the contour and the boxFit data.
- *   Note: The default sort order for Blobs is ContourArea, in descending order, so the biggest contours are listed first.
- *
- * To aid the user, a colored boxFit rectangle is drawn on the camera preview to show the location of each Blob
- * The original Blob contour can also be added to the preview.  This is helpful when configuring the ColorBlobLocatorProcessor parameters.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list
- */
-
-
 @TeleOp(name = "Concept: Vision Color-Locator")
-public class visionnnnn extends LinearOpMode
+public class vision extends LinearOpMode
 {
     @Override
     public void runOpMode()
@@ -115,6 +91,7 @@ public class visionnnnn extends LinearOpMode
                 .setBlurSize(5)                               // Smooth the transitions between different colors in image
                 .build();
 
+
         /*
          * Build a vision portal to run the Color Locator process.
          *
@@ -138,63 +115,24 @@ public class visionnnnn extends LinearOpMode
 
         // WARNING:  To be able to view the stream preview on the Driver Station, this code runs in INIT mode.
         while (opModeIsActive() || opModeInInit())
-        {
-            telemetry.addData("preview on/off", "... Camera Stream\n");
+                {
+                    telemetry.addData("preview on/off", "... Camera Stream\n");
 
-            // Read the current list
-            List<ColorBlobLocatorProcessor.Blob> blobs = colorLocator.getBlobs();
+                    // Read the current list
+                    List<ColorBlobLocatorProcessor.Blob> blobs = colorLocator.getBlobs();
 
-            /*
-             * The list of Blobs can be filtered to remove unwanted Blobs.
-             *   Note:  All contours will be still displayed on the Stream Preview, but only those that satisfy the filter
-             *          conditions will remain in the current list of "blobs".  Multiple filters may be used.
-             *
-             * To perform a filter
-             *   ColorBlobLocatorProcessor.Util.filterByCriteria(criteria, minValue, maxValue, blobs);
-             *
-             * The following criteria are currently supported.
-             *
-             * ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA
-             *   A Blob's area is the number of pixels contained within the Contour.  Filter out any that are too big or small.
-             *   Start with a large range and then refine the range based on the likely size of the desired object in the viewfinder.
-             *
-             * ColorBlobLocatorProcessor.BlobCriteria.BY_DENSITY
-             *   A blob's density is an indication of how "full" the contour is.
-             *   If you put a rubber band around the contour you would get the "Convex Hull" of the contour.
-             *   The density is the ratio of Contour-area to Convex Hull-area.
-             *
-             * ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO
-             *   A blob's Aspect ratio is the ratio of boxFit long side to short side.
-             *   A perfect Square has an aspect ratio of 1.  All others are > 1
-             *
-             * ColorBlobLocatorProcessor.BlobCriteria.BY_ARC_LENGTH
-             *   A blob's arc length is the perimeter of the blob.
-             *   This can be used in conjunction with an area filter to detect oddly shaped blobs.
-             *
-             * ColorBlobLocatorProcessor.BlobCriteria.BY_CIRCULARITY
-             *   A blob's circularity is how circular it is based on the known area and arc length.
-             *   A perfect circle has a circularity of 1.  All others are < 1
-             */
-            ColorBlobLocatorProcessor.Util.filterByCriteria(
-                    ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA,
-                    100, 20000, blobs);  // filter out very small blobs.
 
-            /*
-             * The list of Blobs can be sorted using the same Blob attributes as listed above.
-             * No more than one sort call should be made.  Sorting can use ascending or descending order.
-             *     ColorBlobLocatorProcessor.Util.sortByCriteria(ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA SortOrder.DESCENDING, blobs); // Default
-             *     ColorBlobLocatorProcessor.Util.sortByCriteria(ColorBlobLocatorProcessor.BlobCriteria.BY_DENSITY SortOrder.DESCENDING, blobs);
-             *     ColorBlobLocatorProcessor.Util.sortByCriteria(ColorBlobLocatorProcessor.BlobCriteria.BY_ASPECT_RATIO SortOrder.DESCENDING, blobs);
-             *     ColorBlobLocatorProcessor.Util.sortByCriteria(ColorBlobLocatorProcessor.BlobCriteria.BY_ARC_LENGTH SortOrder.DESCENDING, blobs);
-             *     ColorBlobLocatorProcessor.Util.sortByCriteria(ColorBlobLocatorProcessor.BlobCriteria.BY_CIRCULARITY SortOrder.DESCENDING, blobs);
-             */
+                    ColorBlobLocatorProcessor.Util.filterByCriteria(
+                            ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA,
+                            100, 20000, blobs);  // filter out very small blobs.
 
-            telemetry.addLine("Area Density Aspect Arc Circle Center");
 
-            // Display the size (area) and center location for each Blob.
-            for(ColorBlobLocatorProcessor.Blob b : blobs)
-            {
-                RotatedRect boxFit = b.getBoxFit();
+                    telemetry.addLine("Area Density Aspect Arc Circle Center");
+
+                    // Display the size (area) and center location for each Blob.
+                    for(ColorBlobLocatorProcessor.Blob b : blobs)
+                    {
+                        RotatedRect boxFit = b.getBoxFit();
                 telemetry.addLine(String.format("%5d  %4.2f  %5.2f %3d %5.3f (%3d,%3d)",
                           b.getContourArea(), b.getDensity(), b.getAspectRatio(), (int) b.getArcLength(), b.getCircularity(), (int) boxFit.center.x, (int) boxFit.center.y));
             }

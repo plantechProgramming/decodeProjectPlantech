@@ -1,10 +1,16 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.rowanmcalpin.nextftc.core.Subsystem;
 import com.rowanmcalpin.nextftc.core.command.Command;
+import com.rowanmcalpin.nextftc.core.command.CommandManager;
 import com.rowanmcalpin.nextftc.core.command.groups.ParallelGroup;
 import com.rowanmcalpin.nextftc.core.command.groups.SequentialGroup;
+import com.rowanmcalpin.nextftc.core.command.utility.LambdaCommand;
+import com.rowanmcalpin.nextftc.core.command.utility.NullCommand;
 import com.rowanmcalpin.nextftc.ftc.NextFTCOpMode;
+import com.rowanmcalpin.nextftc.ftc.hardware.controllables.HoldPosition;
 
 import org.firstinspires.ftc.teamcode.auto.subsystems.ElevatorAngleNext;
 import org.firstinspires.ftc.teamcode.auto.subsystems.intake.nextIntakeAngle;
@@ -50,8 +56,12 @@ public class AutoCommands extends NextFTCOpMode{
              );
     }
 
-    // not very useful
 
+    public void Default(Subsystem subsystem){
+        // outline: shoud check if commands are running using .hasCommands(subsystem
+        if (CommandManager.INSTANCE.hasCommandsUsing(subsystem)){
+        }
+    }
 
 
     @Override
