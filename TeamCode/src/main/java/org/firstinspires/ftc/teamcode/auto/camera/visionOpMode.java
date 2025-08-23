@@ -20,10 +20,17 @@ public class visionOpMode extends LinearOpMode {
     private visionPipeline pipeLine;
     @Override
     public void runOpMode() throws InterruptedException {
-        Scalar min = new Scalar(23, 23, 179);
-        Scalar max = new Scalar(5, 5, 255);
 
-        pipeLine = new visionPipeline(min,max);
+        //yellow RGB
+        Scalar minYellow = new Scalar(20,50,50);
+        Scalar maxYellow = new Scalar(40,255,255);
+
+        //red
+        Scalar minRed = new Scalar(112, 153, 230);
+        Scalar maxRed = new Scalar(190, 230, 255);
+
+
+        pipeLine = new visionPipeline(minYellow,maxYellow);
 
         waitForStart();
 

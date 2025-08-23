@@ -26,15 +26,15 @@ import java.util.List;
 
 public class visionPipeline implements VisionProcessor {
     public ColorRange colorRange;
-    Scalar min;
+    int x = 75;
     Scalar max;
-    Mat mask = new Mat();
-
+    Scalar min;
+    int state = 0;
 
     public visionPipeline(Scalar min, Scalar max){
-        this.colorRange = new ColorRange(ColorSpace.YCrCb,min,max);
-        this.min = min;
+        this.colorRange = new ColorRange(ColorSpace.HSV,min,max);
         this.max = max;
+        this.min = min;
 
     }
 
@@ -46,12 +46,38 @@ public class visionPipeline implements VisionProcessor {
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
 
-        Core.inRange(frame,min,max,mask);
+        // TODO: init mats better
+        Mat mat0 = new Mat();
+        Mat mat1 = new Mat();
+        Mat mat2 = new Mat();
+
+        // mat_i is the input for case i, mat i+1 is output
+        switch (state){
+            case 0:
+                // make black if not in range, white otherwise
+                Imgproc.cvtColor(frame,mat0,Imgproc.COLOR_RGB2HSV);
+                Core.inRange(mat0,min,max,mat1);
+                state = 1;
+                break;
+            case 1:
+                // make previous whites the initial color
+                Imgproc.cvtColor(frame, frame,Imgproc.COLOR_RGB2HSV);
+                Core.bitwise_and(frame, frame,mat2,mat1); // frame && frame == frame, but on it you use the mask
+                state = 2;
+                break;
+            default:
+                Imgproc.cvtColor(mat2,frame,Imgproc.COLOR_HSV2RGB);
+        }
+
         return null;
     }
 
     @Override
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
 
+    }
+
+    public int getState(){
+        return state;
     }
 }

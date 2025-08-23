@@ -31,19 +31,25 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
 import org.firstinspires.ftc.vision.opencv.ColorRange;
+import org.firstinspires.ftc.vision.opencv.ColorSpace;
 import org.firstinspires.ftc.vision.opencv.ImageRegion;
-
+import java.lang.Math;
 import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor;
 import org.opencv.core.RotatedRect;
+import org.opencv.core.Scalar;
 
 import java.util.List;
 
-@TeleOp(name = "Concept: Vision Color-Locator")
+@TeleOp(name = "ColorTests")
 public class vision extends LinearOpMode
 {
     @Override
     public void runOpMode()
     {
+        int x = 75;
+        Scalar min = new Scalar(Math.max(32 , 0),Math.max(146 - x, 0) ,Math.max(16 - x, 0));
+        Scalar max = new Scalar(Math.min(255, 255), Math.min(146+ x, 255), Math.min(16+ x, 255));
+        ColorRange yellow = new ColorRange(ColorSpace.YCrCb,min,max);
         /* Build a "Color Locator" vision processor based on the ColorBlobLocatorProcessor class.
          * - Specify the color range you are looking for.  You can use a predefined color, or create you own color range
          *     .setTargetColorRange(ColorRange.BLUE)                      // use a predefined color match
@@ -85,12 +91,12 @@ public class vision extends LinearOpMode
          *                                    "pixels" in the range of 2-4 are suitable for low res images.
          */
         ColorBlobLocatorProcessor colorLocator = new ColorBlobLocatorProcessor.Builder()
-                .setTargetColorRange(ColorRange.BLUE)         // use a predefined color match
+                .setTargetColorRange(yellow)         // use a predefined color match
                 .setContourMode(ColorBlobLocatorProcessor.ContourMode.EXTERNAL_ONLY)    // exclude blobs inside blobs
                 .setRoi(ImageRegion.asUnityCenterCoordinates(-0.9, 0.9, 0.9, -0.9))  // search central 1/4 of camera view
                 .setDrawContours(true)                        // Show contours on the Stream Preview
                 .setBlurSize(5)                               // Smooth the transitions between different colors in image
-                .setErodeSize(43 )
+                .setErodeSize(3)
                 .build();
 
         PredominantColorProcessor colorSensor = new PredominantColorProcessor.Builder()
@@ -139,19 +145,27 @@ public class vision extends LinearOpMode
                             ColorBlobLocatorProcessor.BlobCriteria.BY_CONTOUR_AREA,
                             50, 20000, blobs);  // filter out very small blobs.
 
+//
+//                    telemetry.addLine("Area Density Aspect Arc Circle Center");
+//
+//                    // Display the size (area) and center location for each Blob.
+//                    for(ColorBlobLocatorProcessor.Blob b : blobs)
+//                    {
+//                        RotatedRect boxFit = b.getBoxFit();
+//                telemetry.addLine(String.format("%5d  %4.2f  %5.2f %3d %5.3f (%3d,%3d)",
+//                          b.getContourArea(), b.getDensity(), b.getAspectRatio(), (int) b.getArcLength(), b.getCircularity(), (int) boxFit.center.x, (int) boxFit.center.y));
+                    PredominantColorProcessor.Result result = colorSensor.getAnalysis();
 
-                    telemetry.addLine("Area Density Aspect Arc Circle Center");
-
-                    // Display the size (area) and center location for each Blob.
-                    for(ColorBlobLocatorProcessor.Blob b : blobs)
-                    {
-                        RotatedRect boxFit = b.getBoxFit();
-                telemetry.addLine(String.format("%5d  %4.2f  %5.2f %3d %5.3f (%3d,%3d)",
-                          b.getContourArea(), b.getDensity(), b.getAspectRatio(), (int) b.getArcLength(), b.getCircularity(), (int) boxFit.center.x, (int) boxFit.center.y));
+                    telemetry.addData("Best Match", result.closestSwatch);
+                        telemetry.addLine(String.format("RGB   (%3d, %3d, %3d)", result.RGB[0], result.RGB[1], result.RGB[2]));
+                        telemetry.addLine(String.format("HSV   (%3d, %3d, %3d)", result.HSV[0], result.HSV[1], result.HSV[2]));
+                        telemetry.addLine(String.format("YCrCb (%3d, %3d, %3d)", result.YCrCb[0], result.YCrCb[1], result.YCrCb[2]));
+                        telemetry.update();
             }
 
             telemetry.update();
             sleep(50);
         }
     }
-}
+
+
