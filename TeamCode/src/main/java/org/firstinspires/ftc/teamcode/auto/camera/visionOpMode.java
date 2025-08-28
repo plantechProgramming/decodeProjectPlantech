@@ -13,7 +13,7 @@ import org.firstinspires.ftc.vision.opencv.ImageRegion;
 import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor;
 import org.opencv.core.Scalar;
 
-@TeleOp(name = "grayscale")
+@TeleOp(name = "vision")
 public class visionOpMode extends LinearOpMode {
 //    public int thresh = 100;
 //    private VisionPortal visionPortal;
@@ -21,11 +21,12 @@ public class visionOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        //yellow RGB
-        Scalar minYellow = new Scalar(20,50,50);
-        Scalar maxYellow = new Scalar(40,255,255);
+        // yellow - in opencv hsv
+        // opencv hsv != normal hsv, h:0-179, s:0-255,v:0-255
+        Scalar minYellow = new Scalar(16, 150, 99);
+        Scalar maxYellow = new Scalar(40, 255, 255);
 
-        //red
+        // red
         Scalar minRed = new Scalar(112, 153, 230);
         Scalar maxRed = new Scalar(190, 230, 255);
 

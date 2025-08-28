@@ -47,28 +47,15 @@ public class visionPipeline implements VisionProcessor {
     public Object processFrame(Mat frame, long captureTimeNanos) {
 
         // TODO: init mats better
-        Mat mat0 = new Mat();
-        Mat mat1 = new Mat();
-        Mat mat2 = new Mat();
+        Mat mask = new Mat();
+        Mat maskApplied = new Mat();
+        Mat onlyEdges = new Mat();
         state = 0;
 
-        // mat_i is the input for case i, mat i+1 is output
-        switch (state){
-            case 0:
-                // make black if not in range, white otherwise
-                Imgproc.cvtColor(frame,mat0,Imgproc.COLOR_RGB2HSV);
-                Core.inRange(mat0,min,max,mat1);
-                state = 1;
-            case 1:
-                // make previous whites the initial color
-                Imgproc.cvtColor(frame, frame,Imgproc.COLOR_RGB2HSV);
-                Core.bitwise_and(frame, frame,mat2,mat1); // frame && frame == frame, but on it you use the mask
-                state = 2;
-            default:
-                Imgproc.cvtColor(mat2,frame,Imgproc.COLOR_HSV2RGB);
-                break;
-        }
-
+        this.makeMask(frame,mask);
+        this.applyMask(frame,mask,maskApplied);
+        this.detectEdge(maskApplied,onlyEdges);
+        Imgproc.cvtColor(onlyEdges,frame, Imgproc.COLOR_GRAY2RGB);
         return null;
     }
 
@@ -77,7 +64,21 @@ public class visionPipeline implements VisionProcessor {
 
     }
 
-    public int getState(){
-        return state;
+    public void makeMask(Mat input, Mat output){
+        Mat frameHSV = new Mat();
+
+        Imgproc.cvtColor(input,frameHSV,Imgproc.COLOR_RGB2HSV);
+        Core.inRange(frameHSV,min,max,output);
     }
+
+    public void applyMask(Mat frame, Mat mask, Mat output){
+        Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGB2HSV);
+        Core.bitwise_and(frame, frame, output, mask);
+    }
+    public void detectEdge(Mat input, Mat output){
+        Imgproc.cvtColor(input,input,Imgproc.COLOR_HSV2RGB);
+        Imgproc.cvtColor(input,input,Imgproc.COLOR_RGB2GRAY);
+        Imgproc.Canny(input,output,100,200);
+    }
+
 }
