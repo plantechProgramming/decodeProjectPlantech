@@ -3,11 +3,14 @@ package org.firstinspires.ftc.teamcode.auto.subsystems;
 
 import com.rowanmcalpin.nextftc.core.Subsystem;
 import com.rowanmcalpin.nextftc.core.command.Command;
+import com.rowanmcalpin.nextftc.core.command.CommandManager;
 import com.rowanmcalpin.nextftc.core.command.groups.ParallelRaceGroup;
+import com.rowanmcalpin.nextftc.core.command.groups.SequentialGroup;
 import com.rowanmcalpin.nextftc.core.command.utility.LambdaCommand;
 import com.rowanmcalpin.nextftc.core.command.utility.delays.Delay;
 import com.rowanmcalpin.nextftc.core.control.controllers.PIDFController;
 import com.rowanmcalpin.nextftc.core.control.controllers.feedforward.StaticFeedforward;
+import com.rowanmcalpin.nextftc.ftc.hardware.controllables.HoldPosition;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.MotorEx;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.RunToPosition;
 
@@ -27,16 +30,17 @@ public class nextLift extends Subsystem {
     }
 
     public Command toHeight(double height, double sec) {
-        return new ParallelRaceGroup(
-                new RunToPosition(motor,height,controller,this).perpetually(),
-                new Delay(sec)
+        return new SequentialGroup(
+                new RunToPosition(motor,height,controller,this),
+                new HoldPosition(motor, controller, this).perpetually().endAfter(sec)
+
         );
 
     }
 
-//   @Override
-//    public Command getDefaultCommand() {
-//       return new HoldPosition(motor, controller, this);
+
+//    public Command cb() {
+//       if(CommandManager.INSTANCE.hasCommands() == False)
 //    }
 
     @Override

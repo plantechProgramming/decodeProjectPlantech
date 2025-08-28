@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.auto.camera;
 
 import android.util.Size;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.vision.opencv.ImageRegion;
 import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor;
 import org.opencv.core.Scalar;
 
-@TeleOp(name = "vision")
+@Autonomous(name = "vision")
 public class visionOpMode extends LinearOpMode {
 //    public int thresh = 100;
 //    private VisionPortal visionPortal;
@@ -47,7 +48,7 @@ public class visionOpMode extends LinearOpMode {
 
         // needed to run continuously
         while (opModeIsActive() || opModeInInit()) {
-            telemetry.addLine("Area Density Aspect Arc Circle Center");
+//            telemetry.addLine("Area Density Aspect Arc Circle Center");
             telemetry.update();
             sleep(20);
         }
