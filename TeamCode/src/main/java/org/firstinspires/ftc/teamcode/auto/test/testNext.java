@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.auto.subsystems.defaultCommand;
 @Autonomous(name = "emily")
 public class testNext extends NextFTCOpMode {
 
+
     public testNext() {
         super(nextLift.INSTANCE, nextIntakeAngle.INSTANCE, ElevatorAngleNext.INSTANCE, nextIntakeClaw.INSTANCE,defaultCommand.INSTANCE);
     }
@@ -43,6 +44,6 @@ public class testNext extends NextFTCOpMode {
     @Override
     public void onStartButtonPressed() {
 
-        firstRoutine().invoke();
+        realRoutine().invoke();
     }
 }

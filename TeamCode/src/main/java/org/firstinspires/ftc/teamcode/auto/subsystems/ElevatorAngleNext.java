@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.subsystems;
 
-import com.rowanmcalpin.nextftc.core.Subsystem;
+import com.dev.nextftc.core.Subsystem;
 import com.rowanmcalpin.nextftc.core.command.Command;
 import com.rowanmcalpin.nextftc.core.command.groups.ParallelRaceGroup;
 import com.rowanmcalpin.nextftc.core.command.groups.SequentialGroup;
@@ -8,6 +8,7 @@ import com.rowanmcalpin.nextftc.core.command.utility.LambdaCommand;
 import com.rowanmcalpin.nextftc.core.command.utility.delays.Delay;
 import com.rowanmcalpin.nextftc.core.control.controllers.PIDFController;
 import com.rowanmcalpin.nextftc.core.control.controllers.feedforward.StaticFeedforward;
+import com.rowanmcalpin.nextftc.ftc.hardware.controllables.HoldPosition;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.MotorEx;
 import com.rowanmcalpin.nextftc.ftc.hardware.controllables.RunToPosition;
 
@@ -41,7 +42,7 @@ public class ElevatorAngleNext  extends Subsystem {
 
     @NotNull
     public Command getDefaultCommand() {
-        return HoldPosition.hold(EA,PID_EA);
+        return new HoldPosition(EA,PID_EA, this);
     }
 
     @Override

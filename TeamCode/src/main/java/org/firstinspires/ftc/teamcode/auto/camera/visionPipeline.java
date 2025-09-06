@@ -73,6 +73,8 @@ public class visionPipeline implements VisionProcessor {
 
     public void applyMask(Mat frame, Mat mask, Mat output){
         Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGB2HSV);
+        //frame && frame == frame, we do this to apply the mask on what was already masked,
+        // and returns the original frame to what was not masked
         Core.bitwise_and(frame, frame, output, mask);
     }
     public void detectEdge(Mat input, Mat output){
