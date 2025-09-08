@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto.subsystems;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.SequentialGroup;
