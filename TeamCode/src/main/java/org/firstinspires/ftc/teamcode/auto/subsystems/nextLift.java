@@ -15,7 +15,6 @@ public class nextLift implements Subsystem {
     private nextLift() { }
 
     private MotorEx motor = new MotorEx("EH")
-            .zeroed()
             .brakeMode();
 
     private ControlSystem controlSystem = ControlSystem.builder()
@@ -23,15 +22,14 @@ public class nextLift implements Subsystem {
             .elevatorFF(0)
             .build();
 
-    public Command toLow = new RunToPosition(controlSystem, 0).requires(this);
-    public Command toMiddle = new RunToPosition(controlSystem, 500).requires(this);
     public Command toHeight(int height,int tolerance){
-        return new RunToPosition(controlSystem,height,tolerance).requires(this);
+        return new RunToPosition(controlSystem,-height,tolerance).requires(this);
     }
 
 
     @Override
     public void periodic() {
         motor.setPower(controlSystem.calculate(motor.getState()));
+
     }
 }

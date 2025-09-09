@@ -4,12 +4,15 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 
 
@@ -18,6 +21,7 @@ public abstract class OpMode extends LinearOpMode {
 //    protected CRServo ;
     protected Servo roni2_intake,intake_center_angle;
     protected CRServo IntakeL,IntakeR;
+    protected NormalizedColorSensor colorSensor;
     protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA;
     protected ElapsedTime runtime = new ElapsedTime();
     public boolean liftFlag = false;
@@ -66,7 +70,7 @@ public abstract class OpMode extends LinearOpMode {
 
         intake_center_angle = hardwareMap.get(Servo.class,"intA");
         intake_center_angle.setPosition(0.7);
-
+        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
         IntakeR = hardwareMap.get(CRServo.class,"IntakeR");
         IntakeL = hardwareMap.get(CRServo.class,"IntakeL");
 
@@ -98,6 +102,10 @@ public abstract class OpMode extends LinearOpMode {
 
     }
     protected abstract void run();
+//    @Override
+//    protected abstract void init();
+//    @Override
+//    protected abstract void loop();
 
     protected abstract void end();
 }

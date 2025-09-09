@@ -4,14 +4,21 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.auto.camera.ColorSensorTest;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Elevator;
 import org.firstinspires.ftc.teamcode.OpMode;
-
+import org.firstinspires.ftc.teamcode.auto.camera.aprilTagsTest;
 import android.util.Size;
+
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -37,8 +44,11 @@ public class TeleOp extends OpMode {
     public void run(){
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
         Elevator lift = new Elevator(EA, EH, intake_center_angle,IntakeL,IntakeR, telemetry);
-
+        ColorSensorTest cSencor = new ColorSensorTest();
+        cSencor.init(hardwareMap);
         boolean is_up = false;
+        aprilTagsTest tags = new aprilTagsTest();
+        VisionPortal visionPortal;
 
         double forward; //-1 to 1
         double turn;
@@ -60,6 +70,8 @@ public class TeleOp extends OpMode {
             driveTrain.drive(forward, drift, turn, botHeading, 1);
             telemetry.addData("x", DriveFrontRight.getCurrentPosition());
             telemetry.addData("y",DriveBackLeft.getCurrentPosition());
+            tags.initAprilTag();
+
 
 
             if(gamepad1.x && !slow){
@@ -71,12 +83,18 @@ public class TeleOp extends OpMode {
 
             } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
             telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
+            if (cSencor.getDetectedColor(telemetry) == ColorSensorTest.DetectedColor.RED){lift.intakefunc(true);}
+            else{lift.intakefunc(false);}
+
+            if (tags.Order == "GPP"){
+                lift.intakefunc(true);
+            }
 
 
             if(gamepad1.back){Imu.resetYaw();}
 
             telemetry.addData("ea",EA.getCurrentPosition());
-
+            telemetry.addData("recognized color: ", cSencor.getDetectedColor(telemetry));
             telemetry.update();
         }
         EH.setPower(0);

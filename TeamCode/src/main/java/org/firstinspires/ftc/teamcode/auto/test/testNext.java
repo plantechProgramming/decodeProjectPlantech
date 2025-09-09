@@ -24,12 +24,12 @@ public class testNext extends NextFTCOpMode {
 
     private Command autonomousRoutine() {
         return new SequentialGroup(
-                nextLift.INSTANCE.toHeight(-1000, 100)
+                nextLift.INSTANCE.toHeight(1000, 50)
         );
     }
 
     @Override
     public void onStartButtonPressed() {
-        autonomousRoutine().invoke();
+        autonomousRoutine().schedule();
     }
 }

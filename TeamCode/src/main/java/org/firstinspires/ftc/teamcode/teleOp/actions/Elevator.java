@@ -73,5 +73,14 @@ public class Elevator{
              EH.setPower(0);
          }
     }
+    public void intakefunc(boolean dir){
+       if(dir == true){
+        IntakeL.setPower(1);
+        IntakeR.setPower(-1);
+        } else if (dir == false) {
+           IntakeL.setPower(0);
+           IntakeR.setPower(0);
+       }
+    }
 }
 
