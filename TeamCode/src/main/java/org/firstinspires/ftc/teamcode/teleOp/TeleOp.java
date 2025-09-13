@@ -47,8 +47,14 @@ public class TeleOp extends OpMode {
         ColorSensorTest cSencor = new ColorSensorTest();
         cSencor.init(hardwareMap);
         boolean is_up = false;
-        aprilTagsTest tags = new aprilTagsTest();
-        VisionPortal visionPortal;
+        aprilTagsTest test = new aprilTagsTest();
+        AprilTagProcessor aprilTag = new AprilTagProcessor.Builder().build();
+
+        VisionPortal visionPortal = new VisionPortal.Builder()
+                .setCamera(hardwareMap.get(WebcamName.class, "Webcam"))
+                .addProcessor(aprilTag)
+                .build();
+
 
         double forward; //-1 to 1
         double turn;
@@ -61,6 +67,7 @@ public class TeleOp extends OpMode {
 
 
         while (opModeIsActive() ) {
+            test.telemetryAprilTag(aprilTag);
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
@@ -70,7 +77,7 @@ public class TeleOp extends OpMode {
             driveTrain.drive(forward, drift, turn, botHeading, 1);
             telemetry.addData("x", DriveFrontRight.getCurrentPosition());
             telemetry.addData("y",DriveBackLeft.getCurrentPosition());
-            tags.initAprilTag();
+//            tags.initAprilTag();
 
 
 
@@ -84,17 +91,21 @@ public class TeleOp extends OpMode {
             } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
             telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
             if (cSencor.getDetectedColor(telemetry) == ColorSensorTest.DetectedColor.RED){lift.intakefunc(true);}
-            else{lift.intakefunc(false);}
-
-            if (tags.Order == "GPP"){
+            else if (test.Order.equals("GPP")) {
                 lift.intakefunc(true);
-            }
+            } else{lift.turnOffIntake();}
+
+//            if (test.Order == "GPP"){
+//                lift.intakefunc(true);
+//            }else{lift.intakefunc(false);}
+
 
 
             if(gamepad1.back){Imu.resetYaw();}
 
             telemetry.addData("ea",EA.getCurrentPosition());
             telemetry.addData("recognized color: ", cSencor.getDetectedColor(telemetry));
+            telemetry.addData("Order: ",test.Order);
             telemetry.update();
         }
         EH.setPower(0);

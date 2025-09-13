@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.auto.camera;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -12,17 +15,20 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 @Autonomous(name = "aprilTags")
 public class aprilTagsTest  extends LinearOpMode {
-//    private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
-
     /**
      * The variable to store our instance of the AprilTag processor.
      */
-    private AprilTagProcessor aprilTag;
-    public  String Order = "NNN";
+//    private AprilTagProcessor aprilTag;
+    public String Order = "NNN";
     /**
      * The variable to store our instance of the vision portal.
      */
@@ -39,25 +45,23 @@ public class aprilTagsTest  extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-        if (opModeIsActive()) {
             while (opModeIsActive()) {
 
-                telemetryAprilTag();
+//                telemetryAprilTag(aprilTag);
 
                 // Push telemetry to the Driver Station.
                 telemetry.update();
 
                 // Save CPU resources; can resume streaming when needed.
-                if (gamepad1.dpad_down) {
-                    visionPortal.stopStreaming();
-                } else if (gamepad1.dpad_up) {
-                    visionPortal.resumeStreaming();
-                }
+//                if (gamepad1.dpad_down) {
+//                    visionPortal.stopStreaming();
+//                } else if (gamepad1.dpad_up) {
+//                    visionPortal.resumeStreaming();
+//                }
 
                 // Share the CPU.
                 sleep(20);
             }
-        }
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();
 
@@ -69,7 +73,7 @@ public class aprilTagsTest  extends LinearOpMode {
     public void initAprilTag() {
 
         // Create the AprilTag processor.
-        aprilTag = new AprilTagProcessor.Builder()
+//        aprilTag = new AprilTagProcessor.Builder()
 
                 // The following default settings are available to un-comment and edit as needed.
 //                .setDrawAxes(true)
@@ -85,7 +89,7 @@ public class aprilTagsTest  extends LinearOpMode {
                 //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
                 // ... these parameters are fx, fy, cx, cy.
 
-                .build();
+//                .build();
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
         // eg: Some typical detection data using a Logitech C920 WebCam
@@ -118,7 +122,7 @@ public class aprilTagsTest  extends LinearOpMode {
         //builder.setAutoStopLiveView(false);
 
         // Set and enable the processor.
-        builder.addProcessor(aprilTag);
+//        builder.addProcessor(aprilTag);
 
         // Build the Vision Portal, using the above settings.
         visionPortal = builder.build();
@@ -132,29 +136,35 @@ public class aprilTagsTest  extends LinearOpMode {
     /**
      * Add telemetry about AprilTag detections.
      */
-    private void telemetryAprilTag() {
+    public void telemetryAprilTag(AprilTagProcessor aprilTag) {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        AprilTagDetection detection = null;
+
         telemetry.addData("# AprilTags Detected", currentDetections.size());
 
         // Step through the list of detections and display info for each one.
-        for (AprilTagDetection detection : currentDetections) {
+        for (AprilTagDetection Detection : currentDetections) {
+            if (Detection.id != 20 && Detection.id != 24){
+                detection = Detection;
+            }
+        }
+        if(detection == null){
+            telemetry.addLine(String.format(("\n==== (Order: NNN)")));
+            Order = "NNN";
+        }
+        else if(detection.id == 21) {
+            telemetry.addLine(String.format("\n==== (Order: GPP)"));
+            Order = "GPP";
+        } else if (detection.id == 22) {
+            telemetry.addLine(String.format(("\n==== (Order: PGP)")));
+            Order = "PGP";
+        } else if (detection.id == 23) {
+            telemetry.addLine(String.format(("\n==== (Order: PPG)")));
+            Order = "PPG";
+        }
 
-                if (detection.id == 21){
-                    telemetry.addLine(String.format("\n==== (Order: GPP)"));
-                    Order = "GPP";
-                } else if (detection.id ==22) {
-                    telemetry.addLine(String.format(("\n==== (Order: PGP)")));
-                    Order = "PGP";
-                } else if (detection.id == 23) {
-                    telemetry.addLine(String.format(("\n==== (Order: PPG)")));
-                    Order = "PPG";
-
-                }
-            telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
-                telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
-
-        }   // end for() loop
+        // end for() loop
 
         // Add "key" information to telemetry
 

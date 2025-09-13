@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class ColorTests extends OpMode {
     ColorSensorTest color = new ColorSensorTest();
     ColorSensorTest.DetectedColor detectedColor;
-    public boolean colormatch;
+//    public boolean colormatch;
 
     @Override
     public void init() {

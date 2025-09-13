@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.auto.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.auto.subsystems.ElevatorAngleNext;
 import org.firstinspires.ftc.teamcode.auto.subsystems.nextLift;
 
 import dev.nextftc.core.commands.Command;
@@ -17,19 +18,20 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 public class testNext extends NextFTCOpMode {
     public testNext() {
         addComponents(
-                new SubsystemComponent(nextLift.INSTANCE),
+                new SubsystemComponent(nextLift.INSTANCE, ElevatorAngleNext.INSTANCE),
                 BulkReadComponent.INSTANCE
         );
     }
 
     private Command autonomousRoutine() {
         return new SequentialGroup(
+                ElevatorAngleNext.INSTANCE.toAngle(700, 50),
                 nextLift.INSTANCE.toHeight(1000, 50)
         );
     }
-
     @Override
     public void onStartButtonPressed() {
         autonomousRoutine().schedule();
     }
+
 }
