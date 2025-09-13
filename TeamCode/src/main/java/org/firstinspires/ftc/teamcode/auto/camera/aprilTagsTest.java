@@ -42,7 +42,7 @@ public class aprilTagsTest  extends LinearOpMode {
         if (opModeIsActive()) {
             while (opModeIsActive()) {
 
-                telemetryAprilTag();
+                telemetryAprilTag(aprilTag);
 
                 // Push telemetry to the Driver Station.
                 telemetry.update();
@@ -132,29 +132,35 @@ public class aprilTagsTest  extends LinearOpMode {
     /**
      * Add telemetry about AprilTag detections.
      */
-    private void telemetryAprilTag() {
+    public void telemetryAprilTag(AprilTagProcessor aprilTag) {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        AprilTagDetection detection = null;
+
         telemetry.addData("# AprilTags Detected", currentDetections.size());
 
         // Step through the list of detections and display info for each one.
-        for (AprilTagDetection detection : currentDetections) {
+        for (AprilTagDetection Detection : currentDetections) {
+            if (Detection.id != 20 && Detection.id != 24){
+                detection = Detection;
+            }
+        }
+        if(detection == null){
+            telemetry.addLine(String.format(("\n==== (Order: NNN)")));
+            Order = "NNN";
+        }
+        else if(detection.id == 21) {
+            telemetry.addLine(String.format("\n==== (Order: GPP)"));
+            Order = "GPP";
+        } else if (detection.id == 22) {
+            telemetry.addLine(String.format(("\n==== (Order: PGP)")));
+            Order = "PGP";
+        } else if (detection.id == 23) {
+            telemetry.addLine(String.format(("\n==== (Order: PPG)")));
+            Order = "PPG";
+        }
 
-                if (detection.id == 21){
-                    telemetry.addLine(String.format("\n==== (Order: GPP)"));
-                    Order = "GPP";
-                } else if (detection.id ==22) {
-                    telemetry.addLine(String.format(("\n==== (Order: PGP)")));
-                    Order = "PGP";
-                } else if (detection.id == 23) {
-                    telemetry.addLine(String.format(("\n==== (Order: PPG)")));
-                    Order = "PPG";
-
-                }
-            telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
-                telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
-
-        }   // end for() loop
+        // end for() loop
 
         // Add "key" information to telemetry
 
