@@ -14,8 +14,6 @@ public class ColorSensorTest {
         GREEN,
         BLUE,
         RED,
-        PURPLE,
-
         UNKNOWN
     }
     public void init(HardwareMap hawamap){
@@ -30,7 +28,7 @@ public class ColorSensorTest {
         normGreen = colors.green/ colors.alpha;
         normBlue = colors.blue/ colors.alpha;
 
-        //TODO add the if statements for specific colors
+
         /*
             red green blue
         Green:<.5,.9>,<.4

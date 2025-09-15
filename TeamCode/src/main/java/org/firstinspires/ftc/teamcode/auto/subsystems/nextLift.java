@@ -15,6 +15,8 @@ public class nextLift implements Subsystem {
     private nextLift() { }
 
     private MotorEx motor = new MotorEx("EH")
+            .zeroed()
+            .reversed()
             .brakeMode();
 
     private ControlSystem controlSystem = ControlSystem.builder()
@@ -23,7 +25,7 @@ public class nextLift implements Subsystem {
             .build();
 
     public Command toHeight(int height,int tolerance){
-        return new RunToPosition(controlSystem,-height,tolerance).requires(this);
+        return new RunToPosition(controlSystem,height,tolerance).requires(this);
     }
 
 

@@ -74,13 +74,14 @@ public class Elevator{
          }
     }
     public void intakefunc(boolean dir){
-       if(dir == true){
-        IntakeL.setPower(1);
-        IntakeR.setPower(-1);
-        } else if (dir == false) {
+       if(dir == true) {
+           IntakeL.setPower(1);
+           IntakeR.setPower(-1);
+       }
+    }
+    public void turnOffIntake(){
            IntakeL.setPower(0);
            IntakeR.setPower(0);
-       }
     }
 }
 
