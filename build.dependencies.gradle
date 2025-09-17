@@ -5,9 +5,11 @@ repositories {
     maven { url = 'https://maven.brott.dev/' }
     maven { url= "https://maven.pedropathing.com/" }
     maven { url = "https://maven.rowanmcalpin.com/" }
+    maven { url = "https://mymaven.bylazar.com/releases" }
 }
 
 dependencies {
+    // FIRST quickstart
     implementation 'org.firstinspires.ftc:Inspection:10.3.0'
     implementation 'org.firstinspires.ftc:Blocks:10.3.0'
     implementation 'org.firstinspires.ftc:RobotCore:10.3.0'
@@ -18,12 +20,18 @@ dependencies {
     implementation 'org.firstinspires.ftc:Vision:10.3.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
-    implementation 'com.pedropathing:pedro:1.0.9'
+    // FTCdashboard
     implementation 'com.acmerobotics.dashboard:dashboard:0.4.16'
 
+    // nextFTC
     implementation 'dev.nextftc:ftc:1.0.0'
     implementation 'dev.nextftc:hardware:1.0.0'
     implementation 'dev.nextftc:control:1.0.0'
 
+    // pedroPathing
+    implementation 'com.pedropathing:pedro:1.0.9'
+
+    // panels
+    implementation 'com.bylazar:fullpanels:1.0.6'
 }
 

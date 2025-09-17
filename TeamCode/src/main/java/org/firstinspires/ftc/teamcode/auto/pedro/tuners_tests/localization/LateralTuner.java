@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.auto.pedro.tuners_tests.localization;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.localization.PoseUpdater;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.DashboardPoseTracker;
@@ -29,7 +30,7 @@ import org.firstinspires.ftc.teamcode.auto.pedro.constants.LConstants;
  * @author Anyi Lin - 10158 Scott's Bots
  * @version 1.0, 5/6/2024
  */
-@Config
+@Configurable
 @Autonomous(name = "Lateral Localizer Tuner", group = ".Localization")
 public class LateralTuner extends OpMode {
     private PoseUpdater poseUpdater;

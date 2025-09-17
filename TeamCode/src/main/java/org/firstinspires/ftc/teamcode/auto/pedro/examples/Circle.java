@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.auto.pedro.examples;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.PathChain;
@@ -26,7 +27,7 @@ import org.firstinspires.ftc.teamcode.auto.pedro.constants.LConstants;
  * @author Harrison Womack - 10158 Scott's Bots
  * @version 1.0, 3/12/2024
  */
-@Config
+@Configurable
 @Autonomous (name = "Circle", group = "Examples")
 public class Circle extends OpMode {
     private Telemetry telemetryA;

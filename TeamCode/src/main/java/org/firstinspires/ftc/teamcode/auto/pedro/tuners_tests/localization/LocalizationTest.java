@@ -12,6 +12,7 @@ import static com.pedropathing.follower.FollowerConstants.rightRearMotorName;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.localization.PoseUpdater;
 import com.pedropathing.util.Constants;
 import com.pedropathing.util.DashboardPoseTracker;
@@ -37,7 +38,7 @@ import org.firstinspires.ftc.teamcode.auto.pedro.constants.*;
  * @author Anyi Lin - 10158 Scott's Bots
  * @version 1.0, 5/6/2024
  */
-@Config
+@Configurable
 @TeleOp(group = "Teleop Test", name = "Localization Test pedro")
 public class LocalizationTest extends OpMode {
     private PoseUpdater poseUpdater;

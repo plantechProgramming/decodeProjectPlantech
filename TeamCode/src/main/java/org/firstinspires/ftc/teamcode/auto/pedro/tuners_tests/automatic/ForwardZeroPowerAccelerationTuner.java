@@ -12,6 +12,7 @@ import static com.pedropathing.follower.FollowerConstants.rightRearMotorName;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.localization.PoseUpdater;
 import com.pedropathing.pathgen.MathFunctions;
@@ -47,7 +48,7 @@ import org.firstinspires.ftc.teamcode.auto.pedro.constants.LConstants;
  * @author Harrison Womack - 10158 Scott's Bots
  * @version 1.0, 3/13/2024
  */
-@Config
+@Configurable
 @Autonomous(name = "Forward Zero Power Acceleration Tuner", group = "Automatic Tuners")
 public class ForwardZeroPowerAccelerationTuner extends OpMode {
     private ArrayList<Double> accelerations = new ArrayList<>();
