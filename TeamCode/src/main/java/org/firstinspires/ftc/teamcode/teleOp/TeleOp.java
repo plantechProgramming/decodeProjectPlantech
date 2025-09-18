@@ -43,8 +43,8 @@ public class TeleOp extends OpMode {
 
     @Override
     public void run(){
-        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
-        Elevator lift = new Elevator(EA, EH, intake_center_angle,IntakeL,IntakeR, telemetry);
+//        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
+        Elevator lift = new Elevator(EA, EH, SU,SD,intake_center_angle,IntakeL,IntakeR, telemetry);
         ColorSensorTest cSencor = new ColorSensorTest();
         cSencor.init(hardwareMap);
         boolean is_up = false;
@@ -75,7 +75,7 @@ public class TeleOp extends OpMode {
             botHeading = Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
             ElapsedTime elapsedTime = new ElapsedTime();
-            driveTrain.drive(forward, drift, turn, botHeading, 1);
+//            driveTrain.drive(forward, drift, turn, botHeading, 1);
             telemetry.addData("x", DriveFrontRight.getCurrentPosition());
             telemetry.addData("y",DriveBackLeft.getCurrentPosition());
 //            tags.initAprilTag();
@@ -83,10 +83,10 @@ public class TeleOp extends OpMode {
 
 
             if(gamepad1.x && !slow){
-                driveTrain.drive(forward, drift, turn, botHeading, 0.5);
+//                driveTrain.drive(forward, drift, turn, botHeading, 0.5);
                 slow = true;
             }else if(gamepad1.x && slow) {
-                driveTrain.drive(forward, drift, turn, botHeading, 1);
+//                driveTrain.drive(forward, drift, turn, botHeading, 1);
                 slow = false;
 
             } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
@@ -95,6 +95,8 @@ public class TeleOp extends OpMode {
             else if (test.Order.equals("GPP")) {
                 lift.intakefunc(true);
             } else{lift.turnOffIntake();}
+
+            lift.Shooter(gamepad1.right_bumper,gamepad1.left_bumper);
 
 //            if (test.Order == "GPP"){
 //                lift.intakefunc(true);

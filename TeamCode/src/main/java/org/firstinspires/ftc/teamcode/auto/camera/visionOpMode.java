@@ -15,6 +15,9 @@ import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Autonomous(name = "vision")
 public class visionOpMode extends LinearOpMode {
 
@@ -40,9 +43,12 @@ public class visionOpMode extends LinearOpMode {
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam"))
                 .build();
 
+        List<Color> colors = new ArrayList<Color>();
+        colors.add(Color.YELLOW);
         // needed to run continuously
         while (opModeIsActive() || opModeInInit()) {
-//            telemetry.addLine("Area Density Aspect Arc Circle Center");
+            telemetry.addData("color",colorSensor.isColor(Color.YELLOW));
+            telemetry.addLine("hello world");
             telemetry.update();
             sleep(20);
         }

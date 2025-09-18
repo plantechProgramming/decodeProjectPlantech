@@ -17,7 +17,7 @@ import org.opencv.imgproc.Imgproc;
 
 public class colorSensorPipeline implements VisionProcessor {
     private Scalar avgColor = new Scalar(0, 0, 0);
-    private Rect square = new Rect();
+    private final Rect square;
     public colorSensorPipeline(Rect square){
         this.square = square;
     }
@@ -28,6 +28,7 @@ public class colorSensorPipeline implements VisionProcessor {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
+        Imgproc.cvtColor(frame,frame,Imgproc.COLOR_RGB2HSV);
         Mat roi = frame.submat(square);
 
         // Compute average BGR color in the ROI
@@ -35,7 +36,7 @@ public class colorSensorPipeline implements VisionProcessor {
 
         // Draw a rectangle on the preview so you can see the sample area
         Imgproc.rectangle(frame, square, new Scalar(0, 255, 0), 2);
-
+        Imgproc.cvtColor(frame,frame,Imgproc.COLOR_HSV2RGB);
         roi.release();
         return null;
     }
@@ -49,16 +50,13 @@ public class colorSensorPipeline implements VisionProcessor {
         return avgColor;
     }
 
-    public Color isColor(List<Color> colors) {
+    public boolean isColor(Color color) {
+        Scalar notFound = new Scalar(-1,-1,-1);
         Mat pixelMat = new Mat(1, 1, CvType.CV_8UC3);
         pixelMat.setTo(avgColor);
-        for (Color c: colors){
-            Mat mask = new Mat();
-            Core.inRange(pixelMat, c.getMin(), c.getMax(), mask);
-            if(mask.get(0,0)[0] != 0){
-                return c;
-            }
-        }
-        return null;
+        Mat mask = new Mat();
+        Core.inRange(pixelMat, color.getMin(), color.getMax(), mask);
+        return mask.get(0, 0)[0] != 0;
     }
+
 }

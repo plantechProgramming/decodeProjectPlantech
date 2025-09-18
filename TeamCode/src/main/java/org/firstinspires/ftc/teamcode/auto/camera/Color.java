@@ -17,6 +17,11 @@ public class Color {
             new Scalar(40, 255, 255)
     );
 
+    public static final Color NONE = new Color(
+            new Scalar(-1,-1,-1),
+            new Scalar(-1,-1,-1)
+    );
+
     // yellow - in opencv hsv
     // opencv hsv != normal hsv, h:0-179, s:0-255,v:0-255
     public Color(Scalar min, Scalar max){

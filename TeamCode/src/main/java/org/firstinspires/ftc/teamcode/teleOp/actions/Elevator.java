@@ -25,6 +25,8 @@ public class Elevator{
     public static double kP_EA = 0.03;
     public static double kI_EA = 0.01;
     public static double kD_EA = 0.01;
+    public static double powerU = 0.5;
+    public static double powerD = 0.5;
 
     PID pid_EH = new PID(kP_EH, kI_EH, kD_EH, 0, 0);
     PID pid_intA = new PID(kP_intA, kI_intA, kD_intA, 0, 0);
@@ -35,15 +37,17 @@ public class Elevator{
     public double intakeWanted;
     //Thread thread = Thread.currentThread();
     ElapsedTime runtime = new ElapsedTime();
-    DcMotorEx EH, EA;
+    DcMotorEx EH, EA,SU,SD;
     Servo intake_center_angle;
     CRServo IntakeL, IntakeR;
     Telemetry telemetry;
     public double radToTicks = Math.PI/3000;
 
     // wtf is a type parameter
-    public <roni2_intake> Elevator(DcMotorEx EA, DcMotorEx EH, Servo intake_center_angle,CRServo IntakeL,CRServo IntakeR, Telemetry telemetry){
+    public <roni2_intake> Elevator(DcMotorEx EA, DcMotorEx EH, DcMotorEx SD,DcMotorEx SU, Servo intake_center_angle,CRServo IntakeL,CRServo IntakeR, Telemetry telemetry){
         this.EH = EH;
+        this.SU = SU;
+        this.SD = SD;
         this.EA = EA;
         this.IntakeL = IntakeL;
         this.IntakeR = IntakeR;
@@ -79,6 +83,26 @@ public class Elevator{
            IntakeL.setPower(1);
            IntakeR.setPower(-1);
        }
+    }
+    public void Shooter(boolean in, boolean out){
+        if (in){
+            SU.setPower(0.5);
+            SD.setPower(-1);
+//            pid_EA.setWanted(EA.getCurrentPosition());
+        } else if (out){
+            SU.setPower(-0.75);
+            SD.setPower(1);
+//            pid_EA.setWanted(EA.getCurrentPosition());
+        } else if (!in && !out) {
+            SU.setPower(0);
+            SD.setPower(0);
+//        } else {
+//            double power_EA = pid_EA.update(EA.getCurrentPosition());
+//            SU.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            SD.setPower(0);
+
+        }
+
     }
     public void turnOffIntake(){
            IntakeL.setPower(0);
