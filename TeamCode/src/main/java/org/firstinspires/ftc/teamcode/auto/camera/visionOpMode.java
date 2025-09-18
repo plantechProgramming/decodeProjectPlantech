@@ -12,27 +12,20 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.opencv.ColorRange;
 import org.firstinspires.ftc.vision.opencv.ImageRegion;
 import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 
 @Autonomous(name = "vision")
 public class visionOpMode extends LinearOpMode {
-//    public int thresh = 100;
-//    private VisionPortal visionPortal;
+
     private visionPipeline pipeLine;
+    private colorSensorPipeline colorSensor;
     @Override
     public void runOpMode() throws InterruptedException {
+        Rect rect = new Rect(150, 100, 50, 50);
 
-        // yellow - in opencv hsv
-        // opencv hsv != normal hsv, h:0-179, s:0-255,v:0-255
-        Scalar minYellow = new Scalar(16, 150, 99);
-        Scalar maxYellow = new Scalar(40, 255, 255);
-
-        // red
-        Scalar minRed = new Scalar(112, 153, 230);
-        Scalar maxRed = new Scalar(190, 230, 255);
-
-
-        pipeLine = new visionPipeline(minYellow,maxYellow);
+        pipeLine = new visionPipeline(Color.YELLOW);
+        colorSensor = new colorSensorPipeline(rect);
 
         waitForStart();
 
@@ -41,7 +34,8 @@ public class visionOpMode extends LinearOpMode {
 
 
         VisionPortal portal = new VisionPortal.Builder()
-                .addProcessor(pipeLine)
+//                .addProcessor(pipeLine)
+                .addProcessor(colorSensor)
                 .setCameraResolution(new Size(320, 240))
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam"))
                 .build();

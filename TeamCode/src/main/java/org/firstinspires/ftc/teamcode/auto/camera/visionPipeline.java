@@ -25,16 +25,12 @@ import java.util.List;
 
 
 public class visionPipeline implements VisionProcessor {
-    public ColorRange colorRange;
-    int x = 75;
     Scalar max;
     Scalar min;
-    int state = 0;
 
-    public visionPipeline(Scalar min, Scalar max){
-        this.colorRange = new ColorRange(ColorSpace.HSV,min,max);
-        this.max = max;
-        this.min = min;
+    public visionPipeline(Color color){
+        this.max = color.getMax();
+        this.min = color.getMin();
 
     }
 
@@ -50,7 +46,6 @@ public class visionPipeline implements VisionProcessor {
         Mat mask = new Mat();
         Mat maskApplied = new Mat();
         Mat onlyEdges = new Mat();
-        state = 0;
 
         this.makeMask(frame,mask);
         this.applyMask(frame,mask,maskApplied);

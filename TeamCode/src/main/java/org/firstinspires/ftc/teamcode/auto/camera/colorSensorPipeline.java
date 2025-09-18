@@ -6,8 +6,10 @@ import android.graphics.RecordingCanvas;
 import com.sun.tools.javac.util.List;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.teamcode.teleOp.TeleOp;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -47,10 +49,16 @@ public class colorSensorPipeline implements VisionProcessor {
         return avgColor;
     }
 
-    public boolean isColor(List<String> color) {
-//        if( avgColor(1) > 100 && color == "RED"){
-//            return True;
-//        }
-        return false;
+    public Color isColor(List<Color> colors) {
+        Mat pixelMat = new Mat(1, 1, CvType.CV_8UC3);
+        pixelMat.setTo(avgColor);
+        for (Color c: colors){
+            Mat mask = new Mat();
+            Core.inRange(pixelMat, c.getMin(), c.getMax(), mask);
+            if(mask.get(0,0)[0] != 0){
+                return c;
+            }
+        }
+        return null;
     }
 }
