@@ -22,6 +22,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+/**
+ * This file is an auto for tests. Most funcs are not used, please leave them as they are
+ * until later in the season!
+ */
 @Autonomous(name = "aprilTags")
 public class aprilTagsTest  extends LinearOpMode {
     /**
@@ -29,6 +33,12 @@ public class aprilTagsTest  extends LinearOpMode {
      */
 //    private AprilTagProcessor aprilTag;
     public String Order = "NNN";
+
+    public double robotToTag = 0;
+    public double CAM_HEIGHT = 0;
+
+    public AprilTagDetection specialDetection = null;
+
     /**
      * The variable to store our instance of the vision portal.
      */
@@ -45,23 +55,22 @@ public class aprilTagsTest  extends LinearOpMode {
         telemetry.update();
         waitForStart();
 
-            while (opModeIsActive()) {
+        while (opModeIsActive()) {
 
-//                telemetryAprilTag(aprilTag);
 
-                // Push telemetry to the Driver Station.
-                telemetry.update();
+            // Push telemetry to the Driver Station.
+            telemetry.update();
 
-                // Save CPU resources; can resume streaming when needed.
+            // Save CPU resources; can resume streaming when needed.
 //                if (gamepad1.dpad_down) {
 //                    visionPortal.stopStreaming();
 //                } else if (gamepad1.dpad_up) {
 //                    visionPortal.resumeStreaming();
 //                }
 
-                // Share the CPU.
-                sleep(20);
-            }
+            // Share the CPU.
+            sleep(20);
+        }
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();
 
@@ -75,19 +84,19 @@ public class aprilTagsTest  extends LinearOpMode {
         // Create the AprilTag processor.
 //        aprilTag = new AprilTagProcessor.Builder()
 
-                // The following default settings are available to un-comment and edit as needed.
+        // The following default settings are available to un-comment and edit as needed.
 //                .setDrawAxes(true)
 //                .setDrawCubeProjection(true)
 //                .setDrawTagOutline(true)
-                //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-                //.setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
-                //.setOutputUnits(DistanceUnit.METER, AngleUnit.DEGREES)
+        //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+        //.setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
+        //.setOutputUnits(DistanceUnit.METER, AngleUnit.DEGREES)
 
-                // == CAMERA CALIBRATION ==
-                // If you do not manually specify calibration parameters, the SDK will attempt
-                // to load a predefined calibration for your camera.
-                //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
-                // ... these parameters are fx, fy, cx, cy.
+        // == CAMERA CALIBRATION ==
+        // If you do not manually specify calibration parameters, the SDK will attempt
+        // to load a predefined calibration for your camera.
+        //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
+        // ... these parameters are fx, fy, cx, cy.
 
 //                .build();
 
@@ -140,20 +149,20 @@ public class aprilTagsTest  extends LinearOpMode {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         AprilTagDetection detection = null;
+        AprilTagDetection specialDetection = null;
 
         telemetry.addData("# AprilTags Detected", currentDetections.size());
 
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection Detection : currentDetections) {
-            if (Detection.id != 20 && Detection.id != 24){
+            if (Detection.id != 20 && Detection.id != 24) {
                 detection = Detection;
             }
         }
-        if(detection == null){
+        if (detection == null) {
             telemetry.addLine(String.format(("\n==== (Order: NNN)")));
             Order = "NNN";
-        }
-        else if(detection.id == 21) {
+        } else if (detection.id == 21) {
             telemetry.addLine(String.format("\n==== (Order: GPP)"));
             Order = "GPP";
         } else if (detection.id == 22) {
@@ -163,11 +172,21 @@ public class aprilTagsTest  extends LinearOpMode {
             telemetry.addLine(String.format(("\n==== (Order: PPG)")));
             Order = "PPG";
         }
+        for (AprilTagDetection Detection : currentDetections) {
+            if (Detection.id != 21 && Detection.id != 22 && Detection.id != 23) {
+                specialDetection = Detection;
+            }
+        }
+        if (specialDetection != null) {
+//            double d = specialDetection.ftcPose.range;
+//            double y = 93-CAM_HEIGHT;
+////            robotToTag = Math.sqrt(Math.pow(d,2)+Math.pow(y,2));
+//            robotToTag = specialDetection.ftcPose.y;
+            // end for() loop
 
-        // end for() loop
+            // Add "key" information to telemetry
 
-        // Add "key" information to telemetry
-
-    }   // end method telemetryAprilTag()
-}   // end class
+        }   // end method telemetryAprilTag()
+    }   // end class
+}
 

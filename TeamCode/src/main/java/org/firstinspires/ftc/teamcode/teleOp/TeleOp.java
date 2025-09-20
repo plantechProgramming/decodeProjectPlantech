@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleOp;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.gamepad.PanelsGamepad;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -44,12 +45,13 @@ public class TeleOp extends OpMode {
     @Override
     public void run(){
 //        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
-        Elevator lift = new Elevator(EA, EH, SU,SD,intake_center_angle,IntakeL,IntakeR, telemetry);
+        Elevator lift = new Elevator( SU,SD,intake_center_angle,IntakeL,IntakeR, telemetry);
         ColorSensorTest cSencor = new ColorSensorTest();
         cSencor.init(hardwareMap);
         boolean is_up = false;
         aprilTagsTest test = new aprilTagsTest();
-        AprilTagProcessor aprilTag = new AprilTagProcessor.Builder().build();
+        AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
+                .build();
 
         VisionPortal visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam"))
@@ -62,9 +64,9 @@ public class TeleOp extends OpMode {
         double drift;
         double botHeading;
         boolean slow = false;
-        EH.setDirection(DcMotorSimple.Direction.REVERSE);
-        EH.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        EA.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        EH.setDirection(DcMotorSimple.Direction.REVERSE);
+//        EH.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//        EA.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         while (opModeIsActive() ) {
@@ -76,8 +78,8 @@ public class TeleOp extends OpMode {
 
             ElapsedTime elapsedTime = new ElapsedTime();
 //            driveTrain.drive(forward, drift, turn, botHeading, 1);
-            telemetry.addData("x", DriveFrontRight.getCurrentPosition());
-            telemetry.addData("y",DriveBackLeft.getCurrentPosition());
+//            telemetry.addData("x", DriveFrontRight.getCurrentPosition());
+//            telemetry.addData("y",DriveBackLeft.getCurrentPosition());
 //            tags.initAprilTag();
 
 
@@ -88,16 +90,17 @@ public class TeleOp extends OpMode {
             }else if(gamepad1.x && slow) {
 //                driveTrain.drive(forward, drift, turn, botHeading, 1);
                 slow = false;
-
-            } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
-            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
+            }
+//            } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
+//            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
             if (cSencor.getDetectedColor(telemetry) == ColorSensorTest.DetectedColor.RED){lift.intakefunc(true);}
             else if (test.Order.equals("GPP")) {
                 lift.intakefunc(true);
             } else{lift.turnOffIntake();}
 
-            lift.Shooter(gamepad1.right_bumper,gamepad1.left_bumper);
-
+            lift.Shooter(gamepad1.right_bumper);
+            telemetry.addData("power",lift.powerU);
+            telemetry.addData("powerD",lift.powerD);
 //            if (test.Order == "GPP"){
 //                lift.intakefunc(true);
 //            }else{lift.intakefunc(false);}
@@ -106,12 +109,15 @@ public class TeleOp extends OpMode {
 
             if(gamepad1.back){Imu.resetYaw();}
 
-            telemetry.addData("ea",EA.getCurrentPosition());
+//            telemetry.addData("ea",EA.getCurrentPosition());
             telemetry.addData("recognized color: ", cSencor.getDetectedColor(telemetry));
+            if(test.specialDetection != null){
+                telemetry.addData("distance from tag: ", test.specialDetection.ftcPose.y);
+            }
             telemetry.addData("Order: ",test.Order);
             telemetry.update();
         }
-        EH.setPower(0);
+//        EH.setPower(0);
 
 
     }

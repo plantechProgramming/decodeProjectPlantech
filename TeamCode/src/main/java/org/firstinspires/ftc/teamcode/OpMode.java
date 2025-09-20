@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.bylazar.gamepad.Gamepad;
+import com.bylazar.gamepad.GamepadManager;
+import com.bylazar.gamepad.PanelsGamepad;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -25,6 +28,9 @@ public abstract class OpMode extends LinearOpMode {
     protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA,SU,SD;
     protected ElapsedTime runtime = new ElapsedTime();
     public boolean liftFlag = false;
+
+
+
 
 
     protected IMU Imu;
