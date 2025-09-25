@@ -1,37 +1,18 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
-import com.bylazar.gamepad.PanelsGamepad;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.auto.camera.ColorSensorTest;
-import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
+import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Elevator;
 import org.firstinspires.ftc.teamcode.OpMode;
 import org.firstinspires.ftc.teamcode.auto.camera.aprilTagsTest;
-import android.util.Size;
 
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.opencv.ColorBlobLocatorProcessor;
-import org.firstinspires.ftc.vision.opencv.ColorRange;
-import org.firstinspires.ftc.vision.opencv.ImageRegion;
-import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor;
-import org.opencv.core.RotatedRect;
-
-import java.util.List;
 
 
 @Configurable
@@ -113,6 +94,9 @@ public class TeleOp extends OpMode {
             telemetry.addData("recognized color: ", cSencor.getDetectedColor(telemetry));
             if(test.specialDetection != null){
                 telemetry.addData("distance from tag: ", test.specialDetection.ftcPose.y);
+            }
+            else{
+                telemetry.addData("distance from tag", "null :(((");
             }
             telemetry.addData("Order: ",test.Order);
             telemetry.update();

@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.auto.camera;
+package org.firstinspires.ftc.teamcode.auto.camera.colorsensor;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 @TeleOp
 public class ColorTests extends OpMode {

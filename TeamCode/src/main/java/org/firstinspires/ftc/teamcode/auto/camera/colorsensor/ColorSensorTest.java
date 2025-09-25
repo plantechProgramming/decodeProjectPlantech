@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.camera;
+package org.firstinspires.ftc.teamcode.auto.camera.colorsensor;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
@@ -36,6 +36,7 @@ public class ColorSensorTest {
         Blue: <.1, <.25, >.55
 
          */
+
         telemetry.addData("red: ",normRed);
         telemetry.addData("green: ", normGreen);
         telemetry.addData("blue: ",normBlue);

@@ -10,6 +10,8 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDir
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
@@ -28,20 +30,16 @@ import java.util.ListIterator;
  */
 @Autonomous(name = "aprilTags")
 public class aprilTagsTest  extends LinearOpMode {
-    /**
-     * The variable to store our instance of the AprilTag processor.
-     */
-//    private AprilTagProcessor aprilTag;
+    private AprilTagProcessor aprilTag;
     public String Order = "NNN";
 
     public double robotToTag = 0;
-    public double CAM_HEIGHT = 0;
 
+    private final Position CAM_POS = new Position(DistanceUnit.CM,
+            0, 0, 0, 0);
+    private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,0,0,0);
     public AprilTagDetection specialDetection = null;
 
-    /**
-     * The variable to store our instance of the vision portal.
-     */
     private VisionPortal visionPortal;
 
     @Override
@@ -67,7 +65,7 @@ public class aprilTagsTest  extends LinearOpMode {
 //                } else if (gamepad1.dpad_up) {
 //                    visionPortal.resumeStreaming();
 //                }
-
+            telemetryAprilTag(aprilTag);
             // Share the CPU.
             sleep(20);
         }
@@ -76,13 +74,11 @@ public class aprilTagsTest  extends LinearOpMode {
 
     }   // end method runOpMode()
 
-    /**
-     * Initialize the AprilTag processor.
-     */
     public void initAprilTag() {
 
         // Create the AprilTag processor.
-//        aprilTag = new AprilTagProcessor.Builder()
+        aprilTag = new AprilTagProcessor.Builder()
+                .setCameraPose(CAM_POS, CAM_ORIENTATION)
 
         // The following default settings are available to un-comment and edit as needed.
 //                .setDrawAxes(true)
@@ -98,7 +94,7 @@ public class aprilTagsTest  extends LinearOpMode {
         //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
         // ... these parameters are fx, fy, cx, cy.
 
-//                .build();
+                .build();
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
         // eg: Some typical detection data using a Logitech C920 WebCam
@@ -111,6 +107,7 @@ public class aprilTagsTest  extends LinearOpMode {
 
         // Create the vision portal by using a builder.
         VisionPortal.Builder builder = new VisionPortal.Builder();
+
 
         // Set the camera (webcam vs. built-in RC phone camera).
         builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam"));
@@ -138,7 +135,6 @@ public class aprilTagsTest  extends LinearOpMode {
 
         // Disable or re-enable the aprilTag processor at any time.
         //visionPortal.setProcessorEnabled(aprilTag, true);
-
     }   // end method initAprilTag()
 
 
@@ -181,7 +177,7 @@ public class aprilTagsTest  extends LinearOpMode {
 //            double d = specialDetection.ftcPose.range;
 //            double y = 93-CAM_HEIGHT;
 ////            robotToTag = Math.sqrt(Math.pow(d,2)+Math.pow(y,2));
-//            robotToTag = specialDetection.ftcPose.y;
+            robotToTag = specialDetection.robotPose.getPosition().x;
             // end for() loop
 
             // Add "key" information to telemetry
