@@ -26,7 +26,7 @@ public class TeleOp extends OpMode {
     @Override
     public void run(){
 //        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
-        Elevator lift = new Elevator( SU,SD,intake_center_angle,IntakeL,IntakeR, telemetry);
+        Elevator lift = new Elevator(intake_center_angle,IntakeL,IntakeR, telemetry,shooter);
         ColorSensorTest cSencor = new ColorSensorTest();
         cSencor.init(hardwareMap);
         boolean is_up = false;
@@ -74,12 +74,8 @@ public class TeleOp extends OpMode {
             }
 //            } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
 //            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
-            if (cSencor.getDetectedColor(telemetry) == ColorSensorTest.DetectedColor.RED){lift.intakefunc(true);}
-            else if (test.Order.equals("GPP")) {
-                lift.intakefunc(true);
-            } else{lift.turnOffIntake();}
-
-            lift.Shooter(gamepad1.right_bumper);
+            lift.intakefunc(-gamepad1.left_stick_y);
+//            lift.Shooter(gamepad1.right_bumper);
             telemetry.addData("power",lift.powerU);
             telemetry.addData("powerD",lift.powerD);
 //            if (test.Order == "GPP"){
@@ -93,7 +89,7 @@ public class TeleOp extends OpMode {
 //            telemetry.addData("ea",EA.getCurrentPosition());
             telemetry.addData("recognized color: ", cSencor.getDetectedColor(telemetry));
             if(test.specialDetection != null){
-                telemetry.addData("distance from tag: ", test.specialDetection.ftcPose.y);
+                telemetry.addData("distance from tag: ", test.robotToTag);
             }
             else{
                 telemetry.addData("distance from tag", "null :(((");

@@ -37,7 +37,7 @@ public class aprilTagsTest  extends LinearOpMode {
 
     private final Position CAM_POS = new Position(DistanceUnit.CM,
             0, 0, 0, 0);
-    private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,0,0,0);
+    private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
     public AprilTagDetection specialDetection = null;
 
     private VisionPortal visionPortal;

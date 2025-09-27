@@ -37,17 +37,16 @@ public class Elevator{
     public double intakeWanted;
     //Thread thread = Thread.currentThread();
     ElapsedTime runtime = new ElapsedTime();
-    DcMotorEx EH, EA,SU,SD;
+    DcMotorEx EH, EA,SU,SD, shooter;
     Servo intake_center_angle;
     CRServo IntakeL, IntakeR;
     Telemetry telemetry;
     public double radToTicks = Math.PI/3000;
 
     // wtf is a type parameter
-    public <roni2_intake> Elevator(DcMotorEx SD,DcMotorEx SU, Servo intake_center_angle,CRServo IntakeL,CRServo IntakeR, Telemetry telemetry){
+    public <roni2_intake> Elevator(Servo intake_center_angle,CRServo IntakeL,CRServo IntakeR, Telemetry telemetry, DcMotorEx shooter){
 //        this.EH = EH;
-        this.SU = SU;
-        this.SD = SD;
+        this.shooter = shooter;
 //        this.EA = EA;
         this.IntakeL = IntakeL;
         this.IntakeR = IntakeR;
@@ -78,27 +77,8 @@ public class Elevator{
 //             EH.setPower(0);
          }
     }
-    public void intakefunc(boolean dir){
-       if(dir == true) {
-           IntakeL.setPower(1);
-           IntakeR.setPower(-1);
-       }
-    }
-    public void Shooter(boolean in){
-        if (in){
-            SU.setPower(powerU);
-            SD.setPower(powerD);
-//            pid_EA.setWanted(EA.getCurrentPosition());
-        } else  {
-            SU.setPower(0);
-            SD.setPower(0);
-//        } else {
-//            double power_EA = pid_EA.update(EA.getCurrentPosition());
-//            SU.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//            SD.setPower(0);
-
-        }
-
+    public void intakefunc(double power){
+       shooter.setPower(power);
     }
     public void turnOffIntake(){
            IntakeL.setPower(0);

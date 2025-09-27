@@ -6,6 +6,7 @@ repositories {
     maven { url= "https://maven.pedropathing.com/" }
     maven { url = "https://maven.rowanmcalpin.com/" }
     maven { url = "https://mymaven.bylazar.com/releases" }
+
 }
 
 dependencies {
