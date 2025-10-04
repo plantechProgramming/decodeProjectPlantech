@@ -1,14 +1,16 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
-import org.firstinspires.ftc.teamcode.teleOp.actions.Elevator;
+import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
 import org.firstinspires.ftc.teamcode.OpMode;
 import org.firstinspires.ftc.teamcode.auto.camera.aprilTagsTest;
 
+import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
@@ -26,7 +28,8 @@ public class TeleOp extends OpMode {
     @Override
     public void run(){
 //        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
-        Elevator lift = new Elevator(intake_center_angle,IntakeL,IntakeR, telemetry,shooter);
+        Shooter shooter = new Shooter(shootMotor,telemetry);
+        Intake intake = new Intake(IntakeL,IntakeR,telemetry);
         ColorSensorTest cSencor = new ColorSensorTest();
         cSencor.init(hardwareMap);
         boolean is_up = false;
@@ -60,8 +63,6 @@ public class TeleOp extends OpMode {
 //            telemetry.addData("y",DriveBackLeft.getCurrentPosition());
 //            tags.initAprilTag();
 
-
-
             if(gamepad1.x && !slow){
 //                driveTrain.drive(forward, drift, turn, botHeading, 0.5);
                 slow = true;
@@ -71,15 +72,12 @@ public class TeleOp extends OpMode {
             }
 //            } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
 //            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
-            lift.intakefunc(-gamepad1.left_stick_y);
-//            if (test.Order == "GPP"){
-//                lift.intakefunc(true);
-//            }else{lift.intakefunc(false);}
+            shooter.shooterTest(-gamepad1.left_stick_y);
 
 
-            lift.intake(gamepad1.y);
+            intake.intakeTest(gamepad1.y);
             if(gamepad1.back){Imu.resetYaw();}
-            telemetry.addData("y", gamepad1.y);
+
             telemetry.addData("recognized color: ", cSencor.getDetectedColor(telemetry));
             if(test.specialDetection != null){
                 telemetry.addData("distance from tag: ", test.robotToTag);
@@ -91,7 +89,6 @@ public class TeleOp extends OpMode {
             telemetry.addData("outtake power: ",-gamepad1.left_stick_y);
             telemetry.update();
         }
-
 
     }
 

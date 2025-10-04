@@ -82,7 +82,7 @@ public class DriveTrain {
         BR.setPower(backRightPower * slowRatio);
 
     }
-
+    
         public void stop(){
             FL.setPower(0);
             FR.setPower(0);

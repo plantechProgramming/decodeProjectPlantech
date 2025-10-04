@@ -25,7 +25,7 @@ public abstract class OpMode extends LinearOpMode {
     protected Servo roni2_intake,intake_center_angle;
     protected CRServo IntakeL,IntakeR;
     protected NormalizedColorSensor colorSensor;
-    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA,SU,SD, shooter;
+    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA,SU,SD, shootMotor;
     protected ElapsedTime runtime = new ElapsedTime();
     public boolean liftFlag = false;
 
@@ -89,7 +89,7 @@ public abstract class OpMode extends LinearOpMode {
         Imu.initialize(parameters);
         Imu.resetYaw();
 
-        shooter = hardwareMap.get(DcMotorEx.class, "shooter");
+        shootMotor = hardwareMap.get(DcMotorEx.class, "shooter");
 //        shooter.setDirection(DcMotorEx.Direction.FORWARD);
 //        shooter.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 //        shooter.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
