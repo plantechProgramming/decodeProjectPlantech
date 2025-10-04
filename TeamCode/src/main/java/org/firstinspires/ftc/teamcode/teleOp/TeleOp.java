@@ -45,9 +45,6 @@ public class TeleOp extends OpMode {
         double drift;
         double botHeading;
         boolean slow = false;
-//        EH.setDirection(DcMotorSimple.Direction.REVERSE);
-//        EH.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        EA.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
         while (opModeIsActive() ) {
@@ -75,18 +72,14 @@ public class TeleOp extends OpMode {
 //            } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
 //            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
             lift.intakefunc(-gamepad1.left_stick_y);
-//            lift.Shooter(gamepad1.right_bumper);
-            telemetry.addData("power",lift.powerU);
-            telemetry.addData("powerD",lift.powerD);
 //            if (test.Order == "GPP"){
 //                lift.intakefunc(true);
 //            }else{lift.intakefunc(false);}
 
 
-
+            lift.intake(gamepad1.y);
             if(gamepad1.back){Imu.resetYaw();}
-
-//            telemetry.addData("ea",EA.getCurrentPosition());
+            telemetry.addData("y", gamepad1.y);
             telemetry.addData("recognized color: ", cSencor.getDetectedColor(telemetry));
             if(test.specialDetection != null){
                 telemetry.addData("distance from tag: ", test.robotToTag);
@@ -95,9 +88,9 @@ public class TeleOp extends OpMode {
                 telemetry.addData("distance from tag", "null :(((");
             }
             telemetry.addData("Order: ",test.Order);
+            telemetry.addData("outtake power: ",-gamepad1.left_stick_y);
             telemetry.update();
         }
-//        EH.setPower(0);
 
 
     }

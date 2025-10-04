@@ -29,7 +29,7 @@ public class visionOpMode extends LinearOpMode {
 
         waitForStart();
 
-//        visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam"),
+     //   visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam"),
 //        pipeLine);
 
 

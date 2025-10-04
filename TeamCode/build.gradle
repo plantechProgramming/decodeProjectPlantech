@@ -36,16 +36,12 @@ android {
         jniLibs.useLegacyPackaging true
     }
 }
-
 repositories {
     maven {
         url = "https://repo.dairy.foundation/releases"
     }
-    maven {
-        url = "https://repo.dairy.foundation/snapshots"
-    }
 }
-
 dependencies {
+    implementation("dev.frozenmilk.sinister:Sloth:0.2.4")
     implementation project(':FtcRobotController')
 }

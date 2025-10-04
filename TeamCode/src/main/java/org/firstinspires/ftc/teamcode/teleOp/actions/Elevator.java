@@ -45,44 +45,27 @@ public class Elevator{
 
     // wtf is a type parameter
     public <roni2_intake> Elevator(Servo intake_center_angle,CRServo IntakeL,CRServo IntakeR, Telemetry telemetry, DcMotorEx shooter){
-//        this.EH = EH;
         this.shooter = shooter;
-//        this.EA = EA;
         this.IntakeL = IntakeL;
         this.IntakeR = IntakeR;
         this.intake_center_angle = intake_center_angle;
         this.telemetry = telemetry;
-//        EA.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-//        EH.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-//        EA.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//        EH.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+
     }
 
-
-    public void Intake(boolean in,boolean out){
-         if (in){
-            IntakeL.setPower(1);
-            IntakeR.setPower(-1);
-//            pid_EA.setWanted(EA.getCurrentPosition());
-        } else if (out){
-            IntakeL.setPower(-1);
+    public void intake(boolean pressed){
+        if(pressed){
             IntakeR.setPower(1);
-//            pid_EA.setWanted(EA.getCurrentPosition());
-        } else if (!in && !out) {
-             IntakeR.setPower(0);
-             IntakeL.setPower(0);
-//        } else {
-//            double power_EA = pid_EA.update(EA.getCurrentPosition());
-//             EH.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//             EH.setPower(0);
-         }
+            IntakeL.setPower(-1);
+        }
+        else{
+            IntakeL.setPower(0);
+            IntakeR.setPower(0);
+        }
     }
+
     public void intakefunc(double power){
        shooter.setPower(power);
-    }
-    public void turnOffIntake(){
-           IntakeL.setPower(0);
-           IntakeR.setPower(0);
     }
 }
 

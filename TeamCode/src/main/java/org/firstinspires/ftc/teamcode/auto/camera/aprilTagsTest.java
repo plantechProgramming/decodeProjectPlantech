@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto.camera;
 
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -14,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
@@ -80,13 +83,14 @@ public class aprilTagsTest  extends LinearOpMode {
         aprilTag = new AprilTagProcessor.Builder()
                 .setCameraPose(CAM_POS, CAM_ORIENTATION)
 
+
         // The following default settings are available to un-comment and edit as needed.
 //                .setDrawAxes(true)
 //                .setDrawCubeProjection(true)
 //                .setDrawTagOutline(true)
-        //.setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-        //.setTagLibrary(AprilTagGameDatabase.getCenterStageTagLibrary())
-        //.setOutputUnits(DistanceUnit.METER, AngleUnit.DEGREES)
+        .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+        .setTagLibrary(AprilTagGameDatabase.getCurrentGameTagLibrary())
+        .setOutputUnits(DistanceUnit.METER, AngleUnit.DEGREES)
 
         // == CAMERA CALIBRATION ==
         // If you do not manually specify calibration parameters, the SDK will attempt
@@ -128,7 +132,7 @@ public class aprilTagsTest  extends LinearOpMode {
         //builder.setAutoStopLiveView(false);
 
         // Set and enable the processor.
-//        builder.addProcessor(aprilTag);
+        builder.addProcessor(aprilTag);
 
         // Build the Vision Portal, using the above settings.
         visionPortal = builder.build();
@@ -173,11 +177,17 @@ public class aprilTagsTest  extends LinearOpMode {
                 specialDetection = Detection;
             }
         }
-        if (specialDetection != null) {
+        if (specialDetection != null && specialDetection.metadata != null) {
 //            double d = specialDetection.ftcPose.range;
 //            double y = 93-CAM_HEIGHT;
 ////            robotToTag = Math.sqrt(Math.pow(d,2)+Math.pow(y,2));
-            robotToTag = specialDetection.robotPose.getPosition().x;
+           try {
+               telemetry.addData("x",robotToTag = specialDetection.robotPose.getPosition().x);
+
+           }
+           catch (NullPointerException e){
+               telemetry.addData("robot pose failed","too bad");
+           }
             // end for() loop
 
             // Add "key" information to telemetry
