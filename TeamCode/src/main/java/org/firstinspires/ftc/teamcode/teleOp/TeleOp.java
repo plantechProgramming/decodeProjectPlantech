@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
 import org.firstinspires.ftc.teamcode.OpMode;
@@ -28,30 +30,32 @@ public class TeleOp extends OpMode {
     @Override
     public void run(){
 //        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
-        Shooter shooter = new Shooter(shootMotor,telemetry);
+        Shooter shooter = new Shooter(shootMotor,telemetry,shootMotorOp);
         Intake intake = new Intake(IntakeL,IntakeR,telemetry);
         ColorSensorTest cSencor = new ColorSensorTest();
         cSencor.init(hardwareMap);
         boolean is_up = false;
-        aprilTagsTest test = new aprilTagsTest();
-        AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
-                .build();
+        AprilTagLocalization test = new AprilTagLocalization();
+        test.initProcessor(hardwareMap);
 
-        VisionPortal visionPortal = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "Webcam"))
+//        AprilTagProcessor aprilTag = test.initAprilTag();
+
+       /* VisionPortal visionPortal = new VisionPortal.Builder()
+                .setCamera(hardwareMap.get(WebcamName.class, "webcam"))
                 .addProcessor(aprilTag)
                 .build();
-
+*/
 
         double forward; //-1 to 1
         double turn;
         double drift;
         double botHeading;
         boolean slow = false;
-
+        double tick = 2000/(48*Math.PI); //per tick
 
         while (opModeIsActive() ) {
-            test.telemetryAprilTag(aprilTag);
+//            test.telemetryAprilTag(aprilTag);
+            test.detectTags();
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
@@ -61,7 +65,6 @@ public class TeleOp extends OpMode {
 //            driveTrain.drive(forward, drift, turn, botHeading, 1);
 //            telemetry.addData("x", DriveFrontRight.getCurrentPosition());
 //            telemetry.addData("y",DriveBackLeft.getCurrentPosition());
-//            tags.initAprilTag();
 
             if(gamepad1.x && !slow){
 //                driveTrain.drive(forward, drift, turn, botHeading, 0.5);
@@ -80,13 +83,18 @@ public class TeleOp extends OpMode {
 
             telemetry.addData("recognized color: ", cSencor.getDetectedColor(telemetry));
             if(test.specialDetection != null){
-                telemetry.addData("distance from tag: ", test.robotToTag);
+                telemetry.addData("distance from tag: ", test.distanceToGoal(test.specialDetection.robotPose));
+                test.robotToTag=test.distanceToGoal(test.specialDetection.robotPose);
             }
             else{
                 telemetry.addData("distance from tag", "null :(((");
             }
             telemetry.addData("Order: ",test.Order);
+
+
+            telemetry.addData("cam.pose",test.CAM_POS);
             telemetry.addData("outtake power: ",-gamepad1.left_stick_y);
+            telemetry.addData("odometry: ",odometry.getCurrentPosition()/tick);
             telemetry.update();
         }
 

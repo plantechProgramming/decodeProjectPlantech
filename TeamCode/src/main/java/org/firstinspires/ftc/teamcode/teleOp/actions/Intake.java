@@ -57,7 +57,5 @@ public class Intake {
             IntakeR.setPower(0);
         }
     }
-
-
 }
 

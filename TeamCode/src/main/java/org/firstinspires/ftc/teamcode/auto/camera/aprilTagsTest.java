@@ -9,9 +9,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -36,10 +38,15 @@ public class aprilTagsTest  extends LinearOpMode {
     private AprilTagProcessor aprilTag;
     public String Order = "NNN";
 
+    // goal x: 159,
+    public double goalR_X= -159.0, goalR_Y= 135.0, goalR_Z = 95.0;
     public double robotToTag = 0;
 
     private final Position CAM_POS = new Position(DistanceUnit.CM,
             0, 0, 0, 0);
+
+    private final Position RED_GOAL_POS = new Position(DistanceUnit.CM,
+            goalR_X, goalR_Y, goalR_Z, 0);
     private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
     public AprilTagDetection specialDetection = null;
 
@@ -49,23 +56,15 @@ public class aprilTagsTest  extends LinearOpMode {
     public void runOpMode() {
 
         initAprilTag();
-
-        // Wait for the DS start button to be touched.
-        telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
-        telemetry.addData(">", "Touch START to start OpMode");
-        telemetry.update();
         waitForStart();
 
         while (opModeIsActive()) {
 
-
             telemetry.update();
-
             telemetryAprilTag(aprilTag);
-            // Share the CPU.
             sleep(20);
         }
-        // Save more CPU resources when camera is no longer needed.
+
         visionPortal.close();
 
     }
@@ -88,12 +87,9 @@ public class aprilTagsTest  extends LinearOpMode {
         // Note: Decimation can be changed on-the-fly to adapt during a match.
         //aprilTag.setDecimation(3);
 
-        // Create the vision portal by using a builder.
         VisionPortal.Builder builder = new VisionPortal.Builder();
 
-
-        // Set the camera (webcam vs. built-in RC phone camera).
-        builder.setCamera(hardwareMap.get(WebcamName.class, "Webcam"));
+        builder.setCamera(hardwareMap.get(CameraName.class,"webcam"));
 
 
         // Choose a camera resolution. Not all cameras support all resolutions.
@@ -111,8 +107,6 @@ public class aprilTagsTest  extends LinearOpMode {
         //builder.setAutoStopLiveView(false);
 
         builder.addProcessor(aprilTag);
-
-        // Build the Vision Portal, using the above settings.
         visionPortal = builder.build();
 
         // Disable or re-enable the aprilTag processor at any time.
@@ -163,14 +157,16 @@ public class aprilTagsTest  extends LinearOpMode {
          * OTHERWISE JUST NULL
          */
 
+
         if (specialDetection != null) {
-           try {
-               telemetry.addData("x",specialDetection.robotPose.getPosition().x);
-           }
-           catch (NullPointerException e){
-               telemetry.addData("robot pose failed","too bad");
-           }
+            telemetry.addData(" robotpose x:", specialDetection.robotPose.getPosition().x);
+            robotToTag = distanceToGoal(specialDetection.robotPose);
         }
+
+    }
+
+    public double distanceToGoal(Pose3D robotPose){
+        double x_pos = robotPose.getPosition().x, y_pos = robotPose.getPosition().y;
+        return Math.sqrt(x_pos*x_pos + y_pos*y_pos);
     }
 }
-
