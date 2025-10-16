@@ -21,7 +21,6 @@ public class AprilTagLocalization {
 
     public double goalR_X= 130.0, goalR_Y= 135.0, goalR_Z = 95.0;
     public double robotToTag = 0;
-
     public final Position CAM_POS = new Position(DistanceUnit.CM,
             0, 0, 0, 0);
 
@@ -29,7 +28,7 @@ public class AprilTagLocalization {
             goalR_X, goalR_Y, goalR_Z, 0);
     private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
     public AprilTagDetection specialDetection = null;
-
+    public int numDetected = 0;
     private VisionPortal visionPortal;
 
     public void initProcessor(HardwareMap hardwareMap){
@@ -51,8 +50,8 @@ public class AprilTagLocalization {
     public void detectTags() {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        numDetected = currentDetections.size();
         AprilTagDetection detection = null;
-        AprilTagDetection specialDetection = null;
 
         // find only non special
         for (AprilTagDetection Detection : currentDetections) {
@@ -88,7 +87,11 @@ public class AprilTagLocalization {
         }
 
     }
+    public int getGoalID(){
+        return specialDetection.id;
+    }
     public double distanceToGoal(Pose3D robotPose){
+        //TODO: make func depend on apriltag id
         double x_pos = robotPose.getPosition().x, y_pos = robotPose.getPosition().y;
         return Math.sqrt((x_pos-goalR_X)*(x_pos-goalR_X) + (y_pos-goalR_Y)*(y_pos-goalR_Y));
     }

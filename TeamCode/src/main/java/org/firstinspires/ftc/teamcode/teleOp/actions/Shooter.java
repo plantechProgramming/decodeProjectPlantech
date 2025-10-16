@@ -14,13 +14,14 @@ public class Shooter {
         this.shooter2 = shooter2;
     }
 
-    double curPower = 0.5;
+    public double curPower = 0;
     public void shooterTest(boolean up, boolean down){
         if(up){
-            curPower += 0.05;
+            curPower += 0.005;
         }
         else if(down){
-            curPower -= 0.05;
+            curPower -= 0.005;
         }
+        shooter2.setPower(curPower);
     }
 }

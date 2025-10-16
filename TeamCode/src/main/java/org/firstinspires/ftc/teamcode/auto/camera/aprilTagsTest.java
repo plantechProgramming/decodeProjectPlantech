@@ -62,7 +62,7 @@ public class aprilTagsTest  extends LinearOpMode {
 
             telemetry.update();
             telemetryAprilTag(aprilTag);
-            sleep(20);
+//            sleep(20);
         }
 
         visionPortal.close();
@@ -156,7 +156,6 @@ public class aprilTagsTest  extends LinearOpMode {
          * x is away from obelisk, z is just up. REQUIRES TAG LIBRARY TO BE THE RIGHT ONE TO USE,
          * OTHERWISE JUST NULL
          */
-
 
         if (specialDetection != null) {
             telemetry.addData(" robotpose x:", specialDetection.robotPose.getPosition().x);

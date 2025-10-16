@@ -32,8 +32,8 @@ public class TeleOp extends OpMode {
 //        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
         Shooter shooter = new Shooter(shootMotor,telemetry,shootMotorOp);
         Intake intake = new Intake(IntakeL,IntakeR,telemetry);
-        ColorSensorTest cSencor = new ColorSensorTest();
-        cSencor.init(hardwareMap);
+        ColorSensorTest cSensor = new ColorSensorTest();
+        cSensor.init(hardwareMap);
         boolean is_up = false;
         AprilTagLocalization test = new AprilTagLocalization();
         test.initProcessor(hardwareMap);
@@ -52,7 +52,6 @@ public class TeleOp extends OpMode {
         double botHeading;
         boolean slow = false;
         double tick = 2000/(48*Math.PI); //per tick
-
         while (opModeIsActive() ) {
 //            test.telemetryAprilTag(aprilTag);
             test.detectTags();
@@ -81,7 +80,8 @@ public class TeleOp extends OpMode {
             intake.intakeTest(gamepad1.y);
             if(gamepad1.back){Imu.resetYaw();}
 
-            telemetry.addData("recognized color: ", cSencor.getDetectedColor(telemetry));
+            telemetry.addData("recognized color: ", cSensor.getDetectedColor(telemetry));
+            telemetry.addData("number of apriltags detected",test.numDetected);
             if(test.specialDetection != null){
                 telemetry.addData("distance from tag: ", test.distanceToGoal(test.specialDetection.robotPose));
                 test.robotToTag=test.distanceToGoal(test.specialDetection.robotPose);
@@ -93,7 +93,7 @@ public class TeleOp extends OpMode {
 
 
             telemetry.addData("cam.pose",test.CAM_POS);
-            telemetry.addData("outtake power: ",-gamepad1.left_stick_y);
+            telemetry.addData("shooter power: ",shooter.curPower);
             telemetry.addData("odometry: ",odometry.getCurrentPosition()/tick);
             telemetry.update();
         }
