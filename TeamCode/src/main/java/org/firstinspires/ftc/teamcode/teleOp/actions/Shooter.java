@@ -13,8 +13,14 @@ public class Shooter {
         this.telemetry = telemetry;
         this.shooter2 = shooter2;
     }
-    public void shooterTest(double power){
-        shooter.setPower(power);
-        shooter2.setPower(-power);
+
+    double curPower = 0.5;
+    public void shooterTest(boolean up, boolean down){
+        if(up){
+            curPower += 0.05;
+        }
+        else if(down){
+            curPower -= 0.05;
+        }
     }
 }
