@@ -61,11 +61,14 @@ public class AprilTagLocalization {
         }
         if (detection == null) {
             Order = "NNN";
-        } else if (detection.id == 21) {
+        }
+        if (detection.id == 21) {
             Order = "GPP";
-        } else if (detection.id == 22) {
+        }
+        if (detection.id == 22) {
             Order = "PGP";
-        } else if (detection.id == 23) {
+        }
+        if (detection.id == 23) {
             Order = "PPG";
         }
         // find only special, maybe combine with prev?

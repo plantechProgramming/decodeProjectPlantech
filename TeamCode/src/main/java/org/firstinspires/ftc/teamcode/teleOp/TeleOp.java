@@ -74,7 +74,7 @@ public class TeleOp extends OpMode {
             }
 //            } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
 //            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
-            shooter.shooterTest(gamepad1.dpad_up,gamepad1.dpad_down);
+            shooter.shooterTest(gamepad1.b);
 
 
             intake.intakeTest(gamepad1.y);

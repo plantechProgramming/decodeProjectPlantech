@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.teleOp.actions;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+@Configurable
 public class Shooter {
     DcMotorEx shooter, shooter2;
     Telemetry telemetry;
@@ -14,14 +16,9 @@ public class Shooter {
         this.shooter2 = shooter2;
     }
 
-    public double curPower = 0;
-    public void shooterTest(boolean up, boolean down){
-        if(up){
-            curPower += 0.005;
-        }
-        else if(down){
-            curPower -= 0.005;
-        }
+    public static double curPower = 0;
+    public void shooterTest(boolean x){
+        if(!x){return;}
         shooter2.setPower(curPower);
     }
 }
