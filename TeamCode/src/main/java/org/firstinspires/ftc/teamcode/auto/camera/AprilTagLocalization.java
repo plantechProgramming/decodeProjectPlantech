@@ -32,8 +32,7 @@ public class AprilTagLocalization {
     private VisionPortal visionPortal;
 
     public void initProcessor(HardwareMap hardwareMap){
-
-        aprilTag = new AprilTagProcessor.Builder()
+        AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
                 .setCameraPose(CAM_POS, CAM_ORIENTATION)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getCurrentGameTagLibrary())
@@ -42,12 +41,9 @@ public class AprilTagLocalization {
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(CameraName.class,"webcam"));
-
-        builder.addProcessor(aprilTag);
-        visionPortal = builder.build();
     }
 
-    public void detectTags() {
+    public void detectTags(AprilTagProcessor aprilTag) {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         numDetected = currentDetections.size();
@@ -62,13 +58,13 @@ public class AprilTagLocalization {
         if (detection == null) {
             Order = "NNN";
         }
-        if (detection.id == 21) {
+        else if (detection.id == 21) {
             Order = "GPP";
         }
-        if (detection.id == 22) {
+        else if (detection.id == 22) {
             Order = "PGP";
         }
-        if (detection.id == 23) {
+        else if (detection.id == 23) {
             Order = "PPG";
         }
         // find only special, maybe combine with prev?

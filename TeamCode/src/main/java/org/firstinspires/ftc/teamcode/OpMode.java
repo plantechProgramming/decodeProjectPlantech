@@ -26,8 +26,8 @@ import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 public abstract class OpMode extends LinearOpMode {
 
 //    protected CRServo ;
-    protected Servo roni2_intake,intake_center_angle;
-    protected CRServo IntakeL,IntakeR;
+    protected Servo roni2_intake,intake_center_angle,IntakeR;
+    protected CRServo IntakeL;
     protected NormalizedColorSensor colorSensor;
 
     protected CameraName camera;
@@ -67,24 +67,11 @@ public abstract class OpMode extends LinearOpMode {
 //        DriveBackRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 //        DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 //        DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-//
-//        EA = hardwareMap.get(DcMotorEx.class, "EA");
-//        EA.setDirection(DcMotorEx.Direction.REVERSE);
-//        EA.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-//        EA.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        EA.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-//
-//        EH = hardwareMap.get(DcMotorEx.class, "EH");
-//        EH.setDirection(DcMotorEx.Direction.FORWARD);
-//        EH.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-//        EH.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        EH.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-
 
         intake_center_angle = hardwareMap.get(Servo.class,"intA");
         intake_center_angle.setPosition(0.7);
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
-        IntakeR = hardwareMap.get(CRServo.class,"IntakeR");
+        IntakeR = hardwareMap.get(Servo.class,"hood");
         IntakeL = hardwareMap.get(CRServo.class,"IntakeL");
 
         Imu = hardwareMap.get(IMU.class, "imu");
