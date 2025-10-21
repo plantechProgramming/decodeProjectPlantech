@@ -97,6 +97,7 @@ public class TeleOp extends OpMode {
 //            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
             shooter.shooterTest(-gamepad1.left_stick_y);
             if(gamepad1.y) shooter.shoot(Distance.fromMeters(1),2);
+            else{shooter.noPhysShoot(0);}
 
             //intake.intakeTest(gamepad1.y);
             if(gamepad1.back){Imu.resetYaw();}
@@ -104,14 +105,13 @@ public class TeleOp extends OpMode {
             telemetry.addData("recognized color: ", cSensor.getDetectedColor(telemetry));
             telemetry.addData("number of apriltags detected",test.numDetected);
             if(test.specialDetection != null){
-                telemetry.addData("distance from tag: ", test.specialDetection.ftcPose.x);
+                telemetry.addData("distance from tag: ", test.distanceToGoal((test.specialDetection.robotPose)));
             }
             else{
                 telemetry.addData("distance from tag", "null :(((");
             }
             telemetry.addData("Order: ",test.Order);
 
-            telemetry.addData("cam.pose",test.CAM_POS);
             telemetry.addData("shooter power: ",shooter.curPower);
             telemetry.addData("odometry: ",odometry.getCurrentPosition()/tick);
             telemetry.update();
