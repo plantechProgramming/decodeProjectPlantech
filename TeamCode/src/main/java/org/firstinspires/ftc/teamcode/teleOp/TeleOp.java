@@ -96,7 +96,7 @@ public class TeleOp extends OpMode {
 //            } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
 //            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
             shooter.shooterTest(-gamepad1.left_stick_y);
-            if(gamepad1.y) shooter.shoot(Distance.fromMeters(1),2);
+            if(gamepad1.y) shooter.shoot(Distance.fromMeters(1.57),2);
             else{shooter.noPhysShoot(0);}
 
             //intake.intakeTest(gamepad1.y);
@@ -105,14 +105,17 @@ public class TeleOp extends OpMode {
             telemetry.addData("recognized color: ", cSensor.getDetectedColor(telemetry));
             telemetry.addData("number of apriltags detected",test.numDetected);
             if(test.specialDetection != null){
-                telemetry.addData("distance from tag: ", test.distanceToGoal((test.specialDetection.robotPose)));
+                telemetry.addData("distance from tag: ", test.distanceToGoal(test.specialDetection.robotPose));
+                telemetry.addData("dis2tagFlat", test.distanceToGoal(test.specialDetection.robotPose));
+//                telemetry.addData("distance from tag X: ", test.specialDetection.robotPose.getPosition().x);
             }
             else{
                 telemetry.addData("distance from tag", "null :(((");
             }
             telemetry.addData("Order: ",test.Order);
 
-            telemetry.addData("shooter power: ",shooter.curPower);
+            telemetry.addData("theta", shooter.theta);
+            telemetry.addData("shooter power: ",shooter.motorPower);
             telemetry.addData("odometry: ",odometry.getCurrentPosition()/tick);
             telemetry.update();
         }

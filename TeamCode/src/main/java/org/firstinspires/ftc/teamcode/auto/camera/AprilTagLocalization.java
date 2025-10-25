@@ -21,6 +21,7 @@ public class AprilTagLocalization {
 
     public double goalR_X= 130.0, goalR_Y= 135.0, goalR_Z = 95.0;
     public double robotToTag = 0;
+    public double dis2TagFlat = 2.05; // in meters
     public final Position CAM_POS = new Position(DistanceUnit.CM,
             0, 0, 0, 0);
 
@@ -91,8 +92,15 @@ public class AprilTagLocalization {
     }
     public double distanceToGoal(Pose3D robotPose){
         //TODO: make func depend on apriltag id
-        double x_pos = robotPose.getPosition().x, y_pos = robotPose.getPosition().y;
-        return Math.sqrt((x_pos-goalR_X)*(x_pos-goalR_X) + (y_pos-goalR_Y)*(y_pos-goalR_Y));
+        double dis2CenterFlat = Math.sqrt(Math.pow(robotPose.getPosition().x, 2) + Math.pow(robotPose.getPosition().y, 2));
+        return dis2TagFlat - dis2CenterFlat;
     }
+
+    //TODO: make the func
+    public double pythagDistance(Pose3D robotPose){
+        return -1;
+    }
+
+
 
 }
