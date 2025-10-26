@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.auto.camera.aprilTagsTest;
 
 import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
@@ -104,9 +105,10 @@ public class TeleOp extends OpMode {
 
             telemetry.addData("recognized color: ", cSensor.getDetectedColor(telemetry));
             telemetry.addData("number of apriltags detected",test.numDetected);
-            if(test.specialDetection != null){
-                telemetry.addData("distance from tag: ", test.distanceToGoal(test.specialDetection.robotPose));
-                telemetry.addData("dis2tagFlat", test.distanceToGoal(test.specialDetection.robotPose));
+            AprilTagDetection goalTag = test.specialDetection;
+            if(goalTag != null){
+                telemetry.addData("distance from tag: ", test.distanceToGoal(goalTag.robotPose,goalTag.id));
+                telemetry.addData("dis2tagFlat", test.distanceToGoal(goalTag.robotPose,goalTag.id));
 //                telemetry.addData("distance from tag X: ", test.specialDetection.robotPose.getPosition().x);
             }
             else{
