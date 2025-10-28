@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -28,6 +29,7 @@ import dev.nextftc.core.units.Distance;
 
 
 @Configurable
+@Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOp extends OpMode {
     @Override
@@ -60,6 +62,7 @@ public class TeleOp extends OpMode {
         builder.addProcessor(aprilTag);
         visionPortal = builder.build();
 
+
 //        AprilTagProcessor aprilTag = test.initAprilTag();
 
        /* VisionPortal visionPortal = new VisionPortal.Builder()
@@ -75,8 +78,10 @@ public class TeleOp extends OpMode {
         boolean slow = false;
         double tick = 2000/(48*Math.PI); //per tick
         while (opModeIsActive() ) {
+            AprilTagDetection goalTag = test.specialDetection;
 //            test.telemetryAprilTag(aprilTag);
             test.detectTags(aprilTag);
+
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
@@ -97,22 +102,31 @@ public class TeleOp extends OpMode {
 //            } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
 //            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
             shooter.shooterTest(-gamepad1.left_stick_y);
-            if(gamepad1.y) shooter.shoot(Distance.fromMeters(1.57),2);
-            else{shooter.noPhysShoot(0);}
+            try {
+                double d = test.distanceToGoal(goalTag.robotPose,goalTag.id);
+//                double t = Math.abs(Math.sqrt((2*Math.tan(Math.toRadians(67))*d-1.9)/9.8));
+//                double t = 2;
+//                double d = 1;
+//                telemetry.addData("time", t);
+                if (gamepad1.y) shooter.shoot(d, 2);
+                else{shooter.noPhysShoot(0);}
+            }
+            catch(NullPointerException e){
+                telemetry.addLine("Npe triggered");
+            }
+
 
             //intake.intakeTest(gamepad1.y);
             if(gamepad1.back){Imu.resetYaw();}
 
             telemetry.addData("recognized color: ", cSensor.getDetectedColor(telemetry));
             telemetry.addData("number of apriltags detected",test.numDetected);
-            AprilTagDetection goalTag = test.specialDetection;
             if(goalTag != null){
                 telemetry.addData("distance from tag: ", test.distanceToGoal(goalTag.robotPose,goalTag.id));
-                telemetry.addData("dis2tagFlat", test.distanceToGoal(goalTag.robotPose,goalTag.id));
 //                telemetry.addData("distance from tag X: ", test.specialDetection.robotPose.getPosition().x);
             }
             else{
-                telemetry.addData("distance from tag", "null :(((");
+                telemetry.addData("distance from tag", "null :`(((");
             }
             telemetry.addData("Order: ",test.Order);
 

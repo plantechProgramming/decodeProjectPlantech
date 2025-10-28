@@ -12,13 +12,12 @@ public class ColorSensorTest {
 
     public enum DetectedColor{
         GREEN,
-        BLUE,
-        RED,
+        PURPLE,
         UNKNOWN
     }
     public void init(HardwareMap hawamap){
         colorSensor = hawamap.get(NormalizedColorSensor.class, "color_sensor");
-        colorSensor.setGain(8);
+        colorSensor.setGain(10);
     }
     public DetectedColor getDetectedColor(Telemetry telemetry){
         NormalizedRGBA colors = colorSensor.getNormalizedColors();// returns RGB and Alpha values
@@ -40,13 +39,13 @@ public class ColorSensorTest {
         telemetry.addData("red: ",normRed);
         telemetry.addData("green: ", normGreen);
         telemetry.addData("blue: ",normBlue);
-        if (normRed>0.19 && normGreen<.37 && normBlue<.3){
-            return DetectedColor.RED;
-        }else if (normRed > 0.14 && normGreen>0.2 && normBlue<0.4){
+        if (normRed <.16 && normGreen>0.36 && normBlue<0.53){
             return DetectedColor.GREEN;
-        }else if (normRed < 0.2 && normGreen<0.5 && normBlue>0.20){
-            return DetectedColor.BLUE;
-        }else {
+        }
+        else if(normRed>.11 &&normGreen<.33 && normBlue>.18){
+            return DetectedColor.PURPLE;
+        }
+        else {
             return DetectedColor.UNKNOWN;
         }
     }
