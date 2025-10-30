@@ -104,11 +104,7 @@ public class TeleOp extends OpMode {
             shooter.noPhysShoot(-gamepad1.left_stick_y);
             try {
                 double d = test.distanceToGoal(goalTag.robotPose,goalTag.id);
-//                double t = Math.abs(Math.sqrt((2*Math.tan(Math.toRadians(67))*d-1.9)/9.8));
-//                double t = 2;
-//                double d = 1;
-//                telemetry.addData("time", t);
-                if (gamepad1.y) shooter.shootByAngle(d);
+                if (gamepad1.y) shooter.shootByTime(1.5,2);
                 else{shooter.noPhysShoot(0);}
             }
             catch(NullPointerException e){

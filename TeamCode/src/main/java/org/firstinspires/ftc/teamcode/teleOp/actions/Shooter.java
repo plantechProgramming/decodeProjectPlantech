@@ -32,12 +32,14 @@ public class Shooter {
     public double motorPower;
     public double theta;
     public double t;
+
     public void shootByTime(double d, double t){
         theta = Math.atan((g*t*t + 2*h)/(2*d));
         // the artifact turns between a stationary wall and the flywheel, so you
         // need to multiply by 2
         double velocity = 2*d/(Math.cos(theta)*t);
         motorPower = 60*velocity/(diameter*Math.PI*MAX_RPM);
+        telemetry.addData("velocity",velocity);
         telemetry.addData("motorPower", motorPower);
         shooter.setPower(motorPower);
         shooter2.setPower(-motorPower);
@@ -45,13 +47,14 @@ public class Shooter {
 
     public void shootByAngle(double d){
         // TODO: make cases for different odo vals, test if even needed
-        theta = Math.toRadians(67);
+        theta = 1.16; // in radians
         t = Math.sqrt((2/g)*(Math.tan(theta)*d - h));
         double velocity = 2*d/(Math.cos(theta)*t);
+        telemetry.addData("velocity",velocity);
+        telemetry.addData("time", t);
         motorPower = 60*velocity/(diameter*Math.PI*MAX_RPM);
-        telemetry.addData("motorPower", motorPower);
-        shooter.setPower(motorPower);
-        shooter2.setPower(-motorPower);
+        telemetry.addData("motorPower", motorPower*(2));
+        shooter.setPower(motorPower*(2));
+        shooter2.setPower(-motorPower*(2));
     }
-
 }
