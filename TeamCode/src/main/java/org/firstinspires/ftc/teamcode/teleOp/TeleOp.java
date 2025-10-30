@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.teleOp;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -48,6 +47,7 @@ public class TeleOp extends OpMode {
         ColorSensorTest cSensor = new ColorSensorTest();
         cSensor.init(hardwareMap);
         boolean is_up = false;
+        //TODO: find why didnt work outside
         AprilTagLocalization test = new AprilTagLocalization();
         AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
                 .setCameraPose(CAM_POS, CAM_ORIENTATION)
@@ -101,14 +101,14 @@ public class TeleOp extends OpMode {
             }
 //            } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
 //            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
-            shooter.shooterTest(-gamepad1.left_stick_y);
+            shooter.noPhysShoot(-gamepad1.left_stick_y);
             try {
                 double d = test.distanceToGoal(goalTag.robotPose,goalTag.id);
 //                double t = Math.abs(Math.sqrt((2*Math.tan(Math.toRadians(67))*d-1.9)/9.8));
 //                double t = 2;
 //                double d = 1;
 //                telemetry.addData("time", t);
-                if (gamepad1.y) shooter.shoot(d, 2);
+                if (gamepad1.y) shooter.shootByAngle(d);
                 else{shooter.noPhysShoot(0);}
             }
             catch(NullPointerException e){

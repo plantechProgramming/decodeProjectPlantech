@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.auto.camera;
 
-import org.firstinspires.ftc.vision.opencv.ColorRange;
-import org.firstinspires.ftc.vision.opencv.ColorSpace;
 import org.opencv.core.Scalar;
 
 public class Color {

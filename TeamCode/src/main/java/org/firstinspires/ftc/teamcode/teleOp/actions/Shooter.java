@@ -17,12 +17,6 @@ public class Shooter {
         this.telemetry = telemetry;
         this.shooter2 = shooter2;
     }
-    public double motorPower;
-    public double theta;
-    public static double curPower = 0;
-    public void shooterTest(double x){
-        shooter.setPower(x);
-        shooter2.setPower(-x);    }
 
     // g - gravity acceleration
     final double g = 9.8;
@@ -34,7 +28,11 @@ public class Shooter {
         shooter2.setPower(-x);
         shooter.setPower(x);
     }
-    public void shoot(double d, double t){
+
+    public double motorPower;
+    public double theta;
+    public double t;
+    public void shootByTime(double d, double t){
         theta = Math.atan((g*t*t + 2*h)/(2*d));
         // the artifact turns between a stationary wall and the flywheel, so you
         // need to multiply by 2
@@ -44,4 +42,16 @@ public class Shooter {
         shooter.setPower(motorPower);
         shooter2.setPower(-motorPower);
     }
+
+    public void shootByAngle(double d){
+        // TODO: make cases for different odo vals, test if even needed
+        theta = Math.toRadians(67);
+        t = Math.sqrt((2/g)*(Math.tan(theta)*d - h));
+        double velocity = 2*d/(Math.cos(theta)*t);
+        motorPower = 60*velocity/(diameter*Math.PI*MAX_RPM);
+        telemetry.addData("motorPower", motorPower);
+        shooter.setPower(motorPower);
+        shooter2.setPower(-motorPower);
+    }
+
 }

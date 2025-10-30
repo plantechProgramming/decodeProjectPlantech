@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * This file is an auto for tests. Most funcs are not used, please leave them as they are
- * until later in the season!
+ * FILE IS NOT USED. here for "what if we need it for some reason in comp"
+ * reasons.
  */
 @Autonomous(name = "aprilTags")
 public class aprilTagsTest  extends LinearOpMode {
