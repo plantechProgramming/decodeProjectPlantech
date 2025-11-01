@@ -23,7 +23,9 @@ public class Shooter {
     // g - gravity acceleration
     final double g = 9.8;
     // h - goal height + some 5 cm. IN CM
-    final double h = 0.95;
+    final double h = 1.15;
+
+    final double robot_Height = 0.4;
     final double diameter = .096; //in m
     final int MAX_RPM = 6000;
     public void noPhysShoot(double x){
@@ -43,7 +45,7 @@ public class Shooter {
     public void shootByAngle(double d){
         // TODO: make cases for different odo vals, test if even needed
         theta = 0.804; // in radians
-        t = Math.sqrt((2/g)*(Math.tan(theta)*d - h));
+        t = Math.sqrt((2/g)*(Math.tan(theta)*d - (h - robot_Height)));
         shoot(theta,d,t);
     }
 

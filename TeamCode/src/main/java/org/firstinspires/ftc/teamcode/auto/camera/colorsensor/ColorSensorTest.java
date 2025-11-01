@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class ColorSensorTest {
     NormalizedColorSensor colorSensor;
 //    public boolean
-DetectedColor lastDetected;
+    DetectedColor lastDetected = DetectedColor.UNKNOWN;
     public enum DetectedColor{
         GREEN,
         PURPLE,
@@ -29,7 +29,6 @@ DetectedColor lastDetected;
         normRed = colors.red/ colors.alpha;
         normGreen = colors.green/ colors.alpha;
         normBlue = colors.blue/ colors.alpha;
-        lastDetected = DetectedColor.UNKNOWN;
 
         /*
             red green blue
