@@ -9,7 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class ColorSensorTest {
     NormalizedColorSensor colorSensor;
 //    public boolean
-
+DetectedColor lastDetected;
     public enum DetectedColor{
         GREEN,
         PURPLE,
@@ -19,6 +19,9 @@ public class ColorSensorTest {
         colorSensor = hawamap.get(NormalizedColorSensor.class, "color_sensor");
         colorSensor.setGain(10);
     }
+    public DetectedColor getLastDetected(){
+        return lastDetected;
+    }
     public DetectedColor getDetectedColor(Telemetry telemetry){
         NormalizedRGBA colors = colorSensor.getNormalizedColors();// returns RGB and Alpha values
 
@@ -26,7 +29,7 @@ public class ColorSensorTest {
         normRed = colors.red/ colors.alpha;
         normGreen = colors.green/ colors.alpha;
         normBlue = colors.blue/ colors.alpha;
-
+        lastDetected = DetectedColor.UNKNOWN;
 
         /*
             red green blue
@@ -40,9 +43,11 @@ public class ColorSensorTest {
         telemetry.addData("green: ", normGreen);
         telemetry.addData("blue: ",normBlue);
         if (normRed <.16 && normGreen>0.36 && normBlue<0.53){
+            lastDetected = DetectedColor.GREEN;
             return DetectedColor.GREEN;
         }
-        else if(normRed>.11 &&normGreen<.33 && normBlue>.18){
+        else if(normRed>.12 &&normGreen<.33 && normBlue>.19){
+            lastDetected = DetectedColor.PURPLE;
             return DetectedColor.PURPLE;
         }
         else {

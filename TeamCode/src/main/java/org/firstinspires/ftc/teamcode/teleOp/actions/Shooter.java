@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleOp.actions;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import dev.nextftc.core.units.Distance;
 
 @Configurable
+@Config
 public class Shooter {
     DcMotorEx shooter, shooter2;
     Telemetry telemetry;
@@ -35,26 +37,25 @@ public class Shooter {
 
     public void shootByTime(double d, double t){
         theta = Math.atan((g*t*t + 2*h)/(2*d));
-        // the artifact turns between a stationary wall and the flywheel, so you
-        // need to multiply by 2
-        double velocity = 2*d/(Math.cos(theta)*t);
-        motorPower = 60*velocity/(diameter*Math.PI*MAX_RPM);
-        telemetry.addData("velocity",velocity);
-        telemetry.addData("motorPower", motorPower);
-        shooter.setPower(motorPower);
-        shooter2.setPower(-motorPower);
+        shoot(theta,d,t);
     }
 
     public void shootByAngle(double d){
         // TODO: make cases for different odo vals, test if even needed
-        theta = 1.16; // in radians
+        theta = 0.804; // in radians
         t = Math.sqrt((2/g)*(Math.tan(theta)*d - h));
-        double velocity = 2*d/(Math.cos(theta)*t);
-        telemetry.addData("velocity",velocity);
-        telemetry.addData("time", t);
-        motorPower = 60*velocity/(diameter*Math.PI*MAX_RPM);
-        telemetry.addData("motorPower", motorPower*(2));
-        shooter.setPower(motorPower*(2));
-        shooter2.setPower(-motorPower*(2));
+        shoot(theta,d,t);
     }
+
+    public void shoot(double theta, double d, double t){
+        double velocity = 2*d/(Math.cos(theta)*t);
+        motorPower = 60*velocity/(diameter*Math.PI*MAX_RPM);
+        shooter.setPower(motorPower);
+        shooter2.setPower(-motorPower);
+        telemetry.addData("power", motorPower);
+        telemetry.addData("time",t);
+        telemetry.addData("theta", theta);
+        telemetry.addData("velocity", velocity);
+    }
+
 }

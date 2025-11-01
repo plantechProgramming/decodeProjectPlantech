@@ -18,5 +18,6 @@ public class ColorTests extends OpMode {
     public void loop() {
         detectedColor = color.getDetectedColor(telemetry);
         telemetry.addData("Detected Color is: ", detectedColor);
+        telemetry.addData("last Detected Color: ", detectedColor);
     }
 }

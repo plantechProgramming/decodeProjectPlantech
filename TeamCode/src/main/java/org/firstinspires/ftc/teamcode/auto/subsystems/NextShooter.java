@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto.subsystems;
 
+import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
+
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
@@ -23,17 +25,15 @@ public class NextShooter implements Subsystem {
     final double h = 95;
     final double diameter = .096; //in mm
     final int MAX_RPM = 6000;
-    public Command shoot(Distance d, double t){
-        double theta = Math.atan((g*t*t + 2*h)/(2*d.inCm));
-        double velocity = d.inCm/(Math.cos(theta)*t);
-        double rpm = velocity/(diameter*Math.PI*MAX_RPM);
-        return new SequentialGroup(
-                new SetPosition(hood,theta),
-                new ParallelGroup(
-                        new SetPower(shooter1, rpm),
-                        new SetPower(shooter2, -rpm)
-                )
+    public Command shootByAngle(double d) {
+        double theta = 0.804; // in radians
+        double t = Math.sqrt((2 / g) * (Math.tan(theta) * d - h));
+        double velocity = 2 * d / (Math.cos(theta) * t);
+        double motorPower = 60 * velocity / (diameter * Math.PI * MAX_RPM);
+        return new ParallelGroup(
+                new SetPower(shooter1,motorPower),
+                new SetPower(shooter2,-motorPower)
         );
-    }
 
+    }
 }

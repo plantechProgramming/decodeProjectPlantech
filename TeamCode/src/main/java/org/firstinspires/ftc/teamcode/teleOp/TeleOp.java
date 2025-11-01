@@ -103,8 +103,8 @@ public class TeleOp extends OpMode {
 //            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
             shooter.noPhysShoot(-gamepad1.left_stick_y);
             try {
-                double d = test.distanceToGoal(goalTag.robotPose,goalTag.id);
-                if (gamepad1.y) shooter.shootByTime(1.5,2);
+                //double d = test.distanceToGoal(goalTag.robotPose,goalTag.id);
+                if (gamepad1.y) shooter.shootByAngle(1.5);
                 else{shooter.noPhysShoot(0);}
             }
             catch(NullPointerException e){
@@ -129,6 +129,7 @@ public class TeleOp extends OpMode {
             telemetry.addData("theta", shooter.theta);
             telemetry.addData("shooter power: ",shooter.motorPower);
             telemetry.addData("odometry: ",odometry.getCurrentPosition()/tick);
+            telemetry.addData("last Detected Color: ", cSensor.getLastDetected());
             telemetry.update();
         }
 
