@@ -12,7 +12,7 @@ import dev.nextftc.core.units.Distance;
 @Configurable
 @Config
 public class Shooter {
-    DcMotorEx shooter, shooter2;
+    public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
     public <roni2_intake> Shooter(DcMotorEx shootMotor, Telemetry telemetry, DcMotorEx shooter2){
         this.shooter = shootMotor;
@@ -29,8 +29,8 @@ public class Shooter {
     final double diameter = .096; //in m
     final int MAX_RPM = 6000;
     public void noPhysShoot(double x){
-        shooter2.setPower(-x);
         shooter.setPower(x);
+        shooter2.setPower(-x);
     }
 
     public double motorPower;
@@ -45,7 +45,7 @@ public class Shooter {
     public void shootByAngle(double d){
         // TODO: make cases for different odo vals, test if even needed
         theta = 0.804; // in radians
-        t = Math.sqrt((2/g)*(Math.tan(theta)*d - (h - robot_Height)));
+        t = Math.sqrt((2/g)*(Math.tan(theta)*d - h));
         shoot(theta,d,t);
     }
 

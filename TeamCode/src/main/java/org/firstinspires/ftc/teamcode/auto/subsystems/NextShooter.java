@@ -65,8 +65,8 @@ public class NextShooter implements Subsystem {
         double motorPower = 60 * velocity / (diameter * Math.PI * MAX_RPM);
 
         return new ParallelGroup(
-                new SetPower(shooter1,0.5),
-                new SetPower(shooter2,-0.5)
+                new SetPower(shooter1,1),
+                new SetPower(shooter2,-1)
         );
 
     }
