@@ -25,14 +25,28 @@ public class Shooter {
     final double diameter = .096; //in m
     final int MAX_RPM = 6000;
     public void noPhysShoot(double x){
-        shooter.setPower(x);
-        shooter2.setPower(-x);
+        shooter.setPower(0.77);
+        shooter2.setPower(-0.77);
+    }
+
+    public void naiveShooter(double dis) {
+        if (dis < 2.5) {
+            shooter.setPower(0.75);
+            shooter2.setPower(-0.75);
+        } else if (dis > 2.5) {
+            shooter.setPower(0.82);
+            shooter2.setPower(-0.82);
+        }else{
+            shooter.setPower(0);
+            shooter2.setPower(0);
+        }shooter2.getVelocity()
     }
 
     public double motorPower;
     public double theta;
     public double t;
 
+    double hDiff = h - robot_Height;
     public void shootByTime(double d, double t){
 
         theta = Math.atan((g*t*t + 2*h)/(2*d));
@@ -46,7 +60,6 @@ public class Shooter {
         shoot(theta,d,t);
     }
 
-    double hDiff = h - robot_Height;
     public void shootByAngleOnline(double d){
         theta = 0.804; // in radians
         double cosSquared = Math.cos(theta)*Math.cos(theta);
@@ -61,7 +74,7 @@ public class Shooter {
     }
 
     public void shoot(double theta, double d, double t){
-        double velocity = 2*d/(Math.cos(theta)*t);
+        double velocity = 2*d/(Math.acos(theta)*t);
         motorPower = 60*velocity/(diameter*Math.PI*MAX_RPM);
         shooter.setPower(motorPower);
         shooter2.setPower(-motorPower);

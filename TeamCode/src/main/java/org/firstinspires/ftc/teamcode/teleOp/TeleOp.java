@@ -25,6 +25,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 import dev.nextftc.core.units.Distance;
+import kotlin.Unit;
 
 
 @Configurable
@@ -76,6 +77,7 @@ public class TeleOp extends OpMode {
         double drift;
         double botHeading;
         boolean slow = false;
+
         double tick = 2000/(48*Math.PI); //per tick
         while (opModeIsActive() ) {
             AprilTagDetection goalTag = test.specialDetection;
@@ -101,11 +103,11 @@ public class TeleOp extends OpMode {
             }
 //            } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
 //            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
-            shooter.noPhysShoot(forward);
+//            shooter.noPhysShoot(forward);
             try {
-                double d = test.distanceToGoal(goalTag.robotPose,goalTag.id);
-                if (gamepad1.y) shooter.shootByAngle(1.5);
-                if (gamepad1.a) shooter.shootByTime(1.5,0.41);
+                //double d = test.distanceToGoal(goalTag.robotPose,goalTag.id);
+                if (gamepad1.y) shooter.naiveShooter(2.6);
+                if (gamepad1.a) shooter.naiveShooter(1);
             }
             catch(NullPointerException e){
                 telemetry.addLine("Npe triggered");
@@ -126,7 +128,7 @@ public class TeleOp extends OpMode {
             }
             telemetry.addData("Order: ",test.Order);
 
-            telemetry.addData("shooter power: ",-gamepad1.left_stick_y);
+            telemetry.addData("shooter power: ",shooter.shooter2.getPower());
             telemetry.addData("odometry: ",odometry.getCurrentPosition()/tick);
             telemetry.addData("last Detected Color: ", cSensor.getLastDetected());
             telemetry.update();
