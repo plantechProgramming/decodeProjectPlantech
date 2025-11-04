@@ -101,10 +101,11 @@ public class TeleOp extends OpMode {
             }
 //            } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
 //            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
-            shooter.noPhysShoot(-gamepad1.left_stick_y);
+            shooter.noPhysShoot(forward);
             try {
                 double d = test.distanceToGoal(goalTag.robotPose,goalTag.id);
-                if (gamepad1.y) shooter.shootByAngle(d);
+                if (gamepad1.y) shooter.shootByAngle(1.5);
+                if (gamepad1.a) shooter.shootByTime(1.5,0.41);
             }
             catch(NullPointerException e){
                 telemetry.addLine("Npe triggered");
