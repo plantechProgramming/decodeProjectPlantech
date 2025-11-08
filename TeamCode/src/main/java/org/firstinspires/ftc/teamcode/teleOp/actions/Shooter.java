@@ -5,6 +5,12 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
+import com.qualcomm.robotcore.hardware.HardwareDevice;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Configurable
 @Config
@@ -18,29 +24,34 @@ public class Shooter {
     }
 
     // g - gravity acceleration
-    final double g = 9.81;
+    final double g = 9.8066;
     // h - goal height + some 5 cm. IN CM
     final double h = 1.15;
     final double robot_Height = 0.4;
     final double diameter = .096; //in m
     final int MAX_RPM = 6000;
+
     public void noPhysShoot(double x){
-        shooter.setPower(0.77);
-        shooter2.setPower(-0.77);
+        shooter.setPower(x);
+        shooter2.setPower(-x);
     }
 
+    /// @param dis: distance from goal
+    /// shoots with different powers depending on what launch zone youre in
+    // TODO: make depend on odo vals, closed loop control for values
     public void naiveShooter(double dis) {
         if (dis < 2.5) {
-            shooter.setPower(0.75);
-            shooter2.setPower(-0.75);
+            shooter.setPower(0.1);
+            shooter2.setPower(-0.1);
         } else if (dis > 2.5) {
             shooter.setPower(0.82);
             shooter2.setPower(-0.82);
-        }else{
-            shooter.setPower(0);
-            shooter2.setPower(0);
-        }shooter2.getVelocity()
+        }
+        telemetry.addData("velocity filter", getVelocityFilter(shooter));
+        telemetry.addData("velocity average", getVelocityAverage(shooter));
+        telemetry.addData("velocity noisy", getVelocity(shooter));
     }
+
 
     public double motorPower;
     public double theta;
@@ -53,6 +64,74 @@ public class Shooter {
         shoot(theta,d,t);
     }
 
+    private static final ElapsedTime timer = new ElapsedTime();
+
+    public long prevEncoder = 0;
+    public long curEncoder;
+
+    public double prevTime = 0;
+    public double curTime;
+    int ticksPerRevolution = 28;
+    int millisecondsToMinute = 60000;
+    public double getVelocity(DcMotorEx motor){
+        curEncoder = motor.getCurrentPosition();
+        curTime = timer.milliseconds();
+
+        double timeDiff = curTime - prevTime;
+        double encoderDiff = curEncoder - prevEncoder;
+
+        double tickVelocity = encoderDiff/timeDiff; // ticks/milliseconds
+        double velocity = (tickVelocity*millisecondsToMinute)/ticksPerRevolution;
+
+        prevTime = curTime;
+        prevEncoder = curEncoder;
+
+        telemetry.addData("time",curTime);
+        return velocity;
+    }
+
+    public static double alpha = 0.1;
+    double prevVelocity = 0;
+    public double getVelocityFilter(DcMotorEx motor){
+        curEncoder = motor.getCurrentPosition();
+        curTime = timer.milliseconds();
+
+        double timeDiff = curTime - prevTime;
+        double encoderDiff = curEncoder - prevEncoder;
+
+        double tickVelocity = encoderDiff/timeDiff; // ticks/milliseconds
+        double velocity = (tickVelocity*millisecondsToMinute)/ticksPerRevolution;
+
+        prevTime = curTime;
+        prevEncoder = curEncoder;
+
+        double filteredVelocity = alpha*velocity + (1-alpha)*prevVelocity;
+        prevVelocity = filteredVelocity;
+        return filteredVelocity;
+    }
+
+    double avgPrevVel = 0;
+    int count = 0;
+    public double getVelocityAverage(DcMotorEx motor){
+        curEncoder = motor.getCurrentPosition();
+        curTime = timer.milliseconds();
+
+        double timeDiff = curTime - prevTime;
+        double encoderDiff = curEncoder - prevEncoder;
+
+        double tickVelocity = encoderDiff/timeDiff; // ticks/milliseconds
+        double velocity = (tickVelocity*millisecondsToMinute)/ticksPerRevolution;
+
+        prevTime = curTime;
+        prevEncoder = curEncoder;
+        double velAvg = (avgPrevVel*count+velocity)/(count + 1);
+        avgPrevVel = velAvg;
+        count++;
+        return velAvg;
+    }
+
+    // OLD -------------------------------------------------------------------------------------
+    
     public void shootByAngle(double d){
         // TODO: make cases for different odo vals, test if even needed
         theta = 0.804; // in radians
@@ -84,30 +163,4 @@ public class Shooter {
         telemetry.addData("velocity", velocity);
     }
 
-    // GPT CODE ----------------------------------------------------------------------------
-
-    public void shootByAngleGPT(double d) {
-        theta = 0.804; // radians
-        double v = getLaunchVelocity(d, theta);
-        setShooterPower(v);
-    }
-
-    public double getLaunchVelocity(double d, double theta) {
-        // g = 9.81 m/s^2
-        double g = 9.81;
-        // h = height difference between shooter and target, meters
-        return (d / Math.cos(theta)) * Math.sqrt(g / (2 * (d * Math.tan(theta) + (h-robot_Height))));
-    }
-
-    public void setShooterPower(double velocity) {
-        // Convert linear velocity (m/s) to motor power
-        // diameter in meters, MAX_RPM motor constant
-        motorPower = (60 * velocity) / (diameter * Math.PI * MAX_RPM);
-
-        shooter.setPower(motorPower);
-        shooter2.setPower(-motorPower);
-
-        telemetry.addData("motor power", motorPower);
-        telemetry.addData("velocity (m/s)", velocity);
-    }
 }

@@ -44,7 +44,7 @@ public class TeleOp extends OpMode {
     @Override
     public void run(){
 //        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
-        Shooter shooter = new Shooter(shootMotor,telemetry,shootMotorOp);
+        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
         ColorSensorTest cSensor = new ColorSensorTest();
         cSensor.init(hardwareMap);
         boolean is_up = false;
@@ -91,8 +91,8 @@ public class TeleOp extends OpMode {
 
             ElapsedTime elapsedTime = new ElapsedTime();
 //            driveTrain.drive(forward, drift, turn, botHeading, 1);
-//            telemetry.addData("x", DriveFrontRight.getCurrentPosition());
-//            telemetry.addData("y",DriveBackLeft.getCurrentPosition());
+//            dashboardTelemetry.addData("x", DriveFrontRight.getCurrentPosition());
+//            dashboardTelemetry.addData("y",DriveBackLeft.getCurrentPosition());
 
             if(gamepad1.x && !slow){
 //                driveTrain.drive(forward, drift, turn, botHeading, 0.5);
@@ -101,8 +101,8 @@ public class TeleOp extends OpMode {
 //                driveTrain.drive(forward, drift, turn, botHeading, 1);
                 slow = false;
             }
-//            } telemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
-//            telemetry.addData("x:", DriveFrontRight.getCurrentPosition());
+//            } dashboardTelemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
+//            dashboardTelemetry.addData("x:", DriveFrontRight.getCurrentPosition());
 //            shooter.noPhysShoot(forward);
             try {
                 //double d = test.distanceToGoal(goalTag.robotPose,goalTag.id);
@@ -110,28 +110,29 @@ public class TeleOp extends OpMode {
                 if (gamepad1.a) shooter.naiveShooter(1);
             }
             catch(NullPointerException e){
-                telemetry.addLine("Npe triggered");
+                dashboardTelemetry.addLine("Npe triggered");
             }
 
 
             //intake.intakeTest(gamepad1.y);
             if(gamepad1.back){Imu.resetYaw();}
 
-            telemetry.addData("recognized color: ", cSensor.getDetectedColor(telemetry));
-            telemetry.addData("number of apriltags detected",test.numDetected);
+
+            dashboardTelemetry.addData("recognized color: ", cSensor.getDetectedColor(dashboardTelemetry));
+            dashboardTelemetry.addData("number of apriltags detected",test.numDetected);
             if(goalTag != null){
-                telemetry.addData("distance from tag: ", test.distanceToGoal(goalTag.robotPose,goalTag.id));
-//                telemetry.addData("distance from tag X: ", test.specialDetection.robotPose.getPosition().x);
+                dashboardTelemetry.addData("distance from tag: ", test.distanceToGoal(goalTag.robotPose,goalTag.id));
+//                dashboardTelemetry.addData("distance from tag X: ", test.specialDetection.robotPose.getPosition().x);
             }
             else{
-                telemetry.addData("distance from tag", "null :`(((");
+                dashboardTelemetry.addData("distance from tag", "null :`(((");
             }
-            telemetry.addData("Order: ",test.Order);
+            dashboardTelemetry.addData("Order: ",test.Order);
 
-            telemetry.addData("shooter power: ",shooter.shooter2.getPower());
-            telemetry.addData("odometry: ",odometry.getCurrentPosition()/tick);
-            telemetry.addData("last Detected Color: ", cSensor.getLastDetected());
-            telemetry.update();
+            dashboardTelemetry.addData("shooter power: ",shooter.shooter2.getVelocity(AngleUnit.DEGREES));
+            dashboardTelemetry.addData("odometry: ",odometry.getCurrentPosition()/tick);
+            dashboardTelemetry.addData("last Detected Color: ", cSensor.getLastDetected());
+            dashboardTelemetry.update();
         }
 
     }

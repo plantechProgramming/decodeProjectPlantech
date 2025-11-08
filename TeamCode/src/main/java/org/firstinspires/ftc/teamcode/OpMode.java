@@ -19,6 +19,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 
@@ -34,7 +35,7 @@ public abstract class OpMode extends LinearOpMode {
     protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA,SU,SD, shootMotor, odometry, shootMotorOp; //odometry is for testing purposes
     protected ElapsedTime runtime = new ElapsedTime();
     public boolean liftFlag = false;
-
+    protected Telemetry dashboardTelemetry;
 
 
 
@@ -84,12 +85,12 @@ public abstract class OpMode extends LinearOpMode {
         shootMotor = hardwareMap.get(DcMotorEx.class, "shooter");
         shootMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         shootMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        shootMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        shootMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         shootMotorOp = hardwareMap.get(DcMotorEx.class, "shooter2");
         shootMotorOp.setDirection(DcMotorSimple.Direction.FORWARD);
         shootMotorOp.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        shootMotorOp.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        shootMotorOp.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         odometry = hardwareMap.get(DcMotorEx.class, "ShooterD");
         odometry.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -100,6 +101,20 @@ public abstract class OpMode extends LinearOpMode {
 //        shooter.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 //        shooter.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 //        shooter.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        dashboardTelemetry = dashboard.getTelemetry();
+    }
+
+    public DcMotorEx initMotor(String name, boolean encoder, boolean reversed){
+        DcMotorEx motor = hardwareMap.get(DcMotorEx.class,name);
+
+        if(encoder) {motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);}
+        else {motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);}
+
+        if(reversed){motor.setDirection(DcMotorEx.Direction.REVERSE);}
+        else{motor.setDirection(DcMotorSimple.Direction.FORWARD);}
+
+        return motor;
     }
 
     @Override
