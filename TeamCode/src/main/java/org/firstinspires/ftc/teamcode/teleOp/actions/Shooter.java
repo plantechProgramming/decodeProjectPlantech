@@ -5,11 +5,8 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.teleOp.PID;
 
-import com.qualcomm.robotcore.hardware.HardwareDevice;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Configurable
@@ -17,10 +14,21 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
+    public static double kP = 9;
+    public static double kI = 0;
+    public static double kD = 0;
+    public static double kF = 0;
+    PID pid = new PID(kP, kI, kD, kF);
+    GetVelocity shooterVelocity;
+    GetVelocity shooter2Velocity;
+
     public Shooter(DcMotorEx shootMotor, Telemetry telemetry, DcMotorEx shooter2){
         this.shooter = shootMotor;
         this.telemetry = telemetry;
         this.shooter2 = shooter2;
+
+        shooterVelocity = new GetVelocity(shooter,0.1);
+        shooter2Velocity = new GetVelocity(shooter2,0.1);
     }
 
     // g - gravity acceleration
@@ -40,16 +48,20 @@ public class Shooter {
     /// shoots with different powers depending on what launch zone youre in
     // TODO: make depend on odo vals, closed loop control for values
     public void naiveShooter(double dis) {
-        if (dis < 2.5) {
+        double power = pid.update(shooterVelocity.getVelocityFilter()/6000, true); //TODO: make not shit
+        if (dis <= 1.3) {
             shooter.setPower(0.1);
             shooter2.setPower(-0.1);
-        } else if (dis > 2.5) {
-            shooter.setPower(0.82);
-            shooter2.setPower(-0.82);
+        } else{
+            pid.setWanted(0.6);
+            shooter.setPower(power);
+            shooter2.setPower(-power);
+            telemetry.addData("power", power*6000);
         }
-        telemetry.addData("velocity filter", getVelocityFilter(shooter));
-        telemetry.addData("velocity average", getVelocityAverage(shooter));
+        telemetry.addData("velocity shooter 1", shooterVelocity.getVelocityFilter());
+        telemetry.addData("velocity shooter 2", shooter2Velocity.getVelocityFilter());
         telemetry.addData("velocity noisy", getVelocity(shooter));
+        telemetry.addData("wanted", 0.6*6000);
     }
 
 
@@ -89,27 +101,6 @@ public class Shooter {
         telemetry.addData("time",curTime);
         return velocity;
     }
-
-    public static double alpha = 0.1;
-    double prevVelocity = 0;
-    public double getVelocityFilter(DcMotorEx motor){
-        curEncoder = motor.getCurrentPosition();
-        curTime = timer.milliseconds();
-
-        double timeDiff = curTime - prevTime;
-        double encoderDiff = curEncoder - prevEncoder;
-
-        double tickVelocity = encoderDiff/timeDiff; // ticks/milliseconds
-        double velocity = (tickVelocity*millisecondsToMinute)/ticksPerRevolution;
-
-        prevTime = curTime;
-        prevEncoder = curEncoder;
-
-        double filteredVelocity = alpha*velocity + (1-alpha)*prevVelocity;
-        prevVelocity = filteredVelocity;
-        return filteredVelocity;
-    }
-
     double avgPrevVel = 0;
     int count = 0;
     public double getVelocityAverage(DcMotorEx motor){

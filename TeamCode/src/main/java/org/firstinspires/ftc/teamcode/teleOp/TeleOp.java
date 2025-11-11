@@ -105,14 +105,14 @@ public class TeleOp extends OpMode {
 //            dashboardTelemetry.addData("x:", DriveFrontRight.getCurrentPosition());
 //            shooter.noPhysShoot(forward);
             try {
+
                 //double d = test.distanceToGoal(goalTag.robotPose,goalTag.id);
-                if (gamepad1.y) shooter.naiveShooter(2.6);
-                if (gamepad1.a) shooter.naiveShooter(1);
             }
             catch(NullPointerException e){
                 dashboardTelemetry.addLine("Npe triggered");
             }
-
+            if(gamepad1.y) shooter.naiveShooter(2.6);
+//            else if(gamepad1.a) shooter.naiveShooter(1);
 
             //intake.intakeTest(gamepad1.y);
             if(gamepad1.back){Imu.resetYaw();}
@@ -130,7 +130,7 @@ public class TeleOp extends OpMode {
             dashboardTelemetry.addData("Order: ",test.Order);
 
             dashboardTelemetry.addData("shooter power: ",shooter.shooter2.getVelocity(AngleUnit.DEGREES));
-            dashboardTelemetry.addData("odometry: ",odometry.getCurrentPosition()/tick);
+            dashboardTelemetry.addData("odometry blabla: ",odometry.getCurrentPosition()/tick);
             dashboardTelemetry.addData("last Detected Color: ", cSensor.getLastDetected());
             dashboardTelemetry.update();
         }

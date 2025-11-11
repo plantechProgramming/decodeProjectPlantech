@@ -69,8 +69,8 @@ public abstract class OpMode extends LinearOpMode {
 //        DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 //        DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        intakeIBR = hardwareMap.get(CRServo.class,"intA");
-        intakeIBL = hardwareMap.get(CRServo.class,"IntakeL");
+//        intakeIBR = hardwareMap.get(CRServo.class,"intA");
+//        intakeIBL = hardwareMap.get(CRServo.class,"IntakeL");
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
 //        IntakeR = hardwareMap.get(Servo.class,"hood");
 //        shooterIBL = hardwareMap.get(CRServo.class,"shooterIBL");
