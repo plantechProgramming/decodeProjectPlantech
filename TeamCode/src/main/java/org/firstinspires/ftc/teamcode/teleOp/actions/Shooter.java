@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.teleOp.actions;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.teleOp.PID;
 
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Configurable
@@ -14,7 +16,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 9;
+    public static double kP = 15;
     public static double kI = 0;
     public static double kD = 0;
     public static double kF = 0;
@@ -48,20 +50,21 @@ public class Shooter {
     /// shoots with different powers depending on what launch zone youre in
     // TODO: make depend on odo vals, closed loop control for values
     public void naiveShooter(double dis) {
-        double power = pid.update(shooterVelocity.getVelocityFilter()/6000, true); //TODO: make not shit
+        double power = pid.update(shooterVelocity.getVelocityFilter()/6000); //TODO: make not shit
         if (dis <= 1.3) {
             shooter.setPower(0.1);
             shooter2.setPower(-0.1);
         } else{
-            pid.setWanted(0.6);
-            shooter.setPower(power);
-            shooter2.setPower(-power);
-            telemetry.addData("power", power*6000);
+            PIDFCoefficients pid = new PIDFCoefficients(kP, kI, kD, kF);
+            shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pid);
+            shooter.setPower(0.62);
+            shooter2.setPower(-0.62);
+            telemetry.addData("power", shooter.getPower()*6000);
         }
         telemetry.addData("velocity shooter 1", shooterVelocity.getVelocityFilter());
         telemetry.addData("velocity shooter 2", shooter2Velocity.getVelocityFilter());
         telemetry.addData("velocity noisy", getVelocity(shooter));
-        telemetry.addData("wanted", 0.6*6000);
+        telemetry.addData("wanted", 0.62*6000);
     }
 
 

@@ -18,7 +18,6 @@ public class PID {
 
     private double prevError = 0;
     private double prevTime = 0;
-    private double prevPower = 0;
 
     public PID(final double kP, final double kI, final double kD, final double kF) {
         this.kP = kP;
@@ -30,7 +29,7 @@ public class PID {
 
     public void setWanted(final double wanted) {this.wanted = wanted;}
 
-    public double update(final double current, boolean filtered) {
+    public double update(final double current) {
         final double currentError = wanted - current;
         final double currentTime = timer.milliseconds();
         final double deltaTime = currentTime - prevTime;
@@ -49,16 +48,7 @@ public class PID {
 
         prevError = currentError;
         prevTime = currentTime;
-        prevPower = power;
         power = kP * currentError + kI * integral + kD * derivative + kF * wanted;
-        if(filtered){
-            return filtered(0.000005, power, prevPower);
-        }
-        else{
-            return power;
-        }
-    }
-    public double filtered(double alpha, double val, double prevVal){
-        return alpha * val + (1 - alpha) * prevVal;
+        return power;
     }
 }
