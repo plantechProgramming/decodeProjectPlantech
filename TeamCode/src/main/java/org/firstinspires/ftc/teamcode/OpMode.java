@@ -28,7 +28,7 @@ public abstract class OpMode extends LinearOpMode {
 
 //    protected CRServo ;
 //    protected Servo roni2_intake,IntakeR;
-    protected CRServo intakeIBL,intakeIBR,shooterIBL,shooterIBR;
+    protected CRServo intakeIBL,intakeIBR;
     protected NormalizedColorSensor colorSensor;
 
     protected CameraName camera;
@@ -69,12 +69,11 @@ public abstract class OpMode extends LinearOpMode {
 //        DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 //        DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-//        intakeIBR = hardwareMap.get(CRServo.class,"intA");
-//        intakeIBL = hardwareMap.get(CRServo.class,"IntakeL");
+        intakeIBR = hardwareMap.get(CRServo.class,"intA");
+        intakeIBL = hardwareMap.get(CRServo.class,"IntakeL");
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
 //        IntakeR = hardwareMap.get(Servo.class,"hood");
-//        shooterIBL = hardwareMap.get(CRServo.class,"shooterIBL");
-//        shooterIBR = hardwareMap.get(CRServo.class,"shooterIBR");
+
         Imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,

@@ -103,7 +103,7 @@ public class TeleOp extends OpMode {
             }
 //            } dashboardTelemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
 //            dashboardTelemetry.addData("x:", DriveFrontRight.getCurrentPosition());
-//            shooter.noPhysShoot(forward);
+            shooter.noPhysShoot(forward);
             try {
 
                 //double d = test.distanceToGoal(goalTag.robotPose,goalTag.id);
@@ -118,16 +118,16 @@ public class TeleOp extends OpMode {
             if(gamepad1.back){Imu.resetYaw();}
 
 
-            dashboardTelemetry.addData("recognized color: ", cSensor.getDetectedColor(dashboardTelemetry));
-            dashboardTelemetry.addData("number of apriltags detected",test.numDetected);
+            //dashboardTelemetry.addData("recognized color: ", cSensor.getDetectedColor(dashboardTelemetry));
+            //dashboardTelemetry.addData("number of apriltags detected",test.numDetected);
             if(goalTag != null){
-                dashboardTelemetry.addData("distance from tag: ", test.distanceToGoal(goalTag.robotPose,goalTag.id));
+                //dashboardTelemetry.addData("distance from tag: ", test.distanceToGoal(goalTag.robotPose,goalTag.id));
 //                dashboardTelemetry.addData("distance from tag X: ", test.specialDetection.robotPose.getPosition().x);
             }
             else{
-                dashboardTelemetry.addData("distance from tag", "null :`(((");
+                //dashboardTelemetry.addData("distance from tag", "null :`(((");
             }
-            dashboardTelemetry.addData("Order: ",test.Order);
+            //dashboardTelemetry.addData("Order: ",test.Order);
 
             dashboardTelemetry.addData("shooter power: ",shooter.shooter2.getVelocity(AngleUnit.DEGREES));
             dashboardTelemetry.addData("odometry blabla: ",odometry.getCurrentPosition()/tick);
