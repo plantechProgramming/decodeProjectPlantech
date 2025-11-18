@@ -32,7 +32,7 @@ public abstract class OpMode extends LinearOpMode {
     protected NormalizedColorSensor colorSensor;
 
     protected CameraName camera;
-    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA,SU,SD, shootMotor, odometry, shootMotorOp; //odometry is for testing purposes
+    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA,SU,SD, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
     protected ElapsedTime runtime = new ElapsedTime();
     public boolean liftFlag = false;
     protected Telemetry dashboardTelemetry;
@@ -69,12 +69,15 @@ public abstract class OpMode extends LinearOpMode {
 //        DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 //        DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-//        intakeIBR = hardwareMap.get(CRServo.class,"intA");
-//        intakeIBL = hardwareMap.get(CRServo.class,"IntakeL");
-        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
-//        IntakeR = hardwareMap.get(Servo.class,"hood");
-//        shooterIBL = hardwareMap.get(CRServo.class,"shooterIBL");
-//        shooterIBR = hardwareMap.get(CRServo.class,"shooterIBR");
+        intakeIBR = hardwareMap.get(CRServo.class,"IBR");
+        intakeIBL = hardwareMap.get(CRServo.class,"IBL");
+        shooterIBL = hardwareMap.get(CRServo.class,"SIBL");
+        shooterIBR = hardwareMap.get(CRServo.class,"SIBR");
+
+        intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
+        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//
         Imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
@@ -82,21 +85,8 @@ public abstract class OpMode extends LinearOpMode {
         Imu.initialize(parameters);
         Imu.resetYaw();
 
-        shootMotor = hardwareMap.get(DcMotorEx.class, "shooter");
-        shootMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        shootMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        shootMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        shootMotorOp = hardwareMap.get(DcMotorEx.class, "shooter2");
-        shootMotorOp.setDirection(DcMotorSimple.Direction.FORWARD);
-        shootMotorOp.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        shootMotorOp.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        odometry = hardwareMap.get(DcMotorEx.class, "ShooterD");
-        odometry.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        odometry.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        camera = hardwareMap.get(CameraName.class,"webcam");
 //        shooter.setDirection(DcMotorEx.Direction.FORWARD);
 //        shooter.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 //        shooter.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
