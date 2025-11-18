@@ -41,6 +41,9 @@ public class Shooter {
     final double diameter = .096; //in m
     final int MAX_RPM = 6000;
 
+    double Szonedis = 0.55;
+    final double errorFix = 1.18;
+
     public void noPhysShoot(double x){
         shooter.setPower(x);
         shooter2.setPower(-x);
@@ -77,22 +80,22 @@ public class Shooter {
     // TODO: make depend on odo vals, closed loop control for values
     public void naiveShooter(double dis) {
         if (dis <= 1.3) {
-            shooter.setPower(0.1);
-            shooter2.setPower(-0.1);
+            Szonedis = .48;
+            shooter.setPower(Szonedis*errorFix);
+            shooter2.setPower(-Szonedis*errorFix);
         } else{
+            Szonedis = 0.55;
 //            PIDFCoefficients pid = new PIDFCoefficients(kP, kI, kD, kF);
 //            shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pid);
 //            shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pid);
-            shooter.setVelocity(0.59*6000*28/60);
-            shooter2.setVelocity(-0.59*6000*28/60);
+            shooter.setPower(Szonedis*errorFix);
+            shooter2.setPower(-Szonedis*errorFix);
             telemetry.addData("power", shooter.getPower()*6000);
         }
-        PIDFCoefficients pidfOrig = shooter.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("original pidf vals:","%.04f, %.04f, %.04f, %.04f",pidfOrig.p, pidfOrig.i,pidfOrig.d, pidfOrig.f);
-        telemetry.addData("velocity shooter 1", shooterVelocity.getVelocityFilter());
-        telemetry.addData("velocity shooter 2", shooter2Velocity.getVelocityFilter());
+
+
+        telemetry.addData("velocity shooter ", shooterVelocity.getVelocityFilter());
         telemetry.addData("velocity noisy", getVelocity(shooter));
-        telemetry.addData("velocity no class", getVelocityFilter(shooter));
         telemetry.addData("wanted", 0.59*6000);
     }
      // velocity ---------------------------------------------------------------------------
