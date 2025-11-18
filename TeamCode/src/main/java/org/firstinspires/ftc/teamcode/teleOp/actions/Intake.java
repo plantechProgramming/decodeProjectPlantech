@@ -20,27 +20,50 @@ public class Intake {
     //Thread thread = Thread.currentThread();
     ElapsedTime runtime = new ElapsedTime();
 
-    CRServo IntakeL, IntakeR;
+    CRServo ibl,ibr,sl,sr; //ib = inbetween, s = shooter
+    DcMotorEx intake_motor;
     Telemetry telemetry;
     public double radToTicks = Math.PI/3000;
 
     // wtf is a type parameter
-    public <roni2_intake> Intake(CRServo IntakeL,CRServo IntakeR, Telemetry telemetry){
-        this.IntakeL = IntakeL;
-        this.IntakeR = IntakeR;
+    public <roni2_intake> Intake(CRServo ibl,CRServo ibr,CRServo sl,CRServo sr, DcMotorEx intake_motor ,Telemetry telemetry){
         this.telemetry = telemetry;
-
+        this.ibl=ibl;
+        this.ibr=ibr;
+        this.sl=sl;
+        this.sr=sr;
+        this.intake_motor = intake_motor;
     }
 
-    public void intakeTest(boolean pressed){
-        if(pressed){
-            IntakeR.setPower(1);
-            IntakeL.setPower(-1);
+    public void inBetweenFunc(boolean in,boolean out){
+        if(in){
+            ibr.setPower(1);
+            ibl.setPower(-1);
+            sr.setPower(1);
+            sl.setPower(-1);
+        }
+        else if(out){
+            ibr.setPower(-1);
+            ibl.setPower(1);
+            sr.setPower(-1);
+            sl.setPower(1);
         }
         else{
-            IntakeL.setPower(0);
-            IntakeR.setPower(0);
+            ibl.setPower(0);
+            ibr.setPower(0);
+            sr.setPower(0);
+            sl.setPower(0);
+        }
+    }
+    public void intakeFunc(boolean in, boolean out){ //motor is flipped
+        if(in){
+            intake_motor.setPower(-.92);
+        }
+        else if(out){
+            intake_motor.setPower(.92);
+        }
+        else{
+            intake_motor.setPower(0);
         }
     }
 }
-

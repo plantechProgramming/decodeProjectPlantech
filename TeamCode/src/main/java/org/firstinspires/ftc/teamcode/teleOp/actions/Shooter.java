@@ -42,7 +42,7 @@ public class Shooter {
     final int MAX_RPM = 6000;
 
     double Szonedis = 0.55;
-    final double errorFix = 1.18;
+    final double errorFix = 1.2;
 
     public void noPhysShoot(double x){
         shooter.setPower(x);
@@ -59,10 +59,10 @@ public class Shooter {
     public void variableSpeedShoot(boolean dpadUp, boolean dpadDown, double jumps){
         // make func run only once per 10 calls, so that when pressed once it wont go up so much
         //TODO: remove, delete, destroy, annihilate, die code die, install GNU/Linux, go to code hell, kill; just joking
-        if(!(count % 10 == 0)){
-            count++;
-            return;
-        }
+//        if(!(count % 10 == 0)){
+//            count++;
+//            return;
+//        }
         double power = 0;
         if(dpadUp){power = prevPower + jumps;}
         else if(dpadDown){power = prevPower - jumps;}
@@ -80,7 +80,7 @@ public class Shooter {
     // TODO: make depend on odo vals, closed loop control for values
     public void naiveShooter(double dis) {
         if (dis <= 1.3) {
-            Szonedis = .48;
+            Szonedis = .47;
             shooter.setPower(Szonedis*errorFix);
             shooter2.setPower(-Szonedis*errorFix);
         } else{
@@ -92,8 +92,6 @@ public class Shooter {
             shooter2.setPower(-Szonedis*errorFix);
             telemetry.addData("power", shooter.getPower()*6000);
         }
-
-
         telemetry.addData("velocity shooter ", shooterVelocity.getVelocityFilter());
         telemetry.addData("velocity noisy", getVelocity(shooter));
         telemetry.addData("wanted", 0.59*6000);
@@ -125,6 +123,7 @@ public class Shooter {
     }
     double prevVelocity = 0;
     double alpha = 0.1;
+
     public double getVelocityFilter(DcMotorEx motor) {
         curEncoder = motor.getCurrentPosition();
         curTime = timer.milliseconds();

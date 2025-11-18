@@ -28,11 +28,11 @@ public abstract class OpMode extends LinearOpMode {
 
 //    protected CRServo ;
 //    protected Servo roni2_intake,IntakeR;
-    protected CRServo intakeIBL,intakeIBR;
+    protected CRServo intakeIBL,intakeIBR,shooterIBL,shooterIBR;
     protected NormalizedColorSensor colorSensor;
 
     protected CameraName camera;
-    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA,SU,SD, shootMotor, odometry, shootMotorOp; //odometry is for testing purposes
+    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA,SU,SD, shootMotor, odometry, shootMotorOp,intakeMotor; //odometry is for testing purposes
     protected ElapsedTime runtime = new ElapsedTime();
     public boolean liftFlag = false;
     protected Telemetry dashboardTelemetry;
@@ -69,10 +69,16 @@ public abstract class OpMode extends LinearOpMode {
 //        DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 //        DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        intakeIBR = hardwareMap.get(CRServo.class,"intA");
-        intakeIBL = hardwareMap.get(CRServo.class,"IntakeL");
+
+//        intakeIBR = hardwareMap.get(CRServo.class,"IBR");
+//        intakeIBL = hardwareMap.get(CRServo.class,"IBL");
+//        shooterIBL = hardwareMap.get(CRServo.class,"SIBL");
+//        shooterIBR = hardwareMap.get(CRServo.class,"SIBR");
+//
+//        intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
+//        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
-//        IntakeR = hardwareMap.get(Servo.class,"hood");
 
         Imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
