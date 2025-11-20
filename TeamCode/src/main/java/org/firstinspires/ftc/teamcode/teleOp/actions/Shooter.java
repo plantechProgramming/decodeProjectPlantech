@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.teleOp.PID;
 
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -79,22 +80,27 @@ public class Shooter {
     /// shoots with different powers depending on what launch zone youre in
     // TODO: make depend on odo vals, closed loop control for values
     public void naiveShooter(double dis) {
+        PIDFCoefficients pidOrig = shooter.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+        PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         if (dis <= 1.3) {
             Szonedis = .47;
             shooter.setPower(Szonedis*errorFix);
             shooter2.setPower(-Szonedis*errorFix);
         } else{
             Szonedis = 0.55;
-//            PIDFCoefficients pid = new PIDFCoefficients(kP, kI, kD, kF);
-//            shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pid);
-//            shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pid);
             shooter.setPower(Szonedis*errorFix);
             shooter2.setPower(-Szonedis*errorFix);
-            telemetry.addData("power", shooter.getPower()*6000);
         }
+        PIDFCoefficients pidModified = shooter.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
         telemetry.addData("velocity shooter ", shooterVelocity.getVelocityFilter());
         telemetry.addData("velocity noisy", getVelocity(shooter));
-        telemetry.addData("wanted", 0.59*6000);
+        telemetry.addData("P,I,D,F (orig)", "%.04f, %.04f, %.04f, %.04f",
+                pidOrig.p, pidOrig.i, pidOrig.d, pidOrig.f);
+        telemetry.addData("P,I,D,F (modified)", "%.04f, %.04f, %.04f, %.04f",
+                pidModified.p, pidModified.i, pidModified.d, pidModified.f);
+        telemetry.addData("wanted", Szonedis*6000);
     }
      // velocity ---------------------------------------------------------------------------
     private static final ElapsedTime timer = new ElapsedTime();

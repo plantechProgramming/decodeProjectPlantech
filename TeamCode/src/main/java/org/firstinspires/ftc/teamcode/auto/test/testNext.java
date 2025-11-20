@@ -12,6 +12,7 @@ import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
+import dev.nextftc.core.commands.CommandManager;
 
 @Autonomous(name = "NextFTC testing")
 public class testNext extends NextFTCOpMode {
