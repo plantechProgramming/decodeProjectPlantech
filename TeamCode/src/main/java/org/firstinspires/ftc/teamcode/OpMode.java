@@ -68,16 +68,18 @@ public abstract class OpMode extends LinearOpMode {
 //        DriveBackRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 //        DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
 //        DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        odometry = hardwareMap.get(DcMotorEx.class, "ShooterD");
+        odometry.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odometry.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-
-//        intakeIBR = hardwareMap.get(CRServo.class,"IBR");
-//        intakeIBL = hardwareMap.get(CRServo.class,"IBL");
-//        shooterIBL = hardwareMap.get(CRServo.class,"SIBL");
-//        shooterIBR = hardwareMap.get(CRServo.class,"SIBR");
+        intakeIBR = hardwareMap.get(CRServo.class,"IBR");
+        intakeIBL = hardwareMap.get(CRServo.class,"IBL");
+        shooterIBL = hardwareMap.get(CRServo.class,"SIBL");
+        shooterIBR = hardwareMap.get(CRServo.class,"SIBR");
 //
-//        intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
-//        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
+        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
 
         Imu = hardwareMap.get(IMU.class, "imu");
@@ -97,9 +99,6 @@ public abstract class OpMode extends LinearOpMode {
         shootMotorOp.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shootMotorOp.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        odometry = hardwareMap.get(DcMotorEx.class, "ShooterD");
-        odometry.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        odometry.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         camera = hardwareMap.get(CameraName.class,"webcam");
 //        shooter.setDirection(DcMotorEx.Direction.FORWARD);

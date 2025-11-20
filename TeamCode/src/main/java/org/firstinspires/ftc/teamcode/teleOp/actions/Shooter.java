@@ -17,9 +17,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 15000;
-    public static double kI = 0;
-    public static double kD = 0;
+    public static double kP = 10;
+    public static double kI = 1;
+    public static double kD = 2;
     public static double kF = 0;
     PID pid = new PID(kP, kI, kD, kF);
     GetVelocity shooterVelocity;

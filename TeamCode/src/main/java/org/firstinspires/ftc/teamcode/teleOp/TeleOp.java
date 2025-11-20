@@ -27,7 +27,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import dev.nextftc.core.units.Distance;
 import kotlin.Unit;
 
-
 @Configurable
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -43,6 +42,7 @@ public class TeleOp extends OpMode {
 
     @Override
     public void run(){
+        Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
 //        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
         ColorSensorTest cSensor = new ColorSensorTest();
@@ -109,7 +109,8 @@ public class TeleOp extends OpMode {
 
             //intake.intakeTest(gamepad1.y);
             if(gamepad1.back){Imu.resetYaw();}
-
+            intake.inBetweenFunc(gamepad1.dpad_up, gamepad1.dpad_down);
+            intake.intakeFunc(gamepad1.a, gamepad1.b);
 
             //dashboardTelemetry.addData("recognized color: ", cSensor.getDetectedColor(dashboardTelemetry));
             //dashboardTelemetry.addData("number of apriltags detected",test.numDetected);
