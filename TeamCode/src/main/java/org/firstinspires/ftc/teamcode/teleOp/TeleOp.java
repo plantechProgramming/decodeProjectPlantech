@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
+import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
 import org.firstinspires.ftc.teamcode.OpMode;
 import org.firstinspires.ftc.teamcode.auto.camera.aprilTagsTest;
@@ -43,13 +44,13 @@ public class TeleOp extends OpMode {
     @Override
     public void run(){
         Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
-//        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
+        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
         ColorSensorTest cSensor = new ColorSensorTest();
         cSensor.init(hardwareMap);
         boolean is_up = false;
         //TODO: find why didnt work outside
-        AprilTagLocalization test = new AprilTagLocalization();
+/*        AprilTagLocalization test = new AprilTagLocalization();
         AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
                 .setCameraPose(CAM_POS, CAM_ORIENTATION)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
@@ -63,7 +64,7 @@ public class TeleOp extends OpMode {
         builder.addProcessor(aprilTag);
         visionPortal = builder.build();
 
-
+*/
 //        AprilTagProcessor aprilTag = test.initAprilTag();
 
        /* VisionPortal visionPortal = new VisionPortal.Builder()
@@ -80,9 +81,9 @@ public class TeleOp extends OpMode {
 
         double tick = 2000/(48*Math.PI); //per tick
         while (opModeIsActive() ) {
-            AprilTagDetection goalTag = test.specialDetection;
-//            test.telemetryAprilTag(aprilTag);
-            test.detectTags(aprilTag);
+//            AprilTagDetection goalTag = test.specialDetection;
+////            test.telemetryAprilTag(aprilTag);
+//            test.detectTags(aprilTag);
 
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
@@ -90,7 +91,7 @@ public class TeleOp extends OpMode {
             botHeading = Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
             ElapsedTime elapsedTime = new ElapsedTime();
-//            driveTrain.drive(forward, drift, turn, botHeading, 1);
+            driveTrain.drive(forward, drift, turn, botHeading, 1);
 //            dashboardTelemetry.addData("x", DriveFrontRight.getCurrentPosition());
 //            dashboardTelemetry.addData("y",DriveBackLeft.getCurrentPosition());
 
@@ -108,10 +109,10 @@ public class TeleOp extends OpMode {
 //            else if(gamepad1.a) shooter.naiveShooter(1);
 
             //intake.intakeTest(gamepad1.y);
-            if(gamepad1.back){Imu.resetYaw();}
+            if(gamepad1.back){Imu.resetYaw();}/*
             intake.inBetweenFunc(gamepad1.dpad_up, gamepad1.dpad_down);
             intake.intakeFunc(gamepad1.a, gamepad1.b);
-
+*/
             //dashboardTelemetry.addData("recognized color: ", cSensor.getDetectedColor(dashboardTelemetry));
             //dashboardTelemetry.addData("number of apriltags detected",test.numDetected);
 //            if(goalTag != null){
@@ -122,11 +123,11 @@ public class TeleOp extends OpMode {
 //                //dashboardTelemetry.addData("distance from tag", "null :`(((");
 //            }
 //            //dashboardTelemetry.addData("Order: ",test.Order);
-
-            dashboardTelemetry.addData("shooter power: ",shooter.shooter2.getVelocity(AngleUnit.DEGREES));
+            dashboardTelemetry.addData("botheading",botHeading);
+            /*dashboardTelemetry.addData("shooter power: ",shooter.shooter2.getVelocity(AngleUnit.DEGREES));
             dashboardTelemetry.addData("odometry blabla: ",odometry.getCurrentPosition()/tick);
             dashboardTelemetry.addData("last Detected Color: ", cSensor.getLastDetected());
-            dashboardTelemetry.update();
+            */dashboardTelemetry.update();
         }
 
     }

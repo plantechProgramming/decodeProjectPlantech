@@ -22,7 +22,7 @@ public class DriveTrain {
     private OpenCvCamera camera;
     ElapsedTime runtime = new ElapsedTime();
     public static double Kp = 0.5, Ki = 0.2, Kd = 0.01;
-    static final double WHEEL_DIAMETER_CM = 9.6;     // For figuring circumference
+    static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
 
     public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu) {

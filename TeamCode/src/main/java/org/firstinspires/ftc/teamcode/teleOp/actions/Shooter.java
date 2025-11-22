@@ -17,9 +17,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 10;
+    public static double kP = 60;
     public static double kI = 1;
-    public static double kD = 2;
+    public static double kD = 8;
     public static double kF = 0;
     PID pid = new PID(kP, kI, kD, kF);
     GetVelocity shooterVelocity;
@@ -43,7 +43,7 @@ public class Shooter {
     final int MAX_RPM = 6000;
 
     double Szonedis = 0.55;
-    final double errorFix = 1.2;
+    final double errorFix = 1.18;
 
     public void noPhysShoot(double x){
         shooter.setPower(x);
@@ -80,26 +80,20 @@ public class Shooter {
     /// shoots with different powers depending on what launch zone youre in
     // TODO: make depend on odo vals, closed loop control for values
     public void naiveShooter(double dis) {
-        PIDFCoefficients pidOrig = shooter.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
+
         shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         if (dis <= 1.3) {
-            Szonedis = .47;
-            shooter.setPower(Szonedis*errorFix);
-            shooter2.setPower(-Szonedis*errorFix);
+            Szonedis = 0.44;
         } else{
             Szonedis = 0.55;
-            shooter.setPower(Szonedis*errorFix);
-            shooter2.setPower(-Szonedis*errorFix);
         }
-        PIDFCoefficients pidModified = shooter.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+        shooter.setPower(Szonedis*errorFix);
+        shooter2.setPower(-Szonedis*errorFix);
+
         telemetry.addData("velocity shooter ", shooterVelocity.getVelocityFilter());
         telemetry.addData("velocity noisy", getVelocity(shooter));
-        telemetry.addData("P,I,D,F (orig)", "%.04f, %.04f, %.04f, %.04f",
-                pidOrig.p, pidOrig.i, pidOrig.d, pidOrig.f);
-        telemetry.addData("P,I,D,F (modified)", "%.04f, %.04f, %.04f, %.04f",
-                pidModified.p, pidModified.i, pidModified.d, pidModified.f);
         telemetry.addData("wanted", Szonedis*6000);
     }
      // velocity ---------------------------------------------------------------------------

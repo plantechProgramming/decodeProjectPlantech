@@ -22,6 +22,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
+import org.firstinspires.ftc.teamcode.teleOp.actions.*;
 
 
 public abstract class OpMode extends LinearOpMode {
@@ -32,10 +33,11 @@ public abstract class OpMode extends LinearOpMode {
     protected NormalizedColorSensor colorSensor;
 
     protected CameraName camera;
-    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA,SU,SD, shootMotor, odometry, shootMotorOp,intakeMotor; //odometry is for testing purposes
+    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA,SU,SD, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
     protected ElapsedTime runtime = new ElapsedTime();
     public boolean liftFlag = false;
     protected Telemetry dashboardTelemetry;
+    protected CorrectedPinpoint odometry;
 
 
 
@@ -45,42 +47,39 @@ public abstract class OpMode extends LinearOpMode {
     FtcDashboard dashboard;
 
     void initialize() {
-//        DriveFrontLeft = hardwareMap.get(DcMotorEx.class, "FL");
-//        DriveFrontLeft.setDirection(DcMotorEx.Direction.REVERSE);
-//        DriveFrontLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-//        DriveFrontLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        DriveFrontLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-//
-//        DriveFrontRight = hardwareMap.get(DcMotorEx.class, "FR");
-//        DriveFrontRight.setDirection(DcMotorEx.Direction.FORWARD);
-//        DriveFrontRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-//        DriveFrontRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        DriveFrontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-//
-//        DriveBackLeft = hardwareMap.get(DcMotorEx.class, "BL");
-//        DriveBackLeft.setDirection(DcMotorEx.Direction.REVERSE);
-//        DriveBackLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-//        DriveBackLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        DriveBackLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-//
-//        DriveBackRight = hardwareMap.get(DcMotorEx.class, "BR");
-//        DriveBackRight.setDirection(DcMotorEx.Direction.FORWARD);
-//        DriveBackRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-//        DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        odometry = hardwareMap.get(DcMotorEx.class, "ShooterD");
-        odometry.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        odometry.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        DriveFrontLeft = hardwareMap.get(DcMotorEx.class, "FL");
+        DriveFrontLeft.setDirection(DcMotorEx.Direction.REVERSE);
+        DriveFrontLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        DriveFrontLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        DriveFrontLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        DriveFrontRight = hardwareMap.get(DcMotorEx.class, "FR");
+        DriveFrontRight.setDirection(DcMotorEx.Direction.FORWARD);
+        DriveFrontRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        DriveFrontRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        DriveFrontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        DriveBackLeft = hardwareMap.get(DcMotorEx.class, "BL");
+        DriveBackLeft.setDirection(DcMotorEx.Direction.REVERSE);
+        DriveBackLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        DriveBackLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        DriveBackLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        DriveBackRight = hardwareMap.get(DcMotorEx.class, "BR");
+        DriveBackRight.setDirection(DcMotorEx.Direction.FORWARD);
+        DriveBackRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         intakeIBR = hardwareMap.get(CRServo.class,"IBR");
         intakeIBL = hardwareMap.get(CRServo.class,"IBL");
         shooterIBL = hardwareMap.get(CRServo.class,"SIBL");
         shooterIBR = hardwareMap.get(CRServo.class,"SIBR");
 //
-        intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
-        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
+//        intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
+//        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+//        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
 
         Imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -99,8 +98,9 @@ public abstract class OpMode extends LinearOpMode {
         shootMotorOp.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shootMotorOp.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-
-        camera = hardwareMap.get(CameraName.class,"webcam");
+        odometry = (CorrectedPinpoint)hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+        odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+    //    camera = hardwareMap.get(CameraName.class,"webcam");
 //        shooter.setDirection(DcMotorEx.Direction.FORWARD);
 //        shooter.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 //        shooter.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
