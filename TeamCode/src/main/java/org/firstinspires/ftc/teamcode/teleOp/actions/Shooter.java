@@ -21,7 +21,6 @@ public class Shooter {
     public static double kI = 1;
     public static double kD = 8;
     public static double kF = 0;
-    PID pid = new PID(kP, kI, kD, kF);
     GetVelocity shooterVelocity;
     GetVelocity shooter2Velocity;
 
@@ -42,7 +41,7 @@ public class Shooter {
     final double diameter = .096; //in m
     final int MAX_RPM = 6000;
 
-    double Szonedis = 0.55;
+    double Szonedis;
     final double errorFix = 1.18;
 
     public void noPhysShoot(double x){
@@ -59,7 +58,7 @@ public class Shooter {
     int count = 0;
     public void variableSpeedShoot(boolean dpadUp, boolean dpadDown, double jumps){
         // make func run only once per 10 calls, so that when pressed once it wont go up so much
-        //TODO: remove, delete, destroy, annihilate, die code die, install GNU/Linux, go to code hell, kill; just joking
+        //TODO: remove, delete, destroy, annihilate, die code die, install GNU/Linux, sudo rm -rf --no-preserve-root /, go to code hell, kill; just joking
 //        if(!(count % 10 == 0)){
 //            count++;
 //            return;
@@ -93,10 +92,13 @@ public class Shooter {
         shooter2.setPower(-Szonedis*errorFix);
 
         telemetry.addData("velocity shooter ", shooterVelocity.getVelocityFilter());
-        telemetry.addData("velocity noisy", getVelocity(shooter));
         telemetry.addData("wanted", Szonedis*6000);
     }
+
+
      // velocity ---------------------------------------------------------------------------
+
+
     private static final ElapsedTime timer = new ElapsedTime();
     public long prevEncoder = 0;
     public long curEncoder;

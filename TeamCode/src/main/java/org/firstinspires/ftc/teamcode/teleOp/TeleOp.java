@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -25,15 +24,12 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
-import dev.nextftc.core.units.Distance;
-import kotlin.Unit;
-
-@Configurable
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOp extends OpMode {
     @Override
     protected void postInit() {
+        //TODO: pinpoint
         Imu.resetYaw();
     }
     public final Position CAM_POS = new Position(DistanceUnit.CM,
@@ -48,7 +44,7 @@ public class TeleOp extends OpMode {
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
         ColorSensorTest cSensor = new ColorSensorTest();
         cSensor.init(hardwareMap);
-        boolean is_up = false;
+
         //TODO: find why didnt work outside
 /*        AprilTagLocalization test = new AprilTagLocalization();
         AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
@@ -82,12 +78,13 @@ public class TeleOp extends OpMode {
         double tick = 2000/(48*Math.PI); //per tick
         while (opModeIsActive() ) {
 //            AprilTagDetection goalTag = test.specialDetection;
-////            test.telemetryAprilTag(aprilTag);
+//            test.telemetryAprilTag(aprilTag);
 //            test.detectTags(aprilTag);
 
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
+            //todo: pinpoint
             botHeading = Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
             ElapsedTime elapsedTime = new ElapsedTime();
@@ -102,13 +99,13 @@ public class TeleOp extends OpMode {
 //                driveTrain.drive(forward, drift, turn, botHeading, 1);
                 slow = false;
             }
-//            } dashboardTelemetry.addData("y: ", DriveBackLeft.getCurrentPosition());
-//            dashboardTelemetry.addData("x:", DriveFrontRight.getCurrentPosition());
+
             if(gamepad1.b) shooter.naiveShooter(2.6);
             else if(gamepad1.a) shooter.naiveShooter(1);
 //            else if(gamepad1.a) shooter.naiveShooter(1);
 
             //intake.intakeTest(gamepad1.y);
+            //TODO: make use pinpoint
             if(gamepad1.back){Imu.resetYaw();}/*
             intake.inBetweenFunc(gamepad1.dpad_up, gamepad1.dpad_down);
             intake.intakeFunc(gamepad1.a, gamepad1.b);

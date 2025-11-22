@@ -47,6 +47,7 @@ public abstract class OpMode extends LinearOpMode {
     FtcDashboard dashboard;
 
     void initialize() {
+
         DriveFrontLeft = hardwareMap.get(DcMotorEx.class, "FL");
         DriveFrontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         DriveFrontLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -76,10 +77,10 @@ public abstract class OpMode extends LinearOpMode {
         shooterIBL = hardwareMap.get(CRServo.class,"SIBL");
         shooterIBR = hardwareMap.get(CRServo.class,"SIBR");
 //
-//        intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
-//        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-//        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
+        intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
+        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
 
         Imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -100,11 +101,9 @@ public abstract class OpMode extends LinearOpMode {
 
         odometry = (CorrectedPinpoint)hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
         odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+        // until we find the fucking camera we can't scan it and add it to robot config :(((
     //    camera = hardwareMap.get(CameraName.class,"webcam");
-//        shooter.setDirection(DcMotorEx.Direction.FORWARD);
-//        shooter.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-//        shooter.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        shooter.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
     }
@@ -139,10 +138,6 @@ public abstract class OpMode extends LinearOpMode {
 
     }
     protected abstract void run();
-//    @Override
-//    protected abstract void init();
-//    @Override
-//    protected abstract void loop();
 
     protected abstract void end();
 }
