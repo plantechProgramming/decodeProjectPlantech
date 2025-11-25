@@ -21,6 +21,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.teamcode.teleOp.actions.*;
 
@@ -37,8 +38,10 @@ public abstract class OpMode extends LinearOpMode {
     protected ElapsedTime runtime = new ElapsedTime();
     public boolean liftFlag = false;
     protected Telemetry dashboardTelemetry;
-    protected CorrectedPinpoint odometry;
-
+    protected GoBildaPinpointDriver odometry;
+    private static final float goBILDA_SWINGARM_POD = 13.26291192f; //ticks-per-mm for the goBILDA Swingarm Pod
+    private static final float goBILDA_4_BAR_POD = 19.89436789f;
+    private float avg_tpmm=(goBILDA_4_BAR_POD+goBILDA_SWINGARM_POD)/2;
 
 
 
@@ -99,8 +102,15 @@ public abstract class OpMode extends LinearOpMode {
         shootMotorOp.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shootMotorOp.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        odometry = (CorrectedPinpoint)hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
-        odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
+        odometry = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+        odometry.setEncoderResolution(avg_tpmm,DistanceUnit.MM);
+        odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        odometry.setOffsets(-160,-90, DistanceUnit.MM);
+        odometry.resetPosAndIMU();
+
+        // distance from middle of shooter axle, not very sure its the right thing...
+        int xOffset = 145; //in mm
+        int yOffset = 105;
         // until we find the fucking camera we can't scan it and add it to robot config :(((
     //    camera = hardwareMap.get(CameraName.class,"webcam");
 

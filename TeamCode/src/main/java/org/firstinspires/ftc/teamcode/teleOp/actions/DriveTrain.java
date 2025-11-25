@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleOp.actions;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -20,18 +21,20 @@ public class DriveTrain {
     private Telemetry telemetry;
     private LinearOpMode opMode;
     private OpenCvCamera camera;
+    private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     public static double Kp = 0.5, Ki = 0.2, Kd = 0.01;
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
 
-    public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu) {
+    public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu, GoBildaPinpointDriver odometry) {
         this.BL = BL;
         this.BR = BR;
         this.FL = FL;
         this.FR = FR;
-
+        this.odometry = odometry;
         this.Imu = imu;
+
         this.telemetry = telemetry;
     }
 
@@ -89,4 +92,52 @@ public class DriveTrain {
             BR.setPower(0);
             BL.setPower(0);
         }
+    public void turnToGyro_minus(double degrees) {
+        double botAngle = Math.abs(odometry.getHeading(AngleUnit.DEGREES));
+        PID pid = new PID(1, 0, 0, 0);
+        double threshold = 4;
+        pid.setWanted(degrees);
+
+        if (Math.abs(botAngle) + threshold <= Math.abs(degrees)) {
+//            botAngle = odometry.getHeading(AngleUnit.DEGREES);
+
+            FL.setPower(-Math.abs(pid.update(botAngle)));
+            FR.setPower(Math.abs(pid.update(botAngle)));
+
+            BR.setPower(Math.abs(pid.update(botAngle)));
+            BL.setPower(-Math.abs(pid.update(botAngle)));
+
+            telemetry.addData("pow", pid.update(botAngle));
+            telemetry.addData("heading", botAngle);
+            telemetry.update();
+
+        }
+    }
+
+    public void turnToGyro_plus(double degrees) {
+        double botAngle = Math.abs(Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+        PID pid = new PID(5, 0, 0, 0);
+
+        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        degrees = degrees * (1500.0 / 40.0);
+
+        double pos = BR.getCurrentPosition();
+        pid.setWanted(degrees);
+
+        if (Math.abs(pos) <= Math.abs(degrees)) {
+            pos = BR.getCurrentPosition();
+
+            FL.setPower(Math.abs(pid.update(pos)));
+            BL.setPower(Math.abs(pid.update(pos)));
+
+            FR.setPower(-Math.abs(pid.update(pos)));
+            FR.setPower(-Math.abs(pid.update(pos)));
+
+            telemetry.addData("IMU", botAngle);
+            telemetry.update();
+
+        }stop();
+    }
 }

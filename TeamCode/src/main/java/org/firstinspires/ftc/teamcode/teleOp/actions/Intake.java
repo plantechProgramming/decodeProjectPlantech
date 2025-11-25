@@ -57,10 +57,10 @@ public class Intake {
     }
     public void intakeFunc(boolean in, boolean out){ //motor is flipped
         if(in){
-            intake_motor.setPower(-.92);
+            intake_motor.setPower(.92);
         }
         else if(out){
-            intake_motor.setPower(.92);
+            intake_motor.setPower(-.92);
         }
         else{
             intake_motor.setPower(0);

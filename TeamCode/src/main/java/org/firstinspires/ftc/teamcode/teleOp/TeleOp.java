@@ -36,11 +36,13 @@ public class TeleOp extends OpMode {
             0, 0, 0, 0);
     private VisionPortal visionPortal;
     private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
-
+    private static final float goBILDA_SWINGARM_POD = 13.26291192f; //ticks-per-mm for the goBILDA Swingarm Pod
+    private static final float goBILDA_4_BAR_POD = 19.89436789f;
+    final float YToXRatio = goBILDA_4_BAR_POD/goBILDA_SWINGARM_POD;
     @Override
     public void run(){
         Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
-        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu);
+        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
         ColorSensorTest cSensor = new ColorSensorTest();
         cSensor.init(hardwareMap);
@@ -74,7 +76,6 @@ public class TeleOp extends OpMode {
         double drift;
         double botHeading;
         boolean slow = false;
-
         double tick = 2000/(48*Math.PI); //per tick
         while (opModeIsActive() ) {
 //            AprilTagDetection goalTag = test.specialDetection;
@@ -85,7 +86,7 @@ public class TeleOp extends OpMode {
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
             //todo: pinpoint
-            botHeading = Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+            botHeading = odometry.getHeading(AngleUnit.RADIANS);
 
             ElapsedTime elapsedTime = new ElapsedTime();
             driveTrain.drive(forward, drift, turn, botHeading, 1);
@@ -99,14 +100,29 @@ public class TeleOp extends OpMode {
 //                driveTrain.drive(forward, drift, turn, botHeading, 1);
                 slow = false;
             }
+            if(gamepad1.b){
+                if(odometry.getPosY(DistanceUnit.METER) <= 1.3) {
+                    driveTrain.turnToGyro_minus(-25);
+                    if (Math.abs(odometry.getHeading(AngleUnit.DEGREES)) - 4 >= Math.abs(-25)) {
+                        shooter.naiveShooter(2.6);
+                    }
+                }
+                else{
+                    shooter.naiveShooter(1);
+                }
 
-            if(gamepad1.b) shooter.naiveShooter(2.6);
-            else if(gamepad1.a) shooter.naiveShooter(1);
+            }
+//            if(gamepad1.b)shooter.naiveShooter(2.6);
 //            else if(gamepad1.a) shooter.naiveShooter(1);
+//            else if(gamepad1.a) shooter.naiveShooter(1);
+            intake.intakeFunc(gamepad1.y, false);
 
             //intake.intakeTest(gamepad1.y);
             //TODO: make use pinpoint
-            if(gamepad1.back){Imu.resetYaw();}/*
+            if(gamepad1.back){
+                Imu.resetYaw();
+                odometry.recalibrateIMU();
+            }/*
             intake.inBetweenFunc(gamepad1.dpad_up, gamepad1.dpad_down);
             intake.intakeFunc(gamepad1.a, gamepad1.b);
 */
@@ -120,11 +136,17 @@ public class TeleOp extends OpMode {
 //                //dashboardTelemetry.addData("distance from tag", "null :`(((");
 //            }
 //            //dashboardTelemetry.addData("Order: ",test.Order);
-            dashboardTelemetry.addData("botheading",botHeading);
+            dashboardTelemetry.addData("botheading",odometry.getHeading(AngleUnit.DEGREES));
+            dashboardTelemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            dashboardTelemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
+            dashboardTelemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
+            dashboardTelemetry.addData("X encoder", odometry.getEncoderX());
+            dashboardTelemetry.addData("Y encoder", odometry.getEncoderY());
             /*dashboardTelemetry.addData("shooter power: ",shooter.shooter2.getVelocity(AngleUnit.DEGREES));
             dashboardTelemetry.addData("odometry blabla: ",odometry.getCurrentPosition()/tick);
             dashboardTelemetry.addData("last Detected Color: ", cSensor.getLastDetected());
             */dashboardTelemetry.update();
+            odometry.update();
         }
 
     }
