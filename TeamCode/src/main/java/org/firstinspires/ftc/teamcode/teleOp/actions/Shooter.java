@@ -82,7 +82,7 @@ public class Shooter {
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
 
         shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        telemetry.addData("orig", shooter2.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
         if (dis <= 1.3) {
             Szonedis = 0.44;
         } else{
@@ -94,7 +94,6 @@ public class Shooter {
         telemetry.addData("velocity shooter ", shooterVelocity.getVelocityFilter());
         telemetry.addData("wanted", Szonedis*6000);
     }
-
 
      // velocity ---------------------------------------------------------------------------
 

@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.teleOp;
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.OpMode;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
 
@@ -12,18 +14,19 @@ import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
 public class shooterTest extends OpMode {
     @Override
     protected void postInit() {
-        Imu.resetYaw();
+        odometry.resetPosAndIMU();
     }
 
     @Override
     protected void run() {
-        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
-        double forward;
         while(opModeIsActive()){
-            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.05);
-            dashboardTelemetry.addData("wanted", 3000);
-            dashboardTelemetry.addData("pos2",shooter.shooter2.getCurrentPosition());
-            dashboardTelemetry.addData("pos",shooter.shooter.getCurrentPosition());
+            odometry.update();
+            dashboardTelemetry.addData("raw posY",odometry.getEncoderY());
+            dashboardTelemetry.addData("raw posX",odometry.getEncoderX());
+            dashboardTelemetry.addData("posX", odometry.getPosX(DistanceUnit.CM));
+            dashboardTelemetry.addData("posY", odometry.getPosY(DistanceUnit.CM));
+            dashboardTelemetry.addData("imu", odometry.getHeading(AngleUnit.DEGREES));
+            dashboardTelemetry.addData("status", odometry.getDeviceStatus());
             dashboardTelemetry.update();
         }
     }

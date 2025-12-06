@@ -30,9 +30,12 @@ dependencies {
     implementation 'dev.nextftc:control:1.0.0'
 
     // pedroPathing
-    implementation 'com.pedropathing:pedro:1.0.9'
+//    implementation 'com.pedropathing:pedro:1.0.9'
+    implementation 'com.pedropathing:ftc:2.0.4'
+    implementation 'com.pedropathing:telemetry:1.0.0'
+
 
     // panels
-    implementation 'com.bylazar:fullpanels:1.0.6'
+    implementation "com.bylazar:fullpanels:1.0.11"
 }
 

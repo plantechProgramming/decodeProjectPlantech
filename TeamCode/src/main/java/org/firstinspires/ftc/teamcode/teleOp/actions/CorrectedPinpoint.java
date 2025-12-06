@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.teleOp.actions;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 public class CorrectedPinpoint extends GoBildaPinpointDriver {
     public CorrectedPinpoint(I2cDeviceSynchSimple deviceClient, boolean deviceClientIsOwned) {
         super(deviceClient, deviceClientIsOwned);
@@ -11,7 +13,8 @@ public class CorrectedPinpoint extends GoBildaPinpointDriver {
     private static final float goBILDA_4_BAR_POD = 19.89436789f;
     final float YToXRatio = goBILDA_4_BAR_POD/goBILDA_SWINGARM_POD;
 
-    public double getCorrectedY(){
+    @Override
+    public double getPosY(DistanceUnit distanceUnit){
         return getEncoderY()*YToXRatio;
     }
 

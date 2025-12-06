@@ -39,6 +39,7 @@ public abstract class OpMode extends LinearOpMode {
     public boolean liftFlag = false;
     protected Telemetry dashboardTelemetry;
     protected GoBildaPinpointDriver odometry;
+    protected CorrectedPinpoint odo2;
     private static final float goBILDA_SWINGARM_POD = 13.26291192f; //ticks-per-mm for the goBILDA Swingarm Pod
     private static final float goBILDA_4_BAR_POD = 19.89436789f;
     private float avg_tpmm=(goBILDA_4_BAR_POD+goBILDA_SWINGARM_POD)/2;
@@ -103,14 +104,11 @@ public abstract class OpMode extends LinearOpMode {
         shootMotorOp.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         odometry = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
-        odometry.setEncoderResolution(avg_tpmm,DistanceUnit.MM);
+        odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         odometry.setOffsets(-160,-90, DistanceUnit.MM);
         odometry.resetPosAndIMU();
 
-        // distance from middle of shooter axle, not very sure its the right thing...
-        int xOffset = 145; //in mm
-        int yOffset = 105;
         // until we find the fucking camera we can't scan it and add it to robot config :(((
     //    camera = hardwareMap.get(CameraName.class,"webcam");
 

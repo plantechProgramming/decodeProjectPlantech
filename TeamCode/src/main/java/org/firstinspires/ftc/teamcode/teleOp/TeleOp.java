@@ -39,6 +39,7 @@ public class TeleOp extends OpMode {
     private static final float goBILDA_SWINGARM_POD = 13.26291192f; //ticks-per-mm for the goBILDA Swingarm Pod
     private static final float goBILDA_4_BAR_POD = 19.89436789f;
     final float YToXRatio = goBILDA_4_BAR_POD/goBILDA_SWINGARM_POD;
+
     @Override
     public void run(){
         Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
@@ -77,6 +78,7 @@ public class TeleOp extends OpMode {
         double botHeading;
         boolean slow = false;
         double tick = 2000/(48*Math.PI); //per tick
+
         while (opModeIsActive() ) {
 //            AprilTagDetection goalTag = test.specialDetection;
 //            test.telemetryAprilTag(aprilTag);
@@ -90,38 +92,55 @@ public class TeleOp extends OpMode {
 
             ElapsedTime elapsedTime = new ElapsedTime();
             driveTrain.drive(forward, drift, turn, botHeading, 1);
-//            dashboardTelemetry.addData("x", DriveFrontRight.getCurrentPosition());
-//            dashboardTelemetry.addData("y",DriveBackLeft.getCurrentPosition());
 
-            if(gamepad1.x && !slow){
-//                driveTrain.drive(forward, drift, turn, botHeading, 0.5);
+            // todo: figure out if driver wants slowing on start
+ /*           if(gamepad1.x && !slow){
+                driveTrain.drive(forward, drift, turn, botHeading, 0.5);
                 slow = true;
             }else if(gamepad1.x && slow) {
-//                driveTrain.drive(forward, drift, turn, botHeading, 1);
+                driveTrain.drive(forward, drift, turn, botHeading, 1);
                 slow = false;
             }
-            if(gamepad1.b){
-                if(odometry.getPosY(DistanceUnit.METER) <= 1.3) {
-                    driveTrain.turnToGyro_minus(-25);
-                    if (Math.abs(odometry.getHeading(AngleUnit.DEGREES)) - 4 >= Math.abs(-25)) {
-                        shooter.naiveShooter(2.6);
-                    }
-                }
-                else{
-                    shooter.naiveShooter(1);
-                }
+  */
+//            if(gamepad1.dpad_up){
+//                if(odometry.getPosY(DistanceUnit.METER) <= 1.3) {
+//                    driveTrain.turnToGyro_minus(25);
+//                    if (Math.abs(odometry.getHeading(AngleUnit.DEGREES)) - 4 >= Math.abs(-25)) {
+//                        shooter.naiveShooter(2.6);
+//                    }
+//                }
+//                else{
+//                    shooter.naiveShooter(1);
+//                }
+//
+//            } else {
+//                shooter.shooter.setPower(0);
+//                shooter.shooter2.setPower(0);
+//
+//            }
+            intake.inBetweenFunc(gamepad1.right_bumper,gamepad1.left_bumper);
 
-            }
 //            if(gamepad1.b)shooter.naiveShooter(2.6);
 //            else if(gamepad1.a) shooter.naiveShooter(1);
 //            else if(gamepad1.a) shooter.naiveShooter(1);
-            intake.intakeFunc(gamepad1.y, false);
+            intake.intakeFunc(gamepad1.right_bumper, gamepad1.left_bumper);
+
+           if (gamepad1.dpad_down){ intake.intakeFunc(gamepad1.dpad_down, false);intake.inBetweenFunc(gamepad1.dpad_down,false);
+               shooter.naiveShooter(2.6);
+           }
+           if (gamepad1.dpad_right){
+               shooter.naiveShooter(2.6);
+           }
+           if (gamepad1.dpad_left){
+               shooter.naiveShooter(1);
+           }
+
 
             //intake.intakeTest(gamepad1.y);
             //TODO: make use pinpoint
             if(gamepad1.back){
-                Imu.resetYaw();
-                odometry.recalibrateIMU();
+                odometry.resetPosAndIMU();
+//                odometry.recalibrateIMU();
             }/*
             intake.inBetweenFunc(gamepad1.dpad_up, gamepad1.dpad_down);
             intake.intakeFunc(gamepad1.a, gamepad1.b);
@@ -140,6 +159,7 @@ public class TeleOp extends OpMode {
             dashboardTelemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             dashboardTelemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
             dashboardTelemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
+            dashboardTelemetry.addData("corrected y", getCorrectedY(DistanceUnit.CM));
             dashboardTelemetry.addData("X encoder", odometry.getEncoderX());
             dashboardTelemetry.addData("Y encoder", odometry.getEncoderY());
             /*dashboardTelemetry.addData("shooter power: ",shooter.shooter2.getVelocity(AngleUnit.DEGREES));
@@ -147,12 +167,16 @@ public class TeleOp extends OpMode {
             dashboardTelemetry.addData("last Detected Color: ", cSensor.getLastDetected());
             */dashboardTelemetry.update();
             odometry.update();
+
         }
 
     }
 
-    @Override
+    double getCorrectedY(DistanceUnit distanceUnit){
+        return odometry.getPosY(distanceUnit)*YToXRatio;
+    }
 
+    @Override
     protected void end() {
 
     }
