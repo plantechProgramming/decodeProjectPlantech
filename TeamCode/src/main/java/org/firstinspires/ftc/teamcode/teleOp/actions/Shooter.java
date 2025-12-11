@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 60;
+    public static double kP = 65;
     public static double kI = 1;
     public static double kD = 8;
     public static double kF = 0;
@@ -75,24 +75,28 @@ public class Shooter {
         prevPower = power;
     }
 
-    /// @param dis: distance from goal
+//    / @param dis: distance from goal
     /// shoots with different powers depending on what launch zone youre in
     // TODO: make depend on odo vals, closed loop control for values
-    public void naiveShooter(double dis) {
+    public void naiveShooter(boolean far) {
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
 
         shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         telemetry.addData("orig", shooter2.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
-        if (dis <= 1.3) {
-            Szonedis = 0.44;
+        if (!far) {
+            Szonedis = 0.46;
         } else{
-            Szonedis = 0.55;
+            Szonedis = 0.56;
         }
         shooter.setPower(Szonedis*errorFix);
         shooter2.setPower(-Szonedis*errorFix);
 
         telemetry.addData("velocity shooter ", shooterVelocity.getVelocityFilter());
         telemetry.addData("wanted", Szonedis*6000);
+    }
+    public void stopShooter(){
+       shooter.setPower(0);
+       shooter2.setPower(0);
     }
 
      // velocity ---------------------------------------------------------------------------

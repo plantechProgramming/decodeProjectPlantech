@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.teleOp.PID;
 import org.openftc.easyopencv.OpenCvCamera;
 
@@ -92,52 +93,76 @@ public class DriveTrain {
             BR.setPower(0);
             BL.setPower(0);
         }
-    public void turnToGyro_minus(double degrees) {
+    public void turnToGyro(double degrees) {
         double botAngle = Math.abs(odometry.getHeading(AngleUnit.DEGREES));
-        PID pid = new PID(1, 0, 0, 0);
-        double threshold = 4;
+        double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
+        PID pid = new PID(0.03, 0, 0, 0);
+        double threshold = 5;
+        double a = -1;
+        double b = 1;
+        double power = 0;
+//        double correctedDeg = degrees;
+//        double correctedBotAngle = botAngleRaw;
+//        if(degrees < 0){
+//            correctedDeg = 360 + degrees;
+//        }
+//
+//        if(botAngleRaw < 0){
+//            correctedBotAngle = 360 + botAngleRaw;
+//        }
         pid.setWanted(degrees);
 
-        if (Math.abs(botAngle) + threshold <= Math.abs(degrees)) {
-//            botAngle = odometry.getHeading(AngleUnit.DEGREES);
+        if(Math.abs(degrees - botAngleRaw) > threshold){ // if not in threshold
+//            if(degrees - botAngleRaw > 0){ // if turn right needed
+//                a = 1;
+//                b = -1;
+//            }
+//            if(botAngleRaw < 0){
+//                power = pid.update(360 - Math.abs(botAngleRaw));
+//            }
+//            else{
+//                power = pid.update(Math.abs(botAngleRaw));
+//            }
 
-            FL.setPower(-Math.abs(pid.update(botAngle)));
-            FR.setPower(Math.abs(pid.update(botAngle)));
+            power = pid.updatedeg(botAngleRaw);
+            FL.setPower(-power);
+            FR.setPower(power);
 
-            BR.setPower(Math.abs(pid.update(botAngle)));
-            BL.setPower(-Math.abs(pid.update(botAngle)));
-
-            telemetry.addData("pow", pid.update(botAngle));
-            telemetry.addData("heading", botAngle);
-            telemetry.update();
-
+            BR.setPower(power);
+            BL.setPower(-power);
         }
+
+        telemetry.addData("pow", power);
+        telemetry.addData("heading", botAngleRaw);
+        telemetry.update();
+
     }
 
-    public void turnToGyro_plus(double degrees) {
-        double botAngle = Math.abs(Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-        PID pid = new PID(5, 0, 0, 0);
-
-        BR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        degrees = degrees * (1500.0 / 40.0);
-
-        double pos = BR.getCurrentPosition();
-        pid.setWanted(degrees);
-
-        if (Math.abs(pos) <= Math.abs(degrees)) {
-            pos = BR.getCurrentPosition();
-
-            FL.setPower(Math.abs(pid.update(pos)));
-            BL.setPower(Math.abs(pid.update(pos)));
-
-            FR.setPower(-Math.abs(pid.update(pos)));
-            FR.setPower(-Math.abs(pid.update(pos)));
-
-            telemetry.addData("IMU", botAngle);
-            telemetry.update();
-
-        }stop();
+    public void turnToGoal(){
+        double lenfield = 360;
+        double x = odometry.getPosX(DistanceUnit.CM);
+        double y = odometry.getPosY(DistanceUnit.CM);
+        telemetry.addData("x to goal orig", x);
+        telemetry.addData("y to goal orig", y);
+        if (x<0){
+            x = Math.abs(x) + lenfield/2;
+        }
+        else{
+            x = lenfield/2 - Math.abs(x);
+        }
+        if (y<0){
+            y = Math.abs(y) + lenfield/2;
+        }
+        else{
+            y = lenfield/2 - Math.abs(y);
+        }
+        double deg = Math.toDegrees(Math.atan(y/x));
+        telemetry.addData("deg to goal", deg);
+        telemetry.addData("x to goal", x);
+        telemetry.addData("y to goal", y);
+        telemetry.update();
+//        turnToGyro(deg);
     }
+
 }
+

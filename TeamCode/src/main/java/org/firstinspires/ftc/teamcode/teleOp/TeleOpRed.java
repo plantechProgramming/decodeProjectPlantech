@@ -5,28 +5,24 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.OpMode;
 import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
-import org.firstinspires.ftc.teamcode.OpMode;
-import org.firstinspires.ftc.teamcode.auto.camera.aprilTagsTest;
-
 import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
-public class TeleOp extends OpMode {
+public class TeleOpRed extends OpMode {
     @Override
     protected void postInit() {
         //TODO: pinpoint
@@ -49,7 +45,7 @@ public class TeleOp extends OpMode {
         cSensor.init(hardwareMap);
 
         //TODO: find why didnt work outside
-/*        AprilTagLocalization test = new AprilTagLocalization();
+        AprilTagLocalization test = new AprilTagLocalization();
         AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
                 .setCameraPose(CAM_POS, CAM_ORIENTATION)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
@@ -63,14 +59,16 @@ public class TeleOp extends OpMode {
         builder.addProcessor(aprilTag);
         visionPortal = builder.build();
 
-*/
-//        AprilTagProcessor aprilTag = test.initAprilTag();
+        odometry.setPosition(new Pose2D(DistanceUnit.CM,37,-155,AngleUnit.DEGREES, 0));
 
-       /* VisionPortal visionPortal = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "webcam"))
-                .addProcessor(aprilTag)
-                .build();
-*/
+
+//        AprilTagProcessor aprilTag = test.initAprilTag();
+//
+//        VisionPortal visionPortal = new VisionPortal.Builder()
+//                .setCamera(hardwareMap.get(WebcamName.class, "webcam"))
+//                .addProcessor(aprilTag)
+//                .build();
+
 
         double forward; //-1 to 1
         double turn;
@@ -80,9 +78,9 @@ public class TeleOp extends OpMode {
         double tick = 2000/(48*Math.PI); //per tick
 
         while (opModeIsActive() ) {
-//            AprilTagDetection goalTag = test.specialDetection;
+            AprilTagDetection goalTag = test.specialDetection;
 //            test.telemetryAprilTag(aprilTag);
-//            test.detectTags(aprilTag);
+            test.detectTags(aprilTag);
 
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
@@ -118,29 +116,57 @@ public class TeleOp extends OpMode {
 //                shooter.shooter2.setPower(0);
 //
 //            }
-            intake.inBetweenFunc(gamepad1.right_bumper,gamepad1.left_bumper);
 
-//            if(gamepad1.b)shooter.naiveShooter(2.6);
-//            else if(gamepad1.a) shooter.naiveShooter(1);
-//            else if(gamepad1.a) shooter.naiveShooter(1);
-            intake.intakeFunc(gamepad1.right_bumper, gamepad1.left_bumper);
+           if (gamepad1.a){
+               intake.intakeIn();
+               intake.inBetweenInPart();
+           }
+           else if (gamepad1.b){
+               intake.inBetweenInFull();
+               if(odometry.getPosY(DistanceUnit.CM) > -100){
+                   shooter.naiveShooter(false);
+                   telemetry.addLine("close");
+                   telemetry.update();
+               }
+               else{
+                   shooter.naiveShooter(true);
+                   telemetry.addLine("far");
+                   telemetry.update();
 
-           if (gamepad1.dpad_down){ intake.intakeFunc(gamepad1.dpad_down, false);intake.inBetweenFunc(gamepad1.dpad_down,false);
-               shooter.naiveShooter(2.6);
+               }
            }
-           if (gamepad1.dpad_right){
-               shooter.naiveShooter(2.6);
+           else if(gamepad1.x) {
+               intake.intakeOut();
+               intake.inBetweenOut();
+
+               shooter.shooter.setPower(-0.2);
+               shooter.shooter2.setPower(0.2);
            }
-           if (gamepad1.dpad_left){
-               shooter.naiveShooter(1);
+           else{
+                shooter.shooter.setPower(0);
+                shooter.shooter2.setPower(0);
+                intake.intake_motor.setPower(0);
+                intake.ibl.setPower(0);
+                intake.ibr.setPower(0);
+                intake.sr.setPower(0);
+                intake.sl.setPower(0);
+            }
+           if(gamepad1.right_bumper){
+               driveTrain.turnToGyro(-160);
            }
+//           if(gamepad1.y && test.specialDetection != null && test.numDetected > 0){
+//               double deg = test.specialDetection.ftcPose.bearing;
+//
+//               driveTrain.turnToGyro(odometry.getHeading(AngleUnit.DEGREES) - deg);
+//               telemetry.addData("yaw", deg);
+//               telemetry.update();
+//           }
 
 
             //intake.intakeTest(gamepad1.y);
             //TODO: make use pinpoint
-            if(gamepad1.back){
-                odometry.resetPosAndIMU();
-//                odometry.recalibrateIMU();
+            if(gamepad1.start){
+                odometry.recalibrateIMU();
             }/*
             intake.inBetweenFunc(gamepad1.dpad_up, gamepad1.dpad_down);
             intake.intakeFunc(gamepad1.a, gamepad1.b);
@@ -159,7 +185,7 @@ public class TeleOp extends OpMode {
             dashboardTelemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
             dashboardTelemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
             dashboardTelemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
-            dashboardTelemetry.addData("corrected y", getCorrectedY(DistanceUnit.CM));
+            telemetry.addData("heading", odometry.getHeading(AngleUnit.DEGREES));
             dashboardTelemetry.addData("X encoder", odometry.getEncoderX());
             dashboardTelemetry.addData("Y encoder", odometry.getEncoderY());
             /*dashboardTelemetry.addData("shooter power: ",shooter.shooter2.getVelocity(AngleUnit.DEGREES));
@@ -170,10 +196,6 @@ public class TeleOp extends OpMode {
 
         }
 
-    }
-
-    double getCorrectedY(DistanceUnit distanceUnit){
-        return odometry.getPosY(distanceUnit)*YToXRatio;
     }
 
     @Override

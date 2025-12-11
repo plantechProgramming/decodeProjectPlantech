@@ -20,8 +20,8 @@ public class Intake {
     //Thread thread = Thread.currentThread();
     ElapsedTime runtime = new ElapsedTime();
 
-    CRServo ibl,ibr,sl,sr; //ib = inbetween, s = shooter
-    DcMotorEx intake_motor;
+    public CRServo ibl,ibr,sl,sr; //ib = inbetween, s = shooter
+    public DcMotorEx intake_motor;
     Telemetry telemetry;
     public double radToTicks = Math.PI/3000;
 
@@ -55,6 +55,22 @@ public class Intake {
             sl.setPower(0);
         }
     }
+    public void inBetweenInFull(){
+        ibr.setPower(1);
+        ibl.setPower(-1);
+        sr.setPower(1);
+        sl.setPower(-1);
+    }
+    public void inBetweenInPart(){
+        sr.setPower(1);
+        sl.setPower(-1);
+    }
+    public void inBetweenOut(){
+        ibr.setPower(-1);
+        ibl.setPower(1);
+        sr.setPower(-1);
+        sl.setPower(1);
+    }
     public void intakeFunc(boolean in, boolean out){ //motor is flipped
         if(in){
             intake_motor.setPower(.92);
@@ -65,6 +81,12 @@ public class Intake {
         else{
             intake_motor.setPower(0);
         }
+    }
+    public void intakeIn(){
+        intake_motor.setPower(.92);
+    }
+    public void intakeOut(){
+        intake_motor.setPower(-.92);
     }
 }
 
