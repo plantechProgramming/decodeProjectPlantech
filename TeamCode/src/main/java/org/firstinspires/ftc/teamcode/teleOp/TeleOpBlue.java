@@ -33,9 +33,6 @@ public class TeleOpBlue extends OpMode {
             0, 0, 0, 0);
     private VisionPortal visionPortal;
     private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
-    private static final float goBILDA_SWINGARM_POD = 13.26291192f; //ticks-per-mm for the goBILDA Swingarm Pod
-    private static final float goBILDA_4_BAR_POD = 19.89436789f;
-    final float YToXRatio = goBILDA_4_BAR_POD/goBILDA_SWINGARM_POD;
 
     @Override
     public void run(){
@@ -61,7 +58,8 @@ public class TeleOpBlue extends OpMode {
         visionPortal = builder.build();
 
 //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
-        odometry.setPosition(new Pose2D(DistanceUnit.CM,-90,165,AngleUnit.DEGREES, 0));
+        odometry.resetPosAndIMU();
+        //odometry.setPosition(new Pose2D(DistanceUnit.CM,-90,165,AngleUnit.DEGREES, 180));
 
 
 //        AprilTagProcessor aprilTag = test.initAprilTag();
@@ -128,29 +126,26 @@ public class TeleOpBlue extends OpMode {
             if(gamepad1.dpad_right){
                 driveTrain.turnToGyro(-160);
             }
+            if (gamepad1.right_bumper){shooter.naiveShooter(true);}
             if(gamepad1.dpad_left){
                 driveTrain.turnToGoal();
             }
            if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
                double deg = test.specialDetection.ftcPose.bearing;
 
-               driveTrain.turnToGyro(-(odometry.getHeading(AngleUnit.DEGREES) + deg));
+               driveTrain.turnToGyro(odometry.getHeading(AngleUnit.DEGREES) + deg);
                telemetry.addData("yaw", deg);
                telemetry.update();
            }
-            if (gamepad1.left_bumper){
-                if(odometry.getPosY(DistanceUnit.CM) > -80){
-                    shooter.naiveShooter(false);
-                    telemetry.addLine("close");
-                    telemetry.update();
-                }
-                else{
-                    shooter.naiveShooter(true);
-                    telemetry.addLine("far");
-                    telemetry.update();
+            if (gamepad1.left_bumper) {
+                shooter.naiveShooter(false);
+                dashboardTelemetry.addLine("close");
+                dashboardTelemetry.update();
 
-                }
-            }
+            }else if (gamepad1.right_bumper){
+                shooter.naiveShooter(true);
+                dashboardTelemetry.addLine("far");
+                dashboardTelemetry.update();}
             else{
                 shooter.stopShooter();
             }
@@ -169,6 +164,10 @@ public class TeleOpBlue extends OpMode {
 
                 odometry.resetPosAndIMU();
                 odometry.setPosition(curPose);
+            }
+            if (gamepad1.back){
+                odometry.resetPosAndIMU();
+                odometry.setPosition(new Pose2D(DistanceUnit.CM,-90,165,AngleUnit.DEGREES, 0));
             }
 
             dashboardTelemetry.addData("botheading",odometry.getHeading(AngleUnit.DEGREES));

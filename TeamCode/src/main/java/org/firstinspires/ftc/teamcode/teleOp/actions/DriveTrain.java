@@ -139,12 +139,12 @@ public class DriveTrain {
     }
 
     public void turnToGoal(){
-        double lenfield = 360;
+        double lenfield = 360; // cm
         double x = odometry.getPosX(DistanceUnit.CM);
         double y = odometry.getPosY(DistanceUnit.CM);
-        telemetry.addData("x to goal orig", x);
-        telemetry.addData("y to goal orig", y);
-        if (x<0){
+        telemetry.addData("x to middle orig", x);
+        telemetry.addData("y to middle orig", y);
+        if (x>0){
             x = Math.abs(x) + lenfield/2;
         }
         else{
