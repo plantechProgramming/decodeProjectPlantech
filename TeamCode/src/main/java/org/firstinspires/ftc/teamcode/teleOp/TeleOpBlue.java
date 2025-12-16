@@ -58,8 +58,7 @@ public class TeleOpBlue extends OpMode {
         visionPortal = builder.build();
 
 //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
-        odometry.resetPosAndIMU();
-        //odometry.setPosition(new Pose2D(DistanceUnit.CM,-90,165,AngleUnit.DEGREES, 180));
+        odometry.setPosition(new Pose2D(DistanceUnit.CM,90,-165,AngleUnit.DEGREES, 0));
 
 
 //        AprilTagProcessor aprilTag = test.initAprilTag();
@@ -167,7 +166,7 @@ public class TeleOpBlue extends OpMode {
             }
             if (gamepad1.back){
                 odometry.resetPosAndIMU();
-                odometry.setPosition(new Pose2D(DistanceUnit.CM,-90,165,AngleUnit.DEGREES, 0));
+                odometry.setPosition(new Pose2D(DistanceUnit.CM,90,-165,AngleUnit.DEGREES, 180));
             }
 
             dashboardTelemetry.addData("botheading",odometry.getHeading(AngleUnit.DEGREES));
