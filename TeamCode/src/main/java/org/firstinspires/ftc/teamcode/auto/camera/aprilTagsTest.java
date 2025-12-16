@@ -5,9 +5,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -35,6 +39,8 @@ import java.util.ListIterator;
  */
 @Autonomous(name = "aprilTags")
 public class aprilTagsTest  extends LinearOpMode {
+
+    String team;
     private AprilTagProcessor aprilTag;
     public String Order = "NNN";
 
@@ -51,6 +57,7 @@ public class aprilTagsTest  extends LinearOpMode {
     public AprilTagDetection specialDetection = null;
 
     private VisionPortal visionPortal;
+
 
     @Override
     public void runOpMode() {
@@ -121,7 +128,8 @@ public class aprilTagsTest  extends LinearOpMode {
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         AprilTagDetection detection = null;
-        AprilTagDetection specialDetection = null;
+        List<AprilTagDetection> specialDetections = null;
+        int id = 0;
 
         telemetry.addData("# AprilTags Detected", currentDetections.size());
 
@@ -147,9 +155,25 @@ public class aprilTagsTest  extends LinearOpMode {
         // find only special, maybe combine with prev?
         for (AprilTagDetection Detection : currentDetections) {
             if (Detection.id != 21 && Detection.id != 22 && Detection.id != 23) {
-                specialDetection = Detection;
+                specialDetections.add(Detection);
             }
         }
+        if(team == "RED"){
+            id = 20;
+        }
+        else if(team == "BLUE"){
+            id = 24;
+        }
+        if(specialDetections.size() == 2){
+            for (AprilTagDetection Detection : currentDetections){
+                if(Detection.id == id){
+                    specialDetections.remove(Detection);
+                    specialDetection = specialDetections.get(0);
+                }
+            }
+        }
+        telemetry.addData("specialDetections", specialDetections);
+        telemetry.addData("specialDetection", specialDetection);
 
         /*
          * the x, y, z vals are literally the location in the field. y is toward programming table,

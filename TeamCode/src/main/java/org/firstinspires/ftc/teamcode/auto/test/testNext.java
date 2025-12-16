@@ -28,7 +28,7 @@ public class testNext extends NextFTCOpMode {
 
     private Command autonomousRoutine() {
         return new SequentialGroup(
-                NextShooter.INSTANCE.naiveShooter(2.6)
+                NextShooter.INSTANCE.naiveShooter(true)
         );
     }
     @Override

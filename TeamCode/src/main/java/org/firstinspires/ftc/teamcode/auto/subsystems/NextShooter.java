@@ -29,8 +29,8 @@ public class NextShooter implements Subsystem {
     double Szonedis = 0.55;
     double errorFix = 1.12;
 
-    public Command naiveShooter(double dis) {
-        if (dis <= 1.3) {
+    public Command naiveShooter(boolean far) {
+        if (!far) {
             Szonedis = .47;
             return new ParallelGroup(new SetPower(shooter1, Szonedis*errorFix),
                 new SetPower(shooter2, -Szonedis*errorFix));

@@ -45,7 +45,7 @@ public class TeleOpRed extends OpMode {
         cSensor.init(hardwareMap);
 
         //TODO: find why didnt work outside
-        AprilTagLocalization test = new AprilTagLocalization();
+        AprilTagLocalization test = new AprilTagLocalization("RED");
         AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
                 .setCameraPose(CAM_POS, CAM_ORIENTATION)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)

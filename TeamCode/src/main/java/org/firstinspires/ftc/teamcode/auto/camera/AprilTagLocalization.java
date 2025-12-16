@@ -13,9 +13,12 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AprilTagLocalization {
+    private String team;
+    private int id = 0;
     private AprilTagProcessor aprilTag;
     public String Order = "NNN";
 
@@ -31,6 +34,10 @@ public class AprilTagLocalization {
     public AprilTagDetection specialDetection = null;
     public int numDetected = 0;
     private VisionPortal visionPortal;
+
+    public AprilTagLocalization(String team) {
+        this.team = team;
+    }
 
     public void initProcessor(HardwareMap hardwareMap){
         AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
@@ -49,6 +56,7 @@ public class AprilTagLocalization {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         numDetected = currentDetections.size();
         AprilTagDetection detection = null;
+        List<AprilTagDetection> specialDetections = new ArrayList<AprilTagDetection>();
 
         // find only non special
         for (AprilTagDetection Detection : currentDetections) {
@@ -71,7 +79,21 @@ public class AprilTagLocalization {
         // find only special, maybe combine with prev?
         for (AprilTagDetection Detection : currentDetections) {
             if (Detection.id != 21 && Detection.id != 22 && Detection.id != 23) {
-                specialDetection = Detection;
+                specialDetections.add(Detection);
+            }
+        }
+        if(team == "RED"){// inverted on perpse
+            id = 20;
+        }
+        else if(team == "BLUE"){ // inverted on perpse
+            id = 24;
+        }
+        if(specialDetections.size() == 2){
+            for (AprilTagDetection Detection : currentDetections){
+                if(Detection.id == id){
+                    specialDetections.remove(Detection);
+                    specialDetection = specialDetections.get(0);
+                }
             }
         }
 
