@@ -98,7 +98,7 @@ public class DriveTrain {
         double botAngle = Math.abs(odometry.getHeading(AngleUnit.DEGREES));
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
         PID pid = new PID(0.04, 0, 0, 0);
-        double threshold = 3;
+        double threshold = 2;
         double power = 0;
         pid.setWanted(degrees);
 

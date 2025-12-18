@@ -92,43 +92,24 @@ public class TeleOpBlue extends OpMode {
             ElapsedTime elapsedTime = new ElapsedTime();
             driveTrain.drive(forward, drift, turn, botHeading, 1);
 
-            // todo: figure out if driver wants slowing on start
- /*           if(gamepad1.x && !slow){
-                driveTrain.drive(forward, drift, turn, botHeading, 0.5);
-                slow = true;
-            }else if(gamepad1.x && slow) {
-                driveTrain.drive(forward, drift, turn, botHeading, 1);
-                slow = false;
-            }
-  */
-
             if (gamepad1.a){
                 intake.intakeIn();
                 intake.inBetweenInPart();
             }
-            else if (gamepad1.b){
-                intake.inBetweenInFull();
-            }
             else if(gamepad1.x) {
-                intake.intakeOut();
                 intake.inBetweenOut();
+                shooter.shooter.setPower(-0.3);
+                shooter.shooter2.setPower(0.3);
 
-                shooter.shooter.setPower(-0.2);
-                shooter.shooter2.setPower(0.2);
-            }
-            else{
+            } else{
                 intake.intake_motor.setPower(0);
                 intake.ibl.setPower(0);
                 intake.ibr.setPower(0);
                 intake.sr.setPower(0);
                 intake.sl.setPower(0);
             }
-
             if(gamepad1.dpad_right){
-                driveTrain.turnToGyro(-160);
-            }
-            if(gamepad1.dpad_left){
-                driveTrain.turnToGoal("BLUE"); //TODO: change for red
+                driveTrain.turnToGoal("BLUE");
             }
 //           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
 //               double deg = test.specialDetection.ftcPose.bearing;
@@ -137,29 +118,8 @@ public class TeleOpBlue extends OpMode {
 //               telemetry.addData("yaw", deg);
 //               telemetry.update();
 //           }
-//            if (gamepad1.left_bumper) {
-//                shooter.naiveShooter(false);
-//                dashboardTelemetry.addLine("close");
-//                dashboardTelemetry.update();
-//
-//            }else if (gamepad1.right_bumper){
-//                shooter.naiveShooter(true);
-//                dashboardTelemetry.addLine("far");
-//                dashboardTelemetry.update();}
-            if(gamepad1.left_bumper){
-                if (odometry.getPosY(DistanceUnit.CM) > 60){
-                    shooter.naiveShooter(true);
-                    dashboardTelemetry.addLine("far");
-                    dashboardTelemetry.update();
-                }
-                else{
-                    shooter.naiveShooter(false);
-                    dashboardTelemetry.addLine("close");
-                    dashboardTelemetry.update();
-                }
-            }
             if(gamepad1.right_bumper){
-                int threshold = 200;
+                int threshold = 275;
                 if (odometry.getPosY(DistanceUnit.CM) > 60){
                     shooter.naiveShooter(true);
                     dashboardTelemetry.addLine("far");
@@ -193,7 +153,7 @@ public class TeleOpBlue extends OpMode {
                 odometry.setPosition(curPose);
             }
             if(gamepad1.back){
-                odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 0));
+                odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180));
 
             }
 

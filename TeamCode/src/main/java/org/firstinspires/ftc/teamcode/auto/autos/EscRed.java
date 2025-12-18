@@ -30,7 +30,7 @@ public class EscRed extends OpMode {
     public void buildPaths() {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
         leavePath = follower.pathBuilder()
-                .addPath(new BezierLine(startPose, endPose))
+                .addPath(new BezierLine(startPose, controlPose, endPose))
                 .setLinearHeadingInterpolation(startPose.getHeading(),endPose.getHeading())
                 .build();
 //        leavePath.setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading());
