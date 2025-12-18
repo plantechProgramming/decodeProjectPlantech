@@ -6,14 +6,14 @@ import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.powerable.SetPower;
 
 public class NextIntake implements Subsystem {
-    public static final NextShooter INSTANCE = new NextShooter();
+    public static final NextIntake INSTANCE = new NextIntake();
     public NextIntake() { }
-    MotorEx motor = new MotorEx("Intake");
+    MotorEx intakeMotor = new MotorEx("Intake");
 
     public Command take(){
-        return new SetPower(motor,1);
+        return new SetPower(intakeMotor,1);
     }
     public Command out(){
-        return new SetPower(motor,-1);
+        return new SetPower(intakeMotor,-1);
     }
 }

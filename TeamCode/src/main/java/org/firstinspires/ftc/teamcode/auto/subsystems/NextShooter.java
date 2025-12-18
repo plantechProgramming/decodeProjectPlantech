@@ -11,6 +11,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import dev.nextftc.control.ControlSystem;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
@@ -28,17 +29,19 @@ public class NextShooter implements Subsystem {
     private MotorEx shooter2 = new MotorEx("shooter2");
     double Szonedis = 0.55;
     double errorFix = 1.12;
+    ControlSystem controlSystem = ControlSystem.builder()//next pid
+            .posPid(65, 1, 8)
+            .build();
 
     public Command naiveShooter(boolean far) {
         if (!far) {
             Szonedis = .47;
             return new ParallelGroup(new SetPower(shooter1, Szonedis*errorFix),
-                new SetPower(shooter2, -Szonedis*errorFix));
+                                     new SetPower(shooter2, -Szonedis*errorFix));
         } else {
             Szonedis = 0.55;
             return new ParallelGroup(new SetPower(shooter1, Szonedis*errorFix),
-                    new SetPower(shooter2, -Szonedis*errorFix));
+                                     new SetPower(shooter2, -Szonedis*errorFix));
         }
     }
-
 }

@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import dev.nextftc.core.commands.Command;
+
 @Configurable
 @Config
 public class Shooter {
@@ -43,7 +45,6 @@ public class Shooter {
 
     double Szonedis;
     final double errorFix = 1.18;
-
     public void noPhysShoot(double x){
         shooter.setPower(x);
         shooter2.setPower(-x);
@@ -82,7 +83,7 @@ public class Shooter {
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
 
         shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-        telemetry.addData("orig", shooter2.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER));
+        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         if (!far) {
             Szonedis = 0.46;
         } else{
@@ -98,6 +99,7 @@ public class Shooter {
        shooter.setPower(0);
        shooter2.setPower(0);
     }
+
 
      // velocity ---------------------------------------------------------------------------
 

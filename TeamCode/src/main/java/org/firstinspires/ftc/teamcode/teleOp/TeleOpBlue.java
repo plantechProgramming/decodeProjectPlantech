@@ -29,8 +29,7 @@ public class TeleOpBlue extends OpMode {
         //TODO: pinpoint
         Imu.resetYaw();
     }
-    public final Position CAM_POS = new Position(DistanceUnit.CM,
-            0, 0, 0, 0);
+    public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0);
     private VisionPortal visionPortal;
     private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
 

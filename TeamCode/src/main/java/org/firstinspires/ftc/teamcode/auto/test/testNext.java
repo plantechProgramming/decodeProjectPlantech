@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.auto.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextInBetween;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextIntake;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
@@ -14,10 +15,10 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.core.commands.CommandManager;
 
-@Autonomous(name = "NextFTC testing")
+@Autonomous(name = "NextFTC testing",group = "tests")
 public class testNext extends NextFTCOpMode {
 
-
+AutoCommands command = new AutoCommands();
     public testNext() {
         addComponents(
                 new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
@@ -28,8 +29,8 @@ public class testNext extends NextFTCOpMode {
 
     private Command autonomousRoutine() {
         return new SequentialGroup(
-                NextShooter.INSTANCE.naiveShooter(true)
-        );
+               command.fullShoot(false)
+                );
     }
     @Override
     public void onStartButtonPressed() {

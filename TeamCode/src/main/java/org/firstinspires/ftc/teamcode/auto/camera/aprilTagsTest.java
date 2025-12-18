@@ -37,7 +37,7 @@ import java.util.ListIterator;
  * FILE IS NOT USED. here for "what if we need it for some reason in comp"
  * reasons.
  */
-@Autonomous(name = "aprilTags")
+@Autonomous(name = "aprilTags", group = "camera")
 public class aprilTagsTest  extends LinearOpMode {
 
     String team;

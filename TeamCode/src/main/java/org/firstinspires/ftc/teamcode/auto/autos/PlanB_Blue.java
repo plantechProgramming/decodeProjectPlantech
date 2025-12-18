@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.test; // make sure this aligns with class location
+package org.firstinspires.ftc.teamcode.auto.autos; // make sure this aligns with class location
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -12,8 +12,8 @@ import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
-@Autonomous(name = "Plan A", group = "tests")
-public class testPedro extends OpMode {
+@Autonomous(name = "PlanB_Blue")
+public class PlanB_Blue extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
@@ -22,7 +22,8 @@ public class testPedro extends OpMode {
 
     private final Pose startPose = new Pose(34.0473361662961, 135.60918729550997, Math.toRadians(180)); // Start Pose of our robot.
     private final Pose scorePose = new Pose(47.60172591970307, 95.1073798180677, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose controlPose = new Pose(70,60);
+    private final Pose scorePose2 = new Pose(65,10,Math.toRadians(120));//score from far launch line
+    private final Pose controlPose = new Pose(70,60);// pose for getting to GPP without hitting other balls
     private final Pose GPP = new Pose(40, 35, Math.toRadians(180));
     private final Pose PPG = new Pose(40, 84.3, Math.toRadians(180));
     private final Pose PGP = new Pose(40, 59, Math.toRadians(180));
@@ -58,7 +59,7 @@ public class testPedro extends OpMode {
                 .addPath(new BezierLine(GPP, afterPickup1))
                 .build();
         scoreGPP = follower.pathBuilder()
-                .addPath(new BezierCurve(afterPickup1, scorePose,controlPose))
+                .addPath(new BezierLine(afterPickup1, scorePose2))
                 .setLinearHeadingInterpolation(afterPickup1.getHeading(), scorePose.getHeading())
                 .build();
 

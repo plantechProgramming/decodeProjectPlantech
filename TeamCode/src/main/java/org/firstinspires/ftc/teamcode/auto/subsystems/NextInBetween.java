@@ -44,4 +44,22 @@ public class NextInBetween implements Subsystem {
             );
         }
     }
+    public Command inBetween2Shooter(boolean up, boolean down) {
+        if (up) {
+            return new ParallelGroup(
+                    new SetPower(sr, 1),
+                    new SetPower(sl, -1)
+            );
+        } else if (down) {
+            return new ParallelGroup(
+                    new SetPower(sr, -1),
+                    new SetPower(sl, 1)
+            );
+        }else {
+            return new ParallelGroup(
+                    new SetPower(sr, 0),
+                    new SetPower(sl, 0)
+            );
+        }
+    }
 }

@@ -15,7 +15,7 @@ import org.opencv.core.Rect;
 import java.util.ArrayList;
 import java.util.List;
 
-@Autonomous(name = "vision")
+@Autonomous(name = "vision",group = "camera")
 public class visionOpMode extends LinearOpMode {
 
     private visionPipeline pipeLine;
