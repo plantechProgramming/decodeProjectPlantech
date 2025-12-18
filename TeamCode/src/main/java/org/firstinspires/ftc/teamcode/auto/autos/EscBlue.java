@@ -12,6 +12,8 @@ import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
+import kotlin.annotation.MustBeDocumented;
+
 @Autonomous(name = "EscBlue")
 public class EscBlue extends OpMode {
     private Follower follower;
@@ -20,17 +22,19 @@ public class EscBlue extends OpMode {
     AutoCommands command = new AutoCommands();
 
 
-    private final Pose startPose = new Pose(111, 135.3, Math.toRadians(180)); // Start Pose of our robot.
-    private final Pose endPose = new Pose(34, 10, Math.toRadians(180));
-    private final Pose controlPose = new Pose(70,60);
+    private final Pose startPose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot.
+    private final Pose endPose = new Pose(55.5, 61, Math.toRadians(180));
+    private final Pose controlPose = new Pose(70,89);
 
-    private Path leavePath;
+    private PathChain leavePath;
 
 
     public void buildPaths() {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
-        leavePath = new Path(new BezierCurve(startPose, endPose, controlPose));
-        leavePath.setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading());
+        leavePath = follower.pathBuilder()
+                .addPath(new BezierLine(startPose,endPose))
+                .setLinearHeadingInterpolation(startPose.getHeading(),endPose.getHeading())
+                .build();
     }
     public void autonomousPathUpdate() {
         switch (pathState) {

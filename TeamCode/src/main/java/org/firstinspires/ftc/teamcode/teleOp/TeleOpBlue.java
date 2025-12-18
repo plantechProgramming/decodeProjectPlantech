@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
+import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
 import org.firstinspires.ftc.teamcode.OpMode;
 
@@ -39,6 +40,8 @@ public class TeleOpBlue extends OpMode {
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
         ColorSensorTest cSensor = new ColorSensorTest();
+        GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
+
         cSensor.init(hardwareMap);
 
         //TODO: find why didnt work outside
@@ -57,7 +60,7 @@ public class TeleOpBlue extends OpMode {
         visionPortal = builder.build();
 
 //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
-        odometry.setPosition(new Pose2D(DistanceUnit.CM,90,-165,AngleUnit.DEGREES, 0));//TODO: change here for red
+        odometry.setPosition(new Pose2D(DistanceUnit.CM,24.5,45.5,AngleUnit.DEGREES, 0));//TODO: change here for red
 
 
 //        AprilTagProcessor aprilTag = test.initAprilTag();
@@ -125,15 +128,15 @@ public class TeleOpBlue extends OpMode {
                 driveTrain.turnToGyro(-160);
             }
             if(gamepad1.dpad_left){
-                driveTrain.turnToGoal();
+                driveTrain.turnToGoal("BLUE"); //TODO: change for red
             }
-           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
-               double deg = test.specialDetection.ftcPose.bearing;
-
-               driveTrain.turnToGyro(odometry.getHeading(AngleUnit.DEGREES) + deg);
-               telemetry.addData("yaw", deg);
-               telemetry.update();
-           }
+//           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
+//               double deg = test.specialDetection.ftcPose.bearing;
+//
+//               driveTrain.turnToGyro(odometry.getHeading(AngleUnit.DEGREES) + deg);
+//               telemetry.addData("yaw", deg);
+//               telemetry.update();
+//           }
 //            if (gamepad1.left_bumper) {
 //                shooter.naiveShooter(false);
 //                dashboardTelemetry.addLine("close");
@@ -155,7 +158,23 @@ public class TeleOpBlue extends OpMode {
                     dashboardTelemetry.update();
                 }
             }
+            if(gamepad1.right_bumper){
+                int threshold = 200;
+                if (odometry.getPosY(DistanceUnit.CM) > 60){
+                    shooter.naiveShooter(true);
+                    dashboardTelemetry.addLine("far");
+                    dashboardTelemetry.update();
+                }
+                else{
+                    shooter.naiveShooter(false);
+                    dashboardTelemetry.addLine("close");
+                    dashboardTelemetry.update();
+                }
 
+                if(Math.abs(shooterVel.getVelocityFilter() - shooter.Szonedis*6000) < threshold){
+                    intake.inBetweenInFull();
+                }
+            }
             else{
                 shooter.stopShooter();
             }

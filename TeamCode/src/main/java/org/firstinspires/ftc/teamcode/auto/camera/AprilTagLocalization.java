@@ -82,6 +82,7 @@ public class AprilTagLocalization {
                 specialDetections.add(Detection);
             }
         }
+        // done to know what to remove from list
         if(team == "RED"){// inverted on perpse
             id = 20;
         }

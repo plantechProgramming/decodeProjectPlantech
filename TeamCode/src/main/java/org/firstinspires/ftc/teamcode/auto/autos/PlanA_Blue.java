@@ -20,7 +20,7 @@ public class PlanA_Blue extends OpMode {
     AutoCommands command = new AutoCommands();
 
 
-    private final Pose startPose = new Pose(34.0473361662961, 135.60918729550997, Math.toRadians(180)); // Start Pose of our robot.
+    private final Pose startPose = new Pose(34, 135.5, Math.toRadians(180)); // Start Pose of our robot.
     private final Pose scorePose = new Pose(47.60172591970307, 95.1073798180677, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose controlPose = new Pose(70,60);// pose for getting to GPP without hitting other balls
     private final Pose GPP = new Pose(40, 35, Math.toRadians(180));

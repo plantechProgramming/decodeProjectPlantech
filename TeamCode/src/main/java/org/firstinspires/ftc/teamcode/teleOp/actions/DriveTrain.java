@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.teleOp.PID;
+import org.opencv.core.Mat;
 import org.openftc.easyopencv.OpenCvCamera;
 
 public class DriveTrain {
@@ -96,33 +97,12 @@ public class DriveTrain {
     public void turnToGyro(double degrees) {
         double botAngle = Math.abs(odometry.getHeading(AngleUnit.DEGREES));
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
-        PID pid = new PID(0.03, 0, 0, 0);
-        double threshold = 5;
-        double a = -1;
-        double b = 1;
+        PID pid = new PID(0.04, 0, 0, 0);
+        double threshold = 3;
         double power = 0;
-//        double correctedDeg = degrees;
-//        double correctedBotAngle = botAngleRaw;
-//        if(degrees < 0){
-//            correctedDeg = 360 + degrees;
-//        }
-//
-//        if(botAngleRaw < 0){
-//            correctedBotAngle = 360 + botAngleRaw;
-//        }
         pid.setWanted(degrees);
 
         if(Math.abs(degrees - botAngleRaw) > threshold){ // if not in threshold
-//            if(degrees - botAngleRaw > 0){ // if turn right needed
-//                a = 1;
-//                b = -1;
-//            }
-//            if(botAngleRaw < 0){
-//                power = pid.update(360 - Math.abs(botAngleRaw));
-//            }
-//            else{
-//                power = pid.update(Math.abs(botAngleRaw));
-//            }
 
             power = pid.updatedeg(botAngleRaw);
             FL.setPower(-power);
@@ -138,30 +118,29 @@ public class DriveTrain {
 
     }
 
-    public void turnToGoal(){
+    public void turnToGoal(String team){
         double lenfield = 360; // cm
         double x = odometry.getPosX(DistanceUnit.CM);
         double y = odometry.getPosY(DistanceUnit.CM);
         telemetry.addData("x to middle orig", x);
         telemetry.addData("y to middle orig", y);
-        if (x>0){
-            x = Math.abs(x) + lenfield/2;
+        if(team == "RED"){
+            x = lenfield/2 + x;
         }
         else{
-            x = lenfield/2 - Math.abs(x);
+            x = lenfield/2 - x;
         }
-        if (y<0){
-            y = Math.abs(y) + lenfield/2;
-        }
-        else{
-            y = lenfield/2 - Math.abs(y);
-        }
-        double deg = Math.toDegrees(Math.atan(y/x));
-        telemetry.addData("deg to goal", deg);
+        double deg = Math.toDegrees(Math.atan((lenfield/2 + y)/x));
+        telemetry.addData("deg to goal", -deg);
         telemetry.addData("x to goal", x);
         telemetry.addData("y to goal", y);
         telemetry.update();
-//        turnToGyro(deg);
+        if(team == "BLUE"){
+            turnToGyro(-deg);
+        }
+        if(team == "RED"){
+            turnToGyro(180 + deg);
+        }
     }
 
 }

@@ -43,8 +43,8 @@ public class Shooter {
     final double diameter = .096; //in m
     final int MAX_RPM = 6000;
 
-    double Szonedis;
-    final double errorFix = 1.18;
+    public double Szonedis;
+    public final double errorFix = 1.18;
     public void noPhysShoot(double x){
         shooter.setPower(x);
         shooter2.setPower(-x);
@@ -85,9 +85,9 @@ public class Shooter {
         shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         if (!far) {
-            Szonedis = 0.46;
+            Szonedis = 0.48;
         } else{
-            Szonedis = 0.56;
+            Szonedis = 0.555;
         }
         shooter.setPower(Szonedis*errorFix);
         shooter2.setPower(-Szonedis*errorFix);

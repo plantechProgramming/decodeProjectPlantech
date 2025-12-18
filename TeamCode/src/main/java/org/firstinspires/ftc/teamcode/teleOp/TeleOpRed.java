@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
+import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
 import org.firstinspires.ftc.teamcode.OpMode;
 
@@ -29,23 +30,24 @@ public class TeleOpRed extends OpMode {
         //TODO: pinpoint
         Imu.resetYaw();
     }
-    public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0);
+    public final Position CAM_POS = new Position(DistanceUnit.CM,
+            0, 0, 0, 0);
     private VisionPortal visionPortal;
     private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
-    private static final float goBILDA_SWINGARM_POD = 13.26291192f; //ticks-per-mm for the goBILDA Swingarm Pod
-    private static final float goBILDA_4_BAR_POD = 19.89436789f;
-    final float YToXRatio = goBILDA_4_BAR_POD/goBILDA_SWINGARM_POD;
+
 
     @Override
     public void run(){
         Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
+        GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
         ColorSensorTest cSensor = new ColorSensorTest();
+
         cSensor.init(hardwareMap);
 
         //TODO: find why didnt work outside
-        AprilTagLocalization test = new AprilTagLocalization("RED");
+        AprilTagLocalization test = new AprilTagLocalization("RED"); //TODO: change here for red
         AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
                 .setCameraPose(CAM_POS, CAM_ORIENTATION)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
@@ -60,8 +62,8 @@ public class TeleOpRed extends OpMode {
         visionPortal = builder.build();
 
 //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
-        odometry.setPosition(new Pose2D(DistanceUnit.CM,-90,-165,AngleUnit.DEGREES, 0));
-
+//        odometry.setPosition(new Pose2D(DistanceUnit.CM,-90,-165,AngleUnit.DEGREES, 180));//TODO: change here for red
+        odometry.setPosition(new Pose2D(DistanceUnit.CM,-27.5,50,AngleUnit.DEGREES, 180));
 
 //        AprilTagProcessor aprilTag = test.initAprilTag();
 //
@@ -90,7 +92,7 @@ public class TeleOpRed extends OpMode {
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
 
             ElapsedTime elapsedTime = new ElapsedTime();
-            driveTrain.drive(forward, drift, turn, botHeading, 1);
+            driveTrain.drive(-forward, -drift, turn, botHeading, 1);
 
             // todo: figure out if driver wants slowing on start
  /*           if(gamepad1.x && !slow){
@@ -128,26 +130,51 @@ public class TeleOpRed extends OpMode {
                 driveTrain.turnToGyro(-160);
             }
             if(gamepad1.dpad_left){
-                driveTrain.turnToGoal();
+                driveTrain.turnToGoal("RED");
             }
-            if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
-                double deg = test.specialDetection.ftcPose.bearing;
-
-                driveTrain.turnToGyro(-(odometry.getHeading(AngleUnit.DEGREES) + deg));
-                telemetry.addData("yaw", deg);
-                telemetry.update();
-            }
-            if (gamepad1.left_bumper){
-                if(odometry.getPosY(DistanceUnit.CM) > -80){
-                    shooter.naiveShooter(false);
-                    telemetry.addLine("close");
-                    telemetry.update();
+//           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
+//               double deg = test.specialDetection.ftcPose.bearing;
+//
+//               driveTrain.turnToGyro(odometry.getHeading(AngleUnit.DEGREES) + deg);
+//               telemetry.addData("yaw", deg);
+//               telemetry.update();
+//           }
+//            if (gamepad1.left_bumper) {
+//                shooter.naiveShooter(false);
+//                dashboardTelemetry.addLine("close");
+//                dashboardTelemetry.update();
+//
+//            }else if (gamepad1.right_bumper){
+//                shooter.naiveShooter(true);
+//                dashboardTelemetry.addLine("far");
+//                dashboardTelemetry.update();}
+            if(gamepad1.left_bumper){
+                if (odometry.getPosY(DistanceUnit.CM) > 60){
+                    shooter.naiveShooter(true);
+                    dashboardTelemetry.addLine("far");
+                    dashboardTelemetry.update();
                 }
                 else{
+                    shooter.naiveShooter(false);
+                    dashboardTelemetry.addLine("close");
+                    dashboardTelemetry.update();
+                }
+            }
+            if(gamepad1.right_bumper){
+                int threshold = 200;
+                if (odometry.getPosY(DistanceUnit.CM) > 60){
                     shooter.naiveShooter(true);
-                    telemetry.addLine("far");
-                    telemetry.update();
+                    dashboardTelemetry.addLine("far");
+                    dashboardTelemetry.update();
+                }
+                else{
+                    shooter.naiveShooter(false);
+                    dashboardTelemetry.addLine("close");
+                    dashboardTelemetry.update();
+                }
 
+                if(Math.abs(shooterVel.getVelocityFilter() - shooter.Szonedis*6000) < threshold){
+                    intake.inBetweenInFull();
                 }
             }
             else{
@@ -164,10 +191,12 @@ public class TeleOpRed extends OpMode {
                 double x = odometry.getPosX(DistanceUnit.CM);
                 double y = odometry.getPosY(DistanceUnit.CM);
                 double heading = odometry.getHeading(AngleUnit.DEGREES);
-                Pose2D curPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,heading);
-
-                odometry.resetPosAndIMU();
+                Pose2D curPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,180);
                 odometry.setPosition(curPose);
+            }
+            if(gamepad1.back){
+                odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 0));
+
             }
 
             dashboardTelemetry.addData("botheading",odometry.getHeading(AngleUnit.DEGREES));
@@ -175,6 +204,8 @@ public class TeleOpRed extends OpMode {
             dashboardTelemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
             dashboardTelemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
 //            telemetry.addData("heading", odometry.getHeading(AngleUnit.DEGREES));
+            dashboardTelemetry.addData("vel",shooterVel.getVelocityFilter());
+            dashboardTelemetry.addData("th",Math.abs(shooterVel.getVelocityFilter() - shooter.Szonedis*6000));
             dashboardTelemetry.addData("X encoder", odometry.getEncoderX());
             dashboardTelemetry.addData("Y encoder", odometry.getEncoderY());
             /*dashboardTelemetry.addData("shooter power: ",shooter.shooter2.getVelocity(AngleUnit.DEGREES));

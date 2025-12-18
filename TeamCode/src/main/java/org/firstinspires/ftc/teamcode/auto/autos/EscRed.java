@@ -20,17 +20,21 @@ public class EscRed extends OpMode {
     AutoCommands command = new AutoCommands();
 
 
-    private final Pose startPose = new Pose(111, 135.3, Math.toRadians(0)); // Start Pose of our robot.
-    private final Pose endPose = new Pose(111, 10, Math.toRadians(0));
-    private final Pose controlPose = new Pose(70,60);
+    private final Pose startPose = new Pose(122.5, 123.5, Math.toRadians(36)); // Start Pose of our robot.
+    private final Pose endPose = new Pose(74.5, 61, Math.toRadians(0));
+    private final Pose controlPose = new Pose(75,81);
 
-    private Path leavePath;
+    private PathChain leavePath;
 
 
     public void buildPaths() {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
-        leavePath = new Path(new BezierCurve(startPose, endPose, controlPose));
-        leavePath.setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading());
+        leavePath = follower.pathBuilder()
+                .addPath(new BezierLine(startPose, endPose))
+                .setLinearHeadingInterpolation(startPose.getHeading(),endPose.getHeading())
+                .build();
+//        leavePath.setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading());
+
     }
     public void autonomousPathUpdate() {
         switch (pathState) {
