@@ -109,7 +109,6 @@ public class TeleOpRed extends OpMode {
             }
             else if(gamepad1.x) {
                 intake.inBetweenOut();
-//                intake.intakeOut();
                 shooter.shooter.setPower(-0.3);
                 shooter.shooter2.setPower(0.3);
 
@@ -121,7 +120,7 @@ public class TeleOpRed extends OpMode {
                 intake.sl.setPower(0);
             }
             if(gamepad1.dpad_right){
-                driveTrain.turnToGoal("RED");
+                driveTrain.turnToGoal("RED", driveTrain.isFar());
             }
 //           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
 //               double deg = test.specialDetection.ftcPose.bearing;
@@ -131,7 +130,7 @@ public class TeleOpRed extends OpMode {
 //               telemetry.update();
 //           }
             if(gamepad1.right_bumper){
-                int threshold = 250;
+                int threshold = 275;
                 if (odometry.getPosY(DistanceUnit.CM) > 60){
                     shooter.naiveShooter(true);
                     dashboardTelemetry.addLine("far");

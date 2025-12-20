@@ -50,7 +50,7 @@ public class PlanA_Red extends OpMode {
 
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         grabGPP = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, GPP,controlPose))
+                .addPath(new BezierCurve(scorePose,controlPose, GPP))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), GPP.getHeading())
                 .build();
 
@@ -58,7 +58,7 @@ public class PlanA_Red extends OpMode {
                 .addPath(new BezierLine(GPP, afterPickup1))
                 .build();
         scoreGPP = follower.pathBuilder()
-                .addPath(new BezierCurve(afterPickup1, scorePose,controlPose))
+                .addPath(new BezierCurve(afterPickup1,controlPose, scorePose))
                 .setLinearHeadingInterpolation(afterPickup1.getHeading(), scorePose.getHeading())
                 .build();
 

@@ -56,9 +56,9 @@ public class Intake {
         }
     }
     public void inBetweenInFull(){
-        ibr.setPower(1);
-        ibl.setPower(-1);
-        sr.setPower(1);
+        ibr.setPower(-1);
+        ibl.setPower(1);
+        sr.setPower(-1);
         sl.setPower(-1);
     }
     public void inBetweenInPart(){

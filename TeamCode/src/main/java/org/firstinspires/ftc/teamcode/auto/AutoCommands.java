@@ -29,7 +29,7 @@ public class AutoCommands extends NextFTCOpMode{
     }
 
     public Command intake(){
-        return new ParallelGroup(
+        return new ParallelGroup( // take just moves intake motor, so should be parallel
                 NextIntake.INSTANCE.take(),
                 NextInBetween.INSTANCE.inBetweenFunc(true,false)
              );

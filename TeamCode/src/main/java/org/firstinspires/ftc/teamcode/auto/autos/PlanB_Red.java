@@ -12,7 +12,7 @@ import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
-@Autonomous(name = "PlanA_Red")
+@Autonomous(name = "PlanB_Red")
 public class PlanB_Red extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
@@ -52,7 +52,7 @@ public class PlanB_Red extends OpMode {
 
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         grabGPP = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, GPP,controlPose))
+                .addPath(new BezierCurve(scorePose,controlPose, GPP))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), GPP.getHeading())
                 .build();
 
@@ -60,7 +60,7 @@ public class PlanB_Red extends OpMode {
                 .addPath(new BezierLine(GPP, afterPickup1))
                 .build();
         scoreGPP = follower.pathBuilder()
-                .addPath(new BezierCurve(afterPickup1, scorePose,controlPose))
+                .addPath(new BezierCurve(afterPickup1,controlPose, scorePose))
                 .setLinearHeadingInterpolation(afterPickup1.getHeading(), scorePose.getHeading())
                 .build();
 

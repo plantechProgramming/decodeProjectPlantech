@@ -11,7 +11,11 @@ import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
+import dev.nextftc.*;
 
+import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.extensions.pedro.FollowPath;
 import kotlin.annotation.MustBeDocumented;
 
 @Autonomous(name = "EscBlue")

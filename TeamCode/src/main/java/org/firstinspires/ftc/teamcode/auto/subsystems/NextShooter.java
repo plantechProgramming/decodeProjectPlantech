@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto.subsystems;
 
+import androidx.annotation.NonNull;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
@@ -12,6 +14,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import dev.nextftc.control.ControlSystem;
+import dev.nextftc.control.KineticState;
+import dev.nextftc.control.feedforward.FeedforwardElement;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
@@ -36,12 +40,18 @@ public class NextShooter implements Subsystem {
     public Command naiveShooter(boolean far) {
         if (!far) {
             Szonedis = .47;
-            return new ParallelGroup(new SetPower(shooter1, Szonedis*errorFix),
-                                     new SetPower(shooter2, -Szonedis*errorFix));
         } else {
-            Szonedis = 0.55;
-            return new ParallelGroup(new SetPower(shooter1, Szonedis*errorFix),
-                                     new SetPower(shooter2, -Szonedis*errorFix));
+            Szonedis = 0.56;
         }
+        controlSystem.setGoal(new KineticState(0,Szonedis*errorFix,0));
+        return setPowerPID(shooter1, shooter2);
+    }
+    public Command setPowerPID(MotorEx motor, MotorEx motor2){
+        KineticState state = new KineticState(motor.getCurrentPosition(), motor.getVelocity(),0);
+        KineticState state2 = new KineticState(motor2.getCurrentPosition(), motor2.getVelocity(),0);
+        return new ParallelGroup(
+                new SetPower(motor, controlSystem.calculate(state)),
+                new SetPower(motor2, controlSystem.calculate(state2))
+        );
     }
 }

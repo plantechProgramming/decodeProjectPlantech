@@ -12,6 +12,9 @@ import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
+import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.extensions.pedro.FollowPath;
+
 @Autonomous(name = "PlanA_Blue")
 public class PlanA_Blue extends OpMode {
     private Follower follower;
@@ -50,7 +53,7 @@ public class PlanA_Blue extends OpMode {
 
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         grabGPP = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, GPP,controlPose))
+                .addPath(new BezierCurve(scorePose,controlPose, GPP))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), GPP.getHeading())
                 .build();
 
@@ -58,7 +61,7 @@ public class PlanA_Blue extends OpMode {
                 .addPath(new BezierLine(GPP, afterPickup1))
                 .build();
         scoreGPP = follower.pathBuilder()
-                .addPath(new BezierCurve(afterPickup1, scorePose,controlPose))
+                .addPath(new BezierCurve(afterPickup1,controlPose, scorePose))
                 .setLinearHeadingInterpolation(afterPickup1.getHeading(), scorePose.getHeading())
                 .build();
 
@@ -92,8 +95,11 @@ public class PlanA_Blue extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                follower.followPath(scorePreload);
-                setPathState(1);
+               new SequentialGroup(
+                       new FollowPath(scorePreload),
+                       command.preload1()
+                );
+               setPathState(1);
                 break;
             case 1:
                 if(!follower.isBusy()) {

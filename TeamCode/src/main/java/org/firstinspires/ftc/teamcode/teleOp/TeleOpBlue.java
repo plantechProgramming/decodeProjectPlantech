@@ -101,7 +101,7 @@ public class TeleOpBlue extends OpMode {
                 shooter.shooter.setPower(-0.3);
                 shooter.shooter2.setPower(0.3);
 
-            } else{
+            } else if (!gamepad1.right_bumper){
                 intake.intake_motor.setPower(0);
                 intake.ibl.setPower(0);
                 intake.ibr.setPower(0);
@@ -109,7 +109,7 @@ public class TeleOpBlue extends OpMode {
                 intake.sl.setPower(0);
             }
             if(gamepad1.dpad_right){
-                driveTrain.turnToGoal("BLUE");
+                driveTrain.turnToGoal("BLUE", driveTrain.isFar());
             }
 //           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
 //               double deg = test.specialDetection.ftcPose.bearing;
@@ -119,7 +119,7 @@ public class TeleOpBlue extends OpMode {
 //               telemetry.update();
 //           }
             if(gamepad1.right_bumper){
-                int threshold = 275;
+                int threshold = 275; // TODO: tune
                 if (odometry.getPosY(DistanceUnit.CM) > 60){
                     shooter.naiveShooter(true);
                     dashboardTelemetry.addLine("far");
@@ -131,6 +131,12 @@ public class TeleOpBlue extends OpMode {
                     dashboardTelemetry.update();
                 }
 
+                // nicer code, does the exact same thing. should swap after esc.
+/*
+                shooter.naiveShooter(driveTrain.isFar());
+                dashboardTelemetry.addData("is far", driveTrain.isFar());
+                dashboardTelemetry.update();
+*/
                 if(Math.abs(shooterVel.getVelocityFilter() - shooter.Szonedis*6000) < threshold){
                     intake.inBetweenInFull();
                 }
@@ -144,7 +150,7 @@ public class TeleOpBlue extends OpMode {
 
 
             //intake.intakeTest(gamepad1.y);
-            //TODO: make use pinpoint
+
             if(gamepad1.start){
                 double x = odometry.getPosX(DistanceUnit.CM);
                 double y = odometry.getPosY(DistanceUnit.CM);
@@ -178,4 +184,4 @@ public class TeleOpBlue extends OpMode {
     protected void end() {
 
     }
-    }
+}
