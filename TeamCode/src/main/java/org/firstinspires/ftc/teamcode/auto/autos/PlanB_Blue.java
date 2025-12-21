@@ -20,7 +20,7 @@ public class PlanB_Blue extends OpMode {
     AutoCommands command = new AutoCommands();
 
 
-    private final Pose startPose = new Pose(34.0473361662961, 135.60918729550997, Math.toRadians(180)); // Start Pose of our robot.
+    private final Pose startPose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot.
     private final Pose scorePose = new Pose(47.60172591970307, 95.1073798180677, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose scorePose2 = new Pose(65,10,Math.toRadians(120));//score from far launch line
     private final Pose controlPose = new Pose(70,60);// pose for getting to GPP without hitting other balls

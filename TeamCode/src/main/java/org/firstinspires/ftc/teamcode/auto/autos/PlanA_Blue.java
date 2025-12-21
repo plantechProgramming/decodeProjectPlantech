@@ -11,7 +11,10 @@ import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
+import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
 
+import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.extensions.pedro.FollowPath;
 
@@ -23,7 +26,7 @@ public class PlanA_Blue extends OpMode {
     AutoCommands command = new AutoCommands();
 
 
-    private final Pose startPose = new Pose(34, 135.5, Math.toRadians(180)); // Start Pose of our robot.
+    private final Pose startPose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot.
     private final Pose scorePose = new Pose(47.60172591970307, 95.1073798180677, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose controlPose = new Pose(70,60);// pose for getting to GPP without hitting other balls
     private final Pose GPP = new Pose(40, 35, Math.toRadians(180));
@@ -92,70 +95,77 @@ public class PlanA_Blue extends OpMode {
                 .setLinearHeadingInterpolation(afterPickup2.getHeading(), scorePose.getHeading())
                 .build();
     }
+
+//    public Command preload_1(){
+//        return new SequentialGroup(
+//        new FollowPath(scorePreload),
+////        NextShooter.INSTANCE.naiveShooter(false).invoke()
+//        );
+//    }
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-               new SequentialGroup(
-                       new FollowPath(scorePreload),
-                       command.preload1()
-                );
+
+            new FollowPath(scorePreload);
+            command.preload1().schedule();
                setPathState(1);
                 break;
+//            case 1:
+//                if(!follower.isBusy()) {
+//                    follower.followPath(grabGPP);
+//
+//                    setPathState(2);
+//                }
+//                break;
+//            case 2:
+//                if(!follower.isBusy()) {
+//                    follower.followPath(intake1);
+//                    setPathState(3);
+//                }
+//                break;
+//            case 3:
+//                if(!follower.isBusy()) {
+//                    /* Score Preload */
+//                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
+//                    follower.followPath(scoreGPP);
+//                    setPathState(4);
+//                }
+//                break;
+//            case 4:
+//                if(!follower.isBusy()){
+//                    follower.followPath(grabPPG);
+//                    setPathState(5);
+//                }
+//                break;
+//            case 5:
+//                if ((!follower.isBusy())){
+//                    follower.followPath(intake2);
+//                    setPathState(6);
+//                }
+//                break;
+//            case 6:
+//                if (!follower.isBusy()){
+//                    follower.followPath(scorePPG);
+//                    setPathState(7);
+//                }break;
+//            case 7:
+//                if (!follower.isBusy()){
+//                    follower.followPath(grabPGP);
+//                    setPathState(8);
+//                }break;
+//            case 8:
+//                if ((!follower.isBusy())){
+//                    follower.followPath(intake3);
+//                    setPathState(9);
+//                }
+//                break;
+//            case 9:
+//                if ((!follower.isBusy())){
+//                    follower.followPath(autoEnd,true);
+//                    setPathState(10);
+//                }
+//                break;
             case 1:
-                if(!follower.isBusy()) {
-                    follower.followPath(grabGPP);
-                    setPathState(2);
-                }
-                break;
-            case 2:
-                if(!follower.isBusy()) {
-                    follower.followPath(intake1);
-                    setPathState(3);
-                }
-                break;
-            case 3:
-                if(!follower.isBusy()) {
-                    /* Score Preload */
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(scoreGPP);
-                    setPathState(4);
-                }
-                break;
-            case 4:
-                if(!follower.isBusy()){
-                    follower.followPath(grabPPG);
-                    setPathState(5);
-                }
-                break;
-            case 5:
-                if ((!follower.isBusy())){
-                    follower.followPath(intake2);
-                    setPathState(6);
-                }
-                break;
-            case 6:
-                if (!follower.isBusy()){
-                    follower.followPath(scorePPG);
-                    setPathState(7);
-                }break;
-            case 7:
-                if (!follower.isBusy()){
-                    follower.followPath(grabPGP);
-                    setPathState(8);
-                }break;
-            case 8:
-                if ((!follower.isBusy())){
-                    follower.followPath(intake3);
-                    setPathState(9);
-                }
-                break;
-            case 9:
-                if ((!follower.isBusy())){
-                    follower.followPath(autoEnd,true);
-                    setPathState(10);
-                }
-                break;
-            case 10:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
                     /* Set the state to a Case we won't use or define, so it just stops running an new paths */
@@ -170,8 +180,8 @@ public class PlanA_Blue extends OpMode {
         pathTimer.resetTimer();
     }
     /** This is the main loop of the OpMode, it will run repeatedly after clicking "Play". **/
-    @Override
-    public void loop() {
+@Override
+public void loop() {
 
         // These loop the movements of the robot, these must be called continuously in order to work
         follower.update();

@@ -19,8 +19,8 @@ public class EscBlueFar extends OpMode {
     AutoCommands command = new AutoCommands();
 
 
-    private final Pose startPose = new Pose(55.5, 8, Math.toRadians(180)); // Start Pose of our robot.
-    private final Pose endPose = new Pose(55.5, 61, Math.toRadians(180));
+    private final Pose startPose = new Pose(62, 8, Math.toRadians(180)); // Start Pose of our robot.
+    private final Pose endPose = new Pose(62, 54, Math.toRadians(180));
     private final Pose controlPose = new Pose(70,89);
 
     private PathChain leavePath;

@@ -119,7 +119,7 @@ public class TeleOpBlue extends OpMode {
 //               telemetry.update();
 //           }
             if(gamepad1.right_bumper){
-                int threshold = 275; // TODO: tune
+                int threshold = 250; // TODO: tune
                 if (odometry.getPosY(DistanceUnit.CM) > 60){
                     shooter.naiveShooter(true);
                     dashboardTelemetry.addLine("far");

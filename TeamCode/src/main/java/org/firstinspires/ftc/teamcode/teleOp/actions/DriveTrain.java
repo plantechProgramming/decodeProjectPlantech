@@ -119,17 +119,17 @@ public class DriveTrain {
     }
 
     public void turnToGoal(String team, boolean far){
-        if(far){
-            double teamDeg;
-            if(team == "BLUE"){
-                teamDeg = -60;
-            }
-            else{
-                teamDeg = -120;
-            }
-            turnToGyro(teamDeg);
-            return;
-        }
+//        if(far){
+//            double teamDeg;
+//            if(team == "BLUE"){
+//                teamDeg = -60;
+//            }
+//            else{
+//                teamDeg = -120;
+//            }
+//            turnToGyro(teamDeg);
+//            return;
+//        }
         double lenfield = 360; // cm
         double x = odometry.getPosX(DistanceUnit.CM);
         double y = odometry.getPosY(DistanceUnit.CM);

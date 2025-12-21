@@ -20,7 +20,7 @@ public class EscRedFar extends OpMode {
 
 
     private final Pose startPose = new Pose(74.5, 8, Math.toRadians(0)); // Start Pose of our robot.
-    private final Pose endPose = new Pose(74.5, 61, Math.toRadians(0));
+    private final Pose endPose = new Pose(74.5, 54, Math.toRadians(0));
     private final Pose controlPose = new Pose(70,89);
 
     private PathChain leavePath;
