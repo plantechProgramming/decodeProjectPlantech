@@ -159,7 +159,7 @@ public class TeleOpBlue extends OpMode {
                 odometry.setPosition(curPose);
             }
             if(gamepad1.back){
-                odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180));
+                odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 0));
 
             }
 
