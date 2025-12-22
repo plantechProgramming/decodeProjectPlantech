@@ -101,16 +101,8 @@ public class TeleOpBlue extends OpMode {
                 shooter.shooter.setPower(-0.3);
                 shooter.shooter2.setPower(0.3);
 
-            } else if (!gamepad1.right_bumper){
-                intake.intake_motor.setPower(0);
-                intake.ibl.setPower(0);
-                intake.ibr.setPower(0);
-                intake.sr.setPower(0);
-                intake.sl.setPower(0);
             }
-            if(gamepad1.dpad_right){
-                driveTrain.turnToGoal("BLUE", driveTrain.isFar());
-            }
+
 //           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
 //               double deg = test.specialDetection.ftcPose.bearing;
 //
@@ -118,17 +110,17 @@ public class TeleOpBlue extends OpMode {
 //               telemetry.addData("yaw", deg);
 //               telemetry.update();
 //           }
-            if(gamepad1.right_bumper){
-                int threshold = 250; // TODO: tune
+            else if(gamepad1.right_bumper){
+                int threshold = 150; // TODO: tune
                 if (odometry.getPosY(DistanceUnit.CM) > 60){
                     shooter.naiveShooter(true);
-                    dashboardTelemetry.addLine("far");
-                    dashboardTelemetry.update();
+                    telemetry.addLine("far");
+                    telemetry.update();
                 }
                 else{
                     shooter.naiveShooter(false);
-                    dashboardTelemetry.addLine("close");
-                    dashboardTelemetry.update();
+                    telemetry.addLine("close");
+                    telemetry.update();
                 }
 
                 // nicer code, does the exact same thing. should swap after esc.
@@ -143,6 +135,12 @@ public class TeleOpBlue extends OpMode {
             }
             else{
                 shooter.stopShooter();
+                intake.intake_motor.setPower(0);
+                intake.ibl.setPower(0);
+                intake.ibr.setPower(0);
+                intake.sr.setPower(0);
+                intake.sl.setPower(0);
+
             }
 //            else{
 //                shooter.stopShooter();
@@ -150,7 +148,9 @@ public class TeleOpBlue extends OpMode {
 
 
             //intake.intakeTest(gamepad1.y);
-
+            if(gamepad1.dpad_right){
+                driveTrain.turnToGoal("BLUE", driveTrain.isFar());
+            }
             if(gamepad1.start){
                 double x = odometry.getPosX(DistanceUnit.CM);
                 double y = odometry.getPosY(DistanceUnit.CM);
@@ -163,17 +163,17 @@ public class TeleOpBlue extends OpMode {
 
             }
 
-            dashboardTelemetry.addData("botheading",odometry.getHeading(AngleUnit.DEGREES));
-            dashboardTelemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-            dashboardTelemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
-            dashboardTelemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
+            telemetry.addData("botheading",odometry.getHeading(AngleUnit.DEGREES));
+            telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
+            telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
 //            telemetry.addData("heading", odometry.getHeading(AngleUnit.DEGREES));
-            dashboardTelemetry.addData("X encoder", odometry.getEncoderX());
-            dashboardTelemetry.addData("Y encoder", odometry.getEncoderY());
+            telemetry.addData("X encoder", odometry.getEncoderX());
+            telemetry.addData("Y encoder", odometry.getEncoderY());
             /*dashboardTelemetry.addData("shooter power: ",shooter.shooter2.getVelocity(AngleUnit.DEGREES));
             dashboardTelemetry.addData("odometry blabla: ",odometry.getCurrentPosition()/tick);
             dashboardTelemetry.addData("last Detected Color: ", cSensor.getLastDetected());
-            */dashboardTelemetry.update();
+            */telemetry.update();
             odometry.update();
 
         }

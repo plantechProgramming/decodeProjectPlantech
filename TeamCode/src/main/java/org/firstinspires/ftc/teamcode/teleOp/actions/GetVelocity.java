@@ -11,6 +11,7 @@ public class GetVelocity {
         this.alpha = alpha;
     }
 
+
     private static final ElapsedTime timer = new ElapsedTime();
     public long prevEncoder = 0;
     public long curEncoder;

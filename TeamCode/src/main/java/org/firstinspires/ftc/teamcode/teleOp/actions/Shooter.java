@@ -44,7 +44,7 @@ public class Shooter {
     final int MAX_RPM = 6000;
 
     public double Szonedis;
-    public final double errorFix = 1.18;
+    public final double errorFix = 1.25;
     public void noPhysShoot(double x){
         shooter.setPower(x);
         shooter2.setPower(-x);
@@ -87,7 +87,7 @@ public class Shooter {
         if (!far) {
             Szonedis = 0.47;
         } else{
-            Szonedis = 0.56;
+            Szonedis = 0.55;
         }
         shooter.setPower(Szonedis*errorFix);
         shooter2.setPower(-Szonedis*errorFix);

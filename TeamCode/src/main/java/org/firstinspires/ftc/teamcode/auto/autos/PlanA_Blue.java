@@ -106,7 +106,7 @@ public class PlanA_Blue extends OpMode {
         switch (pathState) {
             case 0:
 
-            new FollowPath(scorePreload);
+            follower.followPath(scorePreload);
             command.preload1().schedule();
                setPathState(1);
                 break;

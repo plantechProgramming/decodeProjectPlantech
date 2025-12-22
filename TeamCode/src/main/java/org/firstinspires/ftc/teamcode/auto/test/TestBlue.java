@@ -1,5 +1,16 @@
 package org.firstinspires.ftc.teamcode.auto.test;
 
+import static dev.nextftc.extensions.pedro.PedroComponent.follower;
+
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathChain;
+
+import org.firstinspires.ftc.teamcode.auto.AutoCommands;
+import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
+import org.firstinspires.ftc.teamcode.auto.subsystems.NextInBetween;
+import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
 
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
@@ -27,11 +38,10 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.core.commands.CommandManager;
 
-@Autonomous(name = "nextftc red",group = "tests")
-public class testNext extends NextFTCOpMode {
-
-AutoCommands command = new AutoCommands();
-    public testNext() {
+@Autonomous(name = "NextFTC blue",group = "tests")
+public class TestBlue extends NextFTCOpMode{
+    AutoCommands command = new AutoCommands();
+    public TestBlue() {
         addComponents(
                 new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 BulkReadComponent.INSTANCE,
@@ -40,10 +50,10 @@ AutoCommands command = new AutoCommands();
 
     }
 
-    private final Pose startPose = new Pose(122.5, 123.5, Math.toRadians(36)); // Start Pose of our robot.
-    private final Pose scorePose = new Pose(95.3, 95.1073798180677, Math.toRadians(45)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose startPose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot.
+    private final Pose scorePose = new Pose(47.60172591970307, 95.1073798180677, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose controlPose = new Pose(70,60);// pose for getting to GPP without hitting other balls
-    private final Pose endPose = new Pose(95.3, 133, Math.toRadians(0));
+    private final Pose endPose = new Pose(55.5, 61, Math.toRadians(180));
 
 
     private PathChain leavePath, scorePath;
@@ -56,10 +66,12 @@ AutoCommands command = new AutoCommands();
                 .addPath(new BezierLine(startPose,scorePose))
                 .setLinearHeadingInterpolation(startPose.getHeading(),scorePose.getHeading())
                 .build();
+
         leavePath = follower().pathBuilder()
-                .addPath(new BezierLine(scorePose,endPose))
-                .setLinearHeadingInterpolation(scorePose.getHeading(),endPose.getHeading())
+                .addPath(new BezierLine(scorePose, endPose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), endPose.getHeading())
                 .build();
+
 //        scorePreload = new Path(new BezierLine(startPose, scorePose));
 //        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading());
     }

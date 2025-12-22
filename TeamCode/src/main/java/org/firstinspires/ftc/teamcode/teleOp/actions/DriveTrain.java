@@ -135,13 +135,16 @@ public class DriveTrain {
         double y = odometry.getPosY(DistanceUnit.CM);
         telemetry.addData("x to middle orig", x);
         telemetry.addData("y to middle orig", y);
+        double yOffset = 18;
+        double xOffset = 16;
         if(team == "RED"){
             x = lenfield/2 + x;
         }
         else{
             x = lenfield/2 - x;
         }
-        double deg = Math.toDegrees(Math.atan((lenfield/2 + y)/x));
+
+        double deg = Math.toDegrees(Math.atan((lenfield/2 + y - yOffset)/(x - xOffset)));
         telemetry.addData("deg to goal", -deg);
         telemetry.addData("x to goal", x);
         telemetry.addData("y to goal", y);

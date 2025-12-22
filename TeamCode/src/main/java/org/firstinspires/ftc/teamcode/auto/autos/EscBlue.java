@@ -28,7 +28,7 @@ public class EscBlue extends OpMode {
 
     private final Pose startPose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot.
     private final Pose endPose = new Pose(55.5, 61, Math.toRadians(180));
-    private final Pose controlPose = new Pose(70,89);
+        private final Pose controlPose = new Pose(70,89);
 
     private PathChain leavePath;
 
