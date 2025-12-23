@@ -39,7 +39,7 @@ public class NextShooter implements Subsystem {
     private MotorEx shooter1 = new MotorEx("shooter");
     private MotorEx shooter2 = new MotorEx("shooter2");
     double Szonedis = 0.55;
-    double errorFix = 1.37;
+    double errorFix = 1.375;
     ControlSystem controlSystem = ControlSystem.builder()//next pid
             .posPid(65, 1, 8)
             .build();
