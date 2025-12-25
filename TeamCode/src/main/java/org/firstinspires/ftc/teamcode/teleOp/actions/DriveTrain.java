@@ -111,30 +111,14 @@ public class DriveTrain {
             BR.setPower(power);
             BL.setPower(-power);
         }
-
         telemetry.addData("pow", power);
         telemetry.addData("heading", botAngleRaw);
-        telemetry.update();
-
     }
 
-    public void turnToGoal(String team, boolean far){
-//        if(far){
-//            double teamDeg;
-//            if(team == "BLUE"){
-//                teamDeg = -60;
-//            }
-//            else{
-//                teamDeg = -120;
-//            }
-//            turnToGyro(teamDeg);
-//            return;
-//        }
+    public void turnToGoal(String team){
         double lenfield = 360; // cm
         double x = odometry.getPosX(DistanceUnit.CM);
         double y = odometry.getPosY(DistanceUnit.CM);
-        telemetry.addData("x to middle orig", x);
-        telemetry.addData("y to middle orig", y);
         double yOffset = 18;
         double xOffset = 16;
         if(team == "RED"){
@@ -145,20 +129,30 @@ public class DriveTrain {
         }
 
         double deg = Math.toDegrees(Math.atan((lenfield/2 + y - yOffset)/(x - xOffset)));
-        telemetry.addData("deg to goal", -deg);
-        telemetry.addData("x to goal", x);
-        telemetry.addData("y to goal", y);
-        telemetry.update();
         if(team == "BLUE"){
             turnToGyro(-deg);
+            telemetry.addData("deg to goal", -deg);
         }
         if(team == "RED"){
             turnToGyro(180 + deg);
+            telemetry.addData("deg to goal", 180 + deg);
         }
     }
 
     public boolean isFar(){
         return odometry.getPosY(DistanceUnit.CM) > 60;
+    }
+
+    public void setDriveTelemetry(Telemetry telemetry){
+        telemetry.addData("botheading",odometry.getHeading(AngleUnit.DEGREES));
+        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+        telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
+        telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
+        telemetry.addData("is far", isFar());
+    }
+
+    public void inThreshold(int threshold, int cur, int wanted){
+
     }
 
 }

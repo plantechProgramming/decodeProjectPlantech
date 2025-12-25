@@ -37,8 +37,13 @@ android {
     }
 }
 repositories {
+    // Dairy releases repository
     maven {
         url = "https://repo.dairy.foundation/releases"
+    }
+    // Dairy snapshots repository
+    maven {
+        url = "https://repo.dairy.foundation/snapshots"
     }
 }
 dependencies {

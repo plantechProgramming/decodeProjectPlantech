@@ -210,4 +210,13 @@ public class Shooter {
         telemetry.addData("velocity", velocity);
     }
 
+    public void setShooterTelemetry(Telemetry telemetry){
+        telemetry.addData("vel",shooterVelocity.getVelocityFilter());
+        telemetry.addData("th",Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000));
+    }
+
+    public boolean isUpToSpeed(){
+        double threshold = 150; //TODO: tune!! should be the biggest reliably scoring value
+        return Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000) < threshold;
+    }
 }

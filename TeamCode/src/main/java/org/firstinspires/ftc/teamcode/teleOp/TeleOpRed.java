@@ -94,15 +94,6 @@ public class TeleOpRed extends OpMode {
             ElapsedTime elapsedTime = new ElapsedTime();
             driveTrain.drive(-forward, -drift, turn, botHeading, 1);
 
-            // todo: figure out if driver wants slowing on start
- /*           if(gamepad1.x && !slow){
-                driveTrain.drive(forward, drift, turn, botHeading, 0.5);
-                slow = true;
-            }else if(gamepad1.x && slow) {
-                driveTrain.drive(forward, drift, turn, botHeading, 1);
-                slow = false;
-            }
-  */
             if (gamepad1.a){
                 intake.intakeIn();
                 intake.inBetweenInPart();
@@ -111,9 +102,7 @@ public class TeleOpRed extends OpMode {
                 intake.inBetweenOut();
                 shooter.shooter.setPower(-0.3);
                 shooter.shooter2.setPower(0.3);
-
             }
-
 //           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
 //               double deg = test.specialDetection.ftcPose.bearing;
 //
@@ -122,25 +111,8 @@ public class TeleOpRed extends OpMode {
 //               telemetry.update();
 //           }
             else if(gamepad1.right_bumper){
-                int threshold = 150; // TODO: tune
-                if (odometry.getPosY(DistanceUnit.CM) > 60){
-                    shooter.naiveShooter(true);
-                    telemetry.addLine("far");
-                    telemetry.update();
-                }
-                else{
-                    shooter.naiveShooter(false);
-                    telemetry.addLine("close");
-                    telemetry.update();
-                }
-
-                // nicer code, does the exact same thing. should swap after esc.
-/*
                 shooter.naiveShooter(driveTrain.isFar());
-                dashboardTelemetry.addData("is far", driveTrain.isFar());
-                dashboardTelemetry.update();
-*/
-                if(Math.abs(shooterVel.getVelocityFilter() - shooter.Szonedis*6000) < threshold){
+                if(shooter.isUpToSpeed()){
                     intake.inBetweenInFull();
                 }
             }
@@ -153,37 +125,28 @@ public class TeleOpRed extends OpMode {
                 intake.sl.setPower(0);
 
             }
-
-
-            //intake.intakeTest(gamepad1.y);
-            //TODO: make use pinpoint
+            if(gamepad1.dpad_right){
+                driveTrain.turnToGoal("RED");//TODO: change for RED
+            }
             if(gamepad1.start){
                 double x = odometry.getPosX(DistanceUnit.CM);
                 double y = odometry.getPosY(DistanceUnit.CM);
                 double heading = odometry.getHeading(AngleUnit.DEGREES);
-                Pose2D curPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,180);
+                Pose2D curPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,180);//TODO: change for RED
                 odometry.setPosition(curPose);
             }
             if(gamepad1.back){
-                odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180));
+                odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
 
             }
-            if(gamepad1.dpad_right){
-                driveTrain.turnToGoal("RED", driveTrain.isFar());
-            }
-            telemetry.addData("botheading",odometry.getHeading(AngleUnit.DEGREES));
-            telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-            telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
-            telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
-//            telemetry.addData("heading", odometry.getHeading(AngleUnit.DEGREES));
-            telemetry.addData("vel",shooterVel.getVelocityFilter());
-            telemetry.addData("th",Math.abs(shooterVel.getVelocityFilter() - shooter.Szonedis*6000));
-            telemetry.addData("X encoder", odometry.getEncoderX());
-            telemetry.addData("Y encoder", odometry.getEncoderY());
-            /*dashboardTelemetry.addData("shooter power: ",shooter.shooter2.getVelocity(AngleUnit.DEGREES));
-            dashboardTelemetry.addData("odometry blabla: ",odometry.getCurrentPosition()/tick);
-            dashboardTelemetry.addData("last Detected Color: ", cSensor.getLastDetected());
-            */telemetry.update();
+            driveTrain.setDriveTelemetry(telemetry);
+            driveTrain.setDriveTelemetry(dashboardTelemetry);
+
+            shooter.setShooterTelemetry(telemetry);
+            shooter.setShooterTelemetry(dashboardTelemetry);
+
+            telemetry.update();
+            dashboardTelemetry.update();
             odometry.update();
 
         }
