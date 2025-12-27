@@ -146,7 +146,6 @@ public class TeleOpBlue extends OpMode {
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();
-
         }
 
     }

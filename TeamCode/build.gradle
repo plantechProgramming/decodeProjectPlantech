@@ -50,4 +50,5 @@ dependencies {
     implementation("dev.frozenmilk.sinister:Sloth:0.2.4")
     implementation project(':FtcRobotController')
     implementation 'com.google.firebase:firebase-crashlytics-buildtools:3.0.6'
+    implementation("com.acmerobotics.slothboard:dashboard:0.2.4+0.5.1")
 }
