@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.teleOp.PID;
 import org.opencv.core.Mat;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -119,8 +120,8 @@ public class DriveTrain {
         double lenfield = 360; // cm
         double x = odometry.getPosX(DistanceUnit.CM);
         double y = odometry.getPosY(DistanceUnit.CM);
-        double yOffset = 18;
-        double xOffset = 16;
+        double yOffset = 10;//prev = 18
+        double xOffset = 0; // prev = 16
         if(team == "RED"){
             x = lenfield/2 + x;
         }
@@ -128,7 +129,7 @@ public class DriveTrain {
             x = lenfield/2 - x;
         }
 
-        double deg = Math.toDegrees(Math.atan((lenfield/2 + y - yOffset)/(x - xOffset)));
+        double deg = Math.toDegrees(Math.atan((lenfield/2 + y + yOffset)/(x - xOffset)));
         if(team == "BLUE"){
             turnToGyro(-deg);
             telemetry.addData("deg to goal", -deg);
@@ -150,10 +151,5 @@ public class DriveTrain {
         telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
         telemetry.addData("is far", isFar());
     }
-
-    public void inThreshold(int threshold, int cur, int wanted){
-
-    }
-
 }
 

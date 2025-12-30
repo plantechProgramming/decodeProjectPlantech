@@ -14,7 +14,7 @@ public class NextInBetween implements Subsystem {
             ,sl = new CRServoEx("SIBL")
             ,sr = new CRServoEx("SIBR"); //ib = inbetween, s = shooter
 
-    public Command inBetweenIn(){
+    public Command inBetweenInFull(){
         return new ParallelGroup(
                 new SetPower(ibr, -1),
                 new SetPower(ibl, 1),
@@ -23,13 +23,37 @@ public class NextInBetween implements Subsystem {
         );
     }
 
-public Command inBetweenOut() {
-    return new ParallelGroup(
-            new SetPower(ibr, 1),
-            new SetPower(ibl, -1),
-            new SetPower(sr, 1),
-            new SetPower(sl, -1)
-    );
+    public Command inBetweenInPart(){
+        return new ParallelGroup(
+                new SetPower(ibr, -1),
+                new SetPower(ibl, 1)
+        );
+    }
 
-}
+    public Command inBetweenOut() {
+        return new ParallelGroup(
+                new SetPower(ibr, 1),
+                new SetPower(ibl, -1),
+                new SetPower(sr, 1),
+                new SetPower(sl, -1)
+        );
+
+    }
+
+    public Command stop(){
+        return new ParallelGroup(
+                new SetPower(ibr, 0),
+                new SetPower(ibl, 0),
+                new SetPower(sr, 0),
+                new SetPower(sl, 0)
+        );
+    }
+
+    public Command stopShooterPrimers(){
+        return new ParallelGroup(
+                new SetPower(sl,0),
+                new SetPower(sr,0)
+        );
+    }
+
 }

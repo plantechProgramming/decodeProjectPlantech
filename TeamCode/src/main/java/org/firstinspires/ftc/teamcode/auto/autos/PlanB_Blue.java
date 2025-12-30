@@ -22,7 +22,7 @@ public class PlanB_Blue extends OpMode {
 
     private final Pose startPose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot.
     private final Pose scorePose = new Pose(47.60172591970307, 95.1073798180677, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose scorePose2 = new Pose(65,10,Math.toRadians(120));//score from far launch line
+    private final Pose scorePose2 = new Pose(63,15,Math.toRadians(113));//score from far launch line
     private final Pose controlPose = new Pose(70,60);// pose for getting to GPP without hitting other balls
     private final Pose GPP = new Pose(40, 35, Math.toRadians(180));
     private final Pose PPG = new Pose(40, 84.3, Math.toRadians(180));
@@ -32,7 +32,7 @@ public class PlanB_Blue extends OpMode {
 
     private final Pose afterPickup2 = new Pose(15, 84.3, Math.toRadians(180));
     private final Pose afterPickup3 = new Pose(15, 59, Math.toRadians(180));
-    private final Pose autoEndPose = new Pose(31.43,72,Math.toRadians(180));
+    private final Pose autoEndPose = new Pose(15,59,Math.toRadians(180));
 
 
     // Highest (First Set) of Artifacts from the Spike Mark.

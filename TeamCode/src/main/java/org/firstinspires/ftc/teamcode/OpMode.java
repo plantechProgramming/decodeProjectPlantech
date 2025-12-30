@@ -31,7 +31,7 @@ public abstract class OpMode extends LinearOpMode {
 //    protected CRServo ;
 //    protected Servo roni2_intake,IntakeR;
     protected CRServo intakeIBL,intakeIBR,shooterIBL,shooterIBR;
-    protected NormalizedColorSensor colorSensor;
+//    protected NormalizedColorSensor colorSensor;
 
     protected CameraName camera;
     protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA,SU,SD, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
@@ -76,7 +76,7 @@ public abstract class OpMode extends LinearOpMode {
         intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
         intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
+//        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
 
         Imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -106,6 +106,7 @@ public abstract class OpMode extends LinearOpMode {
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
+
     }
 
     public DcMotorEx initMotor(String name, boolean encoder, boolean reversed){

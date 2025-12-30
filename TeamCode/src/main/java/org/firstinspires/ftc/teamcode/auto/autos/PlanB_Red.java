@@ -22,7 +22,7 @@ public class PlanB_Red extends OpMode {
 
     private final Pose startPose = new Pose(111, 135.3, Math.toRadians(0)); // Start Pose of our robot.
     private final Pose scorePose = new Pose(95, 95, Math.toRadians(45)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    private final Pose scorePose2 = new Pose(80,10,Math.toRadians(60));//score from far launch line
+    private final Pose scorePose2 = new Pose(80,10,Math.toRadians(67));//score from far launch line
 
     private final Pose controlPose = new Pose(70,60);// pose for getting to GPP without hitting other balls
     private final Pose GPP = new Pose(104, 35, Math.toRadians(0));
@@ -33,7 +33,7 @@ public class PlanB_Red extends OpMode {
 
     private final Pose afterPickup2 = new Pose(130, 84.3, Math.toRadians(0));
     private final Pose afterPickup3 = new Pose(130, 59, Math.toRadians(0));
-    private final Pose autoEndPose = new Pose(110,72,Math.toRadians(0));
+    private final Pose autoEndPose = new Pose(130,59,Math.toRadians(0));
 
 
     // Highest (First Set) of Artifacts from the Spike Mark.
@@ -60,8 +60,8 @@ public class PlanB_Red extends OpMode {
                 .addPath(new BezierLine(GPP, afterPickup1))
                 .build();
         scoreGPP = follower.pathBuilder()
-                .addPath(new BezierCurve(afterPickup1,controlPose, scorePose))
-                .setLinearHeadingInterpolation(afterPickup1.getHeading(), scorePose.getHeading())
+                .addPath(new BezierCurve(afterPickup1,controlPose, scorePose2))
+                .setLinearHeadingInterpolation(afterPickup1.getHeading(), scorePose2.getHeading())
                 .build();
 
         grabPPG = follower.pathBuilder()

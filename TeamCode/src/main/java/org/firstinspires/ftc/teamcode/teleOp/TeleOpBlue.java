@@ -42,7 +42,6 @@ public class TeleOpBlue extends OpMode {
         ColorSensorTest cSensor = new ColorSensorTest();
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
 
-        cSensor.init(hardwareMap);
 
         //TODO: find why didnt work outside
         AprilTagLocalization test = new AprilTagLocalization("BLUE"); //TODO: change here for red
@@ -97,9 +96,9 @@ public class TeleOpBlue extends OpMode {
                 intake.inBetweenInPart();
             }
             else if(gamepad1.x) {
+                shooter.out();
                 intake.inBetweenOut();
-                shooter.shooter.setPower(-0.3);
-                shooter.shooter2.setPower(0.3);
+                intake.intakeOut();
             }
 //           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
 //               double deg = test.specialDetection.ftcPose.bearing;
@@ -115,13 +114,8 @@ public class TeleOpBlue extends OpMode {
                 }
             }
             else{
-                shooter.stopShooter();
-                intake.intake_motor.setPower(0);
-                intake.ibl.setPower(0);
-                intake.ibr.setPower(0);
-                intake.sr.setPower(0);
-                intake.sl.setPower(0);
-
+//                shooter.stopShooter();
+                intake.stopIntake();
             }
             if(gamepad1.dpad_right){
                 driveTrain.turnToGoal("BLUE");//TODO: change for RED
@@ -129,7 +123,6 @@ public class TeleOpBlue extends OpMode {
             if(gamepad1.start){
                 double x = odometry.getPosX(DistanceUnit.CM);
                 double y = odometry.getPosY(DistanceUnit.CM);
-                double heading = odometry.getHeading(AngleUnit.DEGREES);
                 Pose2D curPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,0);//TODO: change for RED
                 odometry.setPosition(curPose);
             }

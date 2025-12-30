@@ -20,39 +20,45 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.impl.MotorEx;
 
-public class AutoCommands extends NextFTCOpMode{
+public class AutoCommands{
     int threshold = 250;
+    NextShooter shooter;
+    NextIntake intake;
+    NextInBetween inBetween;
     public AutoCommands() {
-        addComponents(
-                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE, NextIntake.INSTANCE),
-                BulkReadComponent.INSTANCE
-        );
-    }
-    public Command preload1(){
-        return new SequentialGroup(
-                NextShooter.INSTANCE.naiveShooter(false)
-        );
+        shooter = new NextShooter();
+        intake = new NextIntake();
+        inBetween = new NextInBetween();
     }
 
-    public Command intake(){
-        return new ParallelGroup( // take just moves intake motor, so should be parallel
-                NextIntake.INSTANCE.take(),
-                NextInBetween.INSTANCE.inBetweenIn()
-             );
-    }
-
-    public Command fullShoot(boolean far){
-        return new SequentialGroup(
-                NextShooter.INSTANCE.naiveShooter(far),
-                new Delay(2),
-                NextInBetween.INSTANCE.inBetweenIn(),
+    public Command shoot(){
+        return new SequentialGroup( // take just moves intake motor, so should be parallel
+                inBetween.inBetweenInFull(),
                 new Delay(1),
-                NextIntake.INSTANCE.take()
-//                new ParallelGroup(
-//                        NextInBetween.INSTANCE.inBetweenIn().perpetually().endAfter(25),
-//                        NextShooter.INSTANCE.naiveShooter(far).perpetually().endAfter(25)
-//                        )
-                );
+                intake.take()
+        );
+    }
+
+    public Command startShooter(boolean far){
+        return shooter.naiveShooter(far);
+
+    }
+
+    public Command stopAll(){
+        return new ParallelGroup(
+                intake.stop(),
+                inBetween.stop()
+        );
+    }
+    public Command stopPrimers(){
+        return inBetween.stopShooterPrimers();
+    }
+
+    public Command take(){
+        return new ParallelGroup(
+                inBetween.inBetweenInPart(),
+                intake.take()
+        );
     }
 }
 

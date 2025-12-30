@@ -44,7 +44,6 @@ public class TeleOpRed extends OpMode {
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
         ColorSensorTest cSensor = new ColorSensorTest();
 
-        cSensor.init(hardwareMap);
 
         //TODO: find why didnt work outside
         AprilTagLocalization test = new AprilTagLocalization("RED"); //TODO: change here for red
@@ -100,8 +99,8 @@ public class TeleOpRed extends OpMode {
             }
             else if(gamepad1.x) {
                 intake.inBetweenOut();
-                shooter.shooter.setPower(-0.3);
-                shooter.shooter2.setPower(0.3);
+                shooter.out();
+                intake.intakeOut();
             }
 //           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
 //               double deg = test.specialDetection.ftcPose.bearing;
@@ -118,11 +117,7 @@ public class TeleOpRed extends OpMode {
             }
             else{
                 shooter.stopShooter();
-                intake.intake_motor.setPower(0);
-                intake.ibl.setPower(0);
-                intake.ibr.setPower(0);
-                intake.sr.setPower(0);
-                intake.sl.setPower(0);
+                intake.stopIntake();
 
             }
             if(gamepad1.dpad_right){
@@ -131,13 +126,11 @@ public class TeleOpRed extends OpMode {
             if(gamepad1.start){
                 double x = odometry.getPosX(DistanceUnit.CM);
                 double y = odometry.getPosY(DistanceUnit.CM);
-                double heading = odometry.getHeading(AngleUnit.DEGREES);
                 Pose2D curPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,180);//TODO: change for RED
                 odometry.setPosition(curPose);
             }
             if(gamepad1.back){
                 odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
-
             }
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);

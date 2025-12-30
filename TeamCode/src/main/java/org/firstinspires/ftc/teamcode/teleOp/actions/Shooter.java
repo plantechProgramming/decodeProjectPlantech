@@ -219,4 +219,8 @@ public class Shooter {
         double threshold = 150; //TODO: tune!! should be the biggest reliably scoring value
         return Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000) < threshold;
     }
+    public void out(){
+        shooter.setPower(-.2);
+        shooter2.setPower(.2);
+    }
 }

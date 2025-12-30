@@ -37,7 +37,7 @@ public class PlanA_Blue extends OpMode {
 
     private final Pose afterPickup2 = new Pose(15, 84.3, Math.toRadians(180));
     private final Pose afterPickup3 = new Pose(15, 59, Math.toRadians(180));
-    private final Pose autoEndPose = new Pose(31.43,72,Math.toRadians(180));
+    private final Pose autoEndPose = new Pose(15,59,Math.toRadians(180));
 
 
     // Highest (First Set) of Artifacts from the Spike Mark.
@@ -105,67 +105,65 @@ public class PlanA_Blue extends OpMode {
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-
             follower.followPath(scorePreload);
-            command.preload1().schedule();
                setPathState(1);
                 break;
-//            case 1:
-//                if(!follower.isBusy()) {
-//                    follower.followPath(grabGPP);
-//
-//                    setPathState(2);
-//                }
-//                break;
-//            case 2:
-//                if(!follower.isBusy()) {
-//                    follower.followPath(intake1);
-//                    setPathState(3);
-//                }
-//                break;
-//            case 3:
-//                if(!follower.isBusy()) {
-//                    /* Score Preload */
-//                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-//                    follower.followPath(scoreGPP);
-//                    setPathState(4);
-//                }
-//                break;
-//            case 4:
-//                if(!follower.isBusy()){
-//                    follower.followPath(grabPPG);
-//                    setPathState(5);
-//                }
-//                break;
-//            case 5:
-//                if ((!follower.isBusy())){
-//                    follower.followPath(intake2);
-//                    setPathState(6);
-//                }
-//                break;
-//            case 6:
-//                if (!follower.isBusy()){
-//                    follower.followPath(scorePPG);
-//                    setPathState(7);
-//                }break;
-//            case 7:
-//                if (!follower.isBusy()){
-//                    follower.followPath(grabPGP);
-//                    setPathState(8);
-//                }break;
-//            case 8:
-//                if ((!follower.isBusy())){
-//                    follower.followPath(intake3);
-//                    setPathState(9);
-//                }
-//                break;
-//            case 9:
-//                if ((!follower.isBusy())){
-//                    follower.followPath(autoEnd,true);
-//                    setPathState(10);
-//                }
-//                break;
             case 1:
+                if(!follower.isBusy()) {
+                    follower.followPath(grabGPP);
+
+                    setPathState(2);
+                }
+                break;
+            case 2:
+                if(!follower.isBusy()) {
+                    follower.followPath(intake1);
+                    setPathState(3);
+                }
+                break;
+            case 3:
+                if(!follower.isBusy()) {
+                    /* Score Preload */
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
+                    follower.followPath(scoreGPP);
+                    setPathState(4);
+                }
+                break;
+            case 4:
+                if(!follower.isBusy()){
+                    follower.followPath(grabPPG);
+                    setPathState(5);
+                }
+                break;
+            case 5:
+                if ((!follower.isBusy())){
+                    follower.followPath(intake2);
+                    setPathState(6);
+                }
+                break;
+            case 6:
+                if (!follower.isBusy()){
+                    follower.followPath(scorePPG);
+                    setPathState(7);
+                }break;
+            case 7:
+                if (!follower.isBusy()){
+                    follower.followPath(grabPGP);
+                    setPathState(8);
+                }break;
+            case 8:
+                if ((!follower.isBusy())){
+                    follower.followPath(intake3);
+                    setPathState(9);
+                }
+                break;
+            case 9:
+                if ((!follower.isBusy())){
+                    follower.followPath(autoEnd,true);
+                    setPathState(10);
+                }
+                break;
+            case 10:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
                     /* Set the state to a Case we won't use or define, so it just stops running an new paths */

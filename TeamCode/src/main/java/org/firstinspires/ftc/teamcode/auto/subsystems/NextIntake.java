@@ -16,4 +16,7 @@ public class NextIntake implements Subsystem {
     public Command out(){
         return new SetPower(intakeMotor,-1);
     }
+    public Command stop(){
+        return new SetPower(intakeMotor,0);
+    }
 }

@@ -31,7 +31,7 @@ public class PlanA_Red extends OpMode {
 
     private final Pose afterPickup2 = new Pose(130, 84.3, Math.toRadians(0));
     private final Pose afterPickup3 = new Pose(130, 59, Math.toRadians(0));
-    private final Pose autoEndPose = new Pose(110,72,Math.toRadians(0));
+    private final Pose autoEndPose = new Pose(130,59,Math.toRadians(0));
 
 
     // Highest (First Set) of Artifacts from the Spike Mark.
