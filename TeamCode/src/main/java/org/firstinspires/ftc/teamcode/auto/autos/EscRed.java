@@ -17,7 +17,7 @@ public class EscRed extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    AutoCommands command = new AutoCommands();
+
 
 
     private final Pose startPose = new Pose(122.5, 123.5, Math.toRadians(36)); // Start Pose of our robot.

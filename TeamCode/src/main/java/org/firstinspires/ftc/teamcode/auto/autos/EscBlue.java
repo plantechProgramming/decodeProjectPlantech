@@ -23,7 +23,6 @@ public class EscBlue extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    AutoCommands command = new AutoCommands();
 
 
     private final Pose startPose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot.

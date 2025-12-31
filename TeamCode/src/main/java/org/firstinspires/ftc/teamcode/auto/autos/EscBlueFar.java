@@ -16,7 +16,7 @@ public class EscBlueFar extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    AutoCommands command = new AutoCommands();
+
 
 
     private final Pose startPose = new Pose(62, 8, Math.toRadians(180)); // Start Pose of our robot.

@@ -25,7 +25,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Autonomous(name = "NextFTC blue",group = "tests")
 public class autoNextBlue extends NextFTCOpMode{
-    AutoCommands command = new AutoCommands();
+
     public autoNextBlue() {
         addComponents(
                 new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
@@ -43,7 +43,7 @@ public class autoNextBlue extends NextFTCOpMode{
 
     private PathChain leavePath, scorePath;
     private Follower follower;
-
+    AutoCommands command = new AutoCommands(follower);
 
     public void buildPaths() {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */

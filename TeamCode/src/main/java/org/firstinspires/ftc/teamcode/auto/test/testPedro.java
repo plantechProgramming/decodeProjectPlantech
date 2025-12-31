@@ -17,7 +17,6 @@ public class testPedro extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    AutoCommands command = new AutoCommands();
 
 
     private final Pose startPose = new Pose(48.224037339556595, 135.76662777129522, Math.toRadians(180)); // Start Pose of our robot.

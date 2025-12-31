@@ -30,7 +30,7 @@ import dev.nextftc.core.commands.CommandManager;
 @Autonomous(name = "test Next",group = "tests")
 public class testNext extends NextFTCOpMode {
 
-    AutoCommands command = new AutoCommands();
+
     public testNext() {
         addComponents(
                 new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
@@ -38,7 +38,7 @@ public class testNext extends NextFTCOpMode {
         );
 
     }
-
+    AutoCommands command = new AutoCommands(null);
     private Command autonomousRoutine() {
         return new SequentialGroup(
                 command.shoot(),

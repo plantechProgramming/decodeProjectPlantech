@@ -29,7 +29,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Autonomous(name = "Plan A Next blue")
 public class PlanANextBlue extends NextFTCOpMode{
-    AutoCommands command = new AutoCommands();
+
     public PlanANextBlue() {
         addComponents(
                 new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
@@ -39,23 +39,24 @@ public class PlanANextBlue extends NextFTCOpMode{
 
     }
 
+
+
     private final Pose startPose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot.
     private final Pose scorePose = new Pose(47.60172591970307, 95.1073798180677, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose controlPose = new Pose(70,60);// pose for getting to GPP without hitting other balls
-    private final Pose GPP = new Pose(40, 35, Math.toRadians(180));
-    private final Pose PPG = new Pose(40, 84.3, Math.toRadians(180));
+    private final Pose GPP = new Pose(40, 37, Math.toRadians(180));
+    private final Pose PPG = new Pose(42, 84.3, Math.toRadians(180));
     private final Pose PGP = new Pose(40, 59, Math.toRadians(180));
 
-    private final Pose afterPickup1 = new Pose(11, 35, Math.toRadians(180));
+    private final Pose afterPickup1 = new Pose(11.5, 35, Math.toRadians(180));
 
-    private final Pose afterPickup2 = new Pose(15, 84.3, Math.toRadians(180));
+    private final Pose afterPickup2 = new Pose(17.5, 84.3, Math.toRadians(180));
     private final Pose afterPickup3 = new Pose(15, 59, Math.toRadians(180));
     private final Pose autoEndPose = new Pose(15,59,Math.toRadians(180));
 
-    private Path intake1;
-
-    private PathChain scorePreload, grabGPP, scoreGPP,intake2, intake3, grabPPG, scorePPG, grabPGP, autoEnd;
+    private PathChain scorePreload, grabGPP, scoreGPP,intake1, intake2, intake3, grabPPG, scorePPG, grabPGP, autoEnd;
     private Follower follower;
+    AutoCommands command = new AutoCommands(follower);
 
     public void buildPaths() {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
@@ -74,8 +75,10 @@ public class PlanANextBlue extends NextFTCOpMode{
                 .setLinearHeadingInterpolation(scorePose.getHeading(), GPP.getHeading())
                 .build();
 
-        intake1 = new Path(new BezierLine(GPP, afterPickup1));
-        intake1.setTimeoutConstraint(1000);
+        intake1 = follower.pathBuilder()
+                .addPath(new BezierLine(GPP, afterPickup1))
+                .build();
+
 
         scoreGPP = follower.pathBuilder()
                 .addPath(new BezierCurve(afterPickup1, controlPose, scorePose))
@@ -89,7 +92,6 @@ public class PlanANextBlue extends NextFTCOpMode{
 
         intake2 = follower.pathBuilder()
                 .addPath(new BezierLine(PPG, afterPickup2))
-                .setTimeoutConstraint(1000)
                 .build();
 
         scorePPG = follower.pathBuilder()
@@ -113,52 +115,17 @@ public class PlanANextBlue extends NextFTCOpMode{
 
     }
 
-    private Command onStart() {
-        return command.startShooter(false);
-    }
-    private Command preload() {
-        return new SequentialGroup(
-                new FollowPath(scorePreload),
-                command.shoot()
-        );
-    }
-
-    private Command intakeGPP() {
-        return new SequentialGroup(
-                new FollowPath(grabGPP),
-                command.stopPrimers(),
-                new Delay(2),
-                new FollowPath(intake1),
-                command.stopAll()
-        );
-    }
-
-    private Command scoreGPP(){
-        return new SequentialGroup(
-                new FollowPath(scoreGPP),
-                command.shoot()
-        );
-    }
-    private Command intakePPG() {
-        return new SequentialGroup(
-                new FollowPath(grabPPG),
-                command.stopPrimers(),
-                new Delay(2),
-                new FollowPath(intake2),
-                command.stopAll()
-        );
-    }
-
     public Command autoRoutine(){
         return new SequentialGroup(
-                onStart(),
-                new Delay(5),
-                preload(),
-                new Delay(5),
-                intakeGPP(),
-                scoreGPP(),
-                new Delay(5),
-                intakePPG()
+                command.startShooter(false),
+                new Delay(2),
+                command.score(scorePreload),
+                new Delay(4),
+                command.intake(intake1,grabGPP,0.55),
+                command.score(scoreGPP),
+                new Delay(4),
+                command.intake(intake2,grabPPG,0.55),
+                command.score(scorePPG)
         );
     }
     @Override

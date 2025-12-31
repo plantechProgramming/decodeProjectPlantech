@@ -16,7 +16,7 @@ public class EscRedFar extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    AutoCommands command = new AutoCommands();
+
 
 
     private final Pose startPose = new Pose(74.5, 8, Math.toRadians(0)); // Start Pose of our robot.

@@ -17,7 +17,7 @@ public class PlanB_Red extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    AutoCommands command = new AutoCommands();
+
 
 
     private final Pose startPose = new Pose(111, 135.3, Math.toRadians(0)); // Start Pose of our robot.
