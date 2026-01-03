@@ -26,7 +26,7 @@ public class Intake {
     public double radToTicks = Math.PI/3000;
 
     // wtf is a type parameter
-    public <roni2_intake> Intake(CRServo ibl,CRServo ibr,CRServo sl,CRServo sr, DcMotorEx intake_motor ,Telemetry telemetry){
+    public Intake(CRServo ibl,CRServo ibr,CRServo sl,CRServo sr, DcMotorEx intake_motor ,Telemetry telemetry){
         this.telemetry = telemetry;
         this.ibl=ibl;
         this.ibr=ibr;

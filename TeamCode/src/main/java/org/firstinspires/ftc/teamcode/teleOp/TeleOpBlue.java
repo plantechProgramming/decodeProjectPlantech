@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.ftc.FTCCoordinates;
+import com.pedropathing.ftc.InvertedFTCCoordinates;
+import com.pedropathing.ftc.PoseConverter;
+import com.pedropathing.geometry.CoordinateSystem;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -33,6 +38,15 @@ public class TeleOpBlue extends OpMode {
     public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0);
     private VisionPortal visionPortal;
     private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
+    public void setOdometryStartPos(){
+        double startX = odometry.getPosX(DistanceUnit.INCH);
+        double startY = odometry.getPosY(DistanceUnit.INCH);
+        Pose startPos = new Pose(startX,startY,odometry.getHeading(AngleUnit.RADIANS));
+        Pose2D poseFTC = PoseConverter.poseToPose2D(startPos, FTCCoordinates.INSTANCE);
+
+    //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
+        odometry.setPosition(poseFTC);//TODO: change here for red
+    }
 
     @Override
     public void run(){
@@ -42,6 +56,7 @@ public class TeleOpBlue extends OpMode {
         ColorSensorTest cSensor = new ColorSensorTest();
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
 
+        setOdometryStartPos();
 
         //TODO: find why didnt work outside
         AprilTagLocalization test = new AprilTagLocalization("BLUE"); //TODO: change here for red
@@ -58,8 +73,7 @@ public class TeleOpBlue extends OpMode {
         builder.addProcessor(aprilTag);
         visionPortal = builder.build();
 
-//        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
-        odometry.setPosition(new Pose2D(DistanceUnit.CM,24.5,45.5,AngleUnit.DEGREES, 0));//TODO: change here for red
+
 
 
 //        AprilTagProcessor aprilTag = test.initAprilTag();
@@ -91,14 +105,20 @@ public class TeleOpBlue extends OpMode {
             ElapsedTime elapsedTime = new ElapsedTime();
             driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED
 
-            if (gamepad1.a){
+            if (gamepad1.right_trigger > 0){
                 intake.intakeIn();
                 intake.inBetweenInPart();
             }
-            else if(gamepad1.x) {
+            else if(gamepad1.left_trigger!=0) {
                 shooter.out();
                 intake.inBetweenOut();
                 intake.intakeOut();
+            }
+            else if(gamepad1.x){
+                intake.inBetweenOut();
+                shooter.out();
+            } else if (gamepad1.a) {
+                intake.inBetweenInPart();
             }
 //           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
 //               double deg = test.specialDetection.ftcPose.bearing;
@@ -113,11 +133,16 @@ public class TeleOpBlue extends OpMode {
                     intake.inBetweenInFull();
                 }
             }
+
             else{
-//                shooter.stopShooter();
+                shooter.stopShooter();
                 intake.stopIntake();
             }
-            if(gamepad1.dpad_right){
+            if (gamepad1.b) {
+                shooter.noPhysShoot(1);
+            }
+
+            if(gamepad1.left_bumper){
                 driveTrain.turnToGoal("BLUE");//TODO: change for RED
             }
             if(gamepad1.start){
@@ -130,6 +155,7 @@ public class TeleOpBlue extends OpMode {
                 odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 0)); //TODO: change for RED
 
             }
+
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);
 

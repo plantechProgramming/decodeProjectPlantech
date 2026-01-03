@@ -48,13 +48,13 @@ public class PlanANextBlue extends NextFTCOpMode{
     private final Pose PPG = new Pose(42, 84.3, Math.toRadians(180));
     private final Pose PGP = new Pose(40, 59, Math.toRadians(180));
 
-    private final Pose afterPickup1 = new Pose(11.5, 35, Math.toRadians(180));
+    private final Pose afterPickup1 = new Pose(12, 35, Math.toRadians(180));
 
     private final Pose afterPickup2 = new Pose(17.5, 84.3, Math.toRadians(180));
     private final Pose afterPickup3 = new Pose(15, 59, Math.toRadians(180));
     private final Pose autoEndPose = new Pose(15,59,Math.toRadians(180));
 
-    private PathChain scorePreload, grabGPP, scoreGPP,intake1, intake2, intake3, grabPPG, scorePPG, grabPGP, autoEnd;
+    private PathChain scorePreload, grabGPP, scoreGPP,intake1, intake2, intake3, grabPPG, scorePPG, scorePGP, grabPGP, autoEnd;
     private Follower follower;
     AutoCommands command = new AutoCommands(follower);
 
@@ -104,6 +104,11 @@ public class PlanANextBlue extends NextFTCOpMode{
                 .setLinearHeadingInterpolation(scorePose.getHeading(), PGP.getHeading())
                 .build();
 
+        scorePGP = follower.pathBuilder()
+                .addPath(new BezierLine(PGP, scorePose))
+                .setLinearHeadingInterpolation(PGP.getHeading(),scorePose.getHeading())
+                .build();
+
         intake3 = follower.pathBuilder()
                 .addPath(new BezierLine(PGP, afterPickup3))
                 .build();
@@ -117,15 +122,17 @@ public class PlanANextBlue extends NextFTCOpMode{
 
     public Command autoRoutine(){
         return new SequentialGroup(
-                command.startShooter(false),
+//                command.startShooter(false),
                 new Delay(2),
                 command.score(scorePreload),
                 new Delay(4),
-                command.intake(intake1,grabGPP,0.55),
-                command.score(scoreGPP),
-                new Delay(4),
                 command.intake(intake2,grabPPG,0.55),
-                command.score(scorePPG)
+                command.score(scorePPG),
+                new Delay(4),
+                command.intake(intake3,grabPGP,0.55),
+                command.score(scorePGP),
+                new Delay(4),
+                command.intake(intake1, grabGPP, 0.55)
         );
     }
     @Override

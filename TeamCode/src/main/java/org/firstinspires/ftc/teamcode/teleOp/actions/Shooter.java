@@ -19,7 +19,7 @@ import dev.nextftc.core.commands.Command;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 65;
+    public static double kP = 65; //og = 8
     public static double kI = 1;
     public static double kD = 8;
     public static double kF = 0;
@@ -213,6 +213,10 @@ public class Shooter {
     public void setShooterTelemetry(Telemetry telemetry){
         telemetry.addData("vel",shooterVelocity.getVelocityFilter());
         telemetry.addData("th",Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000));
+        PIDFCoefficients coefficients = shooter.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("p", coefficients.p);
+        telemetry.addData("i", coefficients.i);
+        telemetry.addData("d", coefficients.d);
     }
 
     public boolean isUpToSpeed(){

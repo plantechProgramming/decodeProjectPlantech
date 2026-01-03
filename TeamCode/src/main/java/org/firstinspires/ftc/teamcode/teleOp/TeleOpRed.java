@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.robotcore.internal.network.ControlHubApChannelManager;
 import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
@@ -78,7 +79,6 @@ public class TeleOpRed extends OpMode {
         double botHeading;
         boolean slow = false;
         double tick = 2000/(48*Math.PI); //per tick
-
         while (opModeIsActive() ) {
             AprilTagDetection goalTag = test.specialDetection;
 //            test.telemetryAprilTag(aprilTag);
@@ -93,14 +93,20 @@ public class TeleOpRed extends OpMode {
             ElapsedTime elapsedTime = new ElapsedTime();
             driveTrain.drive(-forward, -drift, turn, botHeading, 1);
 
-            if (gamepad1.a){
+            if (gamepad1.right_trigger > 0){
                 intake.intakeIn();
                 intake.inBetweenInPart();
             }
-            else if(gamepad1.x) {
+            else if(gamepad1.left_trigger!=0) {
+                shooter.out();
+                intake.inBetweenOut();
+                intake.intakeOut();
+            }
+            else if(gamepad1.x){
                 intake.inBetweenOut();
                 shooter.out();
-                intake.intakeOut();
+            } else if (gamepad1.a) {
+                intake.inBetweenInPart();
             }
 //           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
 //               double deg = test.specialDetection.ftcPose.bearing;
@@ -114,13 +120,12 @@ public class TeleOpRed extends OpMode {
                 if(shooter.isUpToSpeed()){
                     intake.inBetweenInFull();
                 }
-            }
-            else{
-                shooter.stopShooter();
+            } else if (gamepad1.b) {
+                shooter.naiveShooter(driveTrain.isFar());
+            } else{
                 intake.stopIntake();
-
             }
-            if(gamepad1.dpad_right){
+            if(gamepad1.left_bumper){
                 driveTrain.turnToGoal("RED");//TODO: change for RED
             }
             if(gamepad1.start){
