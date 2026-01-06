@@ -63,7 +63,8 @@ public class TeleOpRed extends OpMode {
 
 //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
 //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-90,-165,AngleUnit.DEGREES, 180));//TODO: change here for red
-        odometry.setPosition(new Pose2D(DistanceUnit.CM,-27.5,50,AngleUnit.DEGREES, 180));
+        odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180));
+//        odometry.resetPosAndIMU();
 
 //        AprilTagProcessor aprilTag = test.initAprilTag();
 //
@@ -105,8 +106,8 @@ public class TeleOpRed extends OpMode {
             else if(gamepad1.x){
                 intake.inBetweenOut();
                 shooter.out();
-            } else if (gamepad1.a) {
-                intake.inBetweenInPart();
+//            } else if (gamepad1.a) {
+//                intake.inBetweenInPart();
             }
 //           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
 //               double deg = test.specialDetection.ftcPose.bearing;
@@ -116,15 +117,19 @@ public class TeleOpRed extends OpMode {
 //               telemetry.update();
 //           }
             else if(gamepad1.right_bumper){
-                shooter.naiveShooter(driveTrain.isFar());
                 if(shooter.isUpToSpeed()){
                     intake.inBetweenInFull();
                 }
-            } else if (gamepad1.b) {
-                shooter.naiveShooter(driveTrain.isFar());
-            } else{
+                intake.intakeIn();
+            }
+
+            else{
+//                shooter.stopShooter();
                 intake.stopIntake();
             }
+//            shooter.variableSpeedShoot(gamepad1.y, gamepad1.a, .05);
+
+            shooter.naiveShooter(driveTrain.isFar());
             if(gamepad1.left_bumper){
                 driveTrain.turnToGoal("RED");//TODO: change for RED
             }

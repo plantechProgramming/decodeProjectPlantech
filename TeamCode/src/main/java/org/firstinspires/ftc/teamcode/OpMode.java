@@ -99,7 +99,7 @@ public abstract class OpMode extends LinearOpMode {
         odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         odometry.setOffsets(-155,-90, DistanceUnit.MM);
-        odometry.resetPosAndIMU();
+//        odometry.resetPosAndIMU();
 
         // until we find the fucking camera we can't scan it and add it to robot config :(((
     //    camera = hardwareMap.get(CameraName.class,"webcam");

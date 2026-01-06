@@ -38,9 +38,8 @@ public class AutoCommands{
     }
 
     public Command shoot(){
-        return new SequentialGroup( // take just moves intake motor, so should be parallel
+        return new ParallelGroup( // take just moves intake motor, so should be parallel
                 inBetween.inBetweenInFull(),
-                new Delay(1),
                 intake.take()
         );
     }
@@ -48,15 +47,15 @@ public class AutoCommands{
     public Command score(PathChain path){
         return new SequentialGroup(
                 new FollowPath(path),
-                shoot()
+                shoot(),
+                new Delay(2.5)
         );
     }
 
     public Command intake(PathChain intakePath,PathChain toGrabPath, double speed){
         return new SequentialGroup(
                 new FollowPath(toGrabPath),
-                stopPrimers(),
-                new Delay(2),
+                inBetween.inShooterPrimers(),
                 new FollowPath(intakePath, true,speed),
                 stopAll()
         );
@@ -74,9 +73,6 @@ public class AutoCommands{
                 intake.stop(),
                 inBetween.stop()
         );
-    }
-    public Command stopPrimers(){
-        return inBetween.stopShooterPrimers();
     }
 
     public Command take(){

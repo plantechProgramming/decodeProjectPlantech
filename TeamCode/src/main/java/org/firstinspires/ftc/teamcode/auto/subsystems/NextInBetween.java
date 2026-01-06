@@ -26,7 +26,9 @@ public class NextInBetween implements Subsystem {
     public Command inBetweenInPart(){
         return new ParallelGroup(
                 new SetPower(ibr, -1),
-                new SetPower(ibl, 1)
+                new SetPower(ibl, 1),
+                new SetPower(sr, 1),
+                new SetPower(sl, -1)
         );
     }
 
@@ -53,6 +55,12 @@ public class NextInBetween implements Subsystem {
         return new ParallelGroup(
                 new SetPower(sl,0),
                 new SetPower(sr,0)
+        );
+    }
+    public Command inShooterPrimers(){
+        return new ParallelGroup(
+                new SetPower(sl,-1),
+                new SetPower(sr,1)
         );
     }
 

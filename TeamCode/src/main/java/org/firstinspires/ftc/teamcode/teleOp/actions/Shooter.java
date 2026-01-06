@@ -19,10 +19,10 @@ import dev.nextftc.core.commands.Command;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 65; //og = 8
-    public static double kI = 1;
-    public static double kD = 8;
-    public static double kF = 0;
+    public static double kP = 45; //og = 90
+    public static double kI = 0.1;
+    public static double kD = 15;
+    public static double kF = 10; // OG = 18
     GetVelocity shooterVelocity;
     GetVelocity shooter2Velocity;
 
@@ -44,7 +44,7 @@ public class Shooter {
     final int MAX_RPM = 6000;
 
     public double Szonedis;
-    public final double errorFix = 1.25;
+    public final double errorFix = 1;
     public void noPhysShoot(double x){
         shooter.setPower(x);
         shooter2.setPower(-x);
@@ -57,7 +57,7 @@ public class Shooter {
 
     double prevPower = 0;
     int count = 0;
-    public void variableSpeedShoot(boolean dpadUp, boolean dpadDown, double jumps){
+    public void variableSpeedShoot(boolean more, boolean less, double jumps){
         // make func run only once per 10 calls, so that when pressed once it wont go up so much
         //TODO: remove, delete, destroy, annihilate, die code die, install GNU/Linux, sudo rm -rf --no-preserve-root /, go to code hell, kill; just joking
 //        if(!(count % 10 == 0)){
@@ -65,13 +65,16 @@ public class Shooter {
 //            return;
 //        }
         double power = 0;
-        if(dpadUp){power = prevPower + jumps;}
-        else if(dpadDown){power = prevPower - jumps;}
+        if(more){power = prevPower + jumps;}
+        else if(less){power = prevPower - jumps;}
         else{power = prevPower;}
+        if (power >= 5000){
+            power = 5000;
+        }
 
         shooter.setPower(power);
         shooter2.setPower(-power);
-        telemetry.addData("power", power*6000);
+        telemetry.addData("wanted variable", power*6000);
         telemetry.addData("velocity", shooterVelocity.getVelocityFilter());
         prevPower = power;
     }
@@ -85,15 +88,15 @@ public class Shooter {
         shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         if (!far) {
-            Szonedis = 0.47;
+            Szonedis = 0.48;
         } else{
-            Szonedis = 0.55;
+            Szonedis = 0.56;
         }
         shooter.setPower(Szonedis*errorFix);
         shooter2.setPower(-Szonedis*errorFix);
 
-        telemetry.addData("velocity shooter ", shooterVelocity.getVelocityFilter());
-        telemetry.addData("wanted", Szonedis*6000);
+//        telemetry.addData("velocity shooter ", shooterVelocity.getVelocityFilter());
+//        telemetry.addData("wanted", Szonedis*6000);
     }
     public void stopShooter(){
        shooter.setPower(0);
@@ -211,6 +214,7 @@ public class Shooter {
     }
 
     public void setShooterTelemetry(Telemetry telemetry){
+        telemetry.addData("wanted", Szonedis*6000);
         telemetry.addData("vel",shooterVelocity.getVelocityFilter());
         telemetry.addData("th",Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000));
         PIDFCoefficients coefficients = shooter.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);

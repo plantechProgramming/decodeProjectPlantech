@@ -38,15 +38,21 @@ public class TeleOpBlue extends OpMode {
     public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0);
     private VisionPortal visionPortal;
     private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
-    public void setOdometryStartPos(){
-        double startX = odometry.getPosX(DistanceUnit.INCH);
-        double startY = odometry.getPosY(DistanceUnit.INCH);
-        Pose startPos = new Pose(startX,startY,odometry.getHeading(AngleUnit.RADIANS));
-        Pose2D poseFTC = PoseConverter.poseToPose2D(startPos, FTCCoordinates.INSTANCE);
-
-    //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
-        odometry.setPosition(poseFTC);//TODO: change here for red
-    }
+//    public void setOdometryStartPos(){
+//        double startX = odometry.getPosX(DistanceUnit.INCH);
+//        double startY = odometry.getPosY(DistanceUnit.INCH);
+//        Pose startPos = new Pose(startX,startY,odometry.getHeading(AngleUnit.RADIANS));
+//        Pose2D poseFTC = PoseConverter.poseToPose2D(startPos, FTCCoordinates.INSTANCE);
+//        telemetry.addData("x", poseFTC.getX(DistanceUnit.CM));
+//        telemetry.addData("y", poseFTC.getY(DistanceUnit.CM));
+//        telemetry.addData("heading", poseFTC.getHeading(AngleUnit.DEGREES));
+//
+//        double x = poseFTC.getX(DistanceUnit.CM), y = poseFTC.getY(DistanceUnit.CM);
+//        double heading = poseFTC.getHeading(AngleUnit.DEGREES);
+//        Pose2D fixedPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,heading-90);
+//    //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
+//        odometry.setPosition(fixedPose);//TODO: change here for red
+//    }
 
     @Override
     public void run(){
@@ -56,7 +62,8 @@ public class TeleOpBlue extends OpMode {
         ColorSensorTest cSensor = new ColorSensorTest();
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
 
-        setOdometryStartPos();
+//        setOdometryStartPos();
+        odometry.resetPosAndIMU();
 
         //TODO: find why didnt work outside
         AprilTagLocalization test = new AprilTagLocalization("BLUE"); //TODO: change here for red
@@ -117,8 +124,8 @@ public class TeleOpBlue extends OpMode {
             else if(gamepad1.x){
                 intake.inBetweenOut();
                 shooter.out();
-            } else if (gamepad1.a) {
-                intake.inBetweenInPart();
+//            } else if (gamepad1.a) {
+//                intake.inBetweenInPart();
             }
 //           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
 //               double deg = test.specialDetection.ftcPose.bearing;
@@ -128,19 +135,18 @@ public class TeleOpBlue extends OpMode {
 //               telemetry.update();
 //           }
             else if(gamepad1.right_bumper){
-                shooter.naiveShooter(driveTrain.isFar());
                 if(shooter.isUpToSpeed()){
                     intake.inBetweenInFull();
                 }
+                intake.intakeIn();
             }
 
             else{
-                shooter.stopShooter();
+//                shooter.stopShooter();
                 intake.stopIntake();
             }
-            if (gamepad1.b) {
-                shooter.noPhysShoot(1);
-            }
+            shooter.variableSpeedShoot(gamepad1.y, gamepad1.a, .05);
+//            shooter.naiveShooter(driveTrain.isFar());
 
             if(gamepad1.left_bumper){
                 driveTrain.turnToGoal("BLUE");//TODO: change for RED

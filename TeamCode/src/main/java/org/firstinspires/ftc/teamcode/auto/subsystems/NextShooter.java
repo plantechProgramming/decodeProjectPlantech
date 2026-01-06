@@ -53,7 +53,8 @@ public class NextShooter implements Subsystem {
         controlSystem.setGoal(new KineticState(0,Szonedis*errorFix,0));
 
         return new InstantCommand(
-                        () -> {shooter1.setPower(Szonedis*errorFix);
+                        () -> {
+                        shooter1.setPower(Szonedis*errorFix);
                         shooter2.setPower(-Szonedis*errorFix);
                         dashboardTelemetry.addData("power: ", shooter1.getPower());
                         dashboardTelemetry.addData("Szonedis*errorFix",Szonedis*errorFix);
