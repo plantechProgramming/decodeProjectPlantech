@@ -64,8 +64,10 @@ public class AutoCommands{
         return startShooter(false);
     }
     public Command startShooter(boolean far){
-        return shooter.naiveShooter(far);
-
+        return new SequentialGroup(
+                shooter.naiveShooter(far),
+                new Delay(0.5)
+        );
     }
 
     public Command stopAll(){
