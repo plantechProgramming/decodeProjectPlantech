@@ -30,6 +30,8 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 @Autonomous(name = "Plan A Next blue")
 public class PlanANextBlue extends NextFTCOpMode{
 
+    private Follower follower;
+
     public PlanANextBlue() {
         addComponents(
                 new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
@@ -38,10 +40,9 @@ public class PlanANextBlue extends NextFTCOpMode{
         );
 
     }
-    private Follower follower;
 
-    AutoCommands command = new AutoCommands(follower);
-    PathsBlue path = new PathsBlue(follower);
+    AutoCommands command = new AutoCommands(follower());
+    PathsBlue path = new PathsBlue(follower());
 
 
     public Command autoRoutine(){

@@ -19,10 +19,10 @@ import dev.nextftc.core.commands.Command;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 45; //og = 90
-    public static double kI = 0.1;
-    public static double kD = 15;
-    public static double kF = 10; // OG = 18
+    public static double kP = 30; //og = 45
+    public static double kI = 0;//.1
+    public static double kD = 0; //15
+    public static double kF = 0; // OG = 10
     GetVelocity shooterVelocity;
     GetVelocity shooter2Velocity;
 
@@ -57,20 +57,23 @@ public class Shooter {
 
     double prevPower = 0;
     int count = 0;
+    boolean prevMore = false;
+    boolean prevLess = false;
     public void variableSpeedShoot(boolean more, boolean less, double jumps){
-        // make func run only once per 10 calls, so that when pressed once it wont go up so much
-        //TODO: remove, delete, destroy, annihilate, die code die, install GNU/Linux, sudo rm -rf --no-preserve-root /, go to code hell, kill; just joking
-//        if(!(count % 10 == 0)){
-//            count++;
-//            return;
-//        }
+
         double power = 0;
-        if(more){power = prevPower + jumps;}
-        else if(less){power = prevPower - jumps;}
+        if(more && !prevMore){power = prevPower + jumps;}
+        else if(less && prevLess){power = prevPower - jumps;}
         else{power = prevPower;}
         if (power >= 5000){
             power = 5000;
         }
+        prevLess = less;
+        prevMore = more;
+        PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
+
+//        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+//        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
 
         shooter.setPower(power);
         shooter2.setPower(-power);
@@ -85,8 +88,8 @@ public class Shooter {
     public void naiveShooter(boolean far) {
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
 
-        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+//        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+//        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         if (!far) {
             Szonedis = 0.48;
         } else{
@@ -216,7 +219,10 @@ public class Shooter {
     public void setShooterTelemetry(Telemetry telemetry){
         telemetry.addData("wanted", Szonedis*6000);
         telemetry.addData("vel",shooterVelocity.getVelocityFilter());
+        telemetry.addData("vel2", shooter2Velocity.getVelocityFilter());
         telemetry.addData("th",Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000));
+        telemetry.addData("pow 1", shooter.getPower());
+        telemetry.addData("pow 2", shooter2.getPower());
         PIDFCoefficients coefficients = shooter.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
         telemetry.addData("p", coefficients.p);
         telemetry.addData("i", coefficients.i);

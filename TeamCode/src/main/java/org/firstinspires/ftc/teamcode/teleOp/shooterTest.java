@@ -19,14 +19,13 @@ public class shooterTest extends OpMode {
 
     @Override
     protected void run() {
+        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
         while(opModeIsActive()){
             odometry.update();
-            dashboardTelemetry.addData("raw posY",odometry.getEncoderY());
-            dashboardTelemetry.addData("raw posX",odometry.getEncoderX());
-            dashboardTelemetry.addData("posX", odometry.getPosX(DistanceUnit.CM));
-            dashboardTelemetry.addData("posY", odometry.getPosY(DistanceUnit.CM));
-            dashboardTelemetry.addData("imu", odometry.getHeading(AngleUnit.DEGREES));
-            dashboardTelemetry.addData("status", odometry.getDeviceStatus());
+            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .05);
+            if(gamepad1.a) shooter.noPhysShoot(1);
+            dashboardTelemetry.addData("power", shooter.shooter.getPower());
+            shooter.setShooterTelemetry(dashboardTelemetry);
             dashboardTelemetry.update();
         }
     }

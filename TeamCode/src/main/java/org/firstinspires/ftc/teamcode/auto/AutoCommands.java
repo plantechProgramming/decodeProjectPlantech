@@ -55,7 +55,9 @@ public class AutoCommands{
     public Command intake(PathChain intakePath,PathChain toGrabPath, double speed){
         return new SequentialGroup(
                 new FollowPath(toGrabPath),
-                inBetween.inShooterPrimers(),
+
+                inBetween.inBetweenInPart(),
+                intake.take() ,
                 new FollowPath(intakePath, true,speed),
                 stopAll()
         );

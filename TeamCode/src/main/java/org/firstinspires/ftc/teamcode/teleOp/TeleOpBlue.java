@@ -59,7 +59,7 @@ public class TeleOpBlue extends OpMode {
         Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
-        ColorSensorTest cSensor = new ColorSensorTest();
+        //ColorSensorTest cSensor = new ColorSensorTest();
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
 
 //        setOdometryStartPos();
@@ -145,8 +145,8 @@ public class TeleOpBlue extends OpMode {
 //                shooter.stopShooter();
                 intake.stopIntake();
             }
-            shooter.variableSpeedShoot(gamepad1.y, gamepad1.a, .05);
-//            shooter.naiveShooter(driveTrain.isFar());
+//            shooter.variableSpeedShoot(gamepad1.y, gamepad1.a, .05);
+            shooter.naiveShooter(driveTrain.isFar());
 
             if(gamepad1.left_bumper){
                 driveTrain.turnToGoal("BLUE");//TODO: change for RED

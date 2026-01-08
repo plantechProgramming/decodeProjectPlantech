@@ -19,7 +19,7 @@ public class PathsBlue {
     public final Pose PPG = new Pose(42, 84.3, Math.toRadians(180));
     public final Pose PGP = new Pose(41.5, 60, Math.toRadians(180));
 
-    public final Pose afterPickupGPP = new Pose(12.5, 35, Math.toRadians(180));
+    public final Pose afterPickupGPP = new Pose(12, 35, Math.toRadians(180));
 
     public final Pose afterPickupPPG = new Pose(17.5, 84.3, Math.toRadians(180));
     public final Pose afterPickupPGP = new Pose(13, 59, Math.toRadians(180));
@@ -97,4 +97,21 @@ public class PathsBlue {
                 .build();
 
     }
+
+    // these work ONLY FOR BLUE
+    PathChain scorePath(Pose startPose){
+        return follower.pathBuilder()
+                .addPath(new BezierLine(startPose, scorePose))
+                .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
+                .build();
+    }
+
+    PathChain intakePath(Pose startPose, double distance){
+        Pose endPose = new Pose(startPose.getX() - distance,startPose.getY(), startPose.getHeading());
+        return follower.pathBuilder()
+                .addPath(new BezierLine(startPose,endPose))
+                .build();
+    }
+
+
 }
