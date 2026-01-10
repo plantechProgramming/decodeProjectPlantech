@@ -50,7 +50,7 @@ public class TeleOpBlue extends OpMode {
 //        double x = poseFTC.getX(DistanceUnit.CM), y = poseFTC.getY(DistanceUnit.CM);
 //        double heading = poseFTC.getHeading(AngleUnit.DEGREES);
 //        Pose2D fixedPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,heading-90);
-//    //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
+//            odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
 //        odometry.setPosition(fixedPose);//TODO: change here for red
 //    }
 
@@ -138,6 +138,10 @@ public class TeleOpBlue extends OpMode {
                 if(shooter.isUpToSpeed()){
                     intake.inBetweenInFull();
                 }
+                intake.intakeIn();
+            }
+            else if(gamepad1.b){
+                intake.inBetweenInFull();
                 intake.intakeIn();
             }
 

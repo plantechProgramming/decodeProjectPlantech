@@ -19,10 +19,10 @@ import dev.nextftc.core.commands.Command;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 30; //og = 45
-    public static double kI = 0;//.1
-    public static double kD = 0; //15
-    public static double kF = 0; // OG = 10
+    public static double kP = 55; //og = 35
+    public static double kI = 0;//0
+    public static double kD = 0; //0
+    public static double kF = 0; // OG = 7
     GetVelocity shooterVelocity;
     GetVelocity shooter2Velocity;
 
@@ -72,8 +72,8 @@ public class Shooter {
         prevMore = more;
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
 
-//        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-//        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
 
         shooter.setPower(power);
         shooter2.setPower(-power);
@@ -88,8 +88,8 @@ public class Shooter {
     public void naiveShooter(boolean far) {
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
 
-//        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-//        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         if (!far) {
             Szonedis = 0.48;
         } else{

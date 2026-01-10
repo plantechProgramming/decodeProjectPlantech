@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.auto.subsystems;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -36,13 +39,12 @@ public class NextShooter implements Subsystem {
     public NextShooter() { }
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry =  dashboard.getTelemetry();
-    private MotorEx shooter1 = new MotorEx("shooter");
-    private MotorEx shooter2 = new MotorEx("shooter2");
+    private DcMotorEx shooter1;
+    private DcMotorEx shooter2;
     double Szonedis = 0.55;
     double errorFix = 1.375;
-    ControlSystem controlSystem = ControlSystem.builder()//next pid
-            .posPid(65, 1, 8)
-            .build();
+
+    PIDFCoefficients pidNew = new PIDFCoefficients(30,0,0,0);
 
     public Command naiveShooter(boolean far) {
         if (!far) {
@@ -50,20 +52,27 @@ public class NextShooter implements Subsystem {
         } else {
             Szonedis = 0.56;
         }
-        controlSystem.setGoal(new KineticState(0,Szonedis*errorFix,0));
+//        controlSystem.setGoal(new KineticState(0,Szonedis*errorFix,0));
 
         return new InstantCommand(
                         () -> {
-                        shooter1.setPower(Szonedis*errorFix);
-                        shooter2.setPower(-Szonedis*errorFix);
-                        dashboardTelemetry.addData("power: ", shooter1.getPower());
-                        dashboardTelemetry.addData("Szonedis*errorFix",Szonedis*errorFix);
-                        dashboardTelemetry.update();
+                            shooter1.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+                            shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+                            shooter1.setPower(Szonedis*errorFix);
+                            shooter2.setPower(-Szonedis*errorFix);
+                            dashboardTelemetry.addData("power: ", shooter1.getPower());
+                            dashboardTelemetry.addData("Szonedis*errorFix",Szonedis*errorFix);
+                            dashboardTelemetry.update();
                         }
 
                 );
-
     }
+
+    // UNUSED. should check if needed, uses nextControl instead of built in motor pid
+    ControlSystem controlSystem = ControlSystem.builder()//next pid
+            .posPid(65, 1, 8)
+            .build();
+
     public Command setPowerPID(MotorEx motor, MotorEx motor2){
         KineticState state = new KineticState(motor.getCurrentPosition(), motor.getVelocity(),0);
         KineticState state2 = new KineticState(motor2.getCurrentPosition(), motor2.getVelocity(),0);

@@ -30,7 +30,7 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 @Autonomous(name = "Plan A Next blue")
 public class PlanANextBlue extends NextFTCOpMode{
 
-    private Follower follower;
+
 
     public PlanANextBlue() {
         addComponents(
@@ -40,15 +40,17 @@ public class PlanANextBlue extends NextFTCOpMode{
         );
 
     }
+    private Follower follower;
 
-    AutoCommands command = new AutoCommands(follower());
-    PathsBlue path = new PathsBlue(follower());
+    public final Pose startPose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot.
 
+    AutoCommands command;
+    PathsBlue path;
 
     public Command autoRoutine(){
         path.buildPaths();
         return new SequentialGroup(
-                command.startShooter(false),
+                //command.startShooter(false),
                 command.score(path.scorePreload),
                 command.intake(path.intakePPG,path.grabPPG,0.72),
 
@@ -59,11 +61,16 @@ public class PlanANextBlue extends NextFTCOpMode{
                 command.intake(path.intakeGPP, path.grabGPP, 0.72)
         );
     }
+
     @Override
     public void onStartButtonPressed() {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(path.startPose);
+        follower.setStartingPose(startPose);
+
+        command = new AutoCommands(follower());
+        path = new PathsBlue(follower());
         path.buildPaths();
+
         autoRoutine().schedule();
 
     }

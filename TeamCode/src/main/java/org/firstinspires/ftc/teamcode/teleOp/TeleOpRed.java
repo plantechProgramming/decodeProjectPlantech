@@ -122,6 +122,10 @@ public class TeleOpRed extends OpMode {
                 }
                 intake.intakeIn();
             }
+            else if(gamepad1.b){
+                intake.inBetweenInFull();
+                intake.intakeIn();
+            }
 
             else{
 //                shooter.stopShooter();
