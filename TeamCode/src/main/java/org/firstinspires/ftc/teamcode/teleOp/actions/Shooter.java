@@ -19,9 +19,9 @@ import dev.nextftc.core.commands.Command;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 55; //og = 35
-    public static double kI = 0;//.1
-    public static double kD = 0; //15
+    public static double kP = 100; //og = 35
+    public static double kI = 0;//0
+    public static double kD = 0; //0
     public static double kF = 0; // OG = 7
     GetVelocity shooterVelocity;
     GetVelocity shooter2Velocity;
@@ -44,13 +44,13 @@ public class Shooter {
     final int MAX_RPM = 6000;
 
     public double Szonedis;
-    public final double errorFix = 1;
+    public final double errorFix = 1.18;
     public void noPhysShoot(double x){
         shooter.setPower(x);
         shooter2.setPower(-x);
         telemetry.addData("velocity - firsts", shooter.getVelocity());
         telemetry.addData("velocity shooter 1", shooterVelocity.getVelocityFilter());
-        telemetry.addData("velocity shooter 2", shooter2Velocity.getVelocityFilter());
+        telemetry.addData("velocity shooter 2", Math.abs(shooter2Velocity.getVelocityFilter()));
         telemetry.addData("velocity noisy", getVelocity(shooter));
         telemetry.addData("wanted", x*6000);
     }
@@ -62,23 +62,23 @@ public class Shooter {
     public void variableSpeedShoot(boolean more, boolean less, double jumps){
 
         double power = 0;
-        if(more && !prevMore){power = prevPower + jumps;}
-        else if(less && prevLess){power = prevPower - jumps;}
+        if(more){power = prevPower + jumps;}
+        else if(less){power = prevPower - jumps;}
         else{power = prevPower;}
-        if (power >= 5000){
-            power = 5000;
+        if (power >= 0.7){
+            power = 0.7;
         }
         prevLess = less;
         prevMore = more;
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
 
-        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+//        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+//        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
 
-        shooter.setPower(power);
-        shooter2.setPower(-power);
+        shooter.setPower(power*errorFix);
+        shooter2.setPower(-power*errorFix);
         telemetry.addData("wanted variable", power*6000);
-        telemetry.addData("velocity", shooterVelocity.getVelocityFilter());
+        telemetry.addData("wanted fixed", errorFix*power*6000);
         prevPower = power;
     }
 
@@ -98,8 +98,8 @@ public class Shooter {
         shooter.setPower(Szonedis*errorFix);
         shooter2.setPower(-Szonedis*errorFix);
 
-//        telemetry.addData("velocity shooter ", shooterVelocity.getVelocityFilter());
-//        telemetry.addData("wanted", Szonedis*6000);
+        telemetry.addData("velocity shooter ", shooterVelocity.getVelocityFilter());
+        telemetry.addData("wanted", Szonedis*6000);
     }
     public void stopShooter(){
        shooter.setPower(0);
@@ -219,7 +219,7 @@ public class Shooter {
     public void setShooterTelemetry(Telemetry telemetry){
         telemetry.addData("wanted", Szonedis*6000);
         telemetry.addData("vel",shooterVelocity.getVelocityFilter());
-        telemetry.addData("vel2", shooter2Velocity.getVelocityFilter());
+        telemetry.addData("vel2", Math.abs(shooter2Velocity.getVelocityFilter()));
         telemetry.addData("th",Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000));
         telemetry.addData("pow 1", shooter.getPower());
         telemetry.addData("pow 2", shooter2.getPower());

@@ -24,6 +24,7 @@ public class shooterTest extends OpMode {
             odometry.update();
             shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .05);
             if(gamepad1.a) shooter.noPhysShoot(1);
+//            shooter.shooter2.setPower(0.1);
             dashboardTelemetry.addData("power", shooter.shooter.getPower());
             shooter.setShooterTelemetry(dashboardTelemetry);
             dashboardTelemetry.update();
