@@ -3,6 +3,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -11,36 +12,74 @@ import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
-@Autonomous(name = "EscRedFar")
-public class EscRedFar extends OpMode {
-    private Follower follower;
+@Autonomous(name = "PlanA_Red")
+public class PlanA_Red extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
 
 
 
-    private final Pose startPose = new Pose(74.5, 8, Math.toRadians(0)); // Start Pose of our robot.
-    private final Pose endPose = new Pose(74.5, 54, Math.toRadians(0));
-    private final Pose controlPose = new Pose(70,89);
-
-    private PathChain leavePath;
-
-
-    public void buildPaths() {
-        /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
-        leavePath = follower.pathBuilder()
-                .addPath(new BezierLine(startPose,endPose))
-                .setLinearHeadingInterpolation(startPose.getHeading(),endPose.getHeading())
-                .build();
-    }
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                follower.followPath(leavePath, true);
+                follower.followPath(scorePreload);
                 setPathState(1);
                 break;
-
             case 1:
+                if(!follower.isBusy()) {
+                    follower.followPath(grabGPP);
+                    setPathState(2);
+                }
+                break;
+            case 2:
+                if(!follower.isBusy()) {
+                    follower.followPath(intake1);
+                    setPathState(3);
+                }
+                break;
+            case 3:
+                if(!follower.isBusy()) {
+                    /* Score Preload */
+                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
+                    follower.followPath(scoreGPP);
+                    setPathState(4);
+                }
+                break;
+            case 4:
+                if(!follower.isBusy()){
+                    follower.followPath(grabPPG);
+                    setPathState(5);
+                }
+                break;
+            case 5:
+                if ((!follower.isBusy())){
+                    follower.followPath(intake2);
+                    setPathState(6);
+                }
+                break;
+            case 6:
+                if (!follower.isBusy()){
+                    follower.followPath(scorePPG);
+                    setPathState(7);
+                }break;
+            case 7:
+                if (!follower.isBusy()){
+                    follower.followPath(grabPGP);
+                    setPathState(8);
+                }break;
+            case 8:
+                if ((!follower.isBusy())){
+                    follower.followPath(intake3);
+                    setPathState(9);
+                }
+                break;
+            case 9:
+                if ((!follower.isBusy())){
+                    follower.followPath(autoEnd,true);
+                    setPathState(10);
+                }
+                break;
+            case 10:
                 /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
                 if(!follower.isBusy()) {
                     /* Set the state to a Case we won't use or define, so it just stops running an new paths */
