@@ -14,7 +14,7 @@ public class Intake {
     public static double powerU = 0.5;
     public static double powerD = 0.5;
 
-    public static double thresh = 80;
+    public static double thresh = 83;
     public double wanted;
     public double intakeWanted;
     //Thread thread = Thread.currentThread();

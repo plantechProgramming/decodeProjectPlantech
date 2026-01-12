@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleOp.actions;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,7 +20,7 @@ import dev.nextftc.core.commands.Command;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 100; //og = 35
+    public static double kP = 20; //og = 35
     public static double kI = 0;//0
     public static double kD = 0; //0
     public static double kF = 0; // OG = 7
@@ -46,8 +47,14 @@ public class Shooter {
     public double Szonedis;
     public final double errorFix = 1.18;
     public void noPhysShoot(double x){
+        PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
+
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+
         shooter.setPower(x);
         shooter2.setPower(-x);
+
         telemetry.addData("velocity - firsts", shooter.getVelocity());
         telemetry.addData("velocity shooter 1", shooterVelocity.getVelocityFilter());
         telemetry.addData("velocity shooter 2", Math.abs(shooter2Velocity.getVelocityFilter()));
@@ -55,16 +62,23 @@ public class Shooter {
         telemetry.addData("wanted", x*6000);
     }
 
-    double prevPower = 0;
     int count = 0;
     boolean prevMore = false;
     boolean prevLess = false;
+
+    double power = 0;
     public void variableSpeedShoot(boolean more, boolean less, double jumps){
 
-        double power = 0;
-        if(more){power = prevPower + jumps;}
-        else if(less){power = prevPower - jumps;}
-        else{power = prevPower;}
+        if(more && !prevMore){power += jumps;}
+        else if(less && !prevLess){
+            power -= jumps;
+        }
+        else{
+            telemetry.addData("wanted variable", power*6000);
+            prevLess = less;
+            prevMore = more;
+            return;
+        }
         if (power >= 0.7){
             power = 0.7;
         }
@@ -72,14 +86,13 @@ public class Shooter {
         prevMore = more;
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
 
-//        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-//        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
 
         shooter.setPower(power*errorFix);
         shooter2.setPower(-power*errorFix);
         telemetry.addData("wanted variable", power*6000);
         telemetry.addData("wanted fixed", errorFix*power*6000);
-        prevPower = power;
     }
 
 //    / @param dis: distance from goal

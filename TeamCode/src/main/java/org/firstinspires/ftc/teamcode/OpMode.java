@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.bylazar.gamepad.Gamepad;
 import com.bylazar.gamepad.GamepadManager;
 import com.bylazar.gamepad.PanelsGamepad;
+import com.bylazar.panels.Panels;
+import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -40,7 +42,7 @@ public abstract class OpMode extends LinearOpMode {
     protected Telemetry dashboardTelemetry;
     protected GoBildaPinpointDriver odometry;
     protected IMU Imu;
-    FtcDashboard dashboard;
+    public FtcDashboard dashboard;
 
     void initialize() {
 
@@ -106,7 +108,6 @@ public abstract class OpMode extends LinearOpMode {
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
-
     }
 
     public DcMotorEx initMotor(String name, boolean encoder, boolean reversed){
