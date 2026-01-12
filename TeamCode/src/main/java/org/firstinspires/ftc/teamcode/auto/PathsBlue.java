@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 
 public class PathsBlue {
@@ -14,7 +15,8 @@ public class PathsBlue {
     public final Pose startPoseClose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot for the close position.
     public final Pose startPoseFar = new Pose(62, 8, Math.toRadians(180)); // Start Pose of our robot for the far position.
 
-    public final Pose scorePose = new Pose(47.60172591970307, 95.1073798180677, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    public final Pose scorePose = new Pose(47.5, 95.1, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    private final Pose scorePoseFar = new Pose(62, 16, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public final Pose controlPosePPG = new Pose(70,60);// pose for getting to PPG without hitting other balls
     public final Pose controlPosePGP = new Pose(40,55);// pose for getting to PGP without hitting other balls
     public final Pose GPP = new Pose(40, 37, Math.toRadians(180));
@@ -25,9 +27,10 @@ public class PathsBlue {
 
     public final Pose afterPickupPPG = new Pose(17.5, 84.3, Math.toRadians(180));
     public final Pose afterPickupPGP = new Pose(13, 59, Math.toRadians(180));
-    public final Pose autoEndPose = new Pose(13,59,Math.toRadians(180));
+    public final Pose closeEndLeavePose =  new Pose(62, 121.5, Math.toRadians(180));
 
-    public PathChain scorePreload;
+    public PathChain scorePreloadClose;
+    public PathChain scorePreloadFar;
     public PathChain grabGPP;
     public PathChain scoreGPP;
     public PathChain intakeGPP;
@@ -39,15 +42,20 @@ public class PathsBlue {
     public PathChain grabPGP;
     public PathChain autoEnd;
     public void buildPaths() {
-        /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
-        scorePreload = follower.pathBuilder()
+        /* This is our scorePreloadClose path. We are using a BezierLine, which is a straight line. */
+        scorePreloadClose = follower.pathBuilder()
                 .addPath(new BezierLine(startPoseClose, scorePose))
                 .setLinearHeadingInterpolation(startPoseClose.getHeading(), scorePose.getHeading())
                 .build();
+            scorePreloadFar = follower.pathBuilder()
+                  .addPath(new Path(new BezierLine(startPoseFar, scorePoseFar)))
+                  .setLinearHeadingInterpolation(startPoseFar.getHeading(), scorePoseFar.getHeading())
+                  .build();
+
 
 
     /* Here is an example for Constant Interpolation
-    scorePreload.setConstantInterpolation(startPose.getHeading()); */
+    scorePreloadClose.setConstantInterpolation(startPose.getHeading()); */
 
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         grabGPP = follower.pathBuilder()
@@ -94,8 +102,8 @@ public class PathsBlue {
                 .build();
 
         autoEnd = follower.pathBuilder()
-                .addPath(new BezierLine(afterPickupPGP, autoEndPose))
-                .setLinearHeadingInterpolation(afterPickupPPG.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(afterPickupPGP, closeEndLeavePose))
+                .setLinearHeadingInterpolation(afterPickupPPG.getHeading(), closeEndLeavePose.getHeading())
                 .build();
 
     }

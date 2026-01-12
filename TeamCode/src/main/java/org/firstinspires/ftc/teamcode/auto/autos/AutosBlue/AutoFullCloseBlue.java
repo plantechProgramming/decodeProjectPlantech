@@ -3,11 +3,8 @@ package org.firstinspires.ftc.teamcode.auto.autos.AutosBlue;
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
-import com.pedropathing.paths.PathChain;
+
 import org.firstinspires.ftc.teamcode.auto.PathsBlue;
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
@@ -18,17 +15,16 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
-import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 
-@Autonomous(name = "Plan A Next blue")
-public class PlanANextBlue extends NextFTCOpMode{
+@Autonomous(name = "AutoFullCloseBlue", group = "FullAutos")
+public class AutoFullCloseBlue extends NextFTCOpMode{
 
     private Follower follower;
 
-    public PlanANextBlue() {
+    public AutoFullCloseBlue() {
         addComponents(
                 new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 BulkReadComponent.INSTANCE,
@@ -36,6 +32,8 @@ public class PlanANextBlue extends NextFTCOpMode{
         );
 
     }
+    public final Pose startPoseClose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot for the close position.
+
 
     AutoCommands command = new AutoCommands(follower());
     PathsBlue path = new PathsBlue(follower());
@@ -45,7 +43,7 @@ public class PlanANextBlue extends NextFTCOpMode{
         path.buildPaths();
         return new SequentialGroup(
                 command.startShooter(false),
-                command.score(path.scorePreload),
+                command.score(path.scorePreloadClose),
                 command.intake(path.intakePPG,path.grabPPG,0.72),
 
                 command.score(path.scorePPG),
@@ -58,7 +56,7 @@ public class PlanANextBlue extends NextFTCOpMode{
     @Override
     public void onStartButtonPressed() {
         follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(path.startPose);
+        follower.setStartingPose(startPoseClose);
         path.buildPaths();
         autoRoutine().schedule();
 
