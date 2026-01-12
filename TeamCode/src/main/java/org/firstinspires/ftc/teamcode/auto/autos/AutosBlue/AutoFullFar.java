@@ -17,9 +17,10 @@ import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.ftc.NextFTCOpMode;
 
 @Autonomous(name = "AutoFullFar")
-public class AutoFullFar extends OpMode {
+public class AutoFullFar extends NextFTCOpMode {
     private Follower follower;
 //    public void AutoFullFar() {
 //        addComponents(
@@ -35,7 +36,7 @@ public class AutoFullFar extends OpMode {
     PathsBlue path = new PathsBlue(follower());
 
 
-    public final Pose startPose = new Pose(62, 8, Math.toRadians(180)); // Start Pose of our robot for the far position.
+    public final Pose startPoseFar = new Pose(62, 8, Math.toRadians(180)); // Start Pose of our robot for the far position.
     private final Pose scorePoseFar = new Pose(62, 16, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose scorePose = new Pose(47.60172591970307, 95.1073798180677, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     private final Pose controlPose = new Pose(50,60);// pose for getting to GPP without hitting other balls
@@ -58,8 +59,8 @@ public class AutoFullFar extends OpMode {
 
     public void buildPaths() {
         /* This is our scorePreloadClose path. We are using a BezierLine, which is a straight line. */
-        scorePreload = new Path(new BezierLine(startPose, scorePoseFar));
-        scorePreload.setLinearHeadingInterpolation(startPose.getHeading(), scorePoseFar.getHeading());
+        scorePreload = new Path(new BezierLine(startPoseFar, scorePoseFar));
+        scorePreload.setLinearHeadingInterpolation(startPoseFar.getHeading(), scorePoseFar.getHeading());
 
     /* Here is an example for Constant Interpolation
     scorePreloadClose.setConstantInterpolation(startPose.getHeading()); */
@@ -112,146 +113,29 @@ public class AutoFullFar extends OpMode {
 ////        NextShooter.INSTANCE.naiveShooter(false).invoke()
 //        );
 //    }
-    public void autonomousPathUpdate() {
-        switch (pathState) {
-            case 0:
-            follower.followPath(scorePreload);
-               setPathState(1);
-                break;
-            case 1:
-                if(!follower.isBusy()) {
-                    follower.followPath(grabGPP);
+public Command autoRoutine(){
+    path.buildPaths();
+    return new SequentialGroup(
+            command.startShooter(false),
+            command.score(path.scorePreloadFar),
+            command.intake(path.intakePPG,path.grabPPG,0.72),
 
-                    setPathState(2);
-                }
-                break;
-            case 2:
-                if(!follower.isBusy()) {
-                    follower.followPath(intake1);
-                    setPathState(3);
-                }
-                break;
-            case 3:
-                if(!follower.isBusy()) {
-                    /* Score Preload */
-                    /* Since this is a pathChain, we can have Pedro hold the end point while we are grabbing the sample */
-                    follower.followPath(scoreGPP);
-                    setPathState(4);
-                }
-                break;
-            case 4:
-                if(!follower.isBusy()){
-                    follower.followPath(grabPPG);
-                    setPathState(5);
-                }
-                break;
-            case 5:
-                if ((!follower.isBusy())){
-                    follower.followPath(intake2);
-                    setPathState(6);
-                }
-                break;
-            case 6:
-                if (!follower.isBusy()){
-                    follower.followPath(scorePGP);
-                    setPathState(7);
-                }break;
-            case 7:
-                if (!follower.isBusy()){
-                    follower.followPath(grabPGP);
-                    setPathState(8);
-                }break;
-            case 8:
-                if ((!follower.isBusy())){
-                    follower.followPath(intake3);
-                    setPathState(9);
-                }
-                break;
-            case 9:
-                if ((!follower.isBusy())){
-                    follower.followPath(autoEnd,true);
-                    setPathState(10);
-                }
-                break;
-            case 10:
-                /* This case checks the robot's position and will wait until the robot position is close (1 inch away) from the scorePose's position */
-                if(!follower.isBusy()) {
-                    /* Set the state to a Case we won't use or define, so it just stops running an new paths */
-                    setPathState(-1);
-                }
-                break;
-        }
-    }
-    /** These change the states of the paths and actions. It will also reset the timers of the individual switches **/
-    public void setPathState(int pState) {
-        pathState = pState;
-        pathTimer.resetTimer();
-    }
-    /** This is the main loop of the OpMode, it will run repeatedly after clicking "Play". **/
-@Override
-public void loop() {
+            command.score(path.scorePPG),
+            command.intake(path.intakePGP,path.grabPGP,0.72),
 
-        // These loop the movements of the robot, these must be called continuously in order to work
-        follower.update();
-        autonomousPathUpdate();
-
-        // Feedback to Driver Hub for debugging
-        telemetry.addData("path state", pathState);
-        telemetry.addData("x", follower.getPose().getX());
-        telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
-        telemetry.update();
-    }
-
-    /** This method is called once at the init of the OpMode. **/
+            command.score(path.scorePGP),
+            command.intake(path.intakeGPP, path.grabGPP, 0.72)
+    );
+}
     @Override
-    public void init() {
-        pathTimer = new Timer();
-        opmodeTimer = new Timer();
-        opmodeTimer.resetTimer();
-
-
+    public void onStartButtonPressed() {
         follower = Constants.createFollower(hardwareMap);
-        buildPaths();
-        follower.setStartingPose(startPose);
+        follower.setStartingPose(startPoseFar);
+        command = new AutoCommands(follower);
+        path = new PathsBlue(follower());
+        path.buildPaths();
+        autoRoutine().schedule();
 
     }
-
-    /** This method is called continuously after Init while waiting for "play". **/
-    @Override
-    public void init_loop() {}
-
-    /** This method is called once at the start of the OpMode.
-     * It runs all the setup actions, including building paths and starting the path system **/
-    @Override
-    public void start() {
-        opmodeTimer.resetTimer();
-        setPathState(0);
-    }
-
-    /** We do not use this because everything should automatically disable **/
-    @Override
-    public void stop() {}
-    public Command autoRoutine(){
-        return new SequentialGroup(
-                command.startShooter(false),
-                command.score(path.scorePreloadClose),
-                command.intake(path.intakePPG,path.grabPPG,0.72),
-
-                command.score(path.scorePPG),
-                command.intake(path.intakePGP,path.grabPGP,0.72),
-
-                command.score(path.scorePGP),
-                command.intake(path.intakeGPP, path.grabGPP, 0.72)
-        );
-    }
-//    @Override
-//    public void onStartButtonPressed() {
-//        follower = Constants.createFollower(hardwareMap);
-//        follower.setStartingPose(path.startPoseClose);
-//        path.buildPaths();
-//        autoRoutine().schedule();
-//
-//    }
 
 }

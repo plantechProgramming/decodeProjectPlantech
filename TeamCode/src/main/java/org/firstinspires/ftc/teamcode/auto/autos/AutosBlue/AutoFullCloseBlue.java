@@ -35,8 +35,8 @@ public class AutoFullCloseBlue extends NextFTCOpMode{
     public final Pose startPoseClose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot for the close position.
 
 
-    AutoCommands command = new AutoCommands(follower());
-    PathsBlue path = new PathsBlue(follower());
+    AutoCommands command;
+    PathsBlue path ;
 
 
     public Command autoRoutine(){
@@ -57,6 +57,8 @@ public class AutoFullCloseBlue extends NextFTCOpMode{
     public void onStartButtonPressed() {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startPoseClose);
+        command = new AutoCommands(follower);
+        path = new PathsBlue(follower());
         path.buildPaths();
         autoRoutine().schedule();
 
