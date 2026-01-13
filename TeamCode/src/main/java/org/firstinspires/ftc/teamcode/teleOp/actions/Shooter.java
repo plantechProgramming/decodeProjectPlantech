@@ -21,8 +21,8 @@ public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
     public static double kP = 215; //og = 215
-    public static double kI = 0.5;//0
-    public static double kD = 1; //0
+    public static double kI = 0.5;//0.5
+    public static double kD = 0; //0
     public static double kF = 14.5; // OG = 14.5
     GetVelocity shooterVelocity;
     GetVelocity shooter2Velocity;
@@ -45,7 +45,7 @@ public class Shooter {
     final int MAX_RPM = 6000;
 
     public double Szonedis;
-    public final double errorFix = 1.18;
+    public final double errorFix = 1.18; // og = 1.18
     public void noPhysShoot(double x){
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
 
@@ -247,7 +247,7 @@ public class Shooter {
     }
 
     public boolean isUpToSpeed(){
-        double threshold = 150; //TODO: tune!! should be the biggest reliably scoring value
+        double threshold = 130; //TODO: tune!! should be the biggest reliably scoring value
         return Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000) < threshold;
     }
     public void out(){

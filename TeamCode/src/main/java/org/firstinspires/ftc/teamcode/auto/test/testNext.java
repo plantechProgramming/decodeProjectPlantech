@@ -38,11 +38,10 @@ public class testNext extends NextFTCOpMode {
         );
 
     }
-    AutoCommands command = new AutoCommands(null);
+//    AutoCommands command = new AutoCommands(null);
     private Command autonomousRoutine() {
         return new SequentialGroup(
-                command.shoot(),
-                new Delay(5)
+                NextShooter.INSTANCE.naiveShooter(false).perpetually()
         );
     }
     @Override
