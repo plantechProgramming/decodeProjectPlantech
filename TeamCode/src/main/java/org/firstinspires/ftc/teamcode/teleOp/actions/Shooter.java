@@ -20,10 +20,10 @@ import dev.nextftc.core.commands.Command;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 20; //og = 35
-    public static double kI = 0;//0
-    public static double kD = 0; //0
-    public static double kF = 0; // OG = 7
+    public static double kP = 215; //og = 215
+    public static double kI = 0.5;//0
+    public static double kD = 1; //0
+    public static double kF = 14.5; // OG = 14.5
     GetVelocity shooterVelocity;
     GetVelocity shooter2Velocity;
 
@@ -94,7 +94,11 @@ public class Shooter {
         telemetry.addData("wanted variable", power*6000);
         telemetry.addData("wanted fixed", errorFix*power*6000);
     }
-
+    public void setDashBoardPID(){
+        PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+    }
 //    / @param dis: distance from goal
     /// shoots with different powers depending on what launch zone youre in
     // TODO: make depend on odo vals, closed loop control for values

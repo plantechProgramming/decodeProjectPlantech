@@ -17,7 +17,6 @@ public class shooterTest extends OpMode {
         odometry.resetPosAndIMU();
     }
 
-    public static double bla = 67;
 
     @Override
     protected void run() {
@@ -25,6 +24,9 @@ public class shooterTest extends OpMode {
         while(opModeIsActive()){
             odometry.update();
             shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .05);
+            if(gamepad1.a){
+                shooter.setDashBoardPID();
+            }
 //            if(gamepad1.a) shooter.noPhysShoot(0.5);
 //            shooter.shooter2.setPower(0.1);
             dashboardTelemetry.addData("power", shooter.shooter.getPower());

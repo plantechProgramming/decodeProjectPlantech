@@ -65,7 +65,7 @@ public class PlanANextBlue extends NextFTCOpMode{
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startPose);
         command = new AutoCommands(follower);
-        path = new PathsBlue(follower());
+        path = new PathsBlue(follower);
         path.buildPaths();
         autoRoutine().schedule();
 
