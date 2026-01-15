@@ -19,10 +19,10 @@ public class PathsBlue {
     public final Pose PPG = new Pose(42, 84.3, Math.toRadians(180));
     public final Pose PGP = new Pose(41.5, 60, Math.toRadians(180));
 
-    public final Pose afterPickupGPP = new Pose(12, 35, Math.toRadians(180));
+    public final Pose afterPickupGPP = new Pose(12, 36, Math.toRadians(180));
 
     public final Pose afterPickupPPG = new Pose(17.5, 84.3, Math.toRadians(180));
-    public final Pose afterPickupPGP = new Pose(13, 59, Math.toRadians(180));
+    public final Pose afterPickupPGP = new Pose(13, 60, Math.toRadians(180));
     public final Pose autoEndPose = new Pose(13,59,Math.toRadians(180));
 
     public PathChain scorePreload;

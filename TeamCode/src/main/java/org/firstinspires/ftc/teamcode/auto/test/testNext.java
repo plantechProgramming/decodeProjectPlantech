@@ -19,6 +19,8 @@ import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
+import dev.nextftc.core.commands.groups.ParallelGroup;
+import dev.nextftc.core.commands.groups.ParallelRaceGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
@@ -33,15 +35,17 @@ public class testNext extends NextFTCOpMode {
 
     public testNext() {
         addComponents(
-                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
-                BulkReadComponent.INSTANCE
+//                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE, NextIntake.INSTANCE),
+//                BulkReadComponent.INSTANCE
         );
 
     }
-//    AutoCommands command = new AutoCommands(null);
+    AutoCommands command = new AutoCommands(null);
     private Command autonomousRoutine() {
         return new SequentialGroup(
-                NextShooter.INSTANCE.naiveShooter(false).perpetually()
+                command.startShooter(false),
+                command.shoot()
+
         );
     }
     @Override

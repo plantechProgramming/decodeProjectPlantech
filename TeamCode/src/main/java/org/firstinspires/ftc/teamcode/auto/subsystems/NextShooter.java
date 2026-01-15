@@ -1,22 +1,10 @@
 package org.firstinspires.ftc.teamcode.auto.subsystems;
 
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
-import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
@@ -28,6 +16,7 @@ import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.core.units.Distance;
+import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
 import dev.nextftc.hardware.positionable.SetPosition;
@@ -35,74 +24,67 @@ import dev.nextftc.hardware.powerable.SetPower;
 
 public class NextShooter implements Subsystem {
     public static final NextShooter INSTANCE = new NextShooter();
-    public NextShooter() { }
+    public NextShooter() {
+    }
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry =  dashboard.getTelemetry();
     private MotorEx shooter1 = new MotorEx("shooter");
     private MotorEx shooter2 = new MotorEx("shooter2");
-    double Szonedis = 0.55;
-    double errorFix = 1.375;
+
+    double Szonedis = 1;
+    double kp = 0.01, ki = 0, kd = 0, kf = 0;
     ControlSystem controlSystem = ControlSystem.builder()//next pid
-            .posPid(65, 1, 8)
+            .velPid(kp, ki, kd)
+            .basicFF(0,0,kf)
             .build();
 
     public Command naiveShooter(boolean far) {
-        if (!far) {
-            Szonedis = .47;
-        } else {
-            Szonedis = 0.56;
-        }
-        controlSystem.setGoal(new KineticState(0,Szonedis*errorFix,0));
-
         return new InstantCommand(
-                        () -> {
-                        shooter1.setPower(Szonedis*errorFix);
-                        shooter2.setPower(-Szonedis*errorFix);
-                        dashboardTelemetry.addData("power: ", shooter1.getPower());
-                        dashboardTelemetry.addData("vel", shooter1.getCurrentPosition());
-                        dashboardTelemetry.addData("Szonedis*errorFix",Szonedis*errorFix);
-                        dashboardTelemetry.update();
-                        }
-
-                );
-
-    }
-    public Command setPowerPID(MotorEx motor, MotorEx motor2){
-        KineticState state = new KineticState(motor.getCurrentPosition(), motor.getVelocity(),0);
-        KineticState state2 = new KineticState(motor2.getCurrentPosition(), motor2.getVelocity(),0);
-        return new ParallelGroup(
-                new SetPower(motor, controlSystem.calculate(state)),
-                new SetPower(motor2, controlSystem.calculate(state2))
+                () -> {
+                    if (!far) {
+                        Szonedis = 0.47;
+                    } else {
+                        Szonedis = 0.53;
+                    }
+                    controlSystem.setGoal(new KineticState(0, powerToTicks(Szonedis)));
+                }
         );
     }
-//    MotorEx motor;
-//    double alpha;
-//    private static final ElapsedTime timer = new ElapsedTime();
-//    public long prevEncoder = 0;
-//    public long curEncoder;
-//    public double prevTime = 0;
-//    public double curTime;
-//    int ticksPerRevolution = 28;
-//    int millisecondsToMinute = 60000;
-//    double prevVelocity = 0;
-//
-//    public double getVelocityFilter() {
-//        double curEncoder = motor.getCurrentPosition();
-//        curTime = timer.milliseconds();
-//
-//        double timeDiff = curTime - prevTime;
-//        double encoderDiff = curEncoder - prevEncoder;
-//
-//        double tickVelocity = encoderDiff / timeDiff; // ticks/milliseconds
-//        double velocity = (tickVelocity * millisecondsToMinute) / ticksPerRevolution;
-//
-//        prevTime = curTime;
-//        prevEncoder = curEncoder;
-//        double filteredVelocity = filtered(alpha, velocity, prevVelocity);
-//        prevVelocity = filteredVelocity;
-//        return filteredVelocity;
-//    }
-//    public double filtered(double alpha, double val, double prevVal){
-//        return alpha * val + (1 - alpha) * prevVal;
-//    }
+    double diameter = 0.096;
+    double TICK_PER_REV = 28;
+    double powerToTicks(double power){
+        double rpm = power*6000;
+        double rotPerSec = rpm/60;
+        return TICK_PER_REV*rotPerSec; // rotations per second*amt of ticks per turn
+    }
+    double ticksToRPM(double ticks){
+        double tickPerMin = ticks*60;
+        return tickPerMin/TICK_PER_REV;
+    }
+
+    public void setTelemetry(Telemetry telemetry){
+        telemetry.addData("wanted", ticksToRPM(controlSystem.getGoal().getVelocity()));
+        telemetry.addData("vel",ticksToRPM(shooter1.getVelocity()));
+        telemetry.addData("vel2", ticksToRPM(shooter2.getVelocity()));
+        telemetry.addData("szonedis", Szonedis);
+        telemetry.update();
+    }
+    public void setPowerPID(MotorEx motor, MotorEx motor2){
+        KineticState state = motor.getState();
+        KineticState state2 = motor2.getState();
+        motor.setPower(controlSystem.calculate(state));
+        motor2.setPower(-controlSystem.calculate(state2));
+    }
+
+    @Override
+    public void initialize(){
+        shooter1.setPower(0);
+        shooter2.setPower(0);
+    }
+
+    @Override
+    public void periodic(){
+        setPowerPID(shooter1, shooter2);
+        setTelemetry(dashboardTelemetry);
+    }
 }

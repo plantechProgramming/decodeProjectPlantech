@@ -36,24 +36,25 @@ public class TeleOpBlue extends OpMode {
         //TODO: pinpoint
         Imu.resetYaw();
     }
+
     public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0);
     private VisionPortal visionPortal;
     private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
-//    public void setOdometryStartPos(){
-//        double startX = odometry.getPosX(DistanceUnit.INCH);
-//        double startY = odometry.getPosY(DistanceUnit.INCH);
-//        Pose startPos = new Pose(startX,startY,odometry.getHeading(AngleUnit.RADIANS));
-//        Pose2D poseFTC = PoseConverter.poseToPose2D(startPos, FTCCoordinates.INSTANCE);
-//        telemetry.addData("x", poseFTC.getX(DistanceUnit.CM));
-//        telemetry.addData("y", poseFTC.getY(DistanceUnit.CM));
-//        telemetry.addData("heading", poseFTC.getHeading(AngleUnit.DEGREES));
-//
-//        double x = poseFTC.getX(DistanceUnit.CM), y = poseFTC.getY(DistanceUnit.CM);
-//        double heading = poseFTC.getHeading(AngleUnit.DEGREES);
-//        Pose2D fixedPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,heading-90);
-//    //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
-//        odometry.setPosition(fixedPose);//TODO: change here for red
-//    }
+    public void setOdometryStartPos(){
+        double startX = odometry.getPosX(DistanceUnit.INCH);
+        double startY = odometry.getPosY(DistanceUnit.INCH);
+        Pose startPos = new Pose(startX,startY,odometry.getHeading(AngleUnit.RADIANS));
+        Pose2D poseFTC = PoseConverter.poseToPose2D(startPos, FTCCoordinates.INSTANCE);
+        telemetry.addData("x", poseFTC.getX(DistanceUnit.CM));
+        telemetry.addData("y", poseFTC.getY(DistanceUnit.CM));
+        telemetry.addData("heading", poseFTC.getHeading(AngleUnit.DEGREES));
+
+        double x = poseFTC.getX(DistanceUnit.CM), y = poseFTC.getY(DistanceUnit.CM);
+        double heading = poseFTC.getHeading(AngleUnit.DEGREES);
+        Pose2D fixedPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,heading-90);
+    //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
+        odometry.setPosition(fixedPose);//TODO: change here for red
+    }
 
     @Override
     public void run(){
@@ -63,8 +64,6 @@ public class TeleOpBlue extends OpMode {
         //ColorSensorTest cSensor = new ColorSensorTest();
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
 
-//        setOdometryStartPos();
-        odometry.resetPosAndIMU();
 
         //TODO: find why didnt work outside
         AprilTagLocalization test = new AprilTagLocalization("BLUE"); //TODO: change here for red
@@ -82,7 +81,7 @@ public class TeleOpBlue extends OpMode {
         visionPortal = builder.build();
 
 
-
+        odometry.resetPosAndIMU();
 
 //        AprilTagProcessor aprilTag = test.initAprilTag();
 //
@@ -103,7 +102,6 @@ public class TeleOpBlue extends OpMode {
             AprilTagDetection goalTag = test.specialDetection;
 //            test.telemetryAprilTag(aprilTag);
             test.detectTags(aprilTag);
-
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleOp.actions;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -150,6 +151,24 @@ public class DriveTrain {
         telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
         telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
         telemetry.addData("is far", isFar());
+    }
+    public Pose2D PedroPoseConverter(){
+        double lenField = 365.76; // 144 inch to cm
+        double startX = odometry.getPosX(DistanceUnit.CM);
+        double newstartX = -(lenField/2 - startX);
+        double startY = odometry.getPosY(DistanceUnit.CM);
+        double startHed = odometry.getHeading(AngleUnit.DEGREES);
+        double newstartY = -(lenField/2 - startY);
+        if( startX < lenField/2){
+            newstartX = startX - lenField/2;
+        }
+        if( startY < lenField/2){
+            newstartY = startY - lenField/2 ;
+        }
+        double newStartHed = startHed - 180;
+        return new Pose2D(DistanceUnit.CM, newstartX, newstartY, AngleUnit.DEGREES, newStartHed);
+
+
     }
 }
 

@@ -47,7 +47,6 @@ public class PlanANextBlue extends NextFTCOpMode{
 
 
     public Command autoRoutine(){
-        path.buildPaths();
         return new SequentialGroup(
                 command.startShooter(false),
                 command.score(path.scorePreload),
@@ -68,7 +67,6 @@ public class PlanANextBlue extends NextFTCOpMode{
         path = new PathsBlue(follower);
         path.buildPaths();
         autoRoutine().schedule();
-
     }
 
 }

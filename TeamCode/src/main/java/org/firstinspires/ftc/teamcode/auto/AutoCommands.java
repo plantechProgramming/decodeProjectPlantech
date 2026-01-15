@@ -18,6 +18,7 @@ import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.components.Component;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.ftc.NextFTCOpMode;
@@ -38,8 +39,9 @@ public class AutoCommands{
     }
 
     public Command shoot(){
-        return new ParallelGroup( // take just moves intake motor, so should be parallel
+        return new SequentialGroup( // take just moves intake motor, so should be parallel
                 inBetween.inBetweenInFull(),
+                new Delay(1),
                 intake.take()
         );
     }
@@ -55,16 +57,13 @@ public class AutoCommands{
     public Command intake(PathChain intakePath,PathChain toGrabPath, double speed){
         return new SequentialGroup(
                 new FollowPath(toGrabPath),
-
                 inBetween.inBetweenInPart(),
                 intake.take() ,
                 new FollowPath(intakePath, true,speed),
                 stopAll()
         );
     }
-    private Command onStart() {
-        return startShooter(false);
-    }
+
     public Command startShooter(boolean far){
         return new SequentialGroup(
                 shooter.naiveShooter(far),
