@@ -35,17 +35,16 @@ public class testNext extends NextFTCOpMode {
 
     public testNext() {
         addComponents(
-//                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE, NextIntake.INSTANCE),
-//                BulkReadComponent.INSTANCE
+                BulkReadComponent.INSTANCE,
+                AutoCommands.INSTANCE
         );
 
     }
-    AutoCommands command = new AutoCommands(null);
+    AutoCommands command = AutoCommands.INSTANCE;
     private Command autonomousRoutine() {
         return new SequentialGroup(
                 command.startShooter(false),
                 command.shoot()
-
         );
     }
     @Override

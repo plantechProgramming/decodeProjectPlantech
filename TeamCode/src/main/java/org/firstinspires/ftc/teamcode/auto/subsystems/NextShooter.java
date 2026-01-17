@@ -31,9 +31,10 @@ public class NextShooter implements Subsystem {
     private MotorEx shooter1 = new MotorEx("shooter");
     private MotorEx shooter2 = new MotorEx("shooter2");
 
-    double Szonedis = 1;
+
+    double Szonedis = 0.5;
     double kp = 0.01, ki = 0, kd = 0, kf = 0;
-    ControlSystem controlSystem = ControlSystem.builder()//next pid
+    ControlSystem controlSystem = ControlSystem.builder() // next pid
             .velPid(kp, ki, kd)
             .basicFF(0,0,kf)
             .build();
@@ -65,7 +66,9 @@ public class NextShooter implements Subsystem {
     public void setTelemetry(Telemetry telemetry){
         telemetry.addData("wanted", ticksToRPM(controlSystem.getGoal().getVelocity()));
         telemetry.addData("vel",ticksToRPM(shooter1.getVelocity()));
-        telemetry.addData("vel2", ticksToRPM(shooter2.getVelocity()));
+        telemetry.addData("vel2", -ticksToRPM(shooter2.getVelocity()));
+        telemetry.addData("measured pow", shooter1.getPower());
+        telemetry.addData("goal", controlSystem.getGoal());
         telemetry.addData("szonedis", Szonedis);
         telemetry.update();
     }
@@ -74,17 +77,29 @@ public class NextShooter implements Subsystem {
         KineticState state2 = motor2.getState();
         motor.setPower(controlSystem.calculate(state));
         motor2.setPower(-controlSystem.calculate(state2));
+        dashboardTelemetry.addData("pow", controlSystem.calculate(state));
     }
 
-    @Override
-    public void initialize(){
-        shooter1.setPower(0);
-        shooter2.setPower(0);
+    public Command setPow(){
+        return new ParallelGroup(
+                new SetPower(shooter1, Szonedis),
+                new SetPower(shooter2, -Szonedis)
+        );
     }
 
-    @Override
-    public void periodic(){
-        setPowerPID(shooter1, shooter2);
+
+    // NOT subsystem periodic func, with normal periodic it initialized szonedis to 1 every second
+    // loop
+    public void Periodic(){
+//        setPowerPID(shooter1, shooter2);
+//        shooter1.setPower(Szonedis);
+//        shooter2.setPower(-Szonedis);
+        setPow().schedule();
         setTelemetry(dashboardTelemetry);
+    }
+
+    public void end(){
+        shooter2.setPower(0);
+        shooter1.setPower(0);
     }
 }

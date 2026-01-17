@@ -12,7 +12,7 @@ public class NextInBetween implements Subsystem {
     CRServoEx ibl = new CRServoEx("IBL")
             ,ibr = new CRServoEx("IBR")
             ,sl = new CRServoEx("SIBL")
-            ,sr = new CRServoEx("SIBR"); //ib = inbetween, s = shooter
+            ,sr = new CRServoEx("SIBR"); // ib = inbetween, s = shooter
 
     public Command inBetweenInFull(){
         return new ParallelGroup(

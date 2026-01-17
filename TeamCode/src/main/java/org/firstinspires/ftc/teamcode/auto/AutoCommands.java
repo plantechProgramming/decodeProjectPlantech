@@ -25,12 +25,13 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.impl.MotorEx;
 
-public class AutoCommands{
+public class AutoCommands implements Component{
     int threshold = 250;
     NextShooter shooter;
     NextIntake intake;
     NextInBetween inBetween;
     Follower follower;
+
     public AutoCommands(Follower follower) {
         shooter = new NextShooter();
         intake = new NextIntake();
@@ -38,8 +39,16 @@ public class AutoCommands{
         this.follower = follower;
     }
 
+    public AutoCommands(){
+        shooter = new NextShooter();
+        intake = new NextIntake();
+        inBetween = new NextInBetween();
+    }
+
+    public static final AutoCommands INSTANCE = new AutoCommands();
+
     public Command shoot(){
-        return new SequentialGroup( // take just moves intake motor, so should be parallel
+        return new SequentialGroup(
                 inBetween.inBetweenInFull(),
                 new Delay(1),
                 intake.take()
@@ -58,7 +67,7 @@ public class AutoCommands{
         return new SequentialGroup(
                 new FollowPath(toGrabPath),
                 inBetween.inBetweenInPart(),
-                intake.take() ,
+                intake.take(),
                 new FollowPath(intakePath, true,speed),
                 stopAll()
         );
@@ -84,6 +93,19 @@ public class AutoCommands{
                 intake.take()
         );
     }
+
+    @Override
+    public void postUpdate(){
+        shooter.Periodic();
+    }
+
+    @Override
+    public void postStop(){
+        shooter.end();
+        intake.stop();
+        inBetween.stop();
+    }
+
 }
 
 

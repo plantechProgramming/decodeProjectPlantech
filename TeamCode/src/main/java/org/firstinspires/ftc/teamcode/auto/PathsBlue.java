@@ -11,13 +11,13 @@ public class PathsBlue {
     public PathsBlue(Follower follower){
         this.follower = follower;
     }
-    public final Pose startPose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot.
-    public final Pose scorePose = new Pose(47.60172591970307, 95.1073798180677, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    public final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
+    public final Pose scorePose = new Pose(50, 97.2, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public final Pose controlPosePPG = new Pose(70,60);// pose for getting to PPG without hitting other balls
     public final Pose controlPosePGP = new Pose(40,55);// pose for getting to PGP without hitting other balls
     public final Pose GPP = new Pose(40, 37, Math.toRadians(180));
     public final Pose PPG = new Pose(42, 84.3, Math.toRadians(180));
-    public final Pose PGP = new Pose(41.5, 60, Math.toRadians(180));
+    public final Pose PGP = new Pose(42, 60, Math.toRadians(180));
 
     public final Pose afterPickupGPP = new Pose(12, 36, Math.toRadians(180));
 

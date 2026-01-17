@@ -34,16 +34,15 @@ public class PlanANextBlue extends NextFTCOpMode{
 
     public PlanANextBlue() {
         addComponents(
-                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
-                BulkReadComponent.INSTANCE,
-                new PedroComponent(Constants::createFollower)
+//                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
+                new PedroComponent(Constants::createFollower),
+                AutoCommands.INSTANCE
         );
-
     }
 
-    AutoCommands command;
+    AutoCommands command = AutoCommands.INSTANCE;
     PathsBlue path;
-    public final Pose startPose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot.
+    public final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
 
 
     public Command autoRoutine(){
@@ -59,11 +58,17 @@ public class PlanANextBlue extends NextFTCOpMode{
                 command.intake(path.intakeGPP, path.grabGPP, 0.72)
         );
     }
+//    @Override
+//    public void onUpdate(){
+//        telemetry.addData("x", follower().getPose().getX());
+//        telemetry.addData("y", follower().getPose().getY());
+//        telemetry.addData("heading", follower().getPose().getHeading());
+//    }
     @Override
     public void onStartButtonPressed() {
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startPose);
-        command = new AutoCommands(follower);
+
         path = new PathsBlue(follower);
         path.buildPaths();
         autoRoutine().schedule();
