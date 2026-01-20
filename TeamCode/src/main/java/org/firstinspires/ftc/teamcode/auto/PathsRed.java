@@ -33,12 +33,12 @@ public class PathsRed {
     private PathChain grabGPP, intake1, scoreGPP,intake2, intake3, grabPPG, scorePPG, grabPGP, autoEnd;
 
     public void buildPaths() {
-        /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
+        /* This is our scorePreloadClose path. We are using a BezierLine, which is a straight line. */
         scorePreload = new Path(new BezierLine(startPoseClose, scorePose));
         scorePreload.setLinearHeadingInterpolation(startPoseClose.getHeading(), scorePose.getHeading());
 
     /* Here is an example for Constant Interpolation
-    scorePreload.setConstantInterpolation(startPose.getHeading()); */
+    scorePreloadClose.setConstantInterpolation(startPose.getHeading()); */
 
         /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         grabGPP = follower.pathBuilder()

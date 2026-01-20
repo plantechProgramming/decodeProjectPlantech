@@ -1,37 +1,35 @@
 package org.firstinspires.ftc.teamcode.auto.autos.AutosBlue; // make sure this aligns with class location
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.auto.PathsBlue;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
-import dev.nextftc.extensions.pedro.FollowPath;
-
-@Autonomous(name = "EscBlue")
-public class EscBlue extends OpMode {
+@Autonomous(name = "LeaveCloseBlue", group = "LeaveAutos")
+public class LeaveCloseBlue extends OpMode {
     private Follower follower;
+//    PathsBlue path = new PathsBlue(follower);
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
 
 
     private final Pose startPose = new Pose(19, 121.5, Math.toRadians(144)); // Start Pose of our robot.
-    private final Pose endPose = new Pose(55.5, 61, Math.toRadians(180));
-        private final Pose controlPose = new Pose(70,89);
-
+    public final Pose closeEndLeavePose =  new Pose(62, 121.5, Math.toRadians(180));
+//        private final Pose controlPose = new Pose(70,89);
+//
     private PathChain leavePath;
 
 
     public void buildPaths() {
-        /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
+        /* This is our scorePreloadClose path. We are using a BezierLine, which is a straight line. */
         leavePath = follower.pathBuilder()
-                .addPath(new BezierCurve(startPose,controlPose,endPose))
-                .setLinearHeadingInterpolation(startPose.getHeading(),endPose.getHeading())
+                .addPath(new BezierCurve(startPose,closeEndLeavePose))
+                .setLinearHeadingInterpolation(startPose.getHeading(),closeEndLeavePose.getHeading())
                 .build();
     }
     public void autonomousPathUpdate() {

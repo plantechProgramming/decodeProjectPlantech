@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.auto.autos.AutosBlue; // make sure this aligns with class location
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
@@ -10,8 +9,8 @@ import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
-@Autonomous(name = "EscBlueFar")
-public class EscBlueFar extends OpMode {
+@Autonomous(name = "LeaveFarBlue", group = "LeaveAutos")
+public class LeaveFarBlue extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
@@ -19,14 +18,14 @@ public class EscBlueFar extends OpMode {
 
 
     private final Pose startPose = new Pose(62, 8, Math.toRadians(180)); // Start Pose of our robot.
-    private final Pose endPose = new Pose(62, 54, Math.toRadians(180));
+    private final Pose endPose = new Pose(35, 10, Math.toRadians(180));
     private final Pose controlPose = new Pose(70,89);
 
     private PathChain leavePath;
 
 
     public void buildPaths() {
-        /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
+        /* This is our scorePreloadClose path. We are using a BezierLine, which is a straight line. */
         leavePath = follower.pathBuilder()
                 .addPath(new BezierLine(startPose,endPose))
                 .setLinearHeadingInterpolation(startPose.getHeading(),endPose.getHeading())
