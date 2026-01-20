@@ -52,7 +52,7 @@ public class LeaveClosePreRed extends NextFTCOpMode {
                 .addPath(new BezierLine(startPose,scorePose))
                 .setLinearHeadingInterpolation(startPose.getHeading(),scorePose.getHeading())
                 .build();
-        leavePath = follower().pathBuilder()
+        leavePath = follower().pathBuilder()k
                 .addPath(new BezierLine(scorePose,endPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(),endPose.getHeading())
                 .build();
