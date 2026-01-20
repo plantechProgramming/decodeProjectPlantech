@@ -1,28 +1,25 @@
-package org.firstinspires.ftc.teamcode.auto.autos; // make sure this aligns with class location
+package org.firstinspires.ftc.teamcode.auto.autos.blueAutos.old; // make sure this aligns with class location
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
-@Autonomous(name = "EscRed")
-public class EscRed extends OpMode {
+@Autonomous(name = "EscBlueFar")
+public class EscBlueFar extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
 
 
 
-    private final Pose startPose = new Pose(122.5, 123.5, Math.toRadians(36)); // Start Pose of our robot.
-    private final Pose endPose = new Pose(74.5, 61, Math.toRadians(0));
-    private final Pose controlPose = new Pose(75,81);
+    private final Pose startPose = new Pose(62, 8, Math.toRadians(180)); // Start Pose of our robot.
+    private final Pose endPose = new Pose(62, 54, Math.toRadians(180));
+    private final Pose controlPose = new Pose(70,89);
 
     private PathChain leavePath;
 
@@ -30,16 +27,14 @@ public class EscRed extends OpMode {
     public void buildPaths() {
         /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
         leavePath = follower.pathBuilder()
-                .addPath(new BezierCurve(startPose, controlPose, endPose))
+                .addPath(new BezierLine(startPose,endPose))
                 .setLinearHeadingInterpolation(startPose.getHeading(),endPose.getHeading())
                 .build();
-//        leavePath.setLinearHeadingInterpolation(startPose.getHeading(), endPose.getHeading());
-
     }
     public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
-                follower.followPath(leavePath);
+                follower.followPath(leavePath, true);
                 setPathState(1);
                 break;
 

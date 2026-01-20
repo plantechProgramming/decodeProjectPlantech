@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.autos; // make sure this aligns with class location
+package org.firstinspires.ftc.teamcode.auto.autos.blueAutos.old; // make sure this aligns with class location
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -9,14 +9,7 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
-import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
-
-import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.delays.Delay;
-import dev.nextftc.core.commands.groups.SequentialGroup;
-import dev.nextftc.extensions.pedro.FollowPath;
 
 @Autonomous(name = "PlanA_Blue")
 public class PlanA_Blue extends OpMode {

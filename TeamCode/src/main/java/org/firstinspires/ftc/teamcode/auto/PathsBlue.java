@@ -15,6 +15,7 @@ public class PathsBlue {
     public final Pose scorePose = new Pose(47.5, 96, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public final Pose controlPosePPG = new Pose(70,60);// pose for getting to PPG without hitting other balls
     public final Pose controlPosePGP = new Pose(40,55);// pose for getting to PGP without hitting other balls
+    public final Pose leaveClosePose = new Pose(60, 122.5, Math.toRadians(180));
     public final Pose GPP = new Pose(40, 37, Math.toRadians(180));
     public final Pose PPG = new Pose(42, 84.3, Math.toRadians(180));
     public final Pose PGP = new Pose(42, 60, Math.toRadians(180));
@@ -34,7 +35,7 @@ public class PathsBlue {
     public PathChain scorePPG;
     public PathChain scorePGP;
     public PathChain grabPGP;
-    public PathChain autoEnd;
+    public PathChain leaveClose;
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, scorePose))
@@ -82,6 +83,11 @@ public class PathsBlue {
 
         intakePGP = follower.pathBuilder()
                 .addPath(new BezierLine(PGP, afterPickupPGP))
+                .build();
+
+        leaveClose = follower.pathBuilder()
+                .addPath(new BezierLine(scorePose, leaveClosePose))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), leaveClosePose.getHeading())
                 .build();
 
     }

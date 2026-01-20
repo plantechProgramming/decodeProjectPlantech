@@ -1,28 +1,22 @@
-package org.firstinspires.ftc.teamcode.auto.autos;
+package org.firstinspires.ftc.teamcode.auto.autos.blueAutos;
 
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.PathsBlue;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
-import org.firstinspires.ftc.teamcode.auto.subsystems.NextInBetween;
-import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.SequentialGroup;
-import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
-import dev.nextftc.ftc.components.BulkReadComponent;
 
 @Autonomous(name = "Leave close pre",group = "tests")
 public class autoNextBlue extends NextFTCOpMode{
@@ -48,8 +42,7 @@ public class autoNextBlue extends NextFTCOpMode{
                 command.startShooter(false),
                 new Delay(1),
                 command.score(path.scorePreload),
-
-
+                new FollowPath(path.leaveClose)
         );
     }
     @Override
@@ -71,5 +64,3 @@ public class autoNextBlue extends NextFTCOpMode{
 
 }
 
-
-}

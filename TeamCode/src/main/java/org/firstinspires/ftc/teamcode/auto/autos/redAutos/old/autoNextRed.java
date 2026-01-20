@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.autos;
+package org.firstinspires.ftc.teamcode.auto.autos.redAutos.old;
 
 
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
