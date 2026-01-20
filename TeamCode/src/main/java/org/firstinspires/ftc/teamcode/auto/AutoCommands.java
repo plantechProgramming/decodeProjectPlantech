@@ -26,7 +26,6 @@ import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.impl.MotorEx;
 
 public class AutoCommands implements Component{
-    int threshold = 250;
     NextShooter shooter;
     NextIntake intake;
     NextInBetween inBetween;
@@ -68,7 +67,7 @@ public class AutoCommands implements Component{
                 new FollowPath(toGrabPath),
                 inBetween.inBetweenInPart(),
                 intake.take(),
-                new FollowPath(intakePath, true,speed),
+                new FollowPath(intakePath, true, speed),
                 stopAll()
         );
     }
@@ -100,10 +99,10 @@ public class AutoCommands implements Component{
     }
 
     @Override
-    public void postStop(){
-        shooter.end();
-        intake.stop();
+    public void postInit(){
+        shooter.stop();
         inBetween.stop();
+        intake.stop();
     }
 
 }

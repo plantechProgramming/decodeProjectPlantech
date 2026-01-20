@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.auto.autos;
 
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.cache.Cache;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -26,6 +27,7 @@ import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
+import dev.nextftc.hardware.delegates.Caching;
 
 @Autonomous(name = "Plan A Next blue")
 public class PlanANextBlue extends NextFTCOpMode{
@@ -58,18 +60,19 @@ public class PlanANextBlue extends NextFTCOpMode{
                 command.intake(path.intakeGPP, path.grabGPP, 0.72)
         );
     }
-//    @Override
-//    public void onUpdate(){
-//        telemetry.addData("x", follower().getPose().getX());
-//        telemetry.addData("y", follower().getPose().getY());
-//        telemetry.addData("heading", follower().getPose().getHeading());
-//    }
+    @Override
+    public void onUpdate(){
+        telemetry.addData("x", follower().getPose().getX());
+        telemetry.addData("y", follower().getPose().getY());
+        telemetry.addData("heading", follower().getPose().getHeading());
+        telemetry.update();
+    }
     @Override
     public void onStartButtonPressed() {
+//        Caching caching = new Caching(0.01,);
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startPose);
-
-        path = new PathsBlue(follower);
+        path = new PathsBlue(follower());
         path.buildPaths();
         autoRoutine().schedule();
     }

@@ -12,7 +12,7 @@ public class PathsBlue {
         this.follower = follower;
     }
     public final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
-    public final Pose scorePose = new Pose(50, 97.2, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
+    public final Pose scorePose = new Pose(47.5, 96, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public final Pose controlPosePPG = new Pose(70,60);// pose for getting to PPG without hitting other balls
     public final Pose controlPosePGP = new Pose(40,55);// pose for getting to PGP without hitting other balls
     public final Pose GPP = new Pose(40, 37, Math.toRadians(180));
@@ -37,17 +37,11 @@ public class PathsBlue {
     public PathChain grabPGP;
     public PathChain autoEnd;
     public void buildPaths() {
-        /* This is our scorePreload path. We are using a BezierLine, which is a straight line. */
         scorePreload = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, scorePose))
                 .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
                 .build();
 
-
-    /* Here is an example for Constant Interpolation
-    scorePreload.setConstantInterpolation(startPose.getHeading()); */
-
-        /* This is our grabPickup1 PathChain. We are using a single path with a BezierLine, which is a straight line. */
         grabGPP = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose, controlPosePPG, GPP))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), GPP.getHeading())

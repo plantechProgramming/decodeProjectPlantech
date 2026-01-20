@@ -91,14 +91,13 @@ public class NextShooter implements Subsystem {
     // NOT subsystem periodic func, with normal periodic it initialized szonedis to 1 every second
     // loop
     public void Periodic(){
-//        setPowerPID(shooter1, shooter2);
+        setPowerPID(shooter1, shooter2);
 //        shooter1.setPower(Szonedis);
 //        shooter2.setPower(-Szonedis);
-        setPow().schedule();
         setTelemetry(dashboardTelemetry);
     }
 
-    public void end(){
+    public void stop(){
         shooter2.setPower(0);
         shooter1.setPower(0);
     }
