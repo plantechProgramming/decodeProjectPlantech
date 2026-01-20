@@ -16,12 +16,12 @@ import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
-@Autonomous(name = "Plan A Next blue")
-public class PlanANextBlue extends NextFTCOpMode{
+@Autonomous(name = "AutoFullCloseBlue")
+public class AutoFullClose extends NextFTCOpMode{
 
     private Follower follower;
 
-    public PlanANextBlue() {
+    public AutoFullClose() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),

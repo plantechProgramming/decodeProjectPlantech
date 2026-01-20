@@ -17,6 +17,7 @@ import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.core.units.Distance;
 import dev.nextftc.ftc.NextFTCOpMode;
+import dev.nextftc.hardware.delegates.Caching;
 import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
 import dev.nextftc.hardware.positionable.SetPosition;
@@ -31,7 +32,6 @@ public class NextShooter implements Subsystem {
     private MotorEx shooter1 = new MotorEx("shooter");
     private MotorEx shooter2 = new MotorEx("shooter2");
 
-
     double Szonedis = 0.5;
     double kp = 0.01, ki = 0, kd = 0, kf = 0;
     ControlSystem controlSystem = ControlSystem.builder() // next pid
@@ -45,7 +45,7 @@ public class NextShooter implements Subsystem {
                     if (!far) {
                         Szonedis = 0.46;
                     } else {
-                        Szonedis = 0.53;
+                        Szonedis = 0.55;
                     }
                     controlSystem.setGoal(new KineticState(0, powerToTicks(Szonedis)));
                 }

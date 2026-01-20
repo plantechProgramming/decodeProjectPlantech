@@ -18,13 +18,13 @@ import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
-@Autonomous(name = "Leave close pre",group = "tests")
-public class autoNextBlue extends NextFTCOpMode{
+@Autonomous(name = "LeaveClosePre",group = "tests")
+public class LeaveClosePre extends NextFTCOpMode{
 
 
     private Follower follower;
 
-    public autoNextBlue() {
+    public LeaveClosePre() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),

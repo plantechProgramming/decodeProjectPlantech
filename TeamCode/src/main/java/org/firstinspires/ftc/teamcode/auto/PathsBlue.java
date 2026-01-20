@@ -13,16 +13,20 @@ public class PathsBlue {
     }
     public final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
     public final Pose startPoseFar = new Pose(62, 8, Math.toRadians(144)); // Start Pose of our robot.
+    private final Pose scorePoseFar = new Pose(62, 16, Math.toRadians(115)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
 
     public final Pose scorePose = new Pose(47.5, 96, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public final Pose controlPosePPG = new Pose(70,60);// pose for getting to PPG without hitting other balls
     public final Pose controlPosePGP = new Pose(40,55);// pose for getting to PGP without hitting other balls
-    public final Pose leaveClosePose = new Pose(60, 122.5, Math.toRadians(180));
-    public final Pose GPP = new Pose(40, 37, Math.toRadians(180));
-    public final Pose PPG = new Pose(42, 84.3, Math.toRadians(180));
-    public final Pose PGP = new Pose(42, 60, Math.toRadians(180));
+    public final Pose controlPoseGPP = new Pose(50,60);// pose for getting to PGP without hitting other balls
 
-    public final Pose afterPickupGPP = new Pose(10, 36, Math.toRadians(180));
+
+    public final Pose leaveClosePose = new Pose(60, 122.5, Math.toRadians(180));
+    public final Pose GPP = new Pose(42, 37, Math.toRadians(180));
+    public final Pose PPG = new Pose(42, 84.3, Math.toRadians(180));
+    public final Pose PGP = new Pose(44 , 60, Math.toRadians(180));
+
+    public final Pose afterPickupGPP = new Pose(9.5, 36, Math.toRadians(180));
 
     public final Pose afterPickupPPG = new Pose(17.5, 84.3, Math.toRadians(180));
     public final Pose afterPickupPGP = new Pose(10, 60, Math.toRadians(180));
@@ -38,6 +42,10 @@ public class PathsBlue {
     public PathChain scorePPG;
     public PathChain scorePGP;
     public PathChain grabPGP;
+    public PathChain grabGPPFar;
+    public PathChain scoreGPPFar;
+
+
     public PathChain leaveClose;
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
@@ -45,8 +53,8 @@ public class PathsBlue {
                 .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
                 .build();
         scorePreloadFar =  follower.pathBuilder()
-                .addPath(new BezierLine(startPoseFar, scorePose))
-                .setLinearHeadingInterpolation(startPose.getHeading(), scorePose.getHeading())
+                .addPath(new BezierLine(startPoseFar, scorePoseFar))
+                .setLinearHeadingInterpolation(startPose.getHeading(), scorePoseFar.getHeading())
                 .build();
 
         grabGPP = follower.pathBuilder()
@@ -60,7 +68,7 @@ public class PathsBlue {
 
 
         scoreGPP = follower.pathBuilder()
-                .addPath(new BezierCurve(afterPickupGPP, controlPosePPG, scorePose))
+                .addPath(new BezierCurve(afterPickupGPP, controlPoseGPP, scorePose))
                 .setLinearHeadingInterpolation(afterPickupGPP.getHeading(), scorePose.getHeading())
                 .build();
 
@@ -95,6 +103,15 @@ public class PathsBlue {
         leaveClose = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, leaveClosePose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), leaveClosePose.getHeading())
+                .build();
+        grabGPPFar = follower.pathBuilder()
+                .addPath(new BezierCurve(scorePoseFar, controlPoseGPP, GPP))
+                .setLinearHeadingInterpolation(scorePoseFar.getHeading(), GPP.getHeading())
+                .build();
+
+        scoreGPPFar = follower.pathBuilder()
+                .addPath(new BezierCurve(afterPickupGPP, controlPoseGPP, scorePoseFar))
+                .setLinearHeadingInterpolation(afterPickupGPP.getHeading(), scorePoseFar.getHeading())
                 .build();
 
     }
