@@ -27,7 +27,7 @@ public class PathsBlue {
 
     public final Pose afterPickupPPG = new Pose(17.5, 84.3, Math.toRadians(180));
     public final Pose afterPickupPGP = new Pose(13, 59, Math.toRadians(180));
-    public final Pose closeEndLeavePose =  new Pose(62, 121.5, Math.toRadians(180));
+    public final Pose closeEndLeavePose =  new Pose(60, 121.5, Math.toRadians(180));
 
     public PathChain scorePreloadClose;
     public PathChain scorePreloadFar;
