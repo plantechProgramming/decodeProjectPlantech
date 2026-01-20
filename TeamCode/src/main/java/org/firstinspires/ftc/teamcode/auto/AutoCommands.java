@@ -49,7 +49,7 @@ public class AutoCommands implements Component{
     public Command shoot(){
         return new SequentialGroup(
                 inBetween.inBetweenInFull(),
-                new Delay(1),
+                new Delay(0.4),
                 intake.take()
         );
     }
@@ -74,8 +74,7 @@ public class AutoCommands implements Component{
 
     public Command startShooter(boolean far){
         return new SequentialGroup(
-                shooter.naiveShooter(far),
-                new Delay(0.5)
+                shooter.naiveShooter(far)
         );
     }
 

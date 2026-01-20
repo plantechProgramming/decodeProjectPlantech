@@ -50,6 +50,7 @@ public class PlanANextBlue extends NextFTCOpMode{
     public Command autoRoutine(){
         return new SequentialGroup(
                 command.startShooter(false),
+                new Delay(0.3),
                 command.score(path.scorePreload),
                 command.intake(path.intakePPG,path.grabPPG,0.72),
 

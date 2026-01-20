@@ -43,7 +43,7 @@ public class NextShooter implements Subsystem {
         return new InstantCommand(
                 () -> {
                     if (!far) {
-                        Szonedis = 0.47;
+                        Szonedis = 0.46;
                     } else {
                         Szonedis = 0.53;
                     }
