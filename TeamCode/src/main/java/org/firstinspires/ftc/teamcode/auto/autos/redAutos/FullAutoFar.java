@@ -1,28 +1,29 @@
-package org.firstinspires.ftc.teamcode.auto.autos.blueAutos;
+package org.firstinspires.ftc.teamcode.auto.autos.redAutos;
 
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.auto.PathsBlue;
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
+import org.firstinspires.ftc.teamcode.auto.PathsBlue;
+import org.firstinspires.ftc.teamcode.auto.PathsRed;
 import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
-@Autonomous(name = "FullCloseBlue")
-public class AutoFullClose extends NextFTCOpMode{
 
+@Autonomous(name = "FullFarRed")
+public class FullAutoFar extends NextFTCOpMode {
     private Follower follower;
 
-    public AutoFullClose() {
+    public FullAutoFar() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
@@ -31,41 +32,37 @@ public class AutoFullClose extends NextFTCOpMode{
     }
 
     AutoCommands command = AutoCommands.INSTANCE;
-    PathsBlue path;
+    PathsRed path;
     ReadWrite readWrite = new ReadWrite();
-    public final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
 
+
+
+    public final Pose startPose = new Pose(62, 8, Math.toRadians(90)).mirror(); // Start Pose of our robot.
 
     public Command autoRoutine(){
+        path.buildPaths();
         return new SequentialGroup(
+                command.startShooter(true),
+                new Delay(0.3),
+                command.score(path.scorePreloadFar),
+                command.intake(path.intakeGPP, path.grabGPPFar, 0.73),
+                command.score(path.scoreGPPFar),
+
                 command.startShooter(false),
-                command.score(path.scorePreload),
-                command.intake(path.intakePPG,path.grabPPG,0.7),
-
-                command.score(path.scorePPG),
-                command.intake(path.intakePGP,path.grabPGP,0.67),
-
+                command.intake(path.intakePGP,path.grabPGPFar,0.72),
                 command.score(path.scorePGP),
-                command.intake(path.intakeGPP, path.grabGPP, 0.7)
+                command.intake(path.intakePPG,path.grabPPG,0.72)
         );
-    }
-    @Override
-    public void onUpdate(){
-        telemetry.addData("x", follower().getPose().getX());
-        telemetry.addData("y", follower().getPose().getY());
-        telemetry.addData("heading", follower().getPose().getHeading());
-        telemetry.update();
     }
     @Override
     public void onStartButtonPressed() {
 //        Caching caching = new Caching(0.01,);
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startPose);
-        path = new PathsBlue(follower());
+        path = new PathsRed(follower());
         path.buildPaths();
         autoRoutine().schedule();
     }
-
     @Override
     public void onStop(){
         readWrite.writePose(follower().getPose());

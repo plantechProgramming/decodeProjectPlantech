@@ -15,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
@@ -40,27 +41,13 @@ public class TeleOpBlue extends OpMode {
     public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0);
     private VisionPortal visionPortal;
     private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
-    public void setOdometryStartPos(){
-        double startX = odometry.getPosX(DistanceUnit.INCH);
-        double startY = odometry.getPosY(DistanceUnit.INCH);
-        Pose startPos = new Pose(startX,startY,odometry.getHeading(AngleUnit.RADIANS));
-        Pose2D poseFTC = PoseConverter.poseToPose2D(startPos, FTCCoordinates.INSTANCE);
-        telemetry.addData("x", poseFTC.getX(DistanceUnit.CM));
-        telemetry.addData("y", poseFTC.getY(DistanceUnit.CM));
-        telemetry.addData("heading", poseFTC.getHeading(AngleUnit.DEGREES));
-
-        double x = poseFTC.getX(DistanceUnit.CM), y = poseFTC.getY(DistanceUnit.CM);
-        double heading = poseFTC.getHeading(AngleUnit.DEGREES);
-        Pose2D fixedPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,heading-90);
-    //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
-        odometry.setPosition(fixedPose);//TODO: change here for red
-    }
 
     @Override
     public void run(){
         Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
+        ReadWrite readWrite = new ReadWrite();
         //ColorSensorTest cSensor = new ColorSensorTest();
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
 
@@ -80,9 +67,7 @@ public class TeleOpBlue extends OpMode {
         builder.addProcessor(aprilTag);
         visionPortal = builder.build();
 
-
-        odometry.resetPosAndIMU();
-
+        odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
 //        AprilTagProcessor aprilTag = test.initAprilTag();
 //
 //        VisionPortal visionPortal = new VisionPortal.Builder()
