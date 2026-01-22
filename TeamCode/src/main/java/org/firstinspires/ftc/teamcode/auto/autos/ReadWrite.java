@@ -20,7 +20,7 @@ public class ReadWrite {
         return new Pose(
                 Double.parseDouble(posePartitions[0]),
                 Double.parseDouble(posePartitions[1]),
-                Double.parseDouble(posePartitions[2])
+                Math.toRadians(Double.parseDouble(posePartitions[2]))
         );
     }
 

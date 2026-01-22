@@ -165,7 +165,7 @@ public class DriveTrain {
         if( y < lenField/2){
             newY = y - lenField/2 ;
         }
-        double newHed = hed - 180;
+        double newHed = Math.toDegrees(hed) - 180;
         return new Pose2D(DistanceUnit.CM, newX, newY, AngleUnit.DEGREES, newHed);
 
 
