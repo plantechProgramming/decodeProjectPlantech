@@ -29,6 +29,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import dev.nextftc.core.commands.delays.Delay;
+
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOpBlue extends OpMode {
@@ -44,6 +46,7 @@ public class TeleOpBlue extends OpMode {
 
     @Override
     public void run(){
+        odometry.resetPosAndIMU();
         Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
@@ -67,7 +70,6 @@ public class TeleOpBlue extends OpMode {
         builder.addProcessor(aprilTag);
         visionPortal = builder.build();
 
-        odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
 //        AprilTagProcessor aprilTag = test.initAprilTag();
 //
 //        VisionPortal visionPortal = new VisionPortal.Builder()
@@ -75,13 +77,14 @@ public class TeleOpBlue extends OpMode {
 //                .addProcessor(aprilTag)
 //                .build();
 
-
+        sleep(100);
         double forward; //-1 to 1
         double turn;
         double drift;
         double botHeading;
         boolean slow = false;
         double tick = 2000/(48*Math.PI); //per tick
+        odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
 
         while (opModeIsActive() ) {
             AprilTagDetection goalTag = test.specialDetection;
