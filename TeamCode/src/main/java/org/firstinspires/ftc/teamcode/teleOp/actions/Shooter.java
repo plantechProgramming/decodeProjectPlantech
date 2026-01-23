@@ -110,7 +110,7 @@ public class Shooter {
         if (!far) {
             Szonedis = 0.475;
         } else{
-            Szonedis = 0.555;
+            Szonedis = 0.552;
         }
         shooter.setPower(Szonedis*errorFix);
         shooter2.setPower(-Szonedis*errorFix);

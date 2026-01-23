@@ -118,10 +118,10 @@ public class DriveTrain {
     }
 
     public void turnToGoal(String team){
-        double lenfield = 360; // cm
+        double lenfield = 365; // cm
         double x = odometry.getPosX(DistanceUnit.CM);
         double y = odometry.getPosY(DistanceUnit.CM);
-        double yOffset = 20;//prev = 18
+        double yOffset = 19;//prev = 18
         double xOffset = 17; // prev = 16
         if(team == "RED"){
             x = lenfield/2 + x;
@@ -129,16 +129,20 @@ public class DriveTrain {
         else{
             x = lenfield/2 - x;
         }
+        double newY = lenfield/2 + y;
 
-        double deg = Math.toDegrees(Math.atan((lenfield/2 + y - yOffset)/(x - xOffset)));
+        double deg = Math.toDegrees(Math.atan((newY - yOffset)/(x - xOffset)));
         if(team == "BLUE"){
             turnToGyro(-deg);
             telemetry.addData("deg to goal", -deg);
         }
-        if(team == "RED"){
-            turnToGyro(180 + deg);
-            telemetry.addData("deg to goal", 180 + deg);
+        else{
+            turnToGyro(deg);
+            telemetry.addData("deg to goal", deg);
         }
+
+        telemetry.addData("new Y offset", newY - yOffset);
+        telemetry.addData("new X offset", x - xOffset);
     }
 
     public boolean isFar(){
