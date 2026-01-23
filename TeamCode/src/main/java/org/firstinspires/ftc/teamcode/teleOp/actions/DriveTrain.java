@@ -121,8 +121,8 @@ public class DriveTrain {
         double lenfield = 360; // cm
         double x = odometry.getPosX(DistanceUnit.CM);
         double y = odometry.getPosY(DistanceUnit.CM);
-        double yOffset = 10;//prev = 18
-        double xOffset = 0; // prev = 16
+        double yOffset = 20;//prev = 18
+        double xOffset = 17; // prev = 16
         if(team == "RED"){
             x = lenfield/2 + x;
         }
@@ -130,7 +130,7 @@ public class DriveTrain {
             x = lenfield/2 - x;
         }
 
-        double deg = Math.toDegrees(Math.atan((lenfield/2 + y + yOffset)/(x - xOffset)));
+        double deg = Math.toDegrees(Math.atan((lenfield/2 + y - yOffset)/(x - xOffset)));
         if(team == "BLUE"){
             turnToGyro(-deg);
             telemetry.addData("deg to goal", -deg);
