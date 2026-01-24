@@ -152,21 +152,15 @@ public class DriveTrain {
         telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
         telemetry.addData("is far", isFar());
     }
-    public Pose2D PedroPoseConverter(Pose pose){
+    public z PedroPoseConverter(Pose pose){
         double x = pose.getX();
         double y = pose.getY();
         double hed = pose.getHeading();
         double lenField = 365.76; // 144 inch to cm
-        double newX = -(lenField/2 - x);
-        double newY = -(lenField/2 - y);
-        if( x < lenField/2){
-            newX = x - lenField/2;
-        }
-        if( y < lenField/2){
-            newY = y - lenField/2 ;
-        }
+        double newx = ((-lenField/144)*x)+lenField/2;
+        double newy = ((-lenField/144)*y)+lenField/2;
         double newHed = Math.toDegrees(hed) - 180;
-        return new Pose2D(DistanceUnit.CM, newX, newY, AngleUnit.DEGREES, newHed);
+        return new Pose2D(DistanceUnit.CM, newx, newy, AngleUnit.DEGREES, newHed);
 
 
     }
