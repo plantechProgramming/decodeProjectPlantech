@@ -10,7 +10,7 @@ import dev.nextftc.ftc.NextFTCOpMode;
 
 @Autonomous(name = "stillCloseBlue")
 public class CloseStillAuto extends NextFTCOpMode {
-    public final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
+    private final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
 
     @Override
     public void onStop(){

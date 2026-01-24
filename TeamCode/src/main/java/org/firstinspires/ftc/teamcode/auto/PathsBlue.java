@@ -11,8 +11,9 @@ public class PathsBlue {
     public PathsBlue(Follower follower){
         this.follower = follower;
     }
-    public final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
-    public final Pose startPoseFar = new Pose(62, 9, Math.toRadians(90)); // Start Pose of our robot.
+    // TODO: make stuff private with getter
+    private final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
+    private final Pose startPoseFar = new Pose(62, 9, Math.toRadians(90)); // Start Pose of our robot.
     public final Pose scorePoseFar = new Pose(62, 16, Math.toRadians(115)); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
 
     public final Pose scorePose = new Pose(47.5, 96, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
@@ -41,6 +42,13 @@ public class PathsBlue {
 
     public PathChain leaveClose;
 
+    public Pose getSPose(){
+        return this.startPose;
+    }
+    public Pose getSPoseFar(){
+        return this.startPoseFar;
+    }
+
 
     public void buildPaths() {
         scorePreload = follower.pathBuilder()
@@ -49,7 +57,7 @@ public class PathsBlue {
                 .build();
         scorePreloadFar =  follower.pathBuilder()
                 .addPath(new BezierLine(startPoseFar, scorePoseFar))
-                .setLinearHeadingInterpolation(startPose.getHeading(), scorePoseFar.getHeading())
+                .setLinearHeadingInterpolation(startPoseFar.getHeading(), scorePoseFar.getHeading())
                 .build();
 
         grabGPP = follower.pathBuilder()

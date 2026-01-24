@@ -41,6 +41,8 @@ public class testNext extends NextFTCOpMode {
 
     }
     AutoCommands command = AutoCommands.INSTANCE;
+
+
     private Command autonomousRoutine() {
         return new SequentialGroup(
                 command.startShooter(false),

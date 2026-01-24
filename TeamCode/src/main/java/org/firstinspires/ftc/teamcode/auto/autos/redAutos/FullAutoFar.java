@@ -34,7 +34,7 @@ public class FullAutoFar extends NextFTCOpMode {
     PathsRed path;
 
 
-    public final Pose startPose = new Pose(62, 8, Math.toRadians(90)).mirror(); // Start Pose of our robot.
+    private final Pose startPose = new Pose(62, 8, Math.toRadians(90)).mirror(); // Start Pose of our robot.
 
     public Command autoRoutine(){
         path.buildPaths();
@@ -53,9 +53,7 @@ public class FullAutoFar extends NextFTCOpMode {
     }
     @Override
     public void onStartButtonPressed() {
-//        Caching caching = new Caching(0.01,);
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startPose);
+        follower().setStartingPose(startPose);
         path = new PathsRed(follower());
         path.buildPaths();
         autoRoutine().schedule();

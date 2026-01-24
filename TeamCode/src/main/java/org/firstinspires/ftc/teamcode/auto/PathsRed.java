@@ -15,8 +15,8 @@ public class PathsRed {
     }
     private final PathsBlue pathsBlue = new PathsBlue(follower);
 
-    public final Pose startPose = pathsBlue.startPose.mirror(); // Start Pose of our robot.
-    public final Pose startPoseFar = pathsBlue.startPoseFar.mirror(); // Start Pose of our robot.
+    public final Pose startPose = pathsBlue.getSPose().mirror(); // Start Pose of our robot.
+    public final Pose startPoseFar = pathsBlue.getSPoseFar().mirror(); // Start Pose of our robot.
     private final Pose scorePoseFar = pathsBlue.scorePoseFar.mirror(); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
 
     public final Pose scorePose = pathsBlue.scorePose.mirror(); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.

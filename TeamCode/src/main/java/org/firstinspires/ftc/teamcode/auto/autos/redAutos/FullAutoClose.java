@@ -32,7 +32,7 @@ public class FullAutoClose extends NextFTCOpMode {
     PathsRed path;
 
 
-    public final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)).mirror(); // Start Pose of our robot.
+    private final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)).mirror(); // Start Pose of our robot.
 
 
     public Command autoRoutine(){
@@ -57,9 +57,7 @@ public class FullAutoClose extends NextFTCOpMode {
     }
     @Override
     public void onStartButtonPressed() {
-//        Caching caching = new Caching(0.01,);
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startPose);
+        follower().setStartingPose(startPose);
         path = new PathsRed(follower());
         path.buildPaths();
         autoRoutine().schedule();

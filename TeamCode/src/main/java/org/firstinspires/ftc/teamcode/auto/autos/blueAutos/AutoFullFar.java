@@ -23,7 +23,6 @@ import dev.nextftc.ftc.NextFTCOpMode;
 
 @Autonomous(name = "FullFarBlue")
 public class AutoFullFar extends NextFTCOpMode {
-    private Follower follower;
 
     public AutoFullFar() {
         addComponents(
@@ -37,7 +36,7 @@ public class AutoFullFar extends NextFTCOpMode {
     PathsBlue path;
     ReadWrite readWrite = new ReadWrite();
 
-    public final Pose startPose = new Pose(62, 8, Math.toRadians(90)); // Start Pose of our robot.
+    private final Pose startPose = new Pose(62, 8, Math.toRadians(90)); // Start Pose of our robot.
 
         public Command autoRoutine(){
             path.buildPaths();
@@ -56,9 +55,7 @@ public class AutoFullFar extends NextFTCOpMode {
         }
     @Override
     public void onStartButtonPressed() {
-//        Caching caching = new Caching(0.01,);
-        follower = Constants.createFollower(hardwareMap);
-        follower.setStartingPose(startPose);
+        follower().setStartingPose(startPose);
         path = new PathsBlue(follower());
         path.buildPaths();
         autoRoutine().schedule();
