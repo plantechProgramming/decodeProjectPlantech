@@ -152,7 +152,7 @@ public class DriveTrain {
         telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
         telemetry.addData("is far", isFar());
     }
-    public z PedroPoseConverter(Pose pose){
+    public Pose2D PedroPoseConverter(Pose pose){
         double x = pose.getX();
         double y = pose.getY();
         double hed = pose.getHeading();
