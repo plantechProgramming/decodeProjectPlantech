@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.auto;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.CoordinateSystem;
+import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
+import com.pedropathing.math.MathFunctions;
 import com.pedropathing.paths.PathChain;
 
 public class PathsRed {
@@ -15,8 +17,8 @@ public class PathsRed {
     }
     private final PathsBlue pathsBlue = new PathsBlue(follower);
 
-    public final Pose startPose = pathsBlue.getSPose().mirror(); // Start Pose of our robot.
-    public final Pose startPoseFar = pathsBlue.getSPoseFar().mirror(); // Start Pose of our robot.
+    private final Pose startPose = Mymirror(pathsBlue.getSPose()); // Start Pose of our robot.
+    private final Pose startPoseFar = Mymirror(pathsBlue.getSPoseFar()); // Start Pose of our robot.
     private final Pose scorePoseFar = pathsBlue.scorePoseFar.mirror(); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
 
     public final Pose scorePose = pathsBlue.scorePose.mirror(); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
@@ -26,14 +28,15 @@ public class PathsRed {
 
 
     public final Pose leaveClosePose = pathsBlue.leaveClosePose.mirror();
-    public final Pose GPP = pathsBlue.GPP.mirror();
-    public final Pose PPG = pathsBlue.PPG.mirror();
-    public final Pose PGP = pathsBlue.PGP.mirror();
+    public final Pose GPP = Mymirror(pathsBlue.GPP);
+    public final Pose PPG = Mymirror(pathsBlue.PPG);
+    public final Pose PGP = Mymirror(pathsBlue.PGP);
 
-    public final Pose afterPickupGPP = pathsBlue.afterPickupGPP.mirror();
+    public final Pose afterPickupGPP = Mymirror(pathsBlue.afterPickupGPP);
 
-    public final Pose afterPickupPPG = pathsBlue.afterPickupPPG.mirror();
-    public final Pose afterPickupPGP = pathsBlue.afterPickupPGP.mirror();
+    public final Pose afterPickupPPG = Mymirror(pathsBlue.afterPickupPPG);
+    public final Pose afterPickupPGP = Mymirror(pathsBlue.afterPickupPGP);
+
 
     public PathChain scorePreload;
     public PathChain scorePreloadFar;
@@ -45,6 +48,14 @@ public class PathsRed {
 
     public PathChain leaveClose;
 
+    private Pose Mymirror(Pose pPose) {
+        Pose k = pPose;
+        return new Pose(144 - k.getX(), k.getY()-1.8*3.2, MathFunctions.normalizeAngle(Math.PI - k.getHeading()), PedroCoordinates.INSTANCE);
+    }
+
+    public Pose getPose(){
+        return this.startPoseFar;
+    }
 
     public void buildPaths() {
         scorePreload = follower.pathBuilder()

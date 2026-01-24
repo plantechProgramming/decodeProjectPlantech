@@ -49,7 +49,9 @@ public class FullAutoFar extends NextFTCOpMode {
                 command.intake(path.intakePGP,path.grabPGPFar,0.72),
                 command.score(path.scorePGP),
                 command.intake(path.intakePPG,path.grabPPG,0.72)
+
         );
+
     }
     @Override
     public void onStartButtonPressed() {
