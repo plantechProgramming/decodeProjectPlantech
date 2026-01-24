@@ -7,6 +7,7 @@ import com.pedropathing.geometry.Pose;
 
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.PathsBlue;
+import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -34,6 +35,8 @@ public class LeaveClosePre extends NextFTCOpMode{
 
     AutoCommands command = AutoCommands.INSTANCE;
     PathsBlue path;
+    ReadWrite readWrite = new ReadWrite();
+
     public final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
 
 

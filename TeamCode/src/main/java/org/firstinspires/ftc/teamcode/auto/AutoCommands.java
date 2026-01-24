@@ -49,7 +49,7 @@ public class AutoCommands implements Component{
     public Command shoot(){
         return new SequentialGroup(
                 inBetween.inBetweenInFull(),
-                new Delay(0.4),
+                new Delay(0.6),
                 intake.take()
         );
     }
@@ -58,7 +58,7 @@ public class AutoCommands implements Component{
         return new SequentialGroup(
                 new FollowPath(path),
                 shoot(),
-                new Delay(2.5)
+                new Delay(2)
         );
     }
 

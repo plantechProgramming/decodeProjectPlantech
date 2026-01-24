@@ -90,17 +90,16 @@ public class DriveTrain {
 
     }
     
-        public void stop(){
-            FL.setPower(0);
-            FR.setPower(0);
-            BR.setPower(0);
-            BL.setPower(0);
-        }
+    public void stop(){
+        FL.setPower(0);
+        FR.setPower(0);
+        BR.setPower(0);
+        BL.setPower(0);
+    }
     public void turnToGyro(double degrees) {
-        double botAngle = Math.abs(odometry.getHeading(AngleUnit.DEGREES));
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
-        PID pid = new PID(0.04, 0, 0, 0);
-        double threshold = 2;
+        PID pid = new PID(0.04, 0.001, 0, 0);
+        double threshold = 1;
         double power = 0;
         pid.setWanted(degrees);
 
@@ -114,35 +113,27 @@ public class DriveTrain {
             BL.setPower(-power);
         }
         telemetry.addData("pow", power);
-        telemetry.addData("heading", botAngleRaw);
+//        telemetry.addData("heading", botAngleRaw);
     }
-
+    double deg = 0;
     public void turnToGoal(String team){
-        double lenfield = 365; // cm
+        double lenfield = 360; // cm
         double x = odometry.getPosX(DistanceUnit.CM);
         double y = odometry.getPosY(DistanceUnit.CM);
-        double yOffset = 19;//prev = 18
-        double xOffset = 17; // prev = 16
+        double yOffset = 10;//prev = 18
+        double xOffset = 0; // prev = 16
         if(team == "RED"){
             x = lenfield/2 + x;
         }
         else{
             x = lenfield/2 - x;
         }
-        double newY = lenfield/2 + y;
 
-        double deg = Math.toDegrees(Math.atan((newY - yOffset)/(x - xOffset)));
+        deg = Math.toDegrees(Math.atan((lenfield/2 + y + yOffset)/(x - xOffset)));
         if(team == "BLUE"){
-            turnToGyro(-deg);
-            telemetry.addData("deg to goal", -deg);
+            deg = -deg;
         }
-        else{
-            turnToGyro(deg);
-            telemetry.addData("deg to goal", deg);
-        }
-
-        telemetry.addData("new Y offset", newY - yOffset);
-        telemetry.addData("new X offset", x - xOffset);
+        turnToGyro(deg);
     }
 
     public boolean isFar(){
@@ -151,33 +142,24 @@ public class DriveTrain {
 
     public void setDriveTelemetry(Telemetry telemetry){
         telemetry.addData("botheading",odometry.getHeading(AngleUnit.DEGREES));
+        telemetry.addData("deg to goal",deg);
 //        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-        telemetry.addData("x raw", odometry.getEncoderX());
-        telemetry.addData("y raw", odometry.getEncoderY());
         telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
         telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
         telemetry.addData("is far", isFar());
-        telemetry.addData("vel x", odometry.getVelX(DistanceUnit.CM));
-        telemetry.addData("vel y", odometry.getVelY(DistanceUnit.CM));
     }
-//    double getPosX(){
-//
-//    }
-    public Pose2D PedroPoseConverter(){
+    public Pose2D PedroPoseConverter(Pose pose){
+        double x = pose.getX();
+        double y = pose.getY();
+        double hed = Math.toDegrees(pose.getHeading());
         double lenField = 365.76; // 144 inch to cm
-        double startX = odometry.getPosX(DistanceUnit.CM);
-        double newstartX = -(lenField/2 - startX);
-        double startY = odometry.getPosY(DistanceUnit.CM);
-        double startHed = odometry.getHeading(AngleUnit.DEGREES);
-        double newstartY = -(lenField/2 - startY);
-        if( startX < lenField/2){
-            newstartX = startX - lenField/2;
+        double newx = ((-lenField/144)*x)+lenField/2;
+        double newy = ((-lenField/144)*y)+lenField/2;
+        hed = hed - 180;
+        if(hed <= 180){
+            hed += 360;
         }
-        if( startY < lenField/2){
-            newstartY = startY - lenField/2;
-        }
-        double newStartHed = startHed - 180;
-        return new Pose2D(DistanceUnit.CM, newstartX, newstartY, AngleUnit.DEGREES, newStartHed);
+        return new Pose2D(DistanceUnit.CM, newx, newy, AngleUnit.DEGREES, hed);
 
 
     }
