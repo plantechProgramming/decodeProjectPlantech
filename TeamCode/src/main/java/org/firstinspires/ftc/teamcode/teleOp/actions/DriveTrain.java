@@ -151,11 +151,18 @@ public class DriveTrain {
 
     public void setDriveTelemetry(Telemetry telemetry){
         telemetry.addData("botheading",odometry.getHeading(AngleUnit.DEGREES));
-        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+//        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+        telemetry.addData("x raw", odometry.getEncoderX());
+        telemetry.addData("y raw", odometry.getEncoderY());
         telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
         telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
         telemetry.addData("is far", isFar());
+        telemetry.addData("vel x", odometry.getVelX(DistanceUnit.CM));
+        telemetry.addData("vel y", odometry.getVelY(DistanceUnit.CM));
     }
+//    double getPosX(){
+//
+//    }
     public Pose2D PedroPoseConverter(){
         double lenField = 365.76; // 144 inch to cm
         double startX = odometry.getPosX(DistanceUnit.CM);
@@ -167,7 +174,7 @@ public class DriveTrain {
             newstartX = startX - lenField/2;
         }
         if( startY < lenField/2){
-            newstartY = startY - lenField/2 ;
+            newstartY = startY - lenField/2;
         }
         double newStartHed = startHed - 180;
         return new Pose2D(DistanceUnit.CM, newstartX, newstartY, AngleUnit.DEGREES, newStartHed);
