@@ -6,13 +6,14 @@ import dev.nextftc.core.subsystems.Subsystem;
 import dev.nextftc.hardware.impl.CRServoEx;
 import dev.nextftc.hardware.powerable.SetPower;
 
+
 public class NextInBetween implements Subsystem {
     public static final NextInBetween INSTANCE = new NextInBetween();
     public NextInBetween(){}
-    CRServoEx ibl = new CRServoEx("IBL")
-            ,ibr = new CRServoEx("IBR")
-            ,sl = new CRServoEx("SIBL")
-            ,sr = new CRServoEx("SIBR"); // ib = inbetween, s = shooter
+    CRServoEx ibl = new CRServoEx("IBL",-1)
+            ,ibr = new CRServoEx("IBR",-1)
+            ,sl = new CRServoEx("SIBL",-1)
+            ,sr = new CRServoEx("SIBR",-1); // ib = inbetween, s = shooter
 
     public Command inBetweenInFull(){
         return new ParallelGroup(

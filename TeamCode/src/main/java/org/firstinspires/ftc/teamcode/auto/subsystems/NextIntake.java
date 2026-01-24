@@ -14,7 +14,7 @@ public class NextIntake implements Subsystem {
     public NextIntake() { }
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry =  dashboard.getTelemetry();
-    MotorEx intakeMotor = new MotorEx("Intake");
+    MotorEx intakeMotor = new MotorEx("Intake", -1);
 
     public Command take(){
         return new SetPower(intakeMotor,1);

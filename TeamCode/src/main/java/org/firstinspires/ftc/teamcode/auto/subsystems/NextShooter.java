@@ -29,8 +29,8 @@ public class NextShooter implements Subsystem {
     }
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry =  dashboard.getTelemetry();
-    private MotorEx shooter1 = new MotorEx("shooter");
-    private MotorEx shooter2 = new MotorEx("shooter2");
+    private MotorEx shooter1 = new MotorEx("shooter", -1);
+    private MotorEx shooter2 = new MotorEx("shooter2", -1);
 
     double Szonedis = 0.5;
     double kp = 0.01, ki = 0, kd = 0, kf = 0;
@@ -45,7 +45,7 @@ public class NextShooter implements Subsystem {
                     if (!far) {
                         Szonedis = 0.457;
                     } else {
-                        Szonedis = 0.55;
+                        Szonedis = 0.545;
                     }
                     controlSystem.setGoal(new KineticState(0, powerToTicks(Szonedis)));
                 }

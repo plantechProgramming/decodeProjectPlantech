@@ -110,7 +110,7 @@ public class Shooter {
         if (!far) {
             Szonedis = 0.475;
         } else{
-            Szonedis = 0.552;
+            Szonedis = 0.55;
         }
         shooter.setPower(Szonedis*errorFix);
         shooter2.setPower(-Szonedis*errorFix);
@@ -151,87 +151,7 @@ public class Shooter {
         telemetry.addData("time",curTime);
         return velocity;
     }
-    double prevVelocity = 0;
-    double alpha = 0.1;
 
-    public double getVelocityFilter(DcMotorEx motor) {
-        curEncoder = motor.getCurrentPosition();
-        curTime = timer.milliseconds();
-
-        double timeDiff = curTime - prevTime;
-        double encoderDiff = curEncoder - prevEncoder;
-
-        double tickVelocity = encoderDiff / timeDiff; // ticks/milliseconds
-        double velocity = (tickVelocity * millisecondsToMinute) / ticksPerRevolution;
-
-        prevTime = curTime;
-        prevEncoder = curEncoder;
-        double filteredVelocity = alpha*velocity + (1-alpha)*prevVelocity;
-        prevVelocity = filteredVelocity;
-        return filteredVelocity;
-    }
-    double avgPrevVel = 0;
-    public double getVelocityAverage(DcMotorEx motor){
-        curEncoder = motor.getCurrentPosition();
-        curTime = timer.milliseconds();
-
-        double timeDiff = curTime - prevTime;
-        double encoderDiff = curEncoder - prevEncoder;
-
-        double tickVelocity = encoderDiff/timeDiff; // ticks/milliseconds
-        double velocity = (tickVelocity*millisecondsToMinute)/ticksPerRevolution;
-
-        prevTime = curTime;
-        prevEncoder = curEncoder;
-        double velAvg = (avgPrevVel*count+velocity)/(count + 1);
-        avgPrevVel = velAvg;
-        count++;
-        return velAvg;
-    }
-
-    // OLD -------------------------------------------------------------------------------------
-
-    public double motorPower;
-    public double theta;
-    public double t;
-
-    double hDiff = h - robot_Height;
-    public void shootByTime(double d, double t){
-
-        theta = Math.atan((g*t*t + 2*h)/(2*d));
-        shoot(theta,d,t);
-    }
-
-    public void shootByAngle(double d){
-        // TODO: make cases for different odo vals, test if even needed
-        theta = 0.804; // in radians
-        t = Math.sqrt((2/g)*(Math.tan(theta)*d - (h-robot_Height)));
-        shoot(theta,d,t);
-    }
-
-    public void shootByAngleOnline(double d){
-        theta = 0.804; // in radians
-        double cosSquared = Math.cos(theta)*Math.cos(theta);
-        double velocity = Math.sqrt((g*d*d)/(2*(cosSquared)*(d*Math.tan(theta)-hDiff)));
-        motorPower = 60*velocity/(diameter*Math.PI*MAX_RPM);
-        shooter.setPower(motorPower);
-        shooter2.setPower(-motorPower);
-        telemetry.addData("power", motorPower);
-        telemetry.addData("time",t);
-        telemetry.addData("theta", theta);
-        telemetry.addData("velocity", velocity);
-    }
-
-    public void shoot(double theta, double d, double t){
-        double velocity = 2*d/(Math.acos(theta)*t);
-        motorPower = 60*velocity/(diameter*Math.PI*MAX_RPM);
-        shooter.setPower(motorPower);
-        shooter2.setPower(-motorPower);
-        telemetry.addData("power", motorPower);
-        telemetry.addData("time",t);
-        telemetry.addData("theta", theta);
-        telemetry.addData("velocity", velocity);
-    }
 
     public void setShooterTelemetry(Telemetry telemetry){
         telemetry.addData("wanted", Szonedis*6000);
