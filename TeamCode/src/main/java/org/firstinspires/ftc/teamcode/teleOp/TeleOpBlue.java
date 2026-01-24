@@ -97,7 +97,9 @@ public class TeleOpBlue extends OpMode {
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
 
             ElapsedTime elapsedTime = new ElapsedTime();
-            driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED
+            if(!gamepad1.left_bumper) {
+                driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED
+            }
 
             if (gamepad1.right_trigger > 0){
                 intake.intakeIn();

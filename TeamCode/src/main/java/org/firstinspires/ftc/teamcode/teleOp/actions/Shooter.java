@@ -237,13 +237,13 @@ public class Shooter {
         telemetry.addData("wanted", Szonedis*6000);
         telemetry.addData("vel",shooterVelocity.getVelocityFilter());
         telemetry.addData("vel2", Math.abs(shooter2Velocity.getVelocityFilter()));
-        telemetry.addData("th",Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000));
+//        telemetry.addData("th",Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000));
         telemetry.addData("pow 1", shooter.getPower());
         telemetry.addData("pow 2", shooter2.getPower());
         PIDFCoefficients coefficients = shooter.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
-        telemetry.addData("p", coefficients.p);
-        telemetry.addData("i", coefficients.i);
-        telemetry.addData("d", coefficients.d);
+//        telemetry.addData("p", coefficients.p);
+//        telemetry.addData("i", coefficients.i);
+//        telemetry.addData("d", coefficients.d);
     }
 
     public boolean isUpToSpeed(){

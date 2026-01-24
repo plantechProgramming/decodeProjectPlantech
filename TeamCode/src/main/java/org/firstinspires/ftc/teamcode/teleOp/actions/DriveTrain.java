@@ -90,17 +90,16 @@ public class DriveTrain {
 
     }
     
-        public void stop(){
-            FL.setPower(0);
-            FR.setPower(0);
-            BR.setPower(0);
-            BL.setPower(0);
-        }
+    public void stop(){
+        FL.setPower(0);
+        FR.setPower(0);
+        BR.setPower(0);
+        BL.setPower(0);
+    }
     public void turnToGyro(double degrees) {
-        double botAngle = Math.abs(odometry.getHeading(AngleUnit.DEGREES));
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
-        PID pid = new PID(0.04, 0, 0, 0);
-        double threshold = 2;
+        PID pid = new PID(0.04, 0.001, 0, 0);
+        double threshold = 1;
         double power = 0;
         pid.setWanted(degrees);
 
@@ -114,9 +113,9 @@ public class DriveTrain {
             BL.setPower(-power);
         }
         telemetry.addData("pow", power);
-        telemetry.addData("heading", botAngleRaw);
+//        telemetry.addData("heading", botAngleRaw);
     }
-
+    double deg = 0;
     public void turnToGoal(String team){
         double lenfield = 360; // cm
         double x = odometry.getPosX(DistanceUnit.CM);
@@ -130,15 +129,11 @@ public class DriveTrain {
             x = lenfield/2 - x;
         }
 
-        double deg = Math.toDegrees(Math.atan((lenfield/2 + y + yOffset)/(x - xOffset)));
+        deg = Math.toDegrees(Math.atan((lenfield/2 + y + yOffset)/(x - xOffset)));
         if(team == "BLUE"){
-            turnToGyro(-deg);
-            telemetry.addData("deg to goal", -deg);
+            deg = -deg;
         }
-        if(team == "RED"){
-            turnToGyro(180 + deg);
-            telemetry.addData("deg to goal", 180 + deg);
-        }
+        turnToGyro(deg);
     }
 
     public boolean isFar(){
@@ -147,7 +142,8 @@ public class DriveTrain {
 
     public void setDriveTelemetry(Telemetry telemetry){
         telemetry.addData("botheading",odometry.getHeading(AngleUnit.DEGREES));
-        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+        telemetry.addData("deg to goal",deg);
+//        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
         telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
         telemetry.addData("is far", isFar());
@@ -155,12 +151,15 @@ public class DriveTrain {
     public Pose2D PedroPoseConverter(Pose pose){
         double x = pose.getX();
         double y = pose.getY();
-        double hed = pose.getHeading();
+        double hed = Math.toDegrees(pose.getHeading());
         double lenField = 365.76; // 144 inch to cm
         double newx = ((-lenField/144)*x)+lenField/2;
         double newy = ((-lenField/144)*y)+lenField/2;
-        double newHed = Math.toDegrees(hed) - 180;
-        return new Pose2D(DistanceUnit.CM, newx, newy, AngleUnit.DEGREES, newHed);
+        hed = hed - 180;
+        if(hed <= 180){
+            hed += 360;
+        }
+        return new Pose2D(DistanceUnit.CM, newx, newy, AngleUnit.DEGREES, hed);
 
 
     }
