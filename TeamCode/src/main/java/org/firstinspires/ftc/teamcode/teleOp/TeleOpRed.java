@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.robotcore.internal.network.ControlHubApChannelManager;
+import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
@@ -43,6 +44,7 @@ public class TeleOpRed extends OpMode {
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
+        ReadWrite readWrite = new ReadWrite();
         ColorSensorTest cSensor = new ColorSensorTest();
 
 
@@ -63,7 +65,6 @@ public class TeleOpRed extends OpMode {
 
 //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-74,154,AngleUnit.DEGREES, 0));
 //        odometry.setPosition(new Pose2D(DistanceUnit.CM,-90,-165,AngleUnit.DEGREES, 180));//TODO: change here for red
-        odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180));
 //        odometry.resetPosAndIMU();
 
 //        AprilTagProcessor aprilTag = test.initAprilTag();
@@ -80,6 +81,7 @@ public class TeleOpRed extends OpMode {
         double botHeading;
         boolean slow = false;
         double tick = 2000/(48*Math.PI); //per tick
+        odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
         while (opModeIsActive() ) {
             AprilTagDetection goalTag = test.specialDetection;
 //            test.telemetryAprilTag(aprilTag);
@@ -144,7 +146,7 @@ public class TeleOpRed extends OpMode {
             }
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);
-
+            telemetry.addData("pose pedro ", readWrite.readPose());
             shooter.setShooterTelemetry(telemetry);
             shooter.setShooterTelemetry(dashboardTelemetry);
 

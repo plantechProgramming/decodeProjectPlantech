@@ -98,8 +98,8 @@ public class DriveTrain {
     }
     public void turnToGyro(double degrees) {
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
-        PID pid = new PID(0.04, 0.001, 0, 0);
-        double threshold = 1;
+        PID pid = new PID(0.022, 0.0000001, 0.000001, 0); // prev GOOD p = 0.022, i = 0.0000001, d = 0.000001, f = 0
+        double threshold = 0.5;
         double power = 0;
         pid.setWanted(degrees);
 
@@ -129,7 +129,7 @@ public class DriveTrain {
             x = lenfield/2 - x;
         }
 
-        deg = Math.toDegrees(Math.atan((lenfield/2 + y + yOffset)/(x - xOffset)));
+        deg = Math.toDegrees(Math.atan((lenfield/2 + y - yOffset)/(x - xOffset)));
         if(team == "BLUE"){
             deg = -deg;
         }

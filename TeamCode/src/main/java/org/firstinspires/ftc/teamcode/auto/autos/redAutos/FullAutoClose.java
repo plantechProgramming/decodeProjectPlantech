@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.PathsBlue;
 import org.firstinspires.ftc.teamcode.auto.PathsRed;
+import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
 import dev.nextftc.core.commands.Command;
@@ -61,5 +62,11 @@ public class FullAutoClose extends NextFTCOpMode {
         path = new PathsRed(follower());
         path.buildPaths();
         autoRoutine().schedule();
+    }
+
+    @Override
+    public void onStop(){
+        ReadWrite readWrite = new ReadWrite();
+        readWrite.writePose(follower().getPose());
     }
 }

@@ -63,5 +63,10 @@ public class LeaveClosePre extends NextFTCOpMode{
         autoRoutine().schedule();
     }
 
+    @Override
+    public void onStop(){
+        ReadWrite readWrite = new ReadWrite();
+        readWrite.writePose(follower().getPose());
+    }
 }
 

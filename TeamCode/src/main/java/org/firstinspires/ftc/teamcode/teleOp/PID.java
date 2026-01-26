@@ -59,8 +59,8 @@ public class PID {
         if (currentError > 180){
             currentError -= 360;
         }
-        final double currentTime = timer.milliseconds();
-        final double deltaTime = currentTime - prevTime;
+        double currentTime = timer.milliseconds();
+        double deltaTime = currentTime - prevTime;
 
         // no capping until it works
 //        if (Math.abs(currentError) < iZone) {
