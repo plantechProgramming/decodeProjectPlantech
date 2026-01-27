@@ -16,8 +16,8 @@ public class test extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        PathsRed pathsRed = new PathsRed(follower);
-        telemetry.addData("SPR: ", pathsRed.getPose());
+        PathsRed pathsRed = new PathsRed();
+        telemetry.addData("SPR: ", pathsRed.getSPose());
         telemetry.update();
 
         sleep(1000000);

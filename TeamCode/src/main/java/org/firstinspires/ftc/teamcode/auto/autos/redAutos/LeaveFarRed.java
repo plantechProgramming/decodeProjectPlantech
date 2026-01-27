@@ -4,7 +4,6 @@ import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.PathsBlue;
@@ -13,17 +12,14 @@ import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
 import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.delays.Delay;
-import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
-
-@Autonomous(name = "FullFarRed")
-public class FullAutoFar extends NextFTCOpMode {
+public class LeaveFarRed extends NextFTCOpMode {
     private Follower follower;
 
-    public FullAutoFar() {
+    public LeaveFarRed() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
@@ -33,25 +29,13 @@ public class FullAutoFar extends NextFTCOpMode {
 
     AutoCommands command = AutoCommands.INSTANCE;
     PathsRed path;
+    ReadWrite readWrite = new ReadWrite();
+
+    private final Pose startPose = new Pose(56.15, 8.4, Math.toRadians(90)); // Start Pose of our robot.
 
 
-    private final Pose startPose = new Pose(56.15, 8.4, Math.toRadians(90)).mirror(); // Start Pose of our robot.
-
-    public Command autoRoutine(){
-        return new SequentialGroup(
-                command.startShooter(true),
-                new Delay(0.3),
-                command.score(path.scorePreloadFar),
-                command.intake(path.intakeGPP, path.grabGPPFar, 0.73),
-                command.score(path.scoreGPPFar),
-
-                command.startShooter(false),
-                command.intake(path.intakePGP,path.grabPGPFar,0.72),
-                command.score(path.scorePGP),
-                command.intake(path.intakePPG,path.grabPPG,0.72)
-
-        );
-
+    public Command autoRoutine() {
+        return new FollowPath(path.leaveFar);
     }
     @Override
     public void onUpdate(){
@@ -65,17 +49,12 @@ public class FullAutoFar extends NextFTCOpMode {
         path = new PathsRed();
         follower().setStartingPose(path.getSPoseFar());
         path.buildPaths(follower());
-        telemetry.addData("start x", follower().getPose().getX());
-        telemetry.addData("start y", follower().getPose().getY());
-        telemetry.addData("start heading", follower().getPose().getHeading());
-        telemetry.update();
         autoRoutine().schedule();
     }
-
-
     @Override
     public void onStop(){
         ReadWrite readWrite = new ReadWrite();
         readWrite.writePose(follower().getPose());
     }
+
 }

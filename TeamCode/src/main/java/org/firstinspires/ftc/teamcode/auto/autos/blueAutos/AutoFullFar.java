@@ -36,10 +36,7 @@ public class AutoFullFar extends NextFTCOpMode {
     PathsBlue path;
     ReadWrite readWrite = new ReadWrite();
 
-    private final Pose startPose = new Pose(62, 8, Math.toRadians(90)); // Start Pose of our robot.
-
         public Command autoRoutine(){
-            path.buildPaths();
             return new SequentialGroup(
                     command.startShooter(true),
                     new Delay(0.3),
@@ -55,9 +52,9 @@ public class AutoFullFar extends NextFTCOpMode {
         }
     @Override
     public void onStartButtonPressed() {
-        follower().setStartingPose(startPose);
-        path = new PathsBlue(follower());
-        path.buildPaths();
+        path = new PathsBlue();
+        follower().setStartingPose(path.getSPoseFar());
+        path.buildPaths(follower());
         autoRoutine().schedule();
     }
     @Override

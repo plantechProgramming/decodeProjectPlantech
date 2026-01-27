@@ -98,7 +98,7 @@ public class DriveTrain {
     }
     public void turnToGyro(double degrees) {
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
-        PID pid = new PID(0.022, 0.0000001, 0.000001, 0); // prev GOOD p = 0.022, i = 0.0000001, d = 0.000001, f = 0
+        PID pid = new PID(0.022, 0.00000001, 0.000001, 0); // prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
         double threshold = 0.5;
         double power = 0;
         pid.setWanted(degrees);
@@ -117,7 +117,7 @@ public class DriveTrain {
     }
     double deg = 0;
     public void turnToGoal(String team){
-        double lenfield = 360; // cm
+        double lenfield = 365; // cm
         double x = odometry.getPosX(DistanceUnit.CM);
         double y = odometry.getPosY(DistanceUnit.CM);
         double yOffset = 10;//prev = 18

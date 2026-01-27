@@ -33,7 +33,6 @@ public class AutoFullClose extends NextFTCOpMode{
     AutoCommands command = AutoCommands.INSTANCE;
     PathsBlue path;
     ReadWrite readWrite = new ReadWrite();
-    private final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
 
 
     public Command autoRoutine(){
@@ -58,9 +57,9 @@ public class AutoFullClose extends NextFTCOpMode{
     }
     @Override
     public void onStartButtonPressed() {
-        follower().setStartingPose(startPose);
-        path = new PathsBlue(follower());
-        path.buildPaths();
+        path = new PathsBlue();
+        follower().setStartingPose(path.getSPose());
+        path.buildPaths(follower());
         autoRoutine().schedule();
     }
 

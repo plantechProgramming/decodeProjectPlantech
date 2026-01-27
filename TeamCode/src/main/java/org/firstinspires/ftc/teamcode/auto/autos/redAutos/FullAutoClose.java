@@ -58,9 +58,9 @@ public class FullAutoClose extends NextFTCOpMode {
     }
     @Override
     public void onStartButtonPressed() {
-        follower().setStartingPose(startPose);
-        path = new PathsRed(follower());
-        path.buildPaths();
+        path = new PathsRed();
+        follower().setStartingPose(path.getSPose());
+        path.buildPaths(follower());
         autoRoutine().schedule();
     }
 

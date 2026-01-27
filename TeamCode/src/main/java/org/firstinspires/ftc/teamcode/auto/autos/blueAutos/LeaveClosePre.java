@@ -19,7 +19,7 @@ import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
-@Autonomous(name = "LeaveClosePre",group = "tests")
+@Autonomous(name = "LeaveClosePreBlue",group = "tests")
 public class LeaveClosePre extends NextFTCOpMode{
 
 
@@ -45,7 +45,7 @@ public class LeaveClosePre extends NextFTCOpMode{
                 command.startShooter(false),
                 new Delay(1),
                 command.score(path.scorePreload),
-                new FollowPath(path.leaveClose)
+                new FollowPath(path.scoreLeaveClose)
         );
     }
     @Override
@@ -57,9 +57,9 @@ public class LeaveClosePre extends NextFTCOpMode{
     }
     @Override
     public void onStartButtonPressed() {
-        follower().setStartingPose(startPose);
-        path = new PathsBlue(follower());
-        path.buildPaths();
+        path = new PathsBlue();
+        follower().setStartingPose(path.getSPose());
+        path.buildPaths(follower());
         autoRoutine().schedule();
     }
 
