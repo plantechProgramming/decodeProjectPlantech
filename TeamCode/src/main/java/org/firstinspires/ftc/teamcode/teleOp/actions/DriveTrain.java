@@ -133,6 +133,9 @@ public class DriveTrain {
         if(team == "BLUE"){
             deg = -deg;
         }
+        else{
+            deg = 180 + deg;
+        }
         turnToGyro(deg);
     }
 

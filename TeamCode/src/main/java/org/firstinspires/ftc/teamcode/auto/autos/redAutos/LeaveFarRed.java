@@ -4,6 +4,7 @@ import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.PathsBlue;
@@ -16,6 +17,7 @@ import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
+@Autonomous(name = "LeaveFarRed",group = "tests")
 public class LeaveFarRed extends NextFTCOpMode {
     private Follower follower;
 
