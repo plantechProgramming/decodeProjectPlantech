@@ -138,14 +138,16 @@ public class TeleOpBlue extends OpMode {
             shooter.naiveShooter(driveTrain.isFar());
 
             if(gamepad1.left_bumper){
-                driveTrain.turnToGoal("BLUE");//TODO: change for RED
+                driveTrain.turnToGoal("BLUE");// TODO: change for RED
             }
+
             if(gamepad1.start){
                 double x = odometry.getPosX(DistanceUnit.CM);
                 double y = odometry.getPosY(DistanceUnit.CM);
                 Pose2D curPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,0);//TODO: change for RED
                 odometry.setPosition(curPose);
             }
+
             if(gamepad1.back){
                 odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 0)); //TODO: change for RED
 

@@ -29,12 +29,15 @@ public class shooterTest extends OpMode {
             if(gamepad1.a){
                 shooter.setDashBoardPID();
                 intake.inBetweenInFull();
+                intake.intakeIn();
             }
 //            if(gamepad1.a) shooter.noPhysShoot(0.5);
 //            shooter.shooter2.setPower(0.1);
             dashboardTelemetry.addData("power", shooter.shooter.getPower());
+            telemetry.addData("pow", shooter.shooter.getPower());
             shooter.setShooterTelemetry(dashboardTelemetry);
             dashboardTelemetry.update();
+            telemetry.update();
         }
     }
 

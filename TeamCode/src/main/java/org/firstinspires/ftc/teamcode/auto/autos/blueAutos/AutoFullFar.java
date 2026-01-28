@@ -41,13 +41,13 @@ public class AutoFullFar extends NextFTCOpMode {
                     command.startShooter(true),
                     new Delay(0.3),
                     command.score(path.scorePreloadFar),
-                    command.intake(path.intakeGPP, path.grabGPPFar, 0.73),
+                    command.intake(path.intakeGPP, path.grabGPPFar, 0.75),
                     command.score(path.scoreGPPFar),
 
                     command.startShooter(false),
-                    command.intake(path.intakePGP,path.grabPGPFar,0.72),
+                    command.intake(path.intakePGP,path.grabPGPFar,0.74),
                     command.score(path.scorePGP),
-                    command.intake(path.intakePPG,path.grabPPG,0.72)
+                    command.intake(path.intakePPG,path.grabPPG,0.74)
             );
         }
     @Override

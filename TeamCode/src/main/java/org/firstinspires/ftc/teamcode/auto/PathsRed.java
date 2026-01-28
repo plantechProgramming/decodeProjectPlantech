@@ -15,11 +15,10 @@ public class PathsRed {
     public PathsRed(){
     }
     private final PathsBlue pathsBlue = new PathsBlue();
-
     private final Pose startPose = pathsBlue.getSPose().mirror(); // Start Pose of our robot.
 
     // the y is way too large on purpose for localization fix
-    private final Pose startPoseFar = new Pose(88.3,13,Math.toRadians(90)); // Start Pose of our robot.
+    private final Pose startPoseFar = new Pose(88.3,15.8,Math.toRadians(90)); // Start Pose of our robot.
     private final Pose scorePoseFar = pathsBlue.scorePoseFar.mirror(); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
 
     public final Pose scorePose = pathsBlue.scorePose.mirror(); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.

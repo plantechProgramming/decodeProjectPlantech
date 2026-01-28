@@ -108,9 +108,9 @@ public class Shooter {
         shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         if (!far) {
-            Szonedis = 0.475;
+            Szonedis = 0.4743;
         } else{
-            Szonedis = 0.55;
+            Szonedis = 0.545;
         }
         shooter.setPower(Szonedis*errorFix);
         shooter2.setPower(-Szonedis*errorFix);

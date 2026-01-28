@@ -99,7 +99,7 @@ public class DriveTrain {
     public void turnToGyro(double degrees) {
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
         PID pid = new PID(0.022, 0.00000001, 0.000001, 0); // prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
-        double threshold = 0.5;
+        double threshold = 0.4;
         double power = 0;
         pid.setWanted(degrees);
 

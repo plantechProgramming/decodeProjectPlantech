@@ -33,7 +33,7 @@ public class NextShooter implements Subsystem {
     private MotorEx shooter2 = new MotorEx("shooter2", -1);
 
     double Szonedis = 0.5;
-    double kp = 0.01, ki = 0, kd = 0, kf = 0;
+    double kp = 0.01, ki = 0, kd = 0, kf = 0.012;
     ControlSystem controlSystem = ControlSystem.builder() // next pid
             .velPid(kp, ki, kd)
             .basicFF(0,0,kf)
@@ -43,9 +43,9 @@ public class NextShooter implements Subsystem {
         return new InstantCommand(
                 () -> {
                     if (!far) {
-                        Szonedis = 0.457;
+                        Szonedis = 0.4563;
                     } else {
-                        Szonedis = 0.545;
+                        Szonedis = 0.5469;
                     }
                     controlSystem.setGoal(new KineticState(0, powerToTicks(Szonedis)));
                 }

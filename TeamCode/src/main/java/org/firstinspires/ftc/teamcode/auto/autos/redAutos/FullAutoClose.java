@@ -40,13 +40,13 @@ public class FullAutoClose extends NextFTCOpMode {
         return new SequentialGroup(
                 command.startShooter(false),
                 command.score(path.scorePreload),
-                command.intake(path.intakePPG,path.grabPPG,0.7),
+                command.intake(path.intakePPG,path.grabPPG,0.64),
 
                 command.score(path.scorePPG),
-                command.intake(path.intakePGP,path.grabPGP,0.67),
+                command.intake(path.intakePGP,path.grabPGP,0.68),
 
                 command.score(path.scorePGP),
-                command.intake(path.intakeGPP, path.grabGPP, 0.7)
+                command.intake(path.intakeGPP, path.grabGPP, 0.67)
         );
     }
     @Override
