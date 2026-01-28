@@ -129,7 +129,7 @@ public class DriveTrain {
             x = lenfield/2 - x;
         }
 
-        deg = Math.toDegrees(Math.atan((lenfield/2 + y - yOffset)/(x - xOffset)));
+        deg = Math.toDegrees(Math.atan2((lenfield/2 + y - yOffset), (x - xOffset)));
         if(team == "BLUE"){
             deg = -deg;
         }
@@ -163,8 +163,6 @@ public class DriveTrain {
             hed += 360;
         }
         return new Pose2D(DistanceUnit.CM, newx, newy, AngleUnit.DEGREES, hed);
-
-
     }
 }
 
