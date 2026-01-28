@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
+import androidx.lifecycle.DispatchQueue;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.ftc.FTCCoordinates;
@@ -7,12 +9,15 @@ import com.pedropathing.ftc.InvertedFTCCoordinates;
 import com.pedropathing.ftc.PoseConverter;
 import com.pedropathing.geometry.CoordinateSystem;
 import com.pedropathing.geometry.Pose;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
@@ -34,6 +39,8 @@ public class TeleOpBlue extends OpMode {
     @Override
     protected void postInit() {
         //TODO: pinpoint
+        limelight.setPollRateHz(100);
+        limelight.start();
         Imu.resetYaw();
     }
 
@@ -126,13 +133,7 @@ public class TeleOpBlue extends OpMode {
 //            } else if (gamepad1.a) {
 //                intake.inBetweenInPart();
             }
-//           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
-//               double deg = test.specialDetection.ftcPose.bearing;
-//
-//               driveTrain.turnToGyro(odometry.getHeading(AngleUnit.DEGREES) + deg);
-//               telemetry.addData("yaw", deg);
-//               telemetry.update();
-//           }
+
             else if(gamepad1.right_bumper){
                 if(shooter.isUpToSpeed()){
                     intake.inBetweenInFull();
@@ -175,7 +176,21 @@ public class TeleOpBlue extends OpMode {
 
     }
 
+    // is this the best way?
+    private void relocalizeWithLLPose(double heading){
+        limelight.updateRobotOrientation(heading);
+        LLResult curResult = limelight.getLatestResult();
 
+        if(curResult != null && curResult.isValid()){
+            Pose3D botPose = curResult.getBotpose_MT2();
+            double x = botPose.getPosition().x;
+            double y = botPose.getPosition().y;
+
+            // getposition returns mm and degrees (i think)
+            Pose2D curPose =  new Pose2D(DistanceUnit.MM,x, y,AngleUnit.DEGREES,heading);
+            odometry.setPosition(curPose);
+        }
+    }
     @Override
     protected void end() {
 

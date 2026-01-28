@@ -7,6 +7,7 @@ import com.bylazar.gamepad.PanelsGamepad;
 import com.bylazar.panels.Panels;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -43,6 +44,7 @@ public abstract class OpMode extends LinearOpMode {
     protected GoBildaPinpointDriver odometry;
     protected IMU Imu;
     public FtcDashboard dashboard;
+    protected Limelight3A limelight;
 
     void initialize() {
 
@@ -105,6 +107,8 @@ public abstract class OpMode extends LinearOpMode {
 
         // until we find the fucking camera we can't scan it and add it to robot config :(((
     //    camera = hardwareMap.get(CameraName.class,"webcam");
+        limelight = hardwareMap.get(Limelight3A.class, "limelight"); // TODO: change name
+
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
