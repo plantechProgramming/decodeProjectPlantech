@@ -39,8 +39,7 @@ public class TeleOpBlue extends OpMode {
     @Override
     protected void postInit() {
         //TODO: pinpoint
-        limelight.setPollRateHz(100);
-        limelight.start();
+
         Imu.resetYaw();
     }
 
@@ -177,20 +176,7 @@ public class TeleOpBlue extends OpMode {
     }
 
     // is this the best way?
-    private void relocalizeWithLLPose(double heading){
-        limelight.updateRobotOrientation(heading);
-        LLResult curResult = limelight.getLatestResult();
 
-        if(curResult != null && curResult.isValid()){
-            Pose3D botPose = curResult.getBotpose_MT2();
-            double x = botPose.getPosition().x;
-            double y = botPose.getPosition().y;
-
-            // getposition returns mm and degrees (i think)
-            Pose2D curPose =  new Pose2D(DistanceUnit.MM,x, y,AngleUnit.DEGREES,heading);
-            odometry.setPosition(curPose);
-        }
-    }
     @Override
     protected void end() {
 
