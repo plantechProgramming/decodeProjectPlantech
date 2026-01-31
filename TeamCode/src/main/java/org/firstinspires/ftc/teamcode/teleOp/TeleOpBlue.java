@@ -36,8 +36,8 @@ import dev.nextftc.core.commands.delays.Delay;
 public class TeleOpBlue extends OpMode {
     @Override
     protected void postInit() {
-        //TODO: pinpoint
-        Imu.resetYaw();
+//        odometry.recalibrateIMU();
+//        odometry.resetPosAndIMU();
     }
 
     public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0);

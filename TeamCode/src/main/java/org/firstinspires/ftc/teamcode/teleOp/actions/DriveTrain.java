@@ -120,8 +120,8 @@ public class DriveTrain {
         double lenfield = 365; // cm
         double x = odometry.getPosX(DistanceUnit.CM);
         double y = odometry.getPosY(DistanceUnit.CM);
-        double yOffset = 10;//prev = 18
-        double xOffset = 0; // prev = 16
+        double yOffset = 20;//prev = 18
+        double xOffset = 20; // prev = 16
         if(team == "RED"){
             x = lenfield/2 + x;
         }

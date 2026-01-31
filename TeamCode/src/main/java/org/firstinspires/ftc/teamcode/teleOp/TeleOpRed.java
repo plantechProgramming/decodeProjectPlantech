@@ -40,6 +40,7 @@ public class TeleOpRed extends OpMode {
 
     @Override
     public void run(){
+        odometry.resetPosAndIMU();
         Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
@@ -74,7 +75,7 @@ public class TeleOpRed extends OpMode {
 //                .addProcessor(aprilTag)
 //                .build();
 
-
+        sleep(100);
         double forward; //-1 to 1
         double turn;
         double drift;

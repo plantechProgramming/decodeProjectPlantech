@@ -43,9 +43,9 @@ public class NextShooter implements Subsystem {
         return new InstantCommand(
                 () -> {
                     if (!far) {
-                        Szonedis = 0.4563;
+                        Szonedis = 0.45564;
                     } else {
-                        Szonedis = 0.5469;
+                        Szonedis = 0.547;
                     }
                     controlSystem.setGoal(new KineticState(0, powerToTicks(Szonedis)));
                 }
