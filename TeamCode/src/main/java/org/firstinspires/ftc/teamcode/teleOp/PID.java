@@ -34,22 +34,7 @@ public class PID {
         final double currentTime = timer.milliseconds();
         final double deltaTime = currentTime - prevTime;
 
-        // no capping until it works
-//        if (Math.abs(currentError) < iZone) {
-//            if (Math.signum(currentError) != Math.signum(prevError)) {
-//                integral = 0;
-//            } else {
-//                integral += currentError * deltaTime;
-//            }
-//        }
-        // sum our integral
-        integral += currentError * deltaTime;
-        final double derivative = deltaTime == 0 ? 0 : (currentError - prevError) / deltaTime;
-
-        prevError = currentError;
-        prevTime = currentTime;
-        power = kP * currentError + kI * integral + kD * derivative + kF * wanted;
-        return power;
+        return getPIDPower(currentError);
     }
     public double updatedeg(final double current) {
         double currentError = wanted - current;
@@ -59,18 +44,13 @@ public class PID {
         if (currentError > 180){
             currentError -= 360;
         }
+        return getPIDPower(currentError);
+    }
+
+    public double getPIDPower(final double currentError){
         double currentTime = timer.milliseconds();
         double deltaTime = currentTime - prevTime;
 
-        // no capping until it works
-//        if (Math.abs(currentError) < iZone) {
-//            if (Math.signum(currentError) != Math.signum(prevError)) {
-//                integral = 0;
-//            } else {
-//                integral += currentError * deltaTime;
-//            }
-//        }
-        // sum our integral
         integral += currentError * deltaTime;
         final double derivative = deltaTime == 0 ? 0 : (currentError - prevError) / deltaTime;
 

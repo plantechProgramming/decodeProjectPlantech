@@ -124,6 +124,7 @@ public class DriveTrain {
     double deg = 0;
     public void turnToGoal(String team){
         deg = utils.getAngleFromGoal(team);
+        telemetry.addData("disToGoal", utils.getDistFromGoal(team));
         turnToGyro(deg);
     }
 

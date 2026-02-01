@@ -25,10 +25,6 @@ public class Utils {
     public final Pose2D GOAL_RED = new Pose2D(DistanceUnit.CM,-LEN_FIELD/2-xOffset, -LEN_FIELD/2 - yOffset,AngleUnit.DEGREES,0);
     public final Pose2D GOAL_BLUE = new Pose2D(DistanceUnit.CM,LEN_FIELD/2-xOffset, -LEN_FIELD/2 + yOffset,AngleUnit.DEGREES,0);
 
-    // fuck this, its hoory's fault
-    public double square(double num){
-        return Math.pow(num, 2);
-    }
     public Pair<Double, Double> getXYdistToPoint(Pose2D point){
         double robotX = odometry.getPosX(DistanceUnit.CM);
         double robotY = odometry.getPosY(DistanceUnit.CM);
@@ -39,18 +35,16 @@ public class Utils {
 
     public Pair<Double,Double> getXYdistToGoal(String team){
         if(team.equals("BLUE")){
-            telemetry.addData("disTogoalXY", getXYdistToPoint(GOAL_BLUE));
             return getXYdistToPoint(GOAL_BLUE);
         }
-        telemetry.addData("disTogoalXY", getXYdistToPoint(GOAL_BLUE));
         return getXYdistToPoint(GOAL_RED);
     }
 
     public double getDistFromPoint(Pose2D point){
-        return Math.sqrt(square(getXYdistToPoint(point).first) + square(getXYdistToPoint(point).second));
+        return Math.hypot(getXYdistToPoint(point).first, getXYdistToPoint(point).second);
     }
     public double getDistFromGoal(String team){
-        return Math.sqrt(square(getXYdistToGoal(team).first) + square(getXYdistToGoal(team).second));
+        return Math.hypot(getXYdistToGoal(team).first,getXYdistToGoal(team).second);
     }
 
     public double getAngleFromPoint(Pose2D point){

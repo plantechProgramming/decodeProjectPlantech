@@ -36,7 +36,7 @@ public abstract class OpMode extends LinearOpMode {
 //    protected NormalizedColorSensor colorSensor;
 
     protected CameraName camera;
-    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight, EH, EA,SU,SD, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
+    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight,turretMotor, EH, EA,SU,SD, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
     protected ElapsedTime runtime = new ElapsedTime();
     public boolean liftFlag = false;
     protected Telemetry dashboardTelemetry;
@@ -96,6 +96,11 @@ public abstract class OpMode extends LinearOpMode {
         shootMotorOp.setDirection(DcMotorSimple.Direction.FORWARD);
         shootMotorOp.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shootMotorOp.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        turretMotor = hardwareMap.get(DcMotorEx.class, "turret");
+        turretMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        turretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         odometry = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
         odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
