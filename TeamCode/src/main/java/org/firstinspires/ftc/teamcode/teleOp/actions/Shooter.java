@@ -99,6 +99,12 @@ public class Shooter {
         shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
     }
+
+
+    public void interpolate(){
+//        noPhysShoot();
+    }
+
 //    / @param dis: distance from goal
     /// shoots with different powers depending on what launch zone youre in
     // TODO: make depend on odo vals, closed loop control for values

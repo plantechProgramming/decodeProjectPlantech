@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleOp.actions;
 
+import android.util.Pair;
+
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
@@ -15,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.teleOp.PID;
+import org.firstinspires.ftc.teamcode.teleOp.Utils;
 import org.opencv.core.Mat;
 import org.openftc.easyopencv.OpenCvCamera;
 
@@ -27,6 +30,7 @@ public class DriveTrain {
     private OpenCvCamera camera;
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
+    Utils utils;
     public static double Kp = 0.5, Ki = 0.2, Kd = 0.01;
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
@@ -40,6 +44,8 @@ public class DriveTrain {
         this.Imu = imu;
 
         this.telemetry = telemetry;
+
+        this.utils  = new Utils(this.telemetry, this.odometry);
     }
 
 
@@ -117,25 +123,7 @@ public class DriveTrain {
     }
     double deg = 0;
     public void turnToGoal(String team){
-        double lenfield = 365; // cm
-        double x = odometry.getPosX(DistanceUnit.CM);
-        double y = odometry.getPosY(DistanceUnit.CM);
-        double yOffset = 20;//prev = 18
-        double xOffset = 20; // prev = 16
-        if(team == "RED"){
-            x = lenfield/2 + x;
-        }
-        else{
-            x = lenfield/2 - x;
-        }
-
-        deg = Math.toDegrees(Math.atan2((lenfield/2 + y - yOffset), (x - xOffset)));
-        if(team == "BLUE"){
-            deg = -deg;
-        }
-        else{
-            deg = 180 + deg;
-        }
+        deg = utils.getAngleFromGoal(team);
         turnToGyro(deg);
     }
 

@@ -18,7 +18,8 @@ public class PathsRed {
     private final Pose startPose = pathsBlue.getSPose().mirror(); // Start Pose of our robot.
 
     // the y is way too large on purpose for localization fix
-    private final Pose startPoseFar = new Pose(88.3,15.8,Math.toRadians(90)); // Start Pose of our robot.
+//    private final Pose startPoseFar = new Pose(85.35,15,Math.toRadians(90)); // Start Pose of our robot.
+    private final Pose startPoseFar = pathsBlue.getSPoseFar().mirror();
     private final Pose scorePoseFar = pathsBlue.scorePoseFar.mirror(); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
 
     public final Pose scorePose = pathsBlue.scorePose.mirror(); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
@@ -67,7 +68,7 @@ public class PathsRed {
 
     private Pose Mymirror(Pose pPose) {
         Pose k = pPose;
-        return new Pose(144 - k.getX(), k.getY()-17/2.54, MathFunctions.normalizeAngle(Math.PI - k.getHeading()), PedroCoordinates.INSTANCE);
+        return new Pose(141.5 - k.getX(), k.getY()-2, MathFunctions.normalizeAngle(Math.PI - k.getHeading()), PedroCoordinates.INSTANCE);
     }
 
     public Pose getSPoseFar(){

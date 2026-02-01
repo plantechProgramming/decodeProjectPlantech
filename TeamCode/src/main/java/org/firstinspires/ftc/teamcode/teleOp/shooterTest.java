@@ -25,11 +25,10 @@ public class shooterTest extends OpMode {
         Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
         while(opModeIsActive()){
             odometry.update();
-            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .05);
+            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .02);
             if(gamepad1.a){
-                shooter.setDashBoardPID();
-                intake.inBetweenInFull();
-                intake.intakeIn();
+                    intake.inBetweenInFull();
+                    intake.intakeIn();
             }
 //            if(gamepad1.a) shooter.noPhysShoot(0.5);
 //            shooter.shooter2.setPower(0.1);
