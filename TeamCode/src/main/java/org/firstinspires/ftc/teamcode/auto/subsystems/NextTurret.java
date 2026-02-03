@@ -31,7 +31,7 @@ public class NextTurret implements Subsystem {
     public NextTurret(){}
     public int degToTicks(double deg){
         double ticks = deg * TICK_PER_DEG;
-        return (int)Math.round(ticks*GEAR_RATIO); // I ❤ JAVA
+        return (int)Math.round(ticks*GEAR_RATIO); // I ❤ JAVA AND GIT
     }
     public Command turnToDeg(double deg){
         return new RunToPosition(controlSystem,degToTicks(deg));

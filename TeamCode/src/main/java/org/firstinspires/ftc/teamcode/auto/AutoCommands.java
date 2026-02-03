@@ -99,8 +99,8 @@ public class AutoCommands implements Component{
         );
     }
     public Command turnTurret(){
-        Pose pos = follower.getPose();
-        Pose2D ftcPose = turret.PedroPoseConverter(pos);
+        Pose pose = follower.getPose();
+        Pose2D ftcPose = turret.PedroPoseConverter(pose);
         double heading = ftcPose.getHeading(AngleUnit.DEGREES);
         return turret.turnToDeg(heading);
     }
