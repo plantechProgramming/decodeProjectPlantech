@@ -17,7 +17,7 @@ import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
-@Autonomous(name = "LeaveFarGPPRed",group = "Red")
+@Autonomous(name = "Leave Far GPP Red",group = "Red")
 public class LeaveFarGPPRed extends NextFTCOpMode{
     private Follower follower;
 
