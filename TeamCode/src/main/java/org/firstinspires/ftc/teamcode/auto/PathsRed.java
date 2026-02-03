@@ -21,30 +21,26 @@ public class PathsRed {
 //    private final Pose startPoseFar = new Pose(85.35,15,Math.toRadians(90)); // Start Pose of our robot.
     private final Pose startPoseFar = pathsBlue.getSPoseFar().mirror();
     private final Pose scorePoseFar = pathsBlue.scorePoseFar.mirror(); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
-
     public final Pose scorePose = pathsBlue.scorePose.mirror(); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
-    public final Pose controlPosePPG = pathsBlue.controlPosePPG.mirror();// pose for getting to PPG without hitting other balls
-    public final Pose controlPosePGP = pathsBlue.controlPosePGP.mirror();// pose for getting to PGP without hitting other balls
-    public final Pose controlPoseGPP = pathsBlue.controlPoseGPP.mirror();// pose for getting to PGP without hitting other balls
     public final Pose leaveClosePose = pathsBlue.leaveClosePose.mirror();
-
-
+////
+//
 //    public final Pose startPose = new Pose(124.000, 121.700, Math.toRadians(36));
-//    public final Pose scorePoseFar = new Pose(83.589, 19.850, Math.toRadians(65));
-//    public final Pose scorePose = new Pose(94.981, 97.019, Math.toRadians(39));
-//    public final Pose startPoseFar = new Pose(87.500, 8.400, Math.toRadians(90));
-//    public final Pose GPP = new Pose(103.000, 35.215, Math.toRadians(0));
+//    public final Pose scorePoseFar = new Pose(88, 16, Math.toRadians(70));
+////    public final Pose scorePose = new Pose(94.981, 97.019, Math.toRadians(39));
+//    public final Pose startPoseFar = new Pose(88, 8.5, Math.toRadians(90));
+//    public final Pose GPP = new Pose(101.8, 35, Math.toRadians(0));
 //    public final Pose PPG =  new Pose(103.000, 84.00, Math.toRadians(0));
 //    public final Pose PGP = new Pose(103.000, 60.000, Math.toRadians(0));
 //
 //    public final Pose afterPickupGPP = new Pose(132.700, 36.000, Math.toRadians(0));
 //    public final Pose afterPickupPPG = new Pose(127.600, 83.500, Math.toRadians(0));
 //    public final Pose afterPickupPGP = new Pose(133.700, 58.500, Math.toRadians(0));
-//
-//
-//    public final Pose controlPosePPG = pathsBlue.controlPosePPG.mirror();// pose for getting to PPG without hitting other balls
-//    public final Pose controlPosePGP = pathsBlue.controlPosePGP.mirror();// pose for getting to PGP without hitting other balls
-//    public final Pose controlPoseGPP = pathsBlue.controlPoseGPP.mirror();// pose for getting to PGP without hitting other balls
+
+
+    public final Pose controlPosePPG = pathsBlue.controlPosePPG.mirror();// pose for getting to PPG without hitting other balls
+    public final Pose controlPosePGP = pathsBlue.controlPosePGP.mirror();// pose for getting to PGP without hitting other balls
+    public final Pose controlPoseGPP = pathsBlue.controlPoseGPP.mirror();// pose for getting to PGP without hitting other balls
 
     public final Pose GPP = pathsBlue.GPP.mirror();
     public final Pose PPG = pathsBlue.PPG.mirror();
@@ -53,7 +49,7 @@ public class PathsRed {
     public final Pose afterPickupGPP = pathsBlue.afterPickupGPP.mirror();
     public final Pose afterPickupPPG = pathsBlue.afterPickupPPG.mirror();
     public final Pose afterPickupPGP = pathsBlue.afterPickupPGP.mirror();
-
+//
     public final Pose leaveFarPose = pathsBlue.leaveFarPose.mirror();
 
     public PathChain scorePreload, scorePreloadFar;
