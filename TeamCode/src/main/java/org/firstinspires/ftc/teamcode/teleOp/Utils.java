@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleOp;
 
 import android.util.Pair;
 
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -53,5 +54,18 @@ public class Utils {
     public double getAngleFromGoal(String team){
         double deg = Math.atan2(getXYdistToGoal(team).second, getXYdistToGoal(team).first);
         return Math.toDegrees(deg);
+    }
+    public Pose2D PedroPoseConverter(Pose pose){
+        double x = pose.getX();
+        double y = pose.getY();
+        double hed = Math.toDegrees(pose.getHeading());
+        double lenField = 365.76; // 144 inch to cm
+        double newx = ((-lenField/144)*x)+lenField/2;
+        double newy = ((-lenField/144)*y)+lenField/2;
+        hed = hed - 180;
+        if(hed <= 180){
+            hed += 360;
+        }
+        return new Pose2D(DistanceUnit.CM, newx, newy, AngleUnit.DEGREES, hed);
     }
 }

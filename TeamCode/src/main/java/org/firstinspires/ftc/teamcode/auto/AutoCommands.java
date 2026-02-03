@@ -1,15 +1,19 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextInBetween;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextIntake;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
+import org.firstinspires.ftc.teamcode.auto.subsystems.NextTurret;
 import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
 
 import java.nio.channels.NetworkChannel;
@@ -29,12 +33,14 @@ public class AutoCommands implements Component{
     NextShooter shooter;
     NextIntake intake;
     NextInBetween inBetween;
+    NextTurret turret;
     Follower follower;
 
     public AutoCommands(Follower follower) {
         shooter = new NextShooter();
         intake = new NextIntake();
         inBetween = new NextInBetween();
+        turret = new NextTurret();
         this.follower = follower;
     }
 
@@ -42,6 +48,7 @@ public class AutoCommands implements Component{
         shooter = new NextShooter();
         intake = new NextIntake();
         inBetween = new NextInBetween();
+        turret = new NextTurret();
     }
 
     public static final AutoCommands INSTANCE = new AutoCommands();
@@ -91,6 +98,12 @@ public class AutoCommands implements Component{
                 intake.take()
         );
     }
+    public Command turnTurret(){
+        Pose pos = follower.getPose();
+        Pose2D ftcPose = turret.PedroPoseConverter(pos);
+        double heading = ftcPose.getHeading(AngleUnit.DEGREES);
+        return turret.turnToDeg(heading);
+    }
 
     @Override
     public void postUpdate(){
@@ -102,6 +115,7 @@ public class AutoCommands implements Component{
         shooter.stop();
         inBetween.stop();
         intake.stop();
+        turret.stop();
     }
 
 }
