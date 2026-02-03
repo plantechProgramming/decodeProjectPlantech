@@ -106,7 +106,7 @@ public abstract class OpMode extends LinearOpMode {
 //        odometry.resetPosAndIMU();
 
         // until we find the fucking camera we can't scan it and add it to robot config :(((
-    //    camera = hardwareMap.get(CameraName.class,"webcam");
+        camera = hardwareMap.get(CameraName.class,"webcam");
         limelight = hardwareMap.get(Limelight3A.class, "limelight"); // TODO: change name
         limelight.pipelineSwitch(0);
 
