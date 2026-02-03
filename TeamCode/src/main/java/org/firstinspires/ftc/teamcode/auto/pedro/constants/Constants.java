@@ -31,7 +31,7 @@ public class Constants {
             .translationalPIDFCoefficients(new PIDFCoefficients(0.05, 0.0, 0.02, 0))
             .headingPIDFCoefficients(new PIDFCoefficients(2, 0, 0.1, 0))
             .drivePIDFCoefficients(
-                    new FilteredPIDFCoefficients(0.00792, 0.0, 0.000001, 1, 0)
+                    new FilteredPIDFCoefficients(0.00792, 0.0, 0.000001, 1.15, 0)
                     //i=0535
             );
 
