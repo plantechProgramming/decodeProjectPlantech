@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import dev.nextftc.ftc.NextFTCOpMode;
 
 
-@Autonomous(name = "stillCloseBlue")
+@Autonomous(name = "still Close Blue", group = "still")
 public class CloseStillAuto extends NextFTCOpMode {
 
     @Override

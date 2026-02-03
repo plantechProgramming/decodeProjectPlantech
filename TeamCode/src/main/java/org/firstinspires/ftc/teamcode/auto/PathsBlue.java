@@ -12,8 +12,8 @@ public class PathsBlue {
     }
     // TODO: make stuff private with getter
     private final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
-    private final Pose startPoseFar = new Pose(56.5, 8.5, Math.toRadians(180)); // Start Pose of our robot.
-    public final Pose scorePoseFar = new Pose(59, 16, Math.toRadians(110)); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
+    private final Pose startPoseFar = new Pose(56.5, 8.1, Math.toRadians(180)); // Start Pose of our robot.
+    public final Pose scorePoseFar = new Pose(59, 16, Math.toRadians(112)); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
 
     public final Pose scorePose = new Pose(47.5, 95, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public final Pose controlPosePPG = new Pose(70,60);// pose for getting to PPG without hitting other balls
@@ -23,8 +23,8 @@ public class PathsBlue {
 
     public final Pose leaveClosePose = new Pose(55, 122.5, Math.toRadians(180));
     public final Pose leaveFarPose = new Pose(39, 16, Math.toRadians(180));
-    public final Pose GPP = new Pose(42, 36, Math.toRadians(180));
-    public final Pose PPG = new Pose(42, 83.5, Math.toRadians(180));
+    public final Pose GPP = new Pose(44, 36, Math.toRadians(180));
+    public final Pose PPG = new Pose(44, 83.5, Math.toRadians(180));
     public final Pose PGP = new Pose(44 , 58.5, Math.toRadians(180));
 
     public final Pose afterPickupGPP = new Pose(8.5, 36, Math.toRadians(180));

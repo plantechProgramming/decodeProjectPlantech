@@ -21,7 +21,7 @@ import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
-@Autonomous(name = "FullFarBlue")
+@Autonomous(name = "Full Far Blue", group = "Blue")
 public class AutoFullFar extends NextFTCOpMode {
 
     public AutoFullFar() {
@@ -45,7 +45,7 @@ public class AutoFullFar extends NextFTCOpMode {
                     command.score(path.scoreGPPFar),
 
                     command.startShooter(false),
-                    command.intake(path.intakePGP,path.grabPGPFar,0.75),
+                    command.intake(path.intakePGP,path.grabPGPFar,0.8),
                     command.score(path.scorePGP),
                     command.intake(path.intakePPG,path.grabPPG,0.75)
             );

@@ -7,12 +7,13 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
-
-@Autonomous(name = "Plan A", group = "tests")
+@Disabled
+@Autonomous(name = "Test Pedro", group = "tests")
 public class testPedro extends OpMode {
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;

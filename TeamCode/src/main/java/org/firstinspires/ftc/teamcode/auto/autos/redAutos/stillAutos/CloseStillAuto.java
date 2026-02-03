@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import dev.nextftc.ftc.NextFTCOpMode;
 
 
-@Autonomous(name = "stillCloseRed")
+@Autonomous(name = "still Close Red", group = "still")
 public class CloseStillAuto extends NextFTCOpMode {
     private final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)).mirror(); // Start Pose of our robot.
 

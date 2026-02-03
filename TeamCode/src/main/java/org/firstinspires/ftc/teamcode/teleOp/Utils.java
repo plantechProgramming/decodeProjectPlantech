@@ -20,6 +20,7 @@ public class Utils {
         this.telemetry = telemetry;
         this.odometry = odometry;
     }
+    public Utils(){}
     public final double LEN_FIELD = 360.172; // in cm
     double yOffset = 20;//prev = 18
     double xOffset = 20; // prev = 16

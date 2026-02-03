@@ -32,7 +32,7 @@ public class shooterTest extends OpMode {
 
         while(opModeIsActive()){
 //            turret.turnToDeg(60);
-            turret.turret(utils.getAngleFromGoal("BLUE"));
+            turret.turret(utils.getAngleFromGoal("BLUE  "));
 //            turretMotor.setPower(0.2);
             odometry.update();
             shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .02);

@@ -17,7 +17,7 @@ import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
-@Autonomous(name = "FullCloseBlue")
+@Autonomous(name = "Full Close Blue", group = "Blue")
 public class AutoFullClose extends NextFTCOpMode{
 
     private Follower follower;

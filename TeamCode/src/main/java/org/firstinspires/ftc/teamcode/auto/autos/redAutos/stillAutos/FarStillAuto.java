@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 
 import dev.nextftc.ftc.NextFTCOpMode;
 
-@Autonomous(name = "stillFarRed")
+@Autonomous(name = "still Far Red", group = "still")
 public class FarStillAuto extends NextFTCOpMode {
     private final Pose startPose = new Pose(56.15, 8.4, Math.toRadians(90)).mirror(); // Start Pose of our robot.
 

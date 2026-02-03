@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.auto.camera.colorsensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp
 public class ColorTests extends OpMode {
     ColorSensorTest color = new ColorSensorTest();
     ColorSensorTest.DetectedColor detectedColor;

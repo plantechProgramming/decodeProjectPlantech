@@ -3,14 +3,15 @@ package org.firstinspires.ftc.teamcode.auto.test;
 import static org.firstinspires.ftc.teamcode.auto.pedro.Tuning.follower;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.auto.PathsBlue;
 import org.firstinspires.ftc.teamcode.auto.PathsRed;
 
 import dev.nextftc.extensions.pedro.PedroComponent;
-
-@Autonomous(name="test")
+@Disabled
+@Autonomous(name="test",group="test")
 public class test extends LinearOpMode {
 
 

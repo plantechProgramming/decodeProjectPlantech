@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -37,6 +38,7 @@ import java.util.ListIterator;
  * FILE IS NOT USED. here for "what if we need it for some reason in comp"
  * reasons.
  */
+@Disabled
 @Autonomous(name = "aprilTags", group = "camera")
 public class aprilTagsTest  extends LinearOpMode {
 

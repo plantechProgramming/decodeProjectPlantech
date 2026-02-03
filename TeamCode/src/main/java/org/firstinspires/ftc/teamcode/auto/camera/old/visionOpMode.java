@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.auto.camera.old;
 import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -14,7 +15,7 @@ import org.opencv.core.Rect;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Disabled
 @Autonomous(name = "vision",group = "camera")
 public class visionOpMode extends LinearOpMode {
 

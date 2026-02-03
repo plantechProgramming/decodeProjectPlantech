@@ -19,7 +19,7 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
 
-@Autonomous(name = "FullFarRed")
+@Autonomous(name = "Full Far Red", group = "Red")
 public class FullAutoFar extends NextFTCOpMode {
 
     public FullAutoFar() {

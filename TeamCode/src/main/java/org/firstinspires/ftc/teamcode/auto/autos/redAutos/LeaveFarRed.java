@@ -17,7 +17,7 @@ import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
-@Autonomous(name = "LeaveFarRed",group = "tests")
+@Autonomous(name = "Leave Far Red",group = "Red")
 public class LeaveFarRed extends NextFTCOpMode {
     private Follower follower;
 

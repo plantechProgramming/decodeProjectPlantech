@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.auto.subsystems.NextInBetween;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextIntake;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextTurret;
+import org.firstinspires.ftc.teamcode.teleOp.Utils;
 import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
 
 import java.nio.channels.NetworkChannel;
@@ -35,6 +36,8 @@ public class AutoCommands implements Component{
     NextInBetween inBetween;
     NextTurret turret;
     Follower follower;
+    Utils util = new Utils();
+
 
     public AutoCommands(Follower follower) {
         shooter = new NextShooter();
@@ -100,7 +103,7 @@ public class AutoCommands implements Component{
     }
     public Command turnTurret(){
         Pose pose = follower.getPose();
-        Pose2D ftcPose = turret.PedroPoseConverter(pose);
+        Pose2D ftcPose = util.PedroPoseConverter(pose);
         double heading = ftcPose.getHeading(AngleUnit.DEGREES);
         return turret.turnToDeg(heading);
     }

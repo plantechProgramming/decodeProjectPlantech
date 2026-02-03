@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.auto.autos.redAutos;
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
@@ -13,15 +12,16 @@ import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
-
-@Autonomous(name = "Full Close Red", group = "Red")
-public class FullAutoClose extends NextFTCOpMode {
+@Autonomous(name = "Leave Close PPG Red", group = "Red")
+public class LeaveClosePPGRed extends NextFTCOpMode {
     private Follower follower;
 
-    public FullAutoClose() {
+    public LeaveClosePPGRed() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
@@ -31,22 +31,17 @@ public class FullAutoClose extends NextFTCOpMode {
 
     AutoCommands command = AutoCommands.INSTANCE;
     PathsRed path;
-
-
-    private final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)).mirror(); // Start Pose of our robot.
+    ReadWrite readWrite = new ReadWrite();
 
 
     public Command autoRoutine(){
         return new SequentialGroup(
                 command.startShooter(false),
+                new Delay(1),
                 command.score(path.scorePreload),
-                command.intake(path.intakePPG,path.grabPPG,0.64),
-
+                command.intake(path.intakePPG,path.grabPPG,0.5),
                 command.score(path.scorePPG),
-                command.intake(path.intakePGP,path.grabPGP,0.68),
-
-                command.score(path.scorePGP),
-                command.intake(path.intakeGPP, path.grabGPP, 0.67)
+                new FollowPath(path.scoreLeaveClose)
         );
     }
     @Override
@@ -63,7 +58,6 @@ public class FullAutoClose extends NextFTCOpMode {
         path.buildPaths(follower());
         autoRoutine().schedule();
     }
-
     @Override
     public void onStop(){
         ReadWrite readWrite = new ReadWrite();
