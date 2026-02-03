@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
 import org.firstinspires.ftc.teamcode.OpMode;
 
 import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
+import org.firstinspires.ftc.teamcode.teleOp.actions.Turret;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -51,6 +52,8 @@ public class TeleOpBlue extends OpMode {
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
         ReadWrite readWrite = new ReadWrite();
+        Turret turret = new Turret(turretMotor);
+        Utils utils = new Utils(telemetry,odometry);
         //ColorSensorTest cSensor = new ColorSensorTest();
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
 

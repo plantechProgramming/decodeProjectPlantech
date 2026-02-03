@@ -98,9 +98,9 @@ public abstract class OpMode extends LinearOpMode {
         shootMotorOp.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
         turretMotor = hardwareMap.get(DcMotorEx.class, "turret");
-        turretMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        turretMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         odometry = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
         odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
