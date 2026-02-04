@@ -25,11 +25,11 @@ public class FullAutoFar extends NextFTCOpMode {
     public FullAutoFar() {
         addComponents(
                 new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE
+                AutoCommands.INSTANCE_RED
         );
     }
 
-    AutoCommands command = AutoCommands.INSTANCE;
+    AutoCommands command = AutoCommands.INSTANCE_RED;
     PathsRed path;
 
 

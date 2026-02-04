@@ -73,7 +73,6 @@ public class TeleOpBlue extends OpMode {
         builder.addProcessor(aprilTag);
         visionPortal = builder.build();
 
-//        AprilTagProcessor aprilTag = test.initAprilTag();
 //
 //        VisionPortal visionPortal = new VisionPortal.Builder()
 //                .setCamera(hardwareMap.get(WebcamName.class, "webcam"))
@@ -91,8 +90,7 @@ public class TeleOpBlue extends OpMode {
 
         while (opModeIsActive() ) {
             AprilTagDetection goalTag = test.specialDetection;
-//            test.telemetryAprilTag(aprilTag);
-            test.detectTags(aprilTag);
+//            test.detectTags(aprilTag);
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
@@ -119,12 +117,11 @@ public class TeleOpBlue extends OpMode {
 //            } else if (gamepad1.a) {
 //                intake.inBetweenInPart();
             }
-//           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
+//           if(gamepad1.dpad_up && test.specialDetection != null){
 //               double deg = test.specialDetection.ftcPose.bearing;
 //
 //               driveTrain.turnToGyro(odometry.getHeading(AngleUnit.DEGREES) + deg);
 //               telemetry.addData("yaw", deg);
-//               telemetry.update();
 //           }
             else if(gamepad1.right_bumper){
                 if(shooter.isUpToSpeed()){

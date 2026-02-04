@@ -26,11 +26,11 @@ public class LeaveFarPre extends NextFTCOpMode {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE
+                AutoCommands.INSTANCE_RED
         );
     }
 
-    AutoCommands command = AutoCommands.INSTANCE;
+    AutoCommands command = AutoCommands.INSTANCE_RED;
     PathsRed path;
     ReadWrite readWrite = new ReadWrite();
 

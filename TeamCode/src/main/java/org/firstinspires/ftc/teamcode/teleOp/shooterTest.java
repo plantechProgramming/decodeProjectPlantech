@@ -32,14 +32,14 @@ public class shooterTest extends OpMode {
 
         while(opModeIsActive()){
 //            turret.turnToDeg(60);
-            turret.turret(utils.getAngleFromGoal("BLUE  "));
+//            turret.turret(utils.getAngleFromGoal("BLUE  "));
 //            turretMotor.setPower(0.2);
             odometry.update();
             shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .02);
-            if(gamepad1.a){
-                    intake.inBetweenInFull();
-                    intake.intakeIn();
-            }
+//            if(gamepad1.a){
+//                    intake.inBetweenInFull();
+//                    intake.intakeIn();
+//            }
 //            if(gamepad1.a) shooter.noPhysShoot(0.5);
 //            shooter.shooter2.setPower(0.1);
 //            dashboardTelemetry.addData("power", shooter.shooter.getPower());

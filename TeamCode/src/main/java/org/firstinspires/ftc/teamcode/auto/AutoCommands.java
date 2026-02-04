@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.ftc.PoseConverter;
+import com.pedropathing.geometry.CoordinateSystem;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
@@ -18,6 +20,7 @@ import org.firstinspires.ftc.teamcode.teleOp.Utils;
 import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
 
 import java.nio.channels.NetworkChannel;
+import java.security.PublicKey;
 
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
@@ -36,8 +39,10 @@ public class AutoCommands implements Component{
     NextInBetween inBetween;
     NextTurret turret;
     Follower follower;
+    String team;
+    public static final AutoCommands INSTANCE_RED = new AutoCommands("RED");
+    public static final AutoCommands INSTANCE_BLUE = new AutoCommands("BLUE");
     Utils util = new Utils();
-
 
     public AutoCommands(Follower follower) {
         shooter = new NextShooter();
@@ -47,14 +52,14 @@ public class AutoCommands implements Component{
         this.follower = follower;
     }
 
-    public AutoCommands(){
+    public AutoCommands(String team){
         shooter = new NextShooter();
         intake = new NextIntake();
         inBetween = new NextInBetween();
         turret = new NextTurret();
+        this.team = team;
     }
 
-    public static final AutoCommands INSTANCE = new AutoCommands();
 
     public Command shoot(){
         return new SequentialGroup(
@@ -111,8 +116,13 @@ public class AutoCommands implements Component{
     @Override
     public void postUpdate(){
         shooter.Periodic();
+        turnTurretToGoal().schedule();
     }
-
+    public Command turnTurretToGoal(){
+        Pose pose = follower.getPose();
+        Pose2D ftcPose = util.PedroPoseConverter(pose);
+        return turret.turnToDeg(util.getPointToGoalAngle(ftcPose,team));
+    }
     @Override
     public void postInit(){
         shooter.stop();

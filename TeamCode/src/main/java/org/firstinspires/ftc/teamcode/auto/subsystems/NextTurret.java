@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.auto.subsystems;
 
 import android.util.Pair;
 
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cCompassSensor;
 
@@ -23,6 +24,7 @@ import dev.nextftc.hardware.powerable.SetPower;
 
 public class NextTurret implements Subsystem {
     private MotorEx turretMotor = new MotorEx("turret",-1);//todo: put motor name when in config
+    Utils utils = new Utils();
 
     private final double GEAR_RATIO = 2.5;
     private final double TICK_PER_TURN = 1425.2;

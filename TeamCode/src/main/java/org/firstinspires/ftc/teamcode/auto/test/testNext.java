@@ -37,11 +37,11 @@ public class testNext extends NextFTCOpMode {
     public testNext() {
         addComponents(
                 BulkReadComponent.INSTANCE,
-                AutoCommands.INSTANCE
+                AutoCommands.INSTANCE_BLUE
         );
 
     }
-    AutoCommands command = AutoCommands.INSTANCE;
+    AutoCommands command = AutoCommands.INSTANCE_BLUE;
 
 
     private Command autonomousRoutine() {

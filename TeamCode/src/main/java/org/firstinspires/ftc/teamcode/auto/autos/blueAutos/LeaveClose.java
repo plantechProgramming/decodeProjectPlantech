@@ -24,11 +24,11 @@ public class LeaveClose extends NextFTCOpMode {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE
+                AutoCommands.INSTANCE_BLUE
         );
     }
 
-    AutoCommands command = AutoCommands.INSTANCE;
+    AutoCommands command = AutoCommands.INSTANCE_BLUE;
     PathsBlue path;
     ReadWrite readWrite = new ReadWrite();
 

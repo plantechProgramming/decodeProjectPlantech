@@ -34,14 +34,24 @@ public class Utils {
         double pointY = point.getY(DistanceUnit.CM);
         return new Pair<>(pointX-robotX, pointY-robotY);
     }
-
+    public double getPointToGoalAngle(Pose2D point1, String team){
+        double x1 = point1.getX(DistanceUnit.CM);
+        double y1 = point1.getY(DistanceUnit.CM);
+        double goalX = getTeamGoal(team).getX(DistanceUnit.CM);
+        double goalY = getTeamGoal(team).getY(DistanceUnit.CM);
+        return Math.toDegrees(Math.atan2(goalY-y1,goalX-x1));
+    }
+    public Pose2D getTeamGoal(String team){
+        if(team.equals("BLUE")) return GOAL_BLUE;
+        if(team.equals("RED")) return GOAL_RED;
+        return null;
+    }
     public Pair<Double,Double> getXYdistToGoal(String team){
         if(team.equals("BLUE")){
             return getXYdistToPoint(GOAL_BLUE);
         }
         return getXYdistToPoint(GOAL_RED);
     }
-
     public double getDistFromPoint(Pose2D point){
         return Math.hypot(getXYdistToPoint(point).first, getXYdistToPoint(point).second);
     }
@@ -50,7 +60,7 @@ public class Utils {
     }
 
     public double getAngleFromPoint(Pose2D point){
-        return Math.atan2(getXYdistToPoint(point).second, getXYdistToPoint(point).first);
+        return Math.toDegrees(Math.atan2(getXYdistToPoint(point).second, getXYdistToPoint(point).first));
     }
     public double getAngleFromGoal(String team){
         double deg = Math.atan2(getXYdistToGoal(team).second, getXYdistToGoal(team).first);
