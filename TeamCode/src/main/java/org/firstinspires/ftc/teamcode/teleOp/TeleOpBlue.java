@@ -52,7 +52,7 @@ public class TeleOpBlue extends OpMode {
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
         ReadWrite readWrite = new ReadWrite();
-        Turret turret = new Turret(turretMotor);
+        Turret turret = new Turret(turretMotor, odometry);
         Utils utils = new Utils(telemetry,odometry);
         //ColorSensorTest cSensor = new ColorSensorTest();
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
@@ -135,7 +135,9 @@ public class TeleOpBlue extends OpMode {
                 intake.stopIntake();
             }
 //            shooter.variableSpeedShoot(gamepad1.y, gamepad1.a, .05);
-            shooter.naiveShooter(driveTrain.isFar());
+            //TODO: put back when debug ends
+//            shooter.naiveShooter(driveTrain.isFar());
+            turret.turnToDeg(utils.getAngleFromGoal("BLUE"));
 
             if(gamepad1.left_bumper){
                 driveTrain.turnToGoal("BLUE");// TODO: change for RED
@@ -158,6 +160,9 @@ public class TeleOpBlue extends OpMode {
 
             shooter.setShooterTelemetry(telemetry);
             shooter.setShooterTelemetry(dashboardTelemetry);
+            telemetry.addData("cur turret angle", turret.getCurDeg());
+            telemetry.addData("turret turn corrected deg", turret.getRealDeg());
+            telemetry.addData("cur turret pos", turretMotor.getCurrentPosition());
 
             telemetry.update();
             dashboardTelemetry.update();
