@@ -47,9 +47,15 @@ public class PID {
         return getPIDPower(currentError);
     }
 
-//    public double updateTurretDeg(final double current){
-//
-//    }
+    public double updateTurretDeg(final double current){
+        double currentError = wanted - current;
+        double maxPos = 190; // TODO: check!!!!!
+        double cableZero = 78.3;
+        if(Math.abs(wanted - cableZero) > maxPos){
+            currentError += 360;
+        }
+        return getPIDPower(currentError);
+    }
 
     public double getPIDPower(final double currentError){
         double currentTime = timer.milliseconds();

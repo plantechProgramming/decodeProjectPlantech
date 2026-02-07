@@ -168,7 +168,7 @@ public class TeleOpBlue extends OpMode {
             shooter.setShooterTelemetry(dashboardTelemetry);
             dashboardTelemetry.addData("goal angle", utils.getAngleFromGoal("BLUE"));
             dashboardTelemetry.addData("cur turret angle", turret.getCurDeg());
-            telemetry.addData("turret turn corrected deg", turret.getRealDeg());
+            dashboardTelemetry.addData("turret turn corrected deg", turret.getRealDeg());
             telemetry.addData("cur turret pos", turretMotor.getCurrentPosition());
             telemetry.addData("wanted turret deg", utils.getAngleFromGoal("BLUE"));//
 

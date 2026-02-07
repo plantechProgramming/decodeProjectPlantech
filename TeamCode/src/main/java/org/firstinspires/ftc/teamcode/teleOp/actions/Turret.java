@@ -18,7 +18,7 @@ public class Turret {
     private final GoBildaPinpointDriver odometry;
     public Turret(DcMotorEx turretMotor, GoBildaPinpointDriver odometry){
         this.turretMotor = turretMotor;
-        TICK_PER_TURN = 1425.2;
+        TICK_PER_TURN = 383.6;
         TICK_PER_DEG = TICK_PER_TURN/360;
         this.odometry = odometry;
     }
@@ -30,7 +30,7 @@ public class Turret {
 
     public void turnToDegCorrected(double deg){
         double currentDeg = getRealDeg()*GEAR_RATIO;
-        PID pid = new PID(0.02, 0, 0, 0);
+        PID pid = new PID(0.005, 0.001, 0, 0);
         double threshold = 1;
         double power;
         double newdeg = deg * GEAR_RATIO;
