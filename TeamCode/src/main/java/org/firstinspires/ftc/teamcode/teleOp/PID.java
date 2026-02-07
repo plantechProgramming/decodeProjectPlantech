@@ -47,6 +47,10 @@ public class PID {
         return getPIDPower(currentError);
     }
 
+//    public double updateTurretDeg(final double current){
+//
+//    }
+
     public double getPIDPower(final double currentError){
         double currentTime = timer.milliseconds();
         double deltaTime = currentTime - prevTime;

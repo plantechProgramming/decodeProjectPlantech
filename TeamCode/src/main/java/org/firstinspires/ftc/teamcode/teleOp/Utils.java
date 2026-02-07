@@ -79,4 +79,12 @@ public class Utils {
         }
         return new Pose2D(DistanceUnit.CM, newx, newy, AngleUnit.DEGREES, hed);
     }
+
+    public double angleModulo(double num){
+        // fuck java * TREE(3)
+        // java doesnt do mod well for negatives and doubles, so:
+        // add 360 to normalize to [0,360)
+        // multiply by 100 to pretend its an int, then divide to get the right val
+        return ((num +360)*100%(360*100))/100;
+    }
 }
