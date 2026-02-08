@@ -47,14 +47,25 @@ public class PID {
         return getPIDPower(currentError);
     }
 
-    public double updateTurretDeg(final double current){
-        double currentError = wanted - current;
+    public double updateTurretDeg(final double current, final double GEAR_RATIO){
+        double currentError = (wanted - current) / GEAR_RATIO;
+        if (currentError < -180){
+            currentError += 360;
+        }
+        if (currentError > 180){
+            currentError -= 360;
+        }
         double maxPos = 190; // TODO: check!!!!!
         double cableZero = 78.3;
         if(Math.abs(wanted - cableZero) > maxPos){
-            currentError += 360;
+            if(currentError > 0){
+                currentError = 360 - currentError;
+            }
+            else{
+                currentError += 360;
+            }
         }
-        return getPIDPower(currentError);
+        return getPIDPower(currentError*GEAR_RATIO);
     }
 
     public double getPIDPower(final double currentError){

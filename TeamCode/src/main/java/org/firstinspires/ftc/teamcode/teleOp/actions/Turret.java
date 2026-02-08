@@ -30,7 +30,7 @@ public class Turret {
 
     public void turnToDegCorrected(double deg){
         double currentDeg = getRealDeg()*GEAR_RATIO;
-        PID pid = new PID(0.005, 0.001, 0, 0);
+        PID pid = new PID(0.007 , 0.00000004, 0.00002, 0); // kp = 0.008, ki = 0.00000006, kd = 0.00002, kf = 0//
         double threshold = 1;
         double power;
         double newdeg = deg * GEAR_RATIO;
