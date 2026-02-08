@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
 import org.firstinspires.ftc.teamcode.OpMode;
 
 import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
+import org.firstinspires.ftc.teamcode.teleOp.actions.Turret;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -46,7 +47,9 @@ public class TeleOpRed extends OpMode {
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
         ReadWrite readWrite = new ReadWrite();
+        Utils utils = new Utils(telemetry,odometry);
         ColorSensorTest cSensor = new ColorSensorTest();
+        Turret turret = new Turret(turretMotor, odometry);
 
 
         //TODO: find why didnt work outside
@@ -82,6 +85,7 @@ public class TeleOpRed extends OpMode {
         double botHeading;
         boolean slow = false;
         double tick = 2000/(48*Math.PI); //per tick
+        boolean turretActivated = false;
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
         while (opModeIsActive() ) {
             AprilTagDetection goalTag = test.specialDetection;
@@ -127,6 +131,10 @@ public class TeleOpRed extends OpMode {
                 }
                 intake.intakeIn();
             }
+            else if(gamepad1.y && !turretActivated){
+                turretActivated = true;
+            }
+
 
             else{
 //                shooter.stopShooter();
@@ -146,6 +154,9 @@ public class TeleOpRed extends OpMode {
             }
             if(gamepad1.back){
                 odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
+            }
+            if(turretActivated){
+                turret.turnToDegCorrected(utils.getAngleFromGoal("RED"));
             }
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);

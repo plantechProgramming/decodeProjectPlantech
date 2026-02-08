@@ -31,9 +31,7 @@ public class shooterTest extends OpMode {
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
 
         while(opModeIsActive()){
-//            turret.turnToDeg(60);
-            turret.turnToDeg(utils.getAngleFromGoal("BLUE")); // TODO: change for red
-//            turretMotor.setPower(0.2);
+
             odometry.update();
             shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .02);
 //            if(gamepad1.a){
@@ -42,17 +40,10 @@ public class shooterTest extends OpMode {
 //            }
 //            if(gamepad1.a) shooter.noPhysShoot(0.5);
 //            shooter.shooter2.setPower(0.1);
-//            dashboardTelemetry.addData("power", shooter.shooter.getPower());
-//            telemetry.addData("pow", shooter.shooter.getPower());
-            telemetry.addData("pow", turretMotor.getPower());
-            telemetry.addData("cur angle", turret.getCurDeg());
-            telemetry.addData("cur pos", turretMotor.getCurrentPosition());
-            telemetry.addData("cur rev", turret.getRev());
-            telemetry.addData("max turret rpm", turretMotor.getMotorType().getMaxRPM());
-            telemetry.addData("ticksPerRev", turretMotor.getMotorType().getTicksPerRev());
-            dashboardTelemetry.addData("cur position", turretMotor.getCurrentPosition());
-            dashboardTelemetry.addData("turretmotor power", turretMotor.getPower());
+
             shooter.setShooterTelemetry(dashboardTelemetry);
+            shooter.setShooterTelemetry(telemetry);
+            telemetry.update();
             dashboardTelemetry.update();
             telemetry.update();
         }

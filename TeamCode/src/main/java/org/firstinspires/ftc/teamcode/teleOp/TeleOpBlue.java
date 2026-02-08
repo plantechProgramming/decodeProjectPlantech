@@ -130,9 +130,9 @@ public class TeleOpBlue extends OpMode {
                 }
                 intake.intakeIn();
             }
-            else if(gamepad1.y && !turretActivated){
-                turretActivated = true;
-            }
+//            else if(gamepad1.y && !turretActivated){
+//                turretActivated = true;
+//            }
 
             else{
 //                shooter.stopShooter();
@@ -141,10 +141,10 @@ public class TeleOpBlue extends OpMode {
 //            shooter.variableSpeedShoot(gamepad1.y, gamepad1.a, .05);
             //TODO: put back when debug ends
             // shooter.naiveShooter(driveTrain.isFar());
-            if(turretActivated){
-                turret.turnToDegCorrected(utils.getAngleFromGoal("BLUE"));
-            }
-
+//            if(turretActivated){
+//                turret.turnToDegCorrected(utils.getAngleFromGoal("BLUE"));
+//            }
+            shooter.interpolate(utils.getDistFromGoal("BLUE"));
             if(gamepad1.left_bumper){
                 driveTrain.turnToGoal("BLUE");// TODO: change for RED
             }
@@ -166,11 +166,10 @@ public class TeleOpBlue extends OpMode {
 
             shooter.setShooterTelemetry(telemetry);
             shooter.setShooterTelemetry(dashboardTelemetry);
-            dashboardTelemetry.addData("goal angle", utils.getAngleFromGoal("BLUE"));
-            dashboardTelemetry.addData("cur turret angle", turret.getCurDeg());
-            dashboardTelemetry.addData("turret turn corrected deg", turret.getRealDeg());
-            telemetry.addData("cur turret pos", turretMotor.getCurrentPosition());
-            telemetry.addData("wanted turret deg", utils.getAngleFromGoal("BLUE"));//
+
+            turret.setTelemetry(telemetry);
+            turret.setTelemetry(dashboardTelemetry);
+            telemetry.addData("get is stretched", turret.isCableStretched(utils.getAngleFromGoal("BLUE") * 2.5));
 
             telemetry.update();
             dashboardTelemetry.update();

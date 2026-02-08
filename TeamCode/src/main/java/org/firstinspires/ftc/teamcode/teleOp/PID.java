@@ -47,7 +47,7 @@ public class PID {
         return getPIDPower(currentError);
     }
 
-    public double updateTurretDeg(final double current, final double GEAR_RATIO){
+    public double updateTurretDeg(final double current, final double GEAR_RATIO, boolean isCableStretched){
         double currentError = (wanted - current) / GEAR_RATIO;
         if (currentError < -180){
             currentError += 360;
@@ -55,14 +55,12 @@ public class PID {
         if (currentError > 180){
             currentError -= 360;
         }
-        double maxPos = 190; // TODO: check!!!!!
-        double cableZero = 78.3;
-        if(Math.abs(wanted - cableZero) > maxPos){
+        if(isCableStretched){
             if(currentError > 0){
                 currentError = 360 - currentError;
             }
             else{
-                currentError += 360;
+                currentError = currentError + 360;
             }
         }
         return getPIDPower(currentError*GEAR_RATIO);

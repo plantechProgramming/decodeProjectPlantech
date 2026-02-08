@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.teleOp.PID;
 import org.firstinspires.ftc.teamcode.teleOp.Utils;
@@ -28,17 +29,24 @@ public class Turret {
     // so you need to add the diff in heading to the turret heading every time
     // so the actual pos ISNT THE ENCODER POS and we CANT USE the built in pid
 
+    boolean isCableStretched = false;
+    double power;
     public void turnToDegCorrected(double deg){
         double currentDeg = getRealDeg()*GEAR_RATIO;
         PID pid = new PID(0.007 , 0.00000004, 0.00002, 0); // kp = 0.008, ki = 0.00000006, kd = 0.00002, kf = 0//
         double threshold = 1;
-        double power;
         double newdeg = deg * GEAR_RATIO;
         pid.setWanted(newdeg);
 
         if(Math.abs(newdeg - currentDeg) > threshold){ // if not in threshold
-            power = pid.update(currentDeg);
+            if(!isCableStretched){
+                isCableStretched = isCableStretched(newdeg);
+            }
+            power = pid.updateTurretDeg(currentDeg, GEAR_RATIO, isCableStretched);
             turretMotor.setPower(power);
+        }
+        else{
+            isCableStretched = false;
         }
     }
     public double convertMotorAxisToRobot(double angle){
@@ -46,6 +54,17 @@ public class Turret {
             return angle - 360;
         }
         return angle;
+    }
+    public boolean isCableStretched(double wanted){
+        double maxPos = 168; // margin of error = 5 deg
+        double minPos = -148;
+        double cableZero = 78.3;
+        double actualWanted = wanted / GEAR_RATIO;
+//        if((actualWanted - cableZero) > maxPos || -(actualWanted - cableZero) < minPos){
+        if(Math.abs(actualWanted - cableZero) > Math.abs(minPos)){
+            return true;
+        }
+        return false;
     }
     public double convertModuloPos(double angle){
         return convertMotorAxisToRobot(utils.angleModulo(angle));
@@ -76,4 +95,9 @@ public class Turret {
         turretMotor.setVelocity(turretMotor.getMotorType().getAchieveableMaxTicksPerSecond());
     }
 
+    public void setTelemetry(Telemetry telemetry){
+        telemetry.addData("turret deg (corrected)", this.getRealDeg());
+        telemetry.addData("turret pow", power);
+        telemetry.addData("is stretched?", isCableStretched);
+    }
 }

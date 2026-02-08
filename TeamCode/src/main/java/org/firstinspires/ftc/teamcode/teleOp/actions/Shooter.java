@@ -101,8 +101,8 @@ public class Shooter {
     }
 
 
-    public void interpolate(){
-//        noPhysShoot();
+    public void interpolate(double dis){
+        noPhysShoot((-9.90643e-11) * Math.pow(dis, 4) + ( 9.37832e-8 ) * Math.pow(dis, 3) - (2.81195e-5)  * Math.pow(dis, 2) + (3.61685e-3)  * dis + 0.315642);
     }
 
 //    / @param dis: distance from goal
@@ -162,7 +162,7 @@ public class Shooter {
     public void setShooterTelemetry(Telemetry telemetry){
         telemetry.addData("wanted", Szonedis*6000);
         telemetry.addData("vel",shooterVelocity.getVelocityFilter());
-        telemetry.addData("vel2", Math.abs(shooter2Velocity.getVelocityFilter()));
+        telemetry.addData("vel2", shooter2Velocity.getVelocityFilter());
 //        telemetry.addData("th",Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000));
         telemetry.addData("pow 1", shooter.getPower());
         telemetry.addData("pow 2", shooter2.getPower());
