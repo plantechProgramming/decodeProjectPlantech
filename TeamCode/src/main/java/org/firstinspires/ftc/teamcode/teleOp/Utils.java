@@ -100,6 +100,6 @@ public class Utils {
         return currentError;
     }
     public double getDisBetweenAngles(double alpha, double beta){
-        return Math.abs(Math.abs(alpha) - Math.abs(beta));
+        return Math.abs(alpha) - Math.abs(beta);
     }
 }

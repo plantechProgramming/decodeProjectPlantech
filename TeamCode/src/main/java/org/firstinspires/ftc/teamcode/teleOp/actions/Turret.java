@@ -36,12 +36,12 @@ public class Turret {
     double currentError;
     public void turnToDegCorrected(double deg){
         currentDeg = getRealDeg(); // angle in turret
-        PID pid = new PID(0.004 , 0.00000002, 0.00002, 0); // kp = 0.007, ki = 0.00000004, kd = 0.00002, kf = 0//
-        double threshold = 1;
+        PID pid = new PID(0.007 , 0.00000004, 0.00002, 0); // kp = 0.007, ki = 0.00000004, kd = 0.00002, kf = 0//
+        double thresholdbig = 1.5;
         newdeg = deg; // angle in turret
         pid.setWanted(newdeg);
 
-        if(Math.abs(utils.getDiffBetweenAngles(newdeg, currentDeg)) > threshold){ // if not in threshold
+        if(Math.abs(utils.getDiffBetweenAngles(newdeg, currentDeg)) > thresholdbig){ // if not in threshold
             if(!isCableStretched){
                 isCableStretched = isCableStretched(currentDeg);
             }
@@ -52,7 +52,7 @@ public class Turret {
             currentError = utils.getDiffBetweenAngles(newdeg, currentDeg);
             if(isCableStretched){
                 if(currentError > 0){
-                    currentError -= 360;
+                    currentError = 360 - currentError;
                 }
                 else{
                     currentError += 360;
@@ -113,12 +113,18 @@ public class Turret {
 
     public void setTelemetry(Telemetry telemetry){
         telemetry.addData("dist from cable zero",utils.getDiffBetweenAngles(actualWanted, actualCableZero));
-        telemetry.addData("actualWanted",actualWanted);
+//        telemetry.addData("actualWanted",actualWanted);
         telemetry.addData("turret deg (corrected)", this.getRealDeg());
         telemetry.addData("turret pow", power);
         telemetry.addData("is stretched?", isCableStretched);
-        telemetry.addData("wanted", newdeg/GEAR_RATIO);
-        telemetry.addData("error", Math.abs(utils.getDiffBetweenAngles(newdeg, currentDeg)));
-        telemetry.addData("currentDeg", getCurDeg());
+        telemetry.addData("wanted", newdeg);
+        telemetry.addData("error", utils.getDiffBetweenAngles(newdeg, currentDeg));
+//        double er = utils.getDiffBetweenAngles(-45, getRealDeg());
+//        telemetry.addData("Start errorGood",er);
+//        if(er < 0){
+//            er += 360;
+//        }
+//        telemetry.addData("errorGood",er);
+//        telemetry.addData("currentDeg", getCurDeg());
     }
 }

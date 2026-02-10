@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.OpMode;
 import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
@@ -64,10 +66,15 @@ public class TurretTest extends OpMode {
 //            shooter.shooter2.setPower(0.1);
 //            dashboardTelemetry.addData("power", shooter.shooter.getPower());
 //            telemetry.addData("pow", shooter.shooter.getPower());
+            if(gamepad1.back){
+                odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 0)); //TODO: change for RED
+            }
             turret.setTelemetry(telemetry);
             turret.setTelemetry(dashboardTelemetry);
+            driveTrain.setDriveTelemetry(telemetry);
             dashboardTelemetry.update();
             telemetry.update();
+            odometry.update();
         }
     }
 
