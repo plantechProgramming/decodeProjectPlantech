@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class PID {
     private static final ElapsedTime timer = new ElapsedTime();
 
+    Utils utils = new Utils();
+
     public double kP = 0;
     public double kI = 0;
     public double kD = 0;
@@ -47,23 +49,17 @@ public class PID {
         return getPIDPower(currentError);
     }
 
-    public double updateTurretDeg(final double current, final double GEAR_RATIO, boolean isCableStretched){
-        double currentError = (wanted - current) / GEAR_RATIO;
-        if (currentError < -180){
-            currentError += 360;
-        }
-        if (currentError > 180){
-            currentError -= 360;
-        }
+    public double updateTurretDeg(final double current, boolean isCableStretched){
+        double currentError = utils.getDiffBetweenAngles(wanted, current);
         if(isCableStretched){
             if(currentError > 0){
                 currentError = 360 - currentError;
             }
             else{
-                currentError = currentError + 360;
+                currentError += 360;
             }
         }
-        return getPIDPower(currentError*GEAR_RATIO);
+        return getPIDPower(currentError);
     }
 
     public double getPIDPower(final double currentError){

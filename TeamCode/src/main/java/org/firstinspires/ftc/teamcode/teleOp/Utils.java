@@ -88,8 +88,9 @@ public class Utils {
         return ((num +360)*100%(360*100))/100;
     }
 
-    public double getDistBetweenAngles(double alpha, double beta){
+    public double getDiffBetweenAngles(double alpha, double beta){
         double currentError = alpha - beta;
+//            currentError = Math.abs(currentError-360);
         if (currentError < -180){
             currentError += 360;
         }
@@ -97,5 +98,8 @@ public class Utils {
             currentError -= 360;
         }
         return currentError;
+    }
+    public double getDisBetweenAngles(double alpha, double beta){
+        return Math.abs(Math.abs(alpha) - Math.abs(beta));
     }
 }
