@@ -87,4 +87,15 @@ public class Utils {
         // multiply by 100 to pretend its an int, then divide to get the right val
         return ((num +360)*100%(360*100))/100;
     }
+
+    public double getDistBetweenAngles(double alpha, double beta){
+        double currentError = alpha - beta;
+        if (currentError < -180){
+            currentError += 360;
+        }
+        if (currentError > 180){
+            currentError -= 360;
+        }
+        return currentError;
+    }
 }

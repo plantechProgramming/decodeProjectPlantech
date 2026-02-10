@@ -36,6 +36,7 @@ public class TurretTest extends OpMode {
         boolean slow = false;
         double tick = 2000/(48*Math.PI); //per tick
         odometry.setPosition(utils.PedroPoseConverter(readWrite.readPose()));
+        boolean turretActivated = false;
 
         while(opModeIsActive()){
             forward = -gamepad1.left_stick_y;
@@ -46,27 +47,25 @@ public class TurretTest extends OpMode {
 
 //            turret.turnToDeg(60);
             driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED
-            turret.turnToDeg(utils.getAngleFromGoal("BLUE")); // TODO: change for red
+            if(gamepad1.y && !turretActivated){
+                turretActivated = true;
+            }
+            if(turretActivated){
+                turret.turnToDegCorrected(utils.getAngleFromGoal("BLUE"));
+            }
 //            turretMotor.setPower(0.2);
             odometry.update();
-            if(gamepad1.a){
-                if(shooter.isUpToSpeed()){
-                    shooter.naiveShooter(driveTrain.isFar());
-                }
-            }
+//            if(gamepad1.a){
+//                if(shooter.isUpToSpeed()){
+//                    shooter.naiveShooter(driveTrain.isFar());
+//                }
+//            }
 //            if(gamepad1.a) shooter.noPhysShoot(0.5);
 //            shooter.shooter2.setPower(0.1);
 //            dashboardTelemetry.addData("power", shooter.shooter.getPower());
 //            telemetry.addData("pow", shooter.shooter.getPower());
-            telemetry.addData("pow", turretMotor.getPower());
-            telemetry.addData("cur angle", turret.getCurDeg());
-            telemetry.addData("cur pos", turretMotor.getCurrentPosition());
-            telemetry.addData("cur rev", turret.getRev());
-            telemetry.addData("max turret rpm", turretMotor.getMotorType().getMaxRPM());
-            telemetry.addData("ticksPerRev", turretMotor.getMotorType().getTicksPerRev());
-            dashboardTelemetry.addData("cur position", turretMotor.getCurrentPosition());
-            dashboardTelemetry.addData("turretmotor power", turretMotor.getPower());
-            shooter.setShooterTelemetry(dashboardTelemetry);
+            turret.setTelemetry(telemetry);
+            turret.setTelemetry(dashboardTelemetry);
             dashboardTelemetry.update();
             telemetry.update();
         }
