@@ -78,11 +78,7 @@ public class Turret {
     double actualWanted;
     double actualCableZero;
     public boolean isCableStretched(double wanted){
-        actualWanted = wanted; // wanted in -infinite to infinite
-        actualCableZero = (cableZero + utils.convertGyroAngleTo360(odometry.getHeading(AngleUnit.DEGREES))) % 360;
-        double diff = actualWanted - actualCableZero;
-        return diff >= maxDiff || diff <= minDiff;
-
+        return -140-cableZero < wanted && wanted < 225-cableZero;
     }
     public double convertModuloPos(double angle){
         return convertMotorAxisToRobot(utils.angleModulo(angle));
@@ -114,9 +110,9 @@ public class Turret {
     }
 
     public void setTelemetry(Telemetry telemetry){
-        telemetry.addData("dist from cable zero",actualWanted - actualCableZero);
-        telemetry.addData("actualWanted",actualWanted);
-        telemetry.addData("actualcablezero",actualCableZero);
+//        telemetry.addData("dist from cable zero",actualWanted - actualCableZero);
+//        telemetry.addData("actualWanted",actualWanted);
+//        telemetry.addData("actualcablezero",actualCableZero);
         telemetry.addData("turret deg (corrected)", this.getRealDeg());
         telemetry.addData("turret pow", power);
         telemetry.addData("is stretched?", isCableStretched(getCurDeg()));
