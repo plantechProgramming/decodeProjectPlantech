@@ -88,9 +88,8 @@ public class Utils {
         return ((num +360)*100%(360*100))/100;
     }
 
-    public double getDiffBetweenAngles(double alpha, double beta){
-        double currentError = alpha - beta;
-//            currentError = Math.abs(currentError-360);
+    public double getDiffBetweenAngles(double wanted, double current){// positive = left, negative = right// gyro coordinate system
+        double currentError = wanted - current;
         if (currentError < -180){
             currentError += 360;
         }
@@ -99,7 +98,20 @@ public class Utils {
         }
         return currentError;
     }
-    public double getDisBetweenAngles(double alpha, double beta){
-        return Math.abs(alpha) - Math.abs(beta);
+    public double getLongestDiffBetweenAngles(double wanted, double current){// positive = left, negative = right // gyro coordinate system
+        double shortestPath = getDiffBetweenAngles(wanted, current);
+        if(shortestPath < 0){
+            return 360 - Math.abs(shortestPath);
+        }
+        else{
+            return shortestPath - 360;
+        }
+    }
+    public double convertGyroAngleTo360(double deg){// gets bigger to the left
+        double newDeg = deg;
+        if(deg<0){
+             newDeg = 360 - Math.abs(deg);
+        }
+        return newDeg;
     }
 }

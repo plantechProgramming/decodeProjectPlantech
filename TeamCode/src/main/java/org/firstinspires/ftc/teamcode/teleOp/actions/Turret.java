@@ -37,13 +37,13 @@ public class Turret {
     public void turnToDegCorrected(double deg){
         currentDeg = getRealDeg(); // angle in turret
         PID pid = new PID(0.007 , 0.00000004, 0.00002, 0); // kp = 0.007, ki = 0.00000004, kd = 0.00002, kf = 0//
-        double thresholdbig = 1.5;
+        double threshold = 1.5;
         newdeg = deg; // angle in turret
         pid.setWanted(newdeg);
 
-        if(Math.abs(utils.getDiffBetweenAngles(newdeg, currentDeg)) > thresholdbig){ // if not in threshold
+        if(Math.abs(utils.getDiffBetweenAngles(newdeg, currentDeg)) > threshold){ // if not in threshold
             if(!isCableStretched){
-                isCableStretched = isCableStretched(currentDeg);
+                isCableStretched = isCableStretched(getCurDeg());
             }
             power = pid.updateTurretDeg(currentDeg, isCableStretched);
 //            power = pid.update(currentDeg);
@@ -71,17 +71,18 @@ public class Turret {
         }
         return angle;
     }
-    double maxPos = 173; // margin of error = 7 deg// 166
-    double minPos = -173;//-146
-    double cableZero = 78.3;
+
+    double cableZero = 78.3;// in gyro coordinate system
+    double maxDiff = 225 - cableZero; // 225 in turret cords infinite to -infinite
+    double minDiff = -140 - cableZero;
     double actualWanted;
     double actualCableZero;
     public boolean isCableStretched(double wanted){
-//        if((actualWanted - cableZero) > maxPos || -(actualWanted - cableZero) < minPos){
-//        actualWanted = convertDegToReal(wanted);
-        actualWanted = wanted;
-        actualCableZero = convertDegToReal(cableZero);
-        return utils.getDiffBetweenAngles(actualWanted, actualCableZero) > maxPos || utils.getDiffBetweenAngles(actualWanted, actualCableZero) < minPos;
+        actualWanted = wanted; // wanted in -infinite to infinite
+        actualCableZero = (cableZero + utils.convertGyroAngleTo360(odometry.getHeading(AngleUnit.DEGREES))) % 360;
+        double diff = actualWanted - actualCableZero;
+        return diff >= maxDiff || diff <= minDiff;
+
     }
     public double convertModuloPos(double angle){
         return convertMotorAxisToRobot(utils.angleModulo(angle));
@@ -92,6 +93,7 @@ public class Turret {
         double realAngle = convertedAngle + odometry.getHeading(AngleUnit.DEGREES);
         return  convertModuloPos(realAngle);
     }
+
 
     public double convertDegToReal(double deg){
         odometry.update();
@@ -112,13 +114,16 @@ public class Turret {
     }
 
     public void setTelemetry(Telemetry telemetry){
-        telemetry.addData("dist from cable zero",utils.getDiffBetweenAngles(actualWanted, actualCableZero));
-//        telemetry.addData("actualWanted",actualWanted);
+        telemetry.addData("dist from cable zero",actualWanted - actualCableZero);
+        telemetry.addData("actualWanted",actualWanted);
+        telemetry.addData("actualcablezero",actualCableZero);
         telemetry.addData("turret deg (corrected)", this.getRealDeg());
         telemetry.addData("turret pow", power);
-        telemetry.addData("is stretched?", isCableStretched);
+        telemetry.addData("is stretched?", isCableStretched(getCurDeg()));
         telemetry.addData("wanted", newdeg);
         telemetry.addData("error", utils.getDiffBetweenAngles(newdeg, currentDeg));
+        telemetry.addData("curr deg", getCurDeg());
+
 //        double er = utils.getDiffBetweenAngles(-45, getRealDeg());
 //        telemetry.addData("Start errorGood",er);
 //        if(er < 0){
