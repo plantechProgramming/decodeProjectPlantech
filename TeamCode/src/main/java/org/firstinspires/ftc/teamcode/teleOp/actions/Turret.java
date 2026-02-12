@@ -78,7 +78,7 @@ public class Turret {
     double actualWanted;
     double actualCableZero;
     public boolean isCableStretched(double wanted){
-        return -140-cableZero < wanted && wanted < 225-cableZero;
+        return !(minDiff-cableZero <= wanted && wanted <= maxDiff-cableZero);
     }
     public double convertModuloPos(double angle){
         return convertMotorAxisToRobot(utils.angleModulo(angle));
