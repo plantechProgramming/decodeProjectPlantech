@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleOp.actions;
 
+import android.util.Pair;
+
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -24,16 +26,19 @@ public class Turret {
         this.odometry = odometry;
     }
 
-    // turns to deg and accounts for robot turning
-    // when the robot turns, the measured turret angle doesnt change according to its turns
-    // so you need to add the diff in heading to the turret heading every time
-    // so the actual pos ISNT THE ENCODER POS and we CANT USE the built in pid
 
     boolean isCableStretched = false;
+//    boolean isCableStretched = false;
     double power;
     double newdeg;
     double currentDeg;
     double currentError;
+    // while not in threshold:
+    //  if not in stretched mode:
+    //      enter stretch mode if cable will get stretched
+    //  if in stretched mode:
+    //      move in other dir
+    //  set motor power
     public void turnToDegCorrected(double deg){
         currentDeg = getRealDeg(); // angle in turret
         PID pid = new PID(0.007 , 0.00000004, 0.00002, 0); // kp = 0.007, ki = 0.00000004, kd = 0.00002, kf = 0//
@@ -43,22 +48,11 @@ public class Turret {
 
         if(Math.abs(utils.getDiffBetweenAngles(newdeg, currentDeg)) > threshold){ // if not in threshold
             if(!isCableStretched){
-                isCableStretched = isCableStretched(getCurDeg());
+                isCableStretched = isCableStretched(getCurDeg()).second;
             }
             power = pid.updateTurretDeg(currentDeg, isCableStretched);
 //            power = pid.update(currentDeg);
             turretMotor.setPower(power);
-            //TEMP
-            currentError = utils.getDiffBetweenAngles(newdeg, currentDeg);
-            if(isCableStretched){
-                if(currentError > 0){
-                    currentError = 360 - currentError;
-                }
-                else{
-                    currentError += 360;
-                }
-            }
-
         }
         else{
             isCableStretched = false;
@@ -72,13 +66,20 @@ public class Turret {
         return angle;
     }
 
-    double cableZero = 78.3;// in gyro coordinate system
-    double maxDiff = 225 - cableZero; // 225 in turret cords infinite to -infinite
-    double minDiff = -140 - cableZero;
+    double cableZero = 78.3;// in encoder
+    double maxPos = 260; // encoder
+    double minPos = -260; // encoder
     double actualWanted;
     double actualCableZero;
-    public boolean isCableStretched(double wanted){
-        return !(minDiff-cableZero <= wanted && wanted <= maxDiff-cableZero);
+    public Pair<Integer,Boolean> isCableStretched(double wanted){
+        if(!(minPos + cableZero <= wanted)){
+            return new Pair<>(-1, true);
+        }
+        else if (!(wanted <= maxPos + cableZero)) {
+            return new Pair<>(1, true);
+        }
+        return new Pair<>(0, false);
+
     }
     public double convertModuloPos(double angle){
         return convertMotorAxisToRobot(utils.angleModulo(angle));

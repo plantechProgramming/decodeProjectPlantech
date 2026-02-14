@@ -51,8 +51,8 @@ public class PID {
 
     public double updateTurretDeg(final double current, boolean isCableStretched){
         double currentError = utils.getDiffBetweenAngles(wanted, current);
-        if(isCableStretched){ // for negative += 360 for positive 360 - error
-            utils.getLongestDiffBetweenAngles(wanted, current);
+        if(isCableStretched){
+            currentError = utils.getLongestDiffBetweenAngles(wanted, current);
         }
         return getPIDPower(currentError);
     }
