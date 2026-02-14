@@ -15,10 +15,10 @@ import org.firstinspires.ftc.teamcode.teleOp.Utils;
 public class Turret {
     public DcMotorEx turretMotor;
     private final double GEAR_RATIO = 2.5; // TODO: update for final version
-    private final double TICK_PER_TURN; // TODO: check!!
-    private final double TICK_PER_DEG;
+    private double TICK_PER_TURN = 1; // TODO: check!!
+    private double TICK_PER_DEG = 1;
     private final Utils utils = new Utils();
-    private final GoBildaPinpointDriver odometry;
+    private GoBildaPinpointDriver odometry = null;
     public Turret(DcMotorEx turretMotor, GoBildaPinpointDriver odometry){
         this.turretMotor = turretMotor;
         TICK_PER_TURN = 383.6;
@@ -26,8 +26,7 @@ public class Turret {
         this.odometry = odometry;
     }
 
-
-    boolean isCableStretched = false;
+    public int isCableStretched = 0;
 //    boolean isCableStretched = false;
     double power;
     double newdeg;
@@ -47,15 +46,15 @@ public class Turret {
         pid.setWanted(newdeg);
 
         if(Math.abs(utils.getDiffBetweenAngles(newdeg, currentDeg)) > threshold){ // if not in threshold
-            if(!isCableStretched){
-                isCableStretched = isCableStretched(getCurDeg()).second;
+            if(isCableStretched == 0){
+                isCableStretched = isCableStretched(getCurDeg());
             }
-            power = pid.updateTurretDeg(currentDeg, isCableStretched);
+            power = pid.updateTurretDeg(currentDeg, this);
 //            power = pid.update(currentDeg);
             turretMotor.setPower(power);
         }
-        else{
-            isCableStretched = false;
+        else{// if reached target
+            isCableStretched = 0;
             turretMotor.setPower(0); // because the motor remembers the last pow
         }
     }
@@ -71,14 +70,14 @@ public class Turret {
     double minPos = -260; // encoder
     double actualWanted;
     double actualCableZero;
-    public Pair<Integer,Boolean> isCableStretched(double wanted){
+    public int isCableStretched(double wanted){
         if(!(minPos + cableZero <= wanted)){
-            return new Pair<>(-1, true);
+            return -1;
         }
         else if (!(wanted <= maxPos + cableZero)) {
-            return new Pair<>(1, true);
+            return 1;
         }
-        return new Pair<>(0, false);
+        return 0;
 
     }
     public double convertModuloPos(double angle){
