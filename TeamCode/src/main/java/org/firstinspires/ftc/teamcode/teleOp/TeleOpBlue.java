@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleOp;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.follower.Follower;
 import com.pedropathing.ftc.FTCCoordinates;
 import com.pedropathing.ftc.InvertedFTCCoordinates;
 import com.pedropathing.ftc.PoseConverter;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
+import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
@@ -35,8 +37,10 @@ import dev.nextftc.core.commands.delays.Delay;
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOpBlue extends OpMode {
+    Follower follower;
     @Override
     protected void postInit() {
+        follower = Constants.createFollower(hardwareMap);
 //        odometry.recalibrateIMU();
 //        odometry.resetPosAndIMU();
     }
@@ -88,6 +92,7 @@ public class TeleOpBlue extends OpMode {
         boolean turretActivated = false;
         boolean intakeStarted = false;
         double tick = 2000/(48*Math.PI); //per tick
+        follower.setStartingPose(readWrite.readPose());
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
 
         while (opModeIsActive() ) {
@@ -127,9 +132,10 @@ public class TeleOpBlue extends OpMode {
 //           }
             else if(gamepad1.right_bumper){
 //                if(shooter.isUpToSpeed()){
-                    intake.inBetweenInFull();
+                intake.inBetweenInFull();
 //                }
                 intake.intakeIn();
+                follower.holdPoint(follower.getPose());
             }
 
 //            else if(gamepad1.y && !turretActivated){

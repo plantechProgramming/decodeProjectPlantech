@@ -67,13 +67,6 @@ public class Intake {
         sr.setPower(1);
         sl.setPower(-1);
     }
-    public void inBetweenHoldThree(ElapsedTime elapsedTime){
-        if(elapsedTime.seconds() >= 3 ){
-            return;
-        }
-        sr.setPower(-1);
-        sl.setPower(1);
-    }
     public void inBetweenOut(){
         ibr.setPower(1);
         ibl.setPower(-1);
