@@ -168,6 +168,9 @@ public class TeleOpRed extends OpMode {
             dashboardTelemetry.update();
             odometry.update();
 
+//            if(gamepad1.dpad_up) {
+//                push(pushT);
+//            }
         }
 
     }

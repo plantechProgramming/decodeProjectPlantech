@@ -75,7 +75,9 @@ public class TurretTest extends OpMode {
             dashboardTelemetry.update();
             telemetry.update();
             odometry.update();
+
         }
+
     }
 
     @Override
@@ -83,3 +85,4 @@ public class TurretTest extends OpMode {
 
     }
 }
+

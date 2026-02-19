@@ -32,6 +32,7 @@ public class Turret {
     double newdeg;
     double currentDeg;
     double currentError;
+    boolean enteredElse;
     // while not in threshold:
     //  if not in stretched mode:
     //      enter stretch mode if cable will get stretched
@@ -52,9 +53,11 @@ public class Turret {
             power = pid.updateTurretDeg(currentDeg, this);
 //            power = pid.update(currentDeg);
             turretMotor.setPower(power);
+            enteredElse = false;
         }
         else{// if reached target
-            isCableStretched = 0;
+            enteredElse = true;
+//            isCableStretched = 0;
             turretMotor.setPower(0); // because the motor remembers the last pow
         }
     }
@@ -65,7 +68,7 @@ public class Turret {
         return angle;
     }
 
-    double cableZero = 78.3;// in encoder
+    double cableZero = 149.77;// in encoder
     double maxPos = 260; // encoder
     double minPos = -260; // encoder
     double actualWanted;
@@ -116,9 +119,11 @@ public class Turret {
         telemetry.addData("turret deg (corrected)", this.getRealDeg());
         telemetry.addData("turret pow", power);
         telemetry.addData("is stretched?", isCableStretched(getCurDeg()));
+        telemetry.addData("is stretched var", isCableStretched);
         telemetry.addData("wanted", newdeg);
         telemetry.addData("error", utils.getDiffBetweenAngles(newdeg, currentDeg));
         telemetry.addData("curr deg", getCurDeg());
+        telemetry.addData("entered else?", enteredElse);
 
 //        double er = utils.getDiffBetweenAngles(-45, getRealDeg());
 //        telemetry.addData("Start errorGood",er);

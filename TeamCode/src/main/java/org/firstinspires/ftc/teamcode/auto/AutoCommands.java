@@ -116,7 +116,6 @@ public class AutoCommands implements Component{
     @Override
     public void postUpdate(){
         shooter.Periodic();
-        turnTurretToGoal().schedule();
     }
     public Command turnTurretToGoal(){
         Pose pose = follower.getPose();
@@ -128,7 +127,6 @@ public class AutoCommands implements Component{
         shooter.stop();
         inBetween.stop();
         intake.stop();
-        turret.stop();
     }
 
 }

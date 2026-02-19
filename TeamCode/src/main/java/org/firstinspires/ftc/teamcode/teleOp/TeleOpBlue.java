@@ -86,6 +86,7 @@ public class TeleOpBlue extends OpMode {
         double botHeading;
         boolean slow = false;
         boolean turretActivated = false;
+        boolean intakeStarted = false;
         double tick = 2000/(48*Math.PI); //per tick
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
 
@@ -125,11 +126,12 @@ public class TeleOpBlue extends OpMode {
 //               telemetry.addData("yaw", deg);
 //           }
             else if(gamepad1.right_bumper){
-                if(shooter.isUpToSpeed()){
+//                if(shooter.isUpToSpeed()){
                     intake.inBetweenInFull();
-                }
+//                }
                 intake.intakeIn();
             }
+
 //            else if(gamepad1.y && !turretActivated){
 //                turretActivated = true;
 //            }
@@ -167,9 +169,9 @@ public class TeleOpBlue extends OpMode {
             shooter.setShooterTelemetry(telemetry);
             shooter.setShooterTelemetry(dashboardTelemetry);
 
-            turret.setTelemetry(telemetry);
-            turret.setTelemetry(dashboardTelemetry);
-            telemetry.addData("get is stretched", turret.isCableStretched(utils.getAngleFromGoal("BLUE") * 2.5));
+//            turret.setTelemetry(telemetry);
+//            turret.setTelemetry(dashboardTelemetry);
+//            telemetry.addData("get is stretched", turret.isCableStretched(utils.getAngleFromGoal("BLUE") * 2.5));
 
             telemetry.update();
             dashboardTelemetry.update();

@@ -51,21 +51,21 @@ public class PID {
         }
         return getPIDPower(currentError);
     }
-    double prevTurretDir = 0;
+    int prevTurretDir = 0;
     public double updateTurretDeg(final double current, Turret turret){
-        double currentDir;
+        int currentDir = 0;
         double currentError = utils.getDiffBetweenAngles(wanted, current);
 
         if(turret.isCableStretched != 0){
             currentError = utils.getLongestDiffBetweenAngles(wanted, current);
-            currentDir = Math.signum(currentError);
+            currentDir = (int)Math.signum(currentError);
 
             if(currentDir != prevTurretDir){
                 currentError = utils.getDiffBetweenAngles(wanted, current);
-                turret.isCableStretched = 0;
+//                turret.isCableStretched = 0;
             }
         }
-        prevTurretDir = Math.signum(currentError);
+        prevTurretDir = currentDir;
         return getPIDPower(currentError);
     }
 

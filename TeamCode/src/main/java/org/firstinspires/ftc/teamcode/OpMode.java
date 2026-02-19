@@ -43,7 +43,7 @@ public abstract class OpMode extends LinearOpMode {
     protected GoBildaPinpointDriver odometry;
     protected IMU Imu;
     public FtcDashboard dashboard;
-
+    public boolean pushed = false;
     void initialize() {
 
         DriveFrontLeft = hardwareMap.get(DcMotorEx.class, "FL");
@@ -69,11 +69,12 @@ public abstract class OpMode extends LinearOpMode {
         DriveBackRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        //servos connected funny
+        intakeIBR = hardwareMap.get(CRServo.class,"IBL");
+        intakeIBL = hardwareMap.get(CRServo.class,"IBR");
+        shooterIBL = hardwareMap.get(CRServo.class,"SIBR");
+        shooterIBR = hardwareMap.get(CRServo.class,"SIBL");
 
-        intakeIBR = hardwareMap.get(CRServo.class,"IBR");
-        intakeIBL = hardwareMap.get(CRServo.class,"IBL");
-        shooterIBL = hardwareMap.get(CRServo.class,"SIBL");
-        shooterIBR = hardwareMap.get(CRServo.class,"SIBR");
 //
         intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
         intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -139,6 +140,13 @@ public abstract class OpMode extends LinearOpMode {
         }
 
         end();
+    }
+    public void push(CRServo pushT){
+        double Power = 0.5;
+        if (pushed == false)
+            pushT.setPower(Power);
+        else
+            pushT.setPower(-Power);
     }
 
     protected void postInit() {
