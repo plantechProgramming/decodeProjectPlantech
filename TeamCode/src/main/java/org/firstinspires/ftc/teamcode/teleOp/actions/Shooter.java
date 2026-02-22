@@ -23,13 +23,16 @@ import dev.nextftc.hardware.impl.MotorEx;
 @Configurable
 @Config
 public class Shooter {
-    PID pid = new PID(0.5, 0, 0, 0);
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 50; //og = 215
-    public static double kI = 0.1;//0.5
-    public static double kD = 1; //0
-    public static double kF = 0.6; // OG = 14.5
+//    public static double kP = 24.5; //og = 215
+//    public static double kI = 0.1;//0.5
+//    public static double kD = 1; //0
+//    public static double kF = 0.6; // OG = 14.5
+    public static double kP = 0.37;
+    public static double kI = 0.01;
+    public static double kD = 0.01;
+    public static double kF = 1.15;
 
 
     GetVelocity shooterVelocity;
@@ -55,10 +58,10 @@ public class Shooter {
     public double Szonedis;
     public final double errorFix = 1.18; // og = 1.18
     public void noPhysShoot(double x){
-        PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
-
-        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+//        PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
+//
+//        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+//        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
 
         shooter.setPower(x*errorFix);
         shooter2.setPower(-x*errorFix);
@@ -69,15 +72,12 @@ public class Shooter {
         telemetry.addData("velocity noisy", getVelocity(shooter));
         telemetry.addData("wanted", x*6000);
     }
-    PIDFController controller = new PIDFController(0.5,0,0,0);
+    PIDFController controller = new PIDFController(kP,kI,kD,kF);
     public void noPhysShootHomeostasis(double x){
-        double output = controller.calculate(x, shooterVelocity.getVelocityFilter()/6000);
-        shooter.setPower(x);
-        shooter2.setPower(-x);
-    }
-    public void noPhysShootLiorPID(double x){
-        pid.setWanted(x);
-        pid.setWanted(x);
+        double output = controller.calculate(shooterVelocity.getVelocityFilter()/6000,x);
+        shooter.setPower(output);
+        shooter2.setPower(-output);
+        telemetry.addData("output", output);
     }
     int count = 0;
     boolean prevMore = false;
@@ -102,13 +102,7 @@ public class Shooter {
         prevLess = less;
         prevMore = more;
 //        noPhysShootNext(power);
-        PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
-
-        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-
-        shooter.setPower(power*errorFix);
-        shooter2.setPower(-power*errorFix);
+        noPhysShootHomeostasis(power);
 //        telemetry.addData("wanted variable", power*6000);
 //        telemetry.addData("wanted fixed", errorFix*power*6000);
     }
@@ -127,10 +121,10 @@ public class Shooter {
     /// shoots with different powers depending on what launch zone youre in
     // TODO: make depend on odo vals, closed loop control for values
     public void naiveShooter(boolean far) {
-        PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
-
-        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+//        PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
+//
+//        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+//        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         if (!far) {
             Szonedis = 0.471;
         } else{
