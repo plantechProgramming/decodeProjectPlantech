@@ -32,12 +32,18 @@ public class shooterTest extends OpMode {
 
         while(opModeIsActive()){
 
-            odometry.update();
-            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .02);
-//            if(gamepad1.a){
-//                    intake.inBetweenInFull();
-//                    intake.intakeIn();
-//            }
+
+//            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .02);
+            shooter.noPhysShootHomeostasis(0.2);
+           if(gamepad1.a){
+               if(shooter.isUpToGivenSpeed(shooter.power)){
+                   intake.inBetweenInFull();
+                   intake.intakeIn();
+               }
+           }
+//           if(gamepad1.b){
+//               shooter.noPhysShoot(0.5);
+//           }
 //            if(gamepad1.a) shooter.noPhysShoot(0.5);
 //            shooter.shooter2.setPower(0.1);
 
@@ -45,7 +51,8 @@ public class shooterTest extends OpMode {
             shooter.setShooterTelemetry(telemetry);
             telemetry.update();
             dashboardTelemetry.update();
-            telemetry.update();
+            odometry.update();
+
         }
     }
 

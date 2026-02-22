@@ -6,7 +6,10 @@ repositories {
     maven { url= "https://maven.pedropathing.com/" }
     maven { url = "https://maven.rowanmcalpin.com/" }
     maven {  url = "https://mymaven.bylazar.com/releases" }
-
+//    maven { url 'https://jitpack.io' }
+    maven {
+        url "https://repo.dairy.foundation/releases"
+    }
 
 }
 
@@ -41,6 +44,10 @@ dependencies {
     // panels
     implementation "com.bylazar:fullpanels:1.0.11"
 //    implementation 'com.bylazar:fullpanels:1.0.6'
+
+    // homeostasis (control lib)
+//    implementation 'com.github.Thermal-Equilibrium:homeostasis-FTC:1.0.8'
+    implementation "org.solverslib:core:0.3.4" // core
 
 }
 

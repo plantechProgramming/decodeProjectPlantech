@@ -37,13 +37,13 @@ import dev.nextftc.core.commands.delays.Delay;
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOpBlue extends OpMode {
-    Follower follower;
-    @Override
-    protected void postInit() {
-        follower = Constants.createFollower(hardwareMap);
-//        odometry.recalibrateIMU();
-//        odometry.resetPosAndIMU();
-    }
+//    Follower follower;
+//    @Override
+//    protected void postInit() {
+//        follower = Constants.createFollower(hardwareMap);
+////        odometry.recalibrateIMU();
+////        odometry.resetPosAndIMU();
+//    }
 
     public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0);
     private VisionPortal visionPortal;
@@ -92,7 +92,7 @@ public class TeleOpBlue extends OpMode {
         boolean turretActivated = false;
         boolean intakeStarted = false;
         double tick = 2000/(48*Math.PI); //per tick
-        follower.setStartingPose(readWrite.readPose());
+//        follower.setStartingPose(readWrite.readPose());
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
 
         while (opModeIsActive() ) {
@@ -135,7 +135,7 @@ public class TeleOpBlue extends OpMode {
                 intake.inBetweenInFull();
 //                }
                 intake.intakeIn();
-                follower.holdPoint(follower.getPose());
+//                follower.holdPoint(follower.getPose());
             }
 
 //            else if(gamepad1.y && !turretActivated){
@@ -152,7 +152,9 @@ public class TeleOpBlue extends OpMode {
 //            if(turretActivated){
 //                turret.turnToDegCorrected(utils.getAngleFromGoal("BLUE"));
 //            }
-            shooter.interpolate(utils.getDistFromGoal("BLUE"));
+            if(!gamepad1.x && gamepad1.left_trigger == 0){
+                shooter.interpolate(utils.getDistFromGoal("BLUE"));
+            }
             if(gamepad1.left_bumper){
                 driveTrain.turnToGoal("BLUE");// TODO: change for RED
             }
@@ -166,7 +168,6 @@ public class TeleOpBlue extends OpMode {
 
             if(gamepad1.back){
                 odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 0)); //TODO: change for RED
-
             }
 
             driveTrain.setDriveTelemetry(telemetry);

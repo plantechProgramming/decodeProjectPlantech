@@ -29,7 +29,6 @@ import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.core.commands.CommandManager;
-@Disabled
 @Autonomous(name = "test Next",group = "tests")
 public class testNext extends NextFTCOpMode {
 
@@ -37,7 +36,11 @@ public class testNext extends NextFTCOpMode {
     public testNext() {
         addComponents(
                 BulkReadComponent.INSTANCE,
-                AutoCommands.INSTANCE_BLUE
+                AutoCommands.INSTANCE_BLUE,
+                new SubsystemComponent(
+                        NextInBetween.INSTANCE,
+                        NextIntake.INSTANCE
+                )
         );
 
     }
@@ -47,7 +50,11 @@ public class testNext extends NextFTCOpMode {
     private Command autonomousRoutine() {
         return new SequentialGroup(
                 command.startShooter(false),
-                command.shoot()
+                NextIntake.INSTANCE.take(),
+                NextInBetween.INSTANCE.inBetweenInPart(),
+                new Delay(5),
+                NextInBetween.INSTANCE.inBetweenInFull()
+
         );
     }
     @Override

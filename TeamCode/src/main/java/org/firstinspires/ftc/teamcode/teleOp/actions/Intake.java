@@ -62,16 +62,16 @@ public class Intake {
         sl.setPower(-1);
     }
     public void inBetweenInPart(){
-        ibr.setPower(-1);
-        ibl.setPower(1);
-        sr.setPower(1);
-        sl.setPower(-1);
-    }
-    public void inBetweenOut(){
         ibr.setPower(1);
         ibl.setPower(-1);
-        sr.setPower(1);
-        sl.setPower(-1);
+        sr.setPower(-1);
+        sl.setPower(1);
+    }
+    public void inBetweenOut(){
+        ibr.setPower(-1);
+        ibl.setPower(1);
+        sr.setPower(-1);
+        sl.setPower(1);
     }
     public void intakeFunc(boolean in, boolean out){ //motor is flipped
         if(in){

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleOp.actions;
 
+//import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
@@ -9,21 +10,28 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.teleOp.PID;
 
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.seattlesolvers.solverslib.controller.PIDFController;
+//import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 
+import dev.nextftc.control.ControlSystem;
+import dev.nextftc.control.KineticState;
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.hardware.impl.MotorEx;
 
 @Configurable
 @Config
 public class Shooter {
+    PID pid = new PID(0.5, 0, 0, 0);
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
-    public static double kP = 215; //og = 215
-    public static double kI = 0.5;//0.5
-    public static double kD = 0; //0
-    public static double kF = 14.5; // OG = 14.5
+    public static double kP = 50; //og = 215
+    public static double kI = 0.1;//0.5
+    public static double kD = 1; //0
+    public static double kF = 0.6; // OG = 14.5
+
+
     GetVelocity shooterVelocity;
     GetVelocity shooter2Velocity;
 
@@ -52,8 +60,8 @@ public class Shooter {
         shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
         shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
 
-        shooter.setPower(x);
-        shooter2.setPower(-x);
+        shooter.setPower(x*errorFix);
+        shooter2.setPower(-x*errorFix);
 
         telemetry.addData("velocity - firsts", shooter.getVelocity());
         telemetry.addData("velocity shooter 1", shooterVelocity.getVelocityFilter());
@@ -61,12 +69,21 @@ public class Shooter {
         telemetry.addData("velocity noisy", getVelocity(shooter));
         telemetry.addData("wanted", x*6000);
     }
-
+//    PIDFController controller = new PIDFController(0.5,0,0,0);
+    public void noPhysShootHomeostasis(double x){
+//        double output = controller.calculate(x, shooterVelocity.getVelocityFilter()/6000);
+        shooter.setPower(x);
+        shooter2.setPower(-x);
+    }
+    public void noPhysShootLiorPID(double x){
+        pid.setWanted(x);
+        pid.setWanted(x);
+    }
     int count = 0;
     boolean prevMore = false;
     boolean prevLess = false;
 
-    double power = 0;
+    public double power = 0;
     public void variableSpeedShoot(boolean more, boolean less, double jumps){
 
         if(more && !prevMore){power += jumps;}
@@ -84,6 +101,7 @@ public class Shooter {
         }
         prevLess = less;
         prevMore = more;
+//        noPhysShootNext(power);
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
 
         shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
@@ -91,8 +109,8 @@ public class Shooter {
 
         shooter.setPower(power*errorFix);
         shooter2.setPower(-power*errorFix);
-        telemetry.addData("wanted variable", power*6000);
-        telemetry.addData("wanted fixed", errorFix*power*6000);
+//        telemetry.addData("wanted variable", power*6000);
+//        telemetry.addData("wanted fixed", errorFix*power*6000);
     }
     public void setDashBoardPID(){
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
@@ -166,15 +184,21 @@ public class Shooter {
 //        telemetry.addData("th",Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000));
         telemetry.addData("pow 1", shooter.getPower());
         telemetry.addData("pow 2", shooter2.getPower());
-        PIDFCoefficients coefficients = shooter.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
-//        telemetry.addData("p", coefficients.p);
-//        telemetry.addData("i", coefficients.i);
-//        telemetry.addData("d", coefficients.d);
+        PIDFCoefficients coefficients = shooter2.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
+        telemetry.addData("p", coefficients.p);
+        telemetry.addData("i", coefficients.i);
+        telemetry.addData("d", coefficients.d);
+        telemetry.addData("wanted variable", power*6000);
+        telemetry.addData("f",coefficients.f);
     }
 
     public boolean isUpToSpeed(){
         double threshold = 130; //TODO: tune!! should be the biggest reliably scoring value
         return Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000) < threshold;
+    }
+    public boolean isUpToGivenSpeed(double speed){
+        double threshold = 130; //TODO: tune!! should be the biggest reliably scoring value
+        return Math.abs(shooterVelocity.getVelocityFilter() - speed*6000) < threshold;
     }
     public void out(){
         shooter.setPower(-.2);
