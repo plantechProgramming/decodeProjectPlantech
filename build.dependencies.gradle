@@ -26,7 +26,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     // FTCdashboard
-    implementation 'com.acmerobotics.dashboard:dashboard:0.5.1'
+//    implementation 'com.acmerobotics.dashboard:dashboard:0.5.1'
 
     // nextFTC
     implementation 'dev.nextftc:ftc:1.0.1'

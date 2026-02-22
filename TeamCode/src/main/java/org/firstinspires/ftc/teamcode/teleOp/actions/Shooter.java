@@ -69,9 +69,9 @@ public class Shooter {
         telemetry.addData("velocity noisy", getVelocity(shooter));
         telemetry.addData("wanted", x*6000);
     }
-//    PIDFController controller = new PIDFController(0.5,0,0,0);
+    PIDFController controller = new PIDFController(0.5,0,0,0);
     public void noPhysShootHomeostasis(double x){
-//        double output = controller.calculate(x, shooterVelocity.getVelocityFilter()/6000);
+        double output = controller.calculate(x, shooterVelocity.getVelocityFilter()/6000);
         shooter.setPower(x);
         shooter2.setPower(-x);
     }
