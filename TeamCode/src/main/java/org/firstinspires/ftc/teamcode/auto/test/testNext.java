@@ -49,10 +49,8 @@ public class testNext extends NextFTCOpMode {
 
     private Command autonomousRoutine() {
         return new SequentialGroup(
-                command.startShooter(false),
+                command.startShooter(true),
                 NextIntake.INSTANCE.take(),
-                NextInBetween.INSTANCE.inBetweenInPart(),
-                new Delay(5),
                 NextInBetween.INSTANCE.inBetweenInFull()
 
         );

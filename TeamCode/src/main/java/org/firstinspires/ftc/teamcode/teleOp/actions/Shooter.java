@@ -29,10 +29,10 @@ public class Shooter {
 //    public static double kI = 0.1;//0.5
 //    public static double kD = 1; //0
 //    public static double kF = 0.6; // OG = 14.5
-    public static double kP = 0.37;
-    public static double kI = 0.01;
-    public static double kD = 0.01;
-    public static double kF = 1.15;
+    public static double kP = 0.55; // 0.23
+    public static double kI = 0.02; // 0
+    public static double kD = 0.15; // 0.06
+    public static double kF = 1; // 1.16
 
 
     GetVelocity shooterVelocity;
@@ -74,7 +74,12 @@ public class Shooter {
     }
     PIDFController controller = new PIDFController(kP,kI,kD,kF);
     public void noPhysShootHomeostasis(double x){
-        double output = controller.calculate(shooterVelocity.getVelocityFilter()/6000,x);
+        double output = Math.max(controller.calculate(shooterVelocity.getVelocityFilter()/6000,x),0);
+        PIDFCoefficients pidNew = new PIDFCoefficients(0, 0, 0,10);
+
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+
         shooter.setPower(output);
         shooter2.setPower(-output);
         telemetry.addData("output", output);

@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class PedroTeleOp extends OpMode {
     private Follower follower;
-    public static Pose startingPose; // See ExampleAuto to understand how to use this
+    public static Pose startingPose = new Pose(72,72,180); // See ExampleAuto to understand how to use this
     private boolean automatedDrive;
     private Supplier<PathChain> pathChain;
     private TelemetryManager telemetryM;

@@ -6,8 +6,10 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.ftc.FTCCoordinates;
 import com.pedropathing.ftc.InvertedFTCCoordinates;
 import com.pedropathing.ftc.PoseConverter;
+import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.CoordinateSystem;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -37,13 +39,14 @@ import dev.nextftc.core.commands.delays.Delay;
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOpBlue extends OpMode {
-//    Follower follower;
-//    @Override
-//    protected void postInit() {
-//        follower = Constants.createFollower(hardwareMap);
+    Follower follower;
+    @Override
+    protected void postInit() {
+        follower = Constants.createFollower(hardwareMap);
+
 ////        odometry.recalibrateIMU();
 ////        odometry.resetPosAndIMU();
-//    }
+    }
 
     public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0);
     private VisionPortal visionPortal;
@@ -92,8 +95,11 @@ public class TeleOpBlue extends OpMode {
         boolean turretActivated = false;
         boolean intakeStarted = false;
         double tick = 2000/(48*Math.PI); //per tick
+        Pose lastPos = follower.getPose();
 //        follower.setStartingPose(readWrite.readPose());
+        follower.setStartingPose(new Pose(72,72,180)); //TODO: remove
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
+        follower.update();
 
         while (opModeIsActive() ) {
             AprilTagDetection goalTag = test.specialDetection;
@@ -107,6 +113,9 @@ public class TeleOpBlue extends OpMode {
             ElapsedTime elapsedTime = new ElapsedTime();
             if(!gamepad1.left_bumper) {
                 driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED
+            }
+            if(!gamepad1.right_bumper){
+                lastPos = follower.getPose();
             }
 
             if (gamepad1.right_trigger > 0){
@@ -135,8 +144,9 @@ public class TeleOpBlue extends OpMode {
                 intake.inBetweenInFull();
 //                }
                 intake.intakeIn();
-//                follower.holdPoint(follower.getPose());
+                follower.holdPoint(lastPos);
             }
+
 
 //            else if(gamepad1.y && !turretActivated){
 //                turretActivated = true;
@@ -152,11 +162,15 @@ public class TeleOpBlue extends OpMode {
 //            if(turretActivated){
 //                turret.turnToDegCorrected(utils.getAngleFromGoal("BLUE"));
 //            }
-            if(!gamepad1.x && gamepad1.left_trigger == 0){
-                shooter.interpolate(utils.getDistFromGoal("BLUE"));
-            }
+//            if(!gamepad1.x && gamepad1.left_trigger == 0){
+//                shooter.interpolate(utils.getDistFromGoal("BLUE"));
+//            }
             if(gamepad1.left_bumper){
                 driveTrain.turnToGoal("BLUE");// TODO: change for RED
+            }
+            if(gamepad1.a){
+                Path temp = new Path(new BezierLine(follower.getPose(), new Pose(0, 0, follower.getHeading())));
+                follower.followPath(temp);
             }
 
             if(gamepad1.start){
@@ -183,6 +197,7 @@ public class TeleOpBlue extends OpMode {
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();
+            follower.update();
         }
 
     }
