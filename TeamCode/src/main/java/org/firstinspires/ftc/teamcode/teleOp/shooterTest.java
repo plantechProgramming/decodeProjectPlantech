@@ -35,12 +35,14 @@ public class shooterTest extends OpMode {
 
             shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .02);
 //            shooter.noPhysShootHomeostasis(0.5);
-           if(gamepad1.a){
+            if(gamepad1.a){
                if(shooter.isUpToGivenSpeed(shooter.power)){
                    intake.inBetweenInFull();
                    intake.intakeIn();
                }
            }
+
+
 //           if(gamepad1.b){
 //               shooter.noPhysShoot(0.5);
 //           }

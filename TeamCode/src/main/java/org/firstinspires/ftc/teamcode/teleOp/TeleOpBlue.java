@@ -42,7 +42,7 @@ public class TeleOpBlue extends OpMode {
     Follower follower;
     @Override
     protected void postInit() {
-        follower = Constants.createFollower(hardwareMap);
+//        follower = Constants.createFollower(hardwareMap);
 
 ////        odometry.recalibrateIMU();
 ////        odometry.resetPosAndIMU();
@@ -95,11 +95,11 @@ public class TeleOpBlue extends OpMode {
         boolean turretActivated = false;
         boolean intakeStarted = false;
         double tick = 2000/(48*Math.PI); //per tick
-        Pose lastPos = follower.getPose();
+//        Pose lastPos = follower.getPose();
 //        follower.setStartingPose(readWrite.readPose());
-        follower.setStartingPose(new Pose(72,72,180)); //TODO: remove
+//        follower.setStartingPose(new Pose(72,72,180)); //TODO: remove
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
-        follower.update();
+//        follower.update();
 
         while (opModeIsActive() ) {
             AprilTagDetection goalTag = test.specialDetection;
@@ -115,7 +115,7 @@ public class TeleOpBlue extends OpMode {
                 driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED
             }
             if(!gamepad1.right_bumper){
-                lastPos = follower.getPose();
+//                lastPos = follower.getPose();
             }
 
             if (gamepad1.right_trigger > 0){
@@ -144,7 +144,8 @@ public class TeleOpBlue extends OpMode {
                 intake.inBetweenInFull();
 //                }
                 intake.intakeIn();
-                follower.holdPoint(lastPos);
+//                follower.holdPoint(lastPos);
+//                telemetry.addData("last pose", lastPos);
             }
 
 
@@ -169,8 +170,8 @@ public class TeleOpBlue extends OpMode {
                 driveTrain.turnToGoal("BLUE");// TODO: change for RED
             }
             if(gamepad1.a){
-                Path temp = new Path(new BezierLine(follower.getPose(), new Pose(0, 0, follower.getHeading())));
-                follower.followPath(temp);
+//                Path temp = new Path(new BezierLine(follower.getPose(), new Pose(0, 0, follower.getHeading())));
+//                follower.followPath(temp);
             }
 
             if(gamepad1.start){
@@ -197,7 +198,7 @@ public class TeleOpBlue extends OpMode {
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();
-            follower.update();
+//            follower.update();
         }
 
     }

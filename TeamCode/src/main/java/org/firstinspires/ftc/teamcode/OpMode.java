@@ -79,6 +79,7 @@ public abstract class OpMode extends LinearOpMode {
         intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
         intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 //        colorSensor = hardwareMap.get(NormalizedColorSensor.class, "color_sensor");
 
         Imu = hardwareMap.get(IMU.class, "imu");
