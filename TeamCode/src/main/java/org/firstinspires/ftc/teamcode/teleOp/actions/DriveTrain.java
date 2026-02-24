@@ -109,7 +109,7 @@ public class DriveTrain {
         double power = 0;
         pid.setWanted(degrees);
 
-        if(Math.abs(degrees - botAngleRaw) > threshold){ // if not in threshold
+        if(Math.abs(utils.getDiffBetweenAngles(degrees, botAngleRaw)) > threshold){ // if not in threshold
 
             power = pid.updatedeg(botAngleRaw);
             FL.setPower(-power);
@@ -133,7 +133,7 @@ public class DriveTrain {
     }
 
     public void setDriveTelemetry(Telemetry telemetry){
-        telemetry.addData("botheading",odometry.getHeading(AngleUnit.DEGREES));
+        telemetry.addData("botheading", odometry.getHeading(AngleUnit.DEGREES));
         telemetry.addData("deg to goal",deg);
 //        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
