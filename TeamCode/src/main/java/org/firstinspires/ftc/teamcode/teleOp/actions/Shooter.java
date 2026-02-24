@@ -121,7 +121,7 @@ public class Shooter {
 
 
     public void interpolate(double dis){
-        noPhysShoot((-9.90643e-11) * Math.pow(dis, 4) + ( 9.37832e-8 ) * Math.pow(dis, 3) - (2.81195e-5)  * Math.pow(dis, 2) + (3.61685e-3)  * dis + 0.315642);
+        noPhysShootHomeostasis((7.90822e-7) * dis * dis + 0.000132943 * dis + 0.252523);
     }
 
 //    / @param dis: distance from goal

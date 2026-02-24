@@ -111,6 +111,7 @@ public class TeleOpBlue extends OpMode {
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
 
             ElapsedTime elapsedTime = new ElapsedTime();
+            shooter.interpolate(utils.getDistFromGoal("BLUE"));
             if(!gamepad1.left_bumper) {
                 driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED
             }
