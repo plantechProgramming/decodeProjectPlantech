@@ -89,88 +89,107 @@ public class TeleOpRed extends OpMode {
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
         while (opModeIsActive() ) {
             AprilTagDetection goalTag = test.specialDetection;
-//            test.telemetryAprilTag(aprilTag);
-            test.detectTags(aprilTag);
-
+//            test.detectTags(aprilTag);
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
             //todo: pinpoint
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
-
+            shooter.interpolate(utils.getDistFromGoal("RED"));
             ElapsedTime elapsedTime = new ElapsedTime();
-            if(!gamepad1.left_bumper) {
-                driveTrain.drive(-forward, -drift, turn, botHeading, 1);
+            if(!gamepad1.left_bumper ) {
+                driveTrain.drive(-forward, -drift, turn, botHeading, 1);//TODO: change for RED
             }
+
+//            if(!gamepad1.right_bumper){
+//                lastPos = follower.getPose();
+//                if(activatedHold){
+//                    activatedHold = false;
+//                    follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
+//                }
+//            }
+//            if(!gamepad1.a){
+//                lastPos = follower.getPose();
+//            }
 
             if (gamepad1.right_trigger > 0){
                 intake.intakeIn();
                 intake.inBetweenInPart();
             }
             else if(gamepad1.left_trigger!=0) {
-                shooter.out();
                 intake.inBetweenOut();
                 intake.intakeOut();
             }
             else if(gamepad1.x){
                 intake.inBetweenOut();
+                intake.intakeOut();
                 shooter.out();
 //            } else if (gamepad1.a) {
 //                intake.inBetweenInPart();
             }
-//           if(gamepad1.dpad_up && test.specialDetection != null && test.numDetected > 0){
+//           if(gamepad1.dpad_up && test.specialDetection != null){
 //               double deg = test.specialDetection.ftcPose.bearing;
 //
 //               driveTrain.turnToGyro(odometry.getHeading(AngleUnit.DEGREES) + deg);
 //               telemetry.addData("yaw", deg);
-//               telemetry.update();
 //           }
             else if(gamepad1.right_bumper){
-                if(shooter.isUpToSpeed()){
+                if(shooter.isUpToGivenSpeed(shooter.interpolateTel(utils.getDistFromGoal("RED")))){
                     intake.inBetweenInFull();
                 }
                 intake.intakeIn();
-            }
-            else if(gamepad1.y && !turretActivated){
-                turretActivated = true;
+
+//                follower.holdPoint(lastPos);
+//                activatedHold = true;
+//                if(!activatedHold){
+//                    Path holdPoint = new Path(new BezierLine(follower.getPose(), lastPos));
+//                    follower.followPath(holdPoint);
+//                }
+////                telemetry.addData("last pose", lastPos);
+//                activatedHold = true;
             }
 
+
+//            else if(gamepad1.y && !turretActivated){
+//                turretActivated = true;
+//            }
 
             else{
 //                shooter.stopShooter();
                 intake.stopIntake();
             }
-//            shooter.variableSpeedShoot(gamepad1.y, gamepad1.a, .05);
-
-            shooter.naiveShooter(driveTrain.isFar());
+            //TODO: put back when debug ends
+            // shooter.naiveShooter(driveTrain.isFar());
+//            if(turretActivated){
+//                turret.turnToDegCorrected(utils.getAngleFromGoal("BLUE"));
+//            }
+//            if(!gamepad1.x && gamepad1.left_trigger == 0){
+//                shooter.interpolate(utils.getDistFromGoal("BLUE"));
+//            }
             if(gamepad1.left_bumper){
-                driveTrain.turnToGoal("RED");//TODO: change for RED
+                driveTrain.turnToGoal("RED");// TODO: change for RED
             }
-            if(gamepad1.start){
-                double x = odometry.getPosX(DistanceUnit.CM);
-                double y = odometry.getPosY(DistanceUnit.CM);
-                Pose2D curPose = new Pose2D(DistanceUnit.CM,x,y,AngleUnit.DEGREES,180);//TODO: change for RED
-                odometry.setPosition(curPose);
-            }
+
             if(gamepad1.back){
                 odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
             }
-            if(turretActivated){
-                turret.turnToDegCorrected(utils.getAngleFromGoal("RED"));
-            }
+
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);
-            telemetry.addData("pose pedro ", readWrite.readPose());
+
             shooter.setShooterTelemetry(telemetry);
             shooter.setShooterTelemetry(dashboardTelemetry);
 
+//            turret.setTelemetry(telemetry);
+//            turret.setTelemetry(dashboardTelemetry);
+//            telemetry.addData("get is stretched", turret.isCableStretched(utils.getAngleFromGoal("BLUE") * 2.5));
+//            telemetry.addData("pos", follower.getPose());
+//            telemetry.addData("lastpos", lastPos);
+            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();
-
-//            if(gamepad1.dpad_up) {
-//                push(pushT);
-//            }
         }
 
     }

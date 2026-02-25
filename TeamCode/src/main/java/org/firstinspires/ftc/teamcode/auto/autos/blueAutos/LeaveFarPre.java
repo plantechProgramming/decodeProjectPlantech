@@ -40,7 +40,7 @@ public class LeaveFarPre extends NextFTCOpMode {
     public Command autoRoutine(){
         return new SequentialGroup(
                 command.startShooter(true),
-                new Delay(1),
+                new Delay(2),
                 command.score(path.scorePreloadFar),
                 new FollowPath(path.scoreLeaveFar)
         );

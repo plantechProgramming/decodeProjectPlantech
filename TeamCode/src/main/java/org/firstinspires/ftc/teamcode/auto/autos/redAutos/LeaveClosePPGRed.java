@@ -39,7 +39,7 @@ public class LeaveClosePPGRed extends NextFTCOpMode {
                 command.startShooter(false),
                 new Delay(1),
                 command.score(path.scorePreload),
-                command.intake(path.intakePPG,path.grabPPG,0.5),
+                command.intake(path.intakePPG,path.grabPPG,0.3),
                 command.score(path.scorePPG),
                 new FollowPath(path.scoreLeaveClose)
         );

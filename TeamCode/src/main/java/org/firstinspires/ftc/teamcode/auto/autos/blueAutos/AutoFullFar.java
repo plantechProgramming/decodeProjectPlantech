@@ -39,7 +39,7 @@ public class AutoFullFar extends NextFTCOpMode {
         public Command autoRoutine(){
             return new SequentialGroup(
                     command.startShooter(true),
-//                    new Delay(0.3),
+                    new Delay(0.4),
                     command.score(path.scorePreloadFar),
                     command.intake(path.intakeGPP, path.grabGPPFar, 0.75),
                     command.score(path.scoreGPPFar),
