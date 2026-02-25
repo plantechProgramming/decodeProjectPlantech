@@ -193,11 +193,11 @@ public class Shooter {
     }
 
     public boolean isUpToSpeed(){
-        double threshold = 130; //TODO: tune!! should be the biggest reliably scoring value
+        double threshold = 100; //TODO: tune!! should be the biggest reliably scoring value
         return Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000) < threshold;
     }
     public boolean isUpToGivenSpeed(double speed){
-        double threshold = 130; //TODO: tune!! should be the biggest reliably scoring value
+        double threshold = 100; //TODO: tune!! should be the biggest reliably scoring value
         return Math.abs(shooterVelocity.getVelocityFilter() - speed*6000) < threshold;
     }
     public void out(){

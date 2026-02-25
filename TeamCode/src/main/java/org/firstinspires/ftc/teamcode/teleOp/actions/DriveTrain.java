@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleOp.actions;
 
 import android.util.Pair;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
@@ -11,6 +12,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.seattlesolvers.solverslib.controller.PIDFController;
+
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -21,6 +24,7 @@ import org.firstinspires.ftc.teamcode.teleOp.Utils;
 import org.opencv.core.Mat;
 import org.openftc.easyopencv.OpenCvCamera;
 
+@Config
 public class DriveTrain {
     private DcMotorEx BR, BL, FR, FL;
     private BNO055IMU imu;
@@ -31,7 +35,7 @@ public class DriveTrain {
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     Utils utils;
-    public static double Kp = 0.5, Ki = 0.2, Kd = 0.01;
+    public static double Kp = 0.022, Ki = 0.0000001, Kd = 100, Kf = 0;
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
 
@@ -42,6 +46,7 @@ public class DriveTrain {
         this.FR = FR;
         this.odometry = odometry;
         this.Imu = imu;
+
 
         this.telemetry = telemetry;
 
@@ -102,10 +107,12 @@ public class DriveTrain {
         BR.setPower(0);
         BL.setPower(0);
     }
+
     public void turnToGyro(double degrees) {
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
-        PID pid = new PID(0.022, 0.00000001, 0.000001, 0); // prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
-        double threshold = 0.4;
+
+        PID pid = new PID(Kp, Ki, Kd, Kf);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
+        double threshold = 0.5;
         double power = 0;
         pid.setWanted(degrees);
 

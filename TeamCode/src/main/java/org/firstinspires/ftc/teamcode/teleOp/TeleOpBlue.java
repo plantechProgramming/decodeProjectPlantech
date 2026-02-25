@@ -113,7 +113,7 @@ public class TeleOpBlue extends OpMode {
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
 
             ElapsedTime elapsedTime = new ElapsedTime();
-            shooter.interpolate(utils.getDistFromGoal("BLUE"));
+//            shooter.interpolate(utils.getDistFromGoal("BLUE"));
             if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
                 driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED
             }
@@ -151,7 +151,7 @@ public class TeleOpBlue extends OpMode {
 //               telemetry.addData("yaw", deg);
 //           }
             else if(gamepad1.right_bumper){
-                if(shooter.isUpToSpeed()){
+                if(shooter.isUpToGivenSpeed(shooter.interpolateTel(utils.getDistFromGoal("BLUE")))){
                     intake.inBetweenInFull();
                 }
                 intake.intakeIn();
