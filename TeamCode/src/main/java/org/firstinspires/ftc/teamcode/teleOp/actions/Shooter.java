@@ -58,10 +58,10 @@ public class Shooter {
     public double Szonedis;
     public final double errorFix = 1.18; // og = 1.18
     public void noPhysShoot(double x){
-//        PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
-//
-//        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-//        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
+
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
 
         shooter.setPower(x*errorFix);
         shooter2.setPower(-x*errorFix);
@@ -76,10 +76,6 @@ public class Shooter {
     public void noPhysShootHomeostasis(double x){
         controller.setWanted(x);
         double output = controller.update(shooterVelocity.getVelocityFilter()/6000);
-        PIDFCoefficients pidNew = new PIDFCoefficients(0, 0, 0,15);
-
-        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
 
         shooter.setPower(output);
         shooter2.setPower(-output);
@@ -121,7 +117,10 @@ public class Shooter {
 
 
     public void interpolate(double dis){
-        noPhysShootHomeostasis((7.90822e-7) * dis * dis + 0.000132943 * dis + 0.252523);
+        noPhysShootHomeostasis((8.93725e-7) * dis * dis + 0.0000505832 * dis + 0.27646);
+    }
+    public double interpolateTel(double dis){
+        return (8.93725e-7) * dis * dis + 0.0000505832 * dis + 0.27646;
     }
 
 //    / @param dis: distance from goal

@@ -92,12 +92,12 @@ public abstract class OpMode extends LinearOpMode {
         shootMotor = hardwareMap.get(DcMotorEx.class, "shooter");
         shootMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         shootMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        shootMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        shootMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         shootMotorOp = hardwareMap.get(DcMotorEx.class, "shooter2");
         shootMotorOp.setDirection(DcMotorSimple.Direction.FORWARD);
         shootMotorOp.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        shootMotorOp.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        shootMotorOp.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         turretMotor = hardwareMap.get(DcMotorEx.class, "turret");
         turretMotor.setDirection(DcMotorSimple.Direction.FORWARD);

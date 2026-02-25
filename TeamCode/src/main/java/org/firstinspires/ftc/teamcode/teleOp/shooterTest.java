@@ -33,7 +33,7 @@ public class shooterTest extends OpMode {
         while(opModeIsActive()){
 
 
-            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .02);
+            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .01);
 //            shooter.noPhysShootHomeostasis(0.5);
             if(gamepad1.a){
                if(shooter.isUpToGivenSpeed(shooter.power)){

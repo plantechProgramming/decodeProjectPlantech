@@ -135,6 +135,7 @@ public class DriveTrain {
     public void setDriveTelemetry(Telemetry telemetry){
         telemetry.addData("botheading", odometry.getHeading(AngleUnit.DEGREES));
         telemetry.addData("deg to goal",deg);
+        telemetry.addData("disToGoal", utils.getDistFromGoal("BLUE"));
 //        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
         telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));

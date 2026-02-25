@@ -35,6 +35,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import dev.nextftc.core.commands.delays.Delay;
+import kotlin.contracts.HoldsIn;
 
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -93,11 +94,12 @@ public class TeleOpBlue extends OpMode {
         double botHeading;
         boolean slow = false;
         boolean turretActivated = false;
+        boolean activatedHold = false;
         boolean intakeStarted = false;
         double tick = 2000/(48*Math.PI); //per tick
-//        Pose lastPos = follower.getPose();
 //        follower.setStartingPose(readWrite.readPose());
-//        follower.setStartingPose(new Pose(72,72,180)); //TODO: remove
+//        follower.setStartingPose(new Pose(72,72,Math.toRadians(180))); //TODO: remove
+//        Pose lastPos = follower.getPose();
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
 //        follower.update();
 
@@ -112,24 +114,32 @@ public class TeleOpBlue extends OpMode {
 
             ElapsedTime elapsedTime = new ElapsedTime();
             shooter.interpolate(utils.getDistFromGoal("BLUE"));
-            if(!gamepad1.left_bumper) {
+            if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
                 driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED
             }
-            if(!gamepad1.right_bumper){
+
+//            if(!gamepad1.right_bumper){
 //                lastPos = follower.getPose();
-            }
+//                if(activatedHold){
+//                    activatedHold = false;
+//                    follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
+//                }
+//            }
+//            if(!gamepad1.a){
+//                lastPos = follower.getPose();
+//            }
 
             if (gamepad1.right_trigger > 0){
                 intake.intakeIn();
                 intake.inBetweenInPart();
             }
             else if(gamepad1.left_trigger!=0) {
-                shooter.out();
                 intake.inBetweenOut();
                 intake.intakeOut();
             }
             else if(gamepad1.x){
                 intake.inBetweenOut();
+                intake.intakeOut();
                 shooter.out();
 //            } else if (gamepad1.a) {
 //                intake.inBetweenInPart();
@@ -141,12 +151,18 @@ public class TeleOpBlue extends OpMode {
 //               telemetry.addData("yaw", deg);
 //           }
             else if(gamepad1.right_bumper){
-//                if(shooter.isUpToSpeed()){
-                intake.inBetweenInFull();
-//                }
+                if(shooter.isUpToSpeed()){
+                    intake.inBetweenInFull();
+                }
                 intake.intakeIn();
 //                follower.holdPoint(lastPos);
-//                telemetry.addData("last pose", lastPos);
+//                activatedHold = true;
+//                if(!activatedHold){
+//                    Path holdPoint = new Path(new BezierLine(follower.getPose(), lastPos));
+//                    follower.followPath(holdPoint);
+//                }
+////                telemetry.addData("last pose", lastPos);
+//                activatedHold = true;
             }
 
 
@@ -158,7 +174,6 @@ public class TeleOpBlue extends OpMode {
 //                shooter.stopShooter();
                 intake.stopIntake();
             }
-//            shooter.variableSpeedShoot(gamepad1.y, gamepad1.a, .05);
             //TODO: put back when debug ends
             // shooter.naiveShooter(driveTrain.isFar());
 //            if(turretActivated){
@@ -169,10 +184,6 @@ public class TeleOpBlue extends OpMode {
 //            }
             if(gamepad1.left_bumper){
                 driveTrain.turnToGoal("BLUE");// TODO: change for RED
-            }
-            if(gamepad1.a){
-//                Path temp = new Path(new BezierLine(follower.getPose(), new Pose(0, 0, follower.getHeading())));
-//                follower.followPath(temp);
             }
 
             if(gamepad1.start){
@@ -195,7 +206,11 @@ public class TeleOpBlue extends OpMode {
 //            turret.setTelemetry(telemetry);
 //            turret.setTelemetry(dashboardTelemetry);
 //            telemetry.addData("get is stretched", turret.isCableStretched(utils.getAngleFromGoal("BLUE") * 2.5));
-
+//            telemetry.addData("pos", follower.getPose());
+//            telemetry.addData("lastpos", lastPos);
+            telemetry.addData("activated hold", activatedHold);
+            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
+            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();
