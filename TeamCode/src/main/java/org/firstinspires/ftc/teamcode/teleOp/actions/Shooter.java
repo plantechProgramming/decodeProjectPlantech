@@ -29,10 +29,10 @@ public class Shooter {
 //    public static double kI = 0.1;//0.5
 //    public static double kD = 1; //0
 //    public static double kF = 0.6; // OG = 14.5
-    public static double kP = 16; // 0.55
-    public static double kI = 0.01; // 0.02
-    public static double kD = 1000; // 0.15
-    public static double kF = 0; // 1
+    public static double kP = 30; // 0.55
+    public static double kI = 0; // 0.02
+    public static double kD = 0; // 0.15
+    public static double kF = 1.4; // 1
 
 
     GetVelocity shooterVelocity;
