@@ -117,10 +117,10 @@ public class Shooter {
 
 
     public void interpolate(double dis){
-        noPhysShootHomeostasis((8.93725e-7) * dis * dis + 0.0000505832 * dis + 0.27646);
+        noPhysShootHomeostasis((7.68651e-7) * dis * dis + 0.000131763 * dis + 0.266722);
     }
     public double interpolateTel(double dis){
-        return (8.93725e-7) * dis * dis + 0.0000505832 * dis + 0.27646;
+        return (7.68651e-7) * dis * dis + 0.000131763 * dis + 0.266722;
     }
 
 //    / @param dis: distance from goal
