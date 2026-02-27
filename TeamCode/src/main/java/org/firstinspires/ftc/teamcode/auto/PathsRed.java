@@ -134,7 +134,7 @@ public class PathsRed {
                 .build();
 
         intakePGP = follower.pathBuilder()
-                .addPath(new BezierLine(PGP, afterPickupPGP))
+                .addPath(new BezierCurve(PGP,controlPosePGP, afterPickupPGP))
                 .build();
 
         scoreLeaveClose = follower.pathBuilder()

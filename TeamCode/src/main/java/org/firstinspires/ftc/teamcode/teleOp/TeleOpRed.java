@@ -44,7 +44,7 @@ public class TeleOpRed extends OpMode {
         odometry.resetPosAndIMU();
         Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
-        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp);
+        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odo);
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
         ReadWrite readWrite = new ReadWrite();
         Utils utils = new Utils(telemetry,odometry);

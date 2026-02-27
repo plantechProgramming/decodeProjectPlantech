@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
@@ -45,8 +46,8 @@ public class AutoFullClose extends NextFTCOpMode{
                 command.intake(path.intakePGP,path.grabPGP,0.75),
 
                 command.score(path.scorePGP),
-                command.intake(path.intakeGPP, path.grabGPP, 0.75)
-        );
+                new FollowPath(path.scoreLeaveClose)
+                        );
     }
     @Override
     public void onUpdate(){

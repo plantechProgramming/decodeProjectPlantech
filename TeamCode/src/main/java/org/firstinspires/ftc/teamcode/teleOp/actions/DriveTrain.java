@@ -112,7 +112,7 @@ public class DriveTrain {
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
 
         PID pid = new PID(Kp, Ki, Kd, Kf);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
-        double threshold = 0.5;
+        double threshold = 0.55;
         double power = 0;
         pid.setWanted(degrees);
 

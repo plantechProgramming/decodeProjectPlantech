@@ -56,7 +56,7 @@ public abstract class OpMode extends LinearOpMode {
         DriveFrontRight.setDirection(DcMotorEx.Direction.FORWARD);
         DriveFrontRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         DriveFrontRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        DriveFrontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        DriveFrontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER );
 
         DriveBackLeft = hardwareMap.get(DcMotorEx.class, "BL");
         DriveBackLeft.setDirection(DcMotorEx.Direction.REVERSE);

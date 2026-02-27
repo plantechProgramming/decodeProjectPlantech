@@ -4,15 +4,18 @@ package org.firstinspires.ftc.teamcode.teleOp.actions;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.teleOp.PID;
+import org.firstinspires.ftc.teamcode.teleOp.Utils;
 
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.controller.PIDFController;
+import com.seattlesolvers.solverslib.hardware.motors.Motor;
 //import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 
 import dev.nextftc.control.ControlSystem;
@@ -25,6 +28,7 @@ import dev.nextftc.hardware.impl.MotorEx;
 public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
+    GoBildaPinpointDriver odometry;
 //    public static double kP = 24.5; //og = 215
 //    public static double kI = 0.1;//0.5
 //    public static double kD = 1; //0
@@ -33,15 +37,18 @@ public class Shooter {
     public static double kI = 0; // 0.02
     public static double kD = 0; // 0.15
     public static double kF = 1.4; // 1
-
+    Utils utils;
 
     GetVelocity shooterVelocity;
     GetVelocity shooter2Velocity;
 
-    public Shooter(DcMotorEx shootMotor, Telemetry telemetry, DcMotorEx shooter2){
+    public Shooter(DcMotorEx shootMotor, Telemetry telemetry, DcMotorEx shooter2, GoBildaPinpointDriver odometry){
         this.shooter = shootMotor;
         this.telemetry = telemetry;
         this.shooter2 = shooter2;
+        this.odometry = odometry;
+        this.utils = new Utils(telemetry, odometry);
+
 
         shooterVelocity = new GetVelocity(shooter,0.1);
         shooter2Velocity = new GetVelocity(shooter2,0.1);
@@ -109,6 +116,29 @@ public class Shooter {
 //        telemetry.addData("wanted variable", power*6000);
 //        telemetry.addData("wanted fixed", errorFix*power*6000);
     }
+    public void variableInterplationSpeedShoot(boolean more, boolean less, double jumps, String Team){
+
+        if(more && !prevMore){power += jumps;}
+        else if(less && !prevLess){
+            power -= jumps;
+        }
+        else{
+            telemetry.addData("wanted variable", power*6000);
+            prevLess = less;
+            prevMore = more;
+            noPhysShootHomeostasis(interpolateTel(utils.getDistFromGoal(Team)) + power);
+            return;
+        }
+        if (power >= 0.7){
+            power = 0.7;
+        }
+        prevLess = less;
+        prevMore = more;
+//        noPhysShootNext(power);
+        noPhysShootHomeostasis(interpolateTel(utils.getDistFromGoal(Team)) + power);
+//        telemetry.addData("wanted variable", power*6000);
+//        telemetry.addData("wanted fixed", errorFix*power*6000);
+    }
     public void setDashBoardPID(){
         PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
         shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
@@ -117,10 +147,10 @@ public class Shooter {
 
 
     public void interpolate(double dis){
-        noPhysShootHomeostasis((7.68651e-7) * dis * dis + 0.000131763 * dis + 0.266722);
+        noPhysShootHomeostasis(  ((7.68651e-7) * dis * dis + 0.000131763 * dis + 0.266722)  );
     }
     public double interpolateTel(double dis){
-        return (7.68651e-7) * dis * dis + 0.000131763 * dis + 0.266722;
+        return   ((7.68651e-7) * dis * dis + 0.000131763 * dis + 0.266722) ;
     }
 
 //    / @param dis: distance from goal
@@ -193,11 +223,11 @@ public class Shooter {
     }
 
     public boolean isUpToSpeed(){
-        double threshold = 100; //TODO: tune!! should be the biggest reliably scoring value
+        double threshold = 65; //TODO: tune!! should be the biggest reliably scoring value
         return Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000) < threshold;
     }
     public boolean isUpToGivenSpeed(double speed){
-        double threshold = 100; //TODO: tune!! should be the biggest reliably scoring value
+        double threshold = 65; //TODO: tune!! should be the biggest reliably scoring value
         return Math.abs(shooterVelocity.getVelocityFilter() - speed*6000) < threshold;
     }
     public void out(){
