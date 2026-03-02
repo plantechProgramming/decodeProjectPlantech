@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.seattlesolvers.solverslib.controller.Controller;
 import com.seattlesolvers.solverslib.controller.PIDFController;
 
 
@@ -35,7 +36,7 @@ public class DriveTrain {
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     Utils utils;
-    public static double Kp = 0.022, Ki = 0.0000001, Kd = 100, Kf = 0;
+    public static double Kp = 0.0375, Ki =1, Kd = 2000000000, Kf = 0;
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
 
@@ -111,20 +112,25 @@ public class DriveTrain {
     public void turnToGyro(double degrees) {
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
 
-        PID pid = new PID(Kp, Ki, Kd, Kf);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
-        double threshold = 0.55;
+        PIDFController pid = new PIDFController(Kp, Ki, Kd, Kf);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
+        double threshold = 0.3;
         double power = 0;
-        pid.setWanted(degrees);
 
-        if(Math.abs(utils.getDiffBetweenAngles(degrees, botAngleRaw)) > threshold){ // if not in threshold
-
-            power = pid.updatedeg(botAngleRaw);
+//        if(Math.abs(utils.getDiffBetweenAngles(degrees, botAngleRaw)) > threshold){ // if not in threshold
+            double currError = degrees - botAngleRaw;
+            if (currError < -180){
+                degrees += 360;
+            }
+            if (currError > 180){
+                degrees -= 360;
+            }
+            power = pid.calculate(botAngleRaw, degrees);
             FL.setPower(-power);
             FR.setPower(power);
 
             BR.setPower(power);
             BL.setPower(-power);
-        }
+//        }
         telemetry.addData("pow", power);
 //        telemetry.addData("heading", botAngleRaw);
     }
