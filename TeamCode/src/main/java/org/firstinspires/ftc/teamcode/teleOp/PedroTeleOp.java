@@ -27,11 +27,7 @@ import java.util.function.Supplier;
 @Configurable
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class PedroTeleOp extends OpMode {
-    Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
-    DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
-    Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
-    ReadWrite readWrite = new ReadWrite();
-    Utils utils = new Utils(telemetry,odometry);
+
     private Follower follower;
     public static Pose startingPose = new Pose(72,72,180);
     private boolean automatedDrive;
@@ -45,28 +41,34 @@ public class PedroTeleOp extends OpMode {
 
     @Override
     protected void postInit() {
+
+    }
+
+    @Override
+    protected void run() {
+        odometry.resetPosAndIMU();
+        Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
+        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
+        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
+        ReadWrite readWrite = new ReadWrite();
+        Utils utils = new Utils(telemetry,odometry);
         follower = Constants.createFollower(hardwareMap);
 //        follower.setStartingPose(startingPose == null ? new Pose() : startingPose);
-        odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
         follower.update();
         telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
 //        pathChain = () -> follower.pathBuilder() //Lazy Curve Generation
 //                .addPath(new Path(new BezierLine(follower::getPose, new Pose(45, 98))))
 //                .setHeadingInterpolation(HeadingInterpolator.linearFromPoint(follower::getHeading, Math.toRadians(45), 0.8))
 //                .build();
-        follower.startTeleopDrive(true);
+        follower.startTeleopDrive(false);
         lastPos = follower.getPose();
-    }
-
-    @Override
-    protected void run() {
         while(opModeIsActive()){
             if (!gamepad1.right_bumper && !gamepad1.left_bumper) {
                 follower.setTeleOpDrive(
                         gamepad1.left_stick_y,
                         gamepad1.left_stick_x,
                         gamepad1.right_stick_x,
-                        false);
+                        true);
             }
             //Automated PathFollowing
 //            if (gamepad1.aWasPressed()) {
@@ -74,50 +76,50 @@ public class PedroTeleOp extends OpMode {
 //                automatedDrive = true;
 //            }
             //Stop automated following if the follower is done
-//            if (automatedDrive && (gamepad1.bWasPressed() || !follower.isBusy())) {
-//                follower.startTeleopDrive();
-//                automatedDrive = false;
+////            if (automatedDrive && (gamepad1.bWasPressed() || !follower.isBusy())) {
+////                follower.startTeleopDrive();
+////                automatedDrive = false;
+////            }
+//            if(!gamepad1.right_bumper){
+//                lastPos = follower.getPose();
+//                if(activatedHold){
+//                    activatedHold = false;
+//                    follower.startTeleOpDrive(true);
+//                }
 //            }
-            if(!gamepad1.right_bumper){
-                lastPos = follower.getPose();
-                if(activatedHold){
-                    activatedHold = false;
-                    follower.startTeleOpDrive(true);
-                }
-            }
-
-            if (gamepad1.right_trigger > 0){
-                intake.intakeIn();
-                intake.inBetweenInPart();
-            }
-            else if(gamepad1.left_trigger!=0) {
-                intake.inBetweenOut();
-                intake.intakeOut();
-            }
-            else if(gamepad1.x){
-                intake.inBetweenOut();
-                intake.intakeOut();
-                shooter.out();
-            }
-            else if(gamepad1.right_bumper){
-                if(shooter.isUpToGivenSpeed(shooter.interpolateTel(utils.getDistFromGoal("BLUE")))){// TODO: change for RED
-                    intake.inBetweenInFull();
-                }
-                intake.intakeIn();
-
-                follower.holdPoint(lastPos);
-                activatedHold = true;
-            }
-            else{
-                intake.stopIntake();
-            }
-
-            if(gamepad1.left_bumper){
-                driveTrain.turnToGoal("BLUE");// TODO: change for RED
-            }
-            if(gamepad1.back){
-                odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 0)); //TODO: change for RED
-            }
+//
+//            if (gamepad1.right_trigger > 0){
+//                intake.intakeIn();
+//                intake.inBetweenInPart();
+//            }
+//            else if(gamepad1.left_trigger!=0) {
+//                intake.inBetweenOut();
+//                intake.intakeOut();
+//            }
+//            else if(gamepad1.x){
+//                intake.inBetweenOut();
+//                intake.intakeOut();
+//                shooter.out();
+//            }
+//            else if(gamepad1.right_bumper){
+//                if(shooter.isUpToGivenSpeed(shooter.interpolateTel(utils.getDistFromGoal("BLUE")))){// TODO: change for RED
+//                    intake.inBetweenInFull();
+//                }
+//                intake.intakeIn();
+//
+//                follower.holdPoint(lastPos);
+//                activatedHold = true;
+//            }
+//            else{
+//                intake.stopIntake();
+//            }
+//
+//            if(gamepad1.left_bumper){
+//                driveTrain.turnToGoal("BLUE");// TODO: change for RED
+//            }
+//            if(gamepad1.back){
+//                odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 0)); //TODO: change for RED
+//            }
 
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);

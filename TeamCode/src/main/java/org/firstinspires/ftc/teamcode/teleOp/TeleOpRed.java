@@ -42,14 +42,14 @@ public class TeleOpRed extends OpMode {
     @Override
     public void run(){
         odometry.resetPosAndIMU();
-        Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
+        Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
         ReadWrite readWrite = new ReadWrite();
         Utils utils = new Utils(telemetry,odometry);
         ColorSensorTest cSensor = new ColorSensorTest();
-        Turret turret = new Turret(turretMotor, odometry);
+//        Turret turret = new Turret(turretMotor, odometry);
 
 
         //TODO: find why didnt work outside

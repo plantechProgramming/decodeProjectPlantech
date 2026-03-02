@@ -10,6 +10,8 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.CoordinateSystem;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -43,7 +45,7 @@ public class TeleOpBlue extends OpMode {
     Follower follower;
     @Override
     protected void postInit() {
-//        follower = Constants.createFollower(hardwareMap);
+        follower = Constants.createFollower(hardwareMap);
 
 ////        odometry.recalibrateIMU();
 ////        odometry.resetPosAndIMU();
@@ -56,11 +58,10 @@ public class TeleOpBlue extends OpMode {
     @Override
     public void run(){
         odometry.resetPosAndIMU();
-        Intake intake  = new Intake(intakeIBL,intakeIBR,shooterIBL,shooterIBR,intakeMotor,telemetry);
+        Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
         ReadWrite readWrite = new ReadWrite();
-        Turret turret = new Turret(turretMotor, odometry);
         Utils utils = new Utils(telemetry,odometry);
         //ColorSensorTest cSensor = new ColorSensorTest();
         GetVelocity shooterVel = new GetVelocity(shootMotor,0.1);
@@ -99,9 +100,9 @@ public class TeleOpBlue extends OpMode {
         double tick = 2000/(48*Math.PI); //per tick
 //        follower.setStartingPose(readWrite.readPose());
 //        follower.setStartingPose(new Pose(72,72,Math.toRadians(180))); //TODO: remove
-//        Pose lastPos = follower.getPose();
+        Pose lastPos = follower.getPose();
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
-//        follower.update();
+        follower.update();
 
         while (opModeIsActive() ) {
             AprilTagDetection goalTag = test.specialDetection;
@@ -113,17 +114,21 @@ public class TeleOpBlue extends OpMode {
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
             shooter.interpolate(utils.getDistFromGoal("BLUE"));
             ElapsedTime elapsedTime = new ElapsedTime();
-            if(!gamepad1.left_bumper ) {
+            if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
                 driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED
             }
 
-//            if(!gamepad1.right_bumper){
-//                lastPos = follower.getPose();
-//                if(activatedHold){
-//                    activatedHold = false;
-//                    follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
-//                }
-//            }
+            if(!gamepad1.right_bumper){
+                lastPos = follower.getPose();
+                if(activatedHold){
+                    activatedHold = false;
+                    follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
+                }
+                DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            }
 //            if(!gamepad1.a){
 //                lastPos = follower.getPose();
 //            }
@@ -154,9 +159,20 @@ public class TeleOpBlue extends OpMode {
                     intake.inBetweenInFull();
                 }
                 intake.intakeIn();
+                DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//                follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), true);
 
-//                follower.holdPoint(lastPos);
-//                activatedHold = true;
+//                PathChain to_point = follower.pathBuilder()
+//                        .addPath(new BezierLine(follower.getPose(), lastPos))
+//                        .setLinearHeadingInterpolation(follower.getPose().getHeading(), lastPos.getHeading())
+//                        .build();
+//                follower.followPath((to_point), true );
+
+                follower.holdPoint(lastPos, false);
+                activatedHold = true;
 //                if(!activatedHold){
 //                    Path holdPoint = new Path(new BezierLine(follower.getPose(), lastPos));
 //                    follower.followPath(holdPoint);
@@ -182,7 +198,7 @@ public class TeleOpBlue extends OpMode {
 //            if(!gamepad1.x && gamepad1.left_trigger == 0){
 //                shooter.interpolate(utils.getDistFromGoal("BLUE"));
 //            }
-            if(gamepad1.left_bumper){
+            if(gamepad1.left_bumper && !gamepad1.right_bumper){
                 driveTrain.turnToGoal("BLUE");// TODO: change for RED
             }
 
@@ -199,15 +215,15 @@ public class TeleOpBlue extends OpMode {
 //            turret.setTelemetry(telemetry);
 //            turret.setTelemetry(dashboardTelemetry);
 //            telemetry.addData("get is stretched", turret.isCableStretched(utils.getAngleFromGoal("BLUE") * 2.5));
-//            telemetry.addData("pos", follower.getPose());
-//            telemetry.addData("lastpos", lastPos);
+            telemetry.addData("pos", follower.getPose());
+            telemetry.addData("lastpos", lastPos);
             telemetry.addData("activated hold", activatedHold);
             telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
             dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();
-//            follower.update();
+            follower.update();
         }
 
     }

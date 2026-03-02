@@ -36,7 +36,7 @@ public abstract class OpMode extends LinearOpMode {
 //    protected NormalizedColorSensor colorSensor;
 
     protected CameraName camera;
-    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight,turretMotor, EH, EA,SU,SD, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
+    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight,inBetweenMotor, EH, EA,SU,SD, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
     protected ElapsedTime runtime = new ElapsedTime();
     public boolean liftFlag = false;
     protected Telemetry dashboardTelemetry;
@@ -99,10 +99,10 @@ public abstract class OpMode extends LinearOpMode {
 //        shootMotorOp.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shootMotorOp.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        turretMotor = hardwareMap.get(DcMotorEx.class, "turret");
-        turretMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        inBetweenMotor = hardwareMap.get(DcMotorEx.class, "inbetween");
+        inBetweenMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        inBetweenMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        inBetweenMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         odometry = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
         odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
