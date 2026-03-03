@@ -166,6 +166,7 @@ public class TeleOpBlue extends OpMode {
                     DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                     DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                     aang = false;
+
                 }
                 follower.holdPoint(lastPos, false);
                 activatedHold = true;
@@ -174,7 +175,11 @@ public class TeleOpBlue extends OpMode {
                 intake.stopIntake();
             }
             if(gamepad1.left_bumper && !gamepad1.right_bumper){
-                driveTrain.turnToGoal("BLUE");// TODO: change for RED
+//                DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//                DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//                DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//                DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+               follower.turn(Math.toRadians(0));
             }
 
             if(gamepad1.back){

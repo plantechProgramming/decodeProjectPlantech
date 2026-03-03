@@ -108,7 +108,7 @@ public class TeleOpRed extends OpMode {
             drift = gamepad1.left_stick_x;
             //todo: pinpoint
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
-            shooter.interpolate(utils.getDistFromGoal("RED")); //TODO: change for RED
+//            shooter.interpolate(utils.getDistFromGoal("RED")); //TODO: change for RED
             ElapsedTime elapsedTime = new ElapsedTime();
             if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
                 driveTrain.drive(-forward, -drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
@@ -158,6 +158,8 @@ public class TeleOpRed extends OpMode {
                     DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                     DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                     aang = false;
+                    lastPos = follower.getPose();
+
                 }
                 follower.holdPoint(lastPos, false);
                 activatedHold = true;
@@ -177,14 +179,14 @@ public class TeleOpRed extends OpMode {
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);
 //
-//            shooter.setShooterTelemetry(telemetry);
-//            shooter.setShooterTelemetry(dashboardTelemetry);
-//
+            shooter.setShooterTelemetry(telemetry);
+            shooter.setShooterTelemetry(dashboardTelemetry);
+
 //            telemetry.addData("pos", follower.getPose());
 //            telemetry.addData("lastpos", lastPos);
 //            telemetry.addData("activated hold", activatedHold);
-//            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
-//            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
+            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();

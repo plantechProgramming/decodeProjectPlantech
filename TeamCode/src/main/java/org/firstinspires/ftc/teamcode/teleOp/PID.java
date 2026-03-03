@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Turret;
 
 public class PID {
@@ -15,6 +16,7 @@ public class PID {
     public double kD = 0;
     public double kF = 0;
     public double iZone = 0;
+    public Telemetry telemetry;
 
     public double wanted = 0;
 
@@ -23,6 +25,7 @@ public class PID {
 
     private double prevError = 0;
     private double prevTime = 0;
+    private int t = 0;
 
     public PID(final double kP, final double kI, final double kD, final double kF) {
         this.kP = kP;
@@ -30,6 +33,17 @@ public class PID {
         this.kD = kD;
         this.kF = kF;
 //        this.iZone = iZone;
+    }
+
+    // t = amt of loops between checks
+    public PID(final double kP, final double kI, final double kD, final double kF, final int t, Telemetry telemetry){
+        this.kP = kP;
+        this.kI = kI;
+        this.kD = kD;
+        this.kF = kF;
+        this.t = t;
+        this.telemetry = telemetry;
+
     }
 
     public void setWanted(final double wanted) {this.wanted = wanted;}
@@ -79,6 +93,27 @@ public class PID {
         prevError = currentError;
         prevTime = currentTime;
         power = kP * currentError + kI * integral + kD * derivative + kF * wanted;
+        telemetry.addData("derivative",derivative);
+        telemetry.addData("integral", integral);
+        telemetry.addData("error", currentError);
         return power;
     }
+
+    int count = 0;
+    double prevPower = 0;
+    //TODO: make name fit all other funcs
+    public double getPIDPowerWithT(double current){
+        double pow;
+        if(count % t == 0){
+            double currentError = utils.getDiffBetweenAngles(wanted, current);
+            pow = getPIDPower(currentError);
+        }
+        else{
+            pow = prevPower;
+        }
+        prevPower = pow;
+        count++;
+        return pow;
+    }
+
 }
