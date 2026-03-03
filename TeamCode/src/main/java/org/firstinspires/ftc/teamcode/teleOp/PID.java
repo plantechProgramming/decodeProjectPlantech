@@ -93,9 +93,9 @@ public class PID {
         prevError = currentError;
         prevTime = currentTime;
         power = kP * currentError + kI * integral + kD * derivative + kF * wanted;
-        telemetry.addData("derivative",derivative);
-        telemetry.addData("integral", integral);
-        telemetry.addData("error", currentError);
+//        telemetry.addData("derivative",derivative);
+//        telemetry.addData("integral", integral);
+//        telemetry.addData("error", currentError);
         return power;
     }
 
@@ -107,12 +107,14 @@ public class PID {
         if(count % t == 0){
             double currentError = utils.getDiffBetweenAngles(wanted, current);
             pow = getPIDPower(currentError);
+            telemetry.addLine("entered");
         }
         else{
             pow = prevPower;
         }
         prevPower = pow;
         count++;
+        telemetry.addData("count", count);
         return pow;
     }
 
