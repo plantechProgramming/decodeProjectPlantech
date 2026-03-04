@@ -36,8 +36,8 @@ public class DriveTrain {
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     Utils utils;
-    public static double Kp = 0.01, Ki = 0, Kd = 0, Kf = 0;
-    public static int t = 20;
+    public static double Kp = 0.05, Ki = 0.0000000006, Kd = 3.5, Kf = 0;
+    public static int t = 1;
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     private PID pid;
     static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
