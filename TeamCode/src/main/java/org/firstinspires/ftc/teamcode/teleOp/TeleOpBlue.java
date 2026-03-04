@@ -167,7 +167,6 @@ public class TeleOpBlue extends OpMode {
                         DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
                         aang = false;
                         lastPos = follower.getPose();
-
                     }
                     follower.holdPoint(lastPos, false);
                     activatedHold = true;
@@ -181,7 +180,7 @@ public class TeleOpBlue extends OpMode {
                 }
 
                 if(gamepad1.back){
-                    odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
+                    odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 0)); //TODO: change for RED
                 }
 
                 driveTrain.setDriveTelemetry(telemetry);
@@ -193,10 +192,10 @@ public class TeleOpBlue extends OpMode {
 //            telemetry.addData("pos", follower.getPose());
 //            telemetry.addData("lastpos", lastPos);
 //            telemetry.addData("activated hold", activatedHold);
-                telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
-                dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
-                telemetry.update();
-                dashboardTelemetry.update();
+//                telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
+//                dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
+//                telemetry.update();
+//                dashboardTelemetry.update();
                 odometry.update();
                 follower.update();
         }

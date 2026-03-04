@@ -1,13 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.autos.blueAutos; // make sure this aligns with class location
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
-import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
-import com.pedropathing.paths.PathChain;
-import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
@@ -18,13 +11,14 @@ import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
-@Autonomous(name = "Full Far Blue", group = "Blue")
-public class AutoFullFar extends NextFTCOpMode {
+@Autonomous(name = "Full Far Blue leave", group = "Blue")
+public class AutoFullFarLeave extends NextFTCOpMode {
 
-    public AutoFullFar() {
+    public AutoFullFarLeave() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
@@ -46,7 +40,8 @@ public class AutoFullFar extends NextFTCOpMode {
 
                     command.startShooter(false),
                     command.intake(path.intakePGP,path.grabPGPFar,0.8),
-                    command.score(path.scorePGP)
+                    command.score(path.scorePGP),
+                    new FollowPath(path.scoreLeaveFar)
 //                    command.intake(path.intakePPG,path.grabPPG,0.75)
             );
         }

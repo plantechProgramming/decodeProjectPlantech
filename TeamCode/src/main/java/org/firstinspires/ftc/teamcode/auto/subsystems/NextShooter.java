@@ -4,6 +4,9 @@ package org.firstinspires.ftc.teamcode.auto.subsystems;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.bylazar.configurables.annotations.Configurable;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import dev.nextftc.control.ControlSystem;
@@ -22,7 +25,8 @@ import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.impl.ServoEx;
 import dev.nextftc.hardware.positionable.SetPosition;
 import dev.nextftc.hardware.powerable.SetPower;
-
+@Configurable
+@Config
 public class NextShooter implements Subsystem {
     public static final NextShooter INSTANCE = new NextShooter();
     public NextShooter() {
@@ -33,6 +37,8 @@ public class NextShooter implements Subsystem {
     private MotorEx shooter2 = new MotorEx("shooter2", -1);
 
     double Szonedis = 0.5;
+    public static double farPow = 0.539;
+    public static double closePow = 0.406;
     double kp = 0.01, ki = 0, kd = 0, kf = 0.012;
     ControlSystem controlSystem = ControlSystem.builder() // next pid
             .velPid(kp, ki, kd)
@@ -43,9 +49,9 @@ public class NextShooter implements Subsystem {
         return new InstantCommand(
                 () -> {
                     if (!far) {
-                        Szonedis = 0.30;
+                        Szonedis = closePow;
                     } else {
-                        Szonedis = 0.415;
+                        Szonedis = farPow;
                     }
                     controlSystem.setGoal(new KineticState(0, powerToTicks(Szonedis)));
                 }

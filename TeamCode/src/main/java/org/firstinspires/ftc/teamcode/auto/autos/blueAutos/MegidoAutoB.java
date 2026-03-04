@@ -18,12 +18,12 @@ import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
-@Autonomous(name = "Full Close Blue", group = "Blue")
-public class AutoFullClose extends NextFTCOpMode{
+@Autonomous(name = "Megido Auto Close Blue", group = "Blue")
+public class MegidoAutoB extends NextFTCOpMode{
 
     private Follower follower;
 
-    public AutoFullClose() {
+    public MegidoAutoB() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),

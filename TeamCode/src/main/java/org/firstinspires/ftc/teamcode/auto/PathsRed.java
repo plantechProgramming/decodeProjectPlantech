@@ -119,7 +119,7 @@ public class PathsRed {
                 .build();
 
         grabPGP = follower.pathBuilder()
-                .addPath(new BezierLine(scorePose, PGP))
+                .addPath(new BezierCurve(scorePose, controlPosePGP, PGP))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), PGP.getHeading())
                 .build();
 
@@ -134,7 +134,7 @@ public class PathsRed {
                 .build();
 
         intakePGP = follower.pathBuilder()
-                .addPath(new BezierCurve(PGP,controlPosePGP, afterPickupPGP))
+                .addPath(new BezierLine(PGP, afterPickupPGP))
                 .build();
 
         scoreLeaveClose = follower.pathBuilder()

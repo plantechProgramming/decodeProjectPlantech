@@ -25,12 +25,12 @@ public class PathsBlue {
     public final Pose leaveFarPose = new Pose(39, 16, Math.toRadians(180));
     public final Pose GPP = new Pose(44, 36, Math.toRadians(180));
     public final Pose PPG = new Pose(44, 83.5, Math.toRadians(180));
-    public final Pose PGP = new Pose(44 , 58.5, Math.toRadians(180));
+    public final Pose PGP = new Pose(44 , 57.5, Math.toRadians(180));
 
     public final Pose afterPickupGPP = new Pose(10.5, 36, Math.toRadians(180));
 
     public final Pose afterPickupPPG = new Pose(17, 83.5, Math.toRadians(180));
-    public final Pose afterPickupPGP = new Pose(10.5, 58.5, Math.toRadians(180));
+    public final Pose afterPickupPGP = new Pose(10.5, 57.5, Math.toRadians(180));
 
     public PathChain scorePreload, scorePreloadFar;
     public PathChain grabGPP, grabPGP, grabPPG;

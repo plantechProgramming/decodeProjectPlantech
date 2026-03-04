@@ -108,7 +108,7 @@ public class TeleOpRed extends OpMode {
             //todo: pinpoint
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
 //            shooter.interpolate(utils.getDistFromGoal("RED")); //TODO: change for RED
-//            shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, "RED"); //TODO: change for RED
+            shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, "RED"); //TODO: change for RED
             ElapsedTime elapsedTime = new ElapsedTime();
             if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
                 driveTrain.drive(-forward, -drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
