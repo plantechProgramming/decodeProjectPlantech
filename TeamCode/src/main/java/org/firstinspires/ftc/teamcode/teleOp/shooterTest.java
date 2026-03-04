@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.OpMode;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
@@ -29,11 +30,18 @@ public class shooterTest extends OpMode {
 //        Turret turret = new Turret(turretMotor, odometry);
         Utils utils = new Utils(telemetry,odometry);
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
-
+        odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
+        DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         while(opModeIsActive()){
-
-
+            double forward = -gamepad1.left_stick_y;
+            double turn = gamepad1.right_stick_x;
+            double drift = gamepad1.left_stick_x;
             shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .01);
+//            driveTrain.drive(-forward, -drift, turn, odometry.getHeading(AngleUnit.DEGREES), 1);//TODO: change for RED -forward, -drift
+
 //            shooter.noPhysShootHomeostasis(0.5);
             if(gamepad1.a){
                if(shooter.isUpToGivenSpeed(shooter.power)){
@@ -51,6 +59,8 @@ public class shooterTest extends OpMode {
 
             shooter.setShooterTelemetry(dashboardTelemetry);
             shooter.setShooterTelemetry(telemetry);
+            driveTrain.setDriveTelemetry(telemetry);
+            driveTrain.setDriveTelemetry(dashboardTelemetry);
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();

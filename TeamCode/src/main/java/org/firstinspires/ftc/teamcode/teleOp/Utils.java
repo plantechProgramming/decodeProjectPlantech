@@ -24,7 +24,7 @@ public class Utils {
     public final double LEN_FIELD = 360.172; // in cm
     double yOffset = 20;//prev = 18
     double xOffset = 20; // prev = 16
-    public final Pose2D GOAL_RED = new Pose2D(DistanceUnit.CM,-LEN_FIELD/2-xOffset, -LEN_FIELD/2 - yOffset,AngleUnit.DEGREES,0);
+    public final Pose2D GOAL_RED = new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+xOffset, -LEN_FIELD/2 + yOffset,AngleUnit.DEGREES,0);
     public final Pose2D GOAL_BLUE = new Pose2D(DistanceUnit.CM,LEN_FIELD/2-xOffset, -LEN_FIELD/2 + yOffset,AngleUnit.DEGREES,0);
 
     public Pair<Double, Double> getXYdistToPoint(Pose2D point){

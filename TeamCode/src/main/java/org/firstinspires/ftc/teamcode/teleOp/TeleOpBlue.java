@@ -109,98 +109,96 @@ public class TeleOpBlue extends OpMode {
         DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         while (opModeIsActive() ) {
-            AprilTagDetection goalTag = test.specialDetection;
-//            test.detectTags(aprilTag);
-            forward = -gamepad1.left_stick_y;
-            turn = gamepad1.right_stick_x;
-            drift = gamepad1.left_stick_x;
-            //todo: pinpoint
-            botHeading = odometry.getHeading(AngleUnit.RADIANS);
-            shooter.interpolate(utils.getDistFromGoal("BLUE")); //TODO: change for RED
-            ElapsedTime elapsedTime = new ElapsedTime();
-            if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
-                driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
-            }
-
-            if(!gamepad1.right_bumper){
-                lastPos = follower.getPose();
-                aang = true;
-                if(activatedHold){
-                    activatedHold = false;
-                    follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
-                    DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-                    DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//                 AprilTagDetection goalTag = test.specialDetection;       test.detectTags(aprilTag);
+                forward = -gamepad1.left_stick_y;
+                turn = gamepad1.right_stick_x;
+                drift = gamepad1.left_stick_x;
+                //todo: pinpoint
+                botHeading = odometry.getHeading(AngleUnit.RADIANS);
+//            shooter.interpolate(utils.getDistFromGoal("BLUE")); //TODO: change for RED
+                shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, "BLUE"); //TODO: change for RED
+                ElapsedTime elapsedTime = new ElapsedTime();
+                if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
+                    driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
                 }
 
-            }
+                if(!gamepad1.right_bumper){
+                    lastPos = follower.getPose();
+                    aang = true;
+                    if(activatedHold){
+                        activatedHold = false;
+                        follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
+                        DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                        DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                        DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                        DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    }
 
-            if (gamepad1.right_trigger > 0){
-                intake.intakeIn();
-                intake.inBetweenInPart();
-            }
-            else if(gamepad1.left_trigger!=0) {
-                intake.inBetweenOut();
-                intake.intakeOut();
-            }
-            else if(gamepad1.x){
-                intake.inBetweenOut();
-                intake.intakeOut();
-                shooter.out();
-            }
+                }
+
+                if (gamepad1.right_trigger > 0){
+                    intake.intakeIn();
+                    intake.inBetweenInPart();
+                }
+                else if(gamepad1.left_trigger!=0) {
+                    intake.inBetweenOut();
+                    intake.intakeOut();
+                }
+                else if(gamepad1.x){
+                    intake.inBetweenOut();
+                    intake.intakeOut();
+                    shooter.out();
+                }
 //           if(gamepad1.dpad_up && test.specialDetection != null){
 //               double deg = test.specialDetection.ftcPose.bearing;
 //
 //               driveTrain.turnToGyro(odometry.getHeading(AngleUnit.DEGREES) + deg);
 //               telemetry.addData("yaw", deg);
 //           }
-            else if(gamepad1.right_bumper){
-                if(shooter.isUpToGivenSpeed(shooter.interpolateTel(utils.getDistFromGoal("BLUE")))){ //TODO: change for RED
-                    intake.inBetweenInFull();
+                else if(gamepad1.right_bumper){
+                    if(shooter.isUpToGivenSpeed(shooter.interpolateTel(utils.getDistFromGoal("BLUE")))){ //TODO: change for RED
+                        intake.inBetweenInFull();
+                    }
+                    intake.intakeIn();
+                    if(aang){
+                        DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        aang = false;
+                        lastPos = follower.getPose();
+
+                    }
+                    follower.holdPoint(lastPos, false);
+                    activatedHold = true;
                 }
-                intake.intakeIn();
-                if(aang){
-                    DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    aang = false;
 
+                else{
+                    intake.stopIntake();
                 }
-                follower.holdPoint(lastPos, false);
-                activatedHold = true;
-            }
-            else{
-                intake.stopIntake();
-            }
-            if(gamepad1.left_bumper && !gamepad1.right_bumper){
-//                DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-//                DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-//                DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-//                DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-               follower.turn(Math.toRadians(0));
-            }
+                if(gamepad1.left_bumper && !gamepad1.right_bumper){
+                    driveTrain.turnToGoal("BLUE");// TODO: change for RED
+                }
 
-            if(gamepad1.back){
-                odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 0)); //TODO: change for RED
-            }
+                if(gamepad1.back){
+                    odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
+                }
 
-//            driveTrain.setDriveTelemetry(telemetry);
-//            driveTrain.setDriveTelemetry(dashboardTelemetry);
+                driveTrain.setDriveTelemetry(telemetry);
+                driveTrain.setDriveTelemetry(dashboardTelemetry);
 //
-//            shooter.setShooterTelemetry(telemetry);
-//            shooter.setShooterTelemetry(dashboardTelemetry);
-//
+                shooter.setShooterTelemetry(telemetry);
+                shooter.setShooterTelemetry(dashboardTelemetry);
+
 //            telemetry.addData("pos", follower.getPose());
 //            telemetry.addData("lastpos", lastPos);
 //            telemetry.addData("activated hold", activatedHold);
-//            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
-//            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
-//            telemetry.update();
-//            dashboardTelemetry.update();
-            odometry.update();
-            follower.update();
+                telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
+                dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("BLUE")) *6000);
+                telemetry.update();
+                dashboardTelemetry.update();
+                odometry.update();
+                follower.update();
         }
 
     }

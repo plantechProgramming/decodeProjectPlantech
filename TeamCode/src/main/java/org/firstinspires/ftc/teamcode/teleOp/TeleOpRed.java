@@ -101,14 +101,14 @@ public class TeleOpRed extends OpMode {
         DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         while (opModeIsActive() ) {
-            AprilTagDetection goalTag = test.specialDetection;
-//            test.detectTags(aprilTag);
+//                 AprilTagDetection goalTag = test.specialDetection;       test.detectTags(aprilTag);
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
             //todo: pinpoint
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
 //            shooter.interpolate(utils.getDistFromGoal("RED")); //TODO: change for RED
+//            shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, "RED"); //TODO: change for RED
             ElapsedTime elapsedTime = new ElapsedTime();
             if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
                 driveTrain.drive(-forward, -drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift

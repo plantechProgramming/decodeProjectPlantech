@@ -129,8 +129,8 @@ public class Shooter {
             noPhysShootHomeostasis(interpolateTel(utils.getDistFromGoal(Team)) + power);
             return;
         }
-        if (power >= 0.7){
-            power = 0.7;
+        if (power >= 0.8){
+            power = 0.8;
         }
         prevLess = less;
         prevMore = more;
@@ -147,10 +147,10 @@ public class Shooter {
 
 
     public void interpolate(double dis){
-        noPhysShootHomeostasis(  ((7.68651e-7) * dis * dis + 0.000131763 * dis + 0.266722)  );
+        noPhysShootHomeostasis( 4.27503E-7 * Math.pow(dis, 2) + 0.000437294 * dis + 0.33109);
     }
     public double interpolateTel(double dis){
-        return   ((7.68651e-7) * dis * dis + 0.000131763 * dis + 0.266722);
+        return   (4.27503E-7 * Math.pow(dis, 2) + 0.000437294 * dis + 0.33109);
     }
 
 //    / @param dis: distance from goal
