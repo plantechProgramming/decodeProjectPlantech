@@ -17,9 +17,9 @@ public class PathsBlue {
 
     public final Pose scorePose = new Pose(47.5, 95, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public final Pose controlPosePPG = new Pose(70,60);// pose for getting to PPG without hitting other balls
-    public final Pose controlPosePGP = new Pose(40,55);// pose for getting to PGP without hitting other balls
+    public final Pose controlPosePGP = new Pose(58,58);// pose for getting to PGP without hitting other balls
     public final Pose controlPoseGPP = new Pose(50,60);// pose for getting to PGP without hitting other balls
-
+    public final Pose controlPoseGate = new Pose(31.5,57.5);
 
     public final Pose leaveClosePose = new Pose(55, 122.5, Math.toRadians(180));
     public final Pose leaveFarPose = new Pose(39, 16, Math.toRadians(180));
@@ -28,17 +28,16 @@ public class PathsBlue {
     public final Pose PGP = new Pose(44 , 57.5, Math.toRadians(180));
 
     public final Pose afterPickupGPP = new Pose(10.5, 36, Math.toRadians(180));
-
     public final Pose afterPickupPPG = new Pose(17, 83.5, Math.toRadians(180));
     public final Pose afterPickupPGP = new Pose(10.5, 57.5, Math.toRadians(180));
-
+    public final Pose gate = new Pose(15.3,76,Math.toRadians(180));
     public PathChain scorePreload, scorePreloadFar;
     public PathChain grabGPP, grabPGP, grabPPG;
     public PathChain scoreGPP, scorePGP, scorePPG;
     public PathChain intakeGPP, intakePGP, intakePPG;
     public PathChain grabGPPFar, grabPGPFar;
     public PathChain scoreGPPFar;
-
+    public PathChain gatePGP;
     public PathChain scoreLeaveClose, scoreLeaveFar;
     public PathChain leaveClose, leaveFar;
 
@@ -97,6 +96,10 @@ public class PathsBlue {
         grabPGP = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, PGP))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), PGP.getHeading())
+                .build();
+        gatePGP = follower.pathBuilder()
+                .addPath(new BezierCurve(PGP,controlPoseGate,gate))
+                .setLinearHeadingInterpolation(PGP.getHeading(), gate.getHeading())
                 .build();
 
         grabPGPFar = follower.pathBuilder()

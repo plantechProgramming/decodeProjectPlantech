@@ -36,7 +36,7 @@ public class DriveTrain {
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     Utils utils;
-    public static double Kp = 0.041, Ki = 0.0000000012, Kd = 2.5, Kf = 0;
+    public static double Kp = 0.034, Ki = 3e-9, Kd = 2.5, Kf = 0;
     public static int t = 1;
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     private PID pid;
@@ -150,6 +150,7 @@ public class DriveTrain {
         telemetry.addData("deg to goal",deg);
         telemetry.addData("disToGoalred", utils.getDistFromGoal("RED"));
         telemetry.addData("disToGoalblue", utils.getDistFromGoal("BLUE"));
+//        telemetry.addData("mode", FL.getZeroPowerBehavior());
 //        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
         telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));

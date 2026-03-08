@@ -140,6 +140,10 @@ public class TeleOpRed extends OpMode {
                 intake.inBetweenOut();
                 intake.intakeOut();
                 shooter.out();
+            } else if (gamepad1.dpad_right) {
+                intake.inBetweenInFull();
+            }else if (gamepad1.dpad_left){
+                intake.intake_motor.setPower(0.5);
             }
 //           if(gamepad1.dpad_up && test.specialDetection != null){
 //               double deg = test.specialDetection.ftcPose.bearing;

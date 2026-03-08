@@ -41,7 +41,8 @@ public class PathsRed {
     public final Pose controlPosePPG = pathsBlue.controlPosePPG.mirror();// pose for getting to PPG without hitting other balls
     public final Pose controlPosePGP = pathsBlue.controlPosePGP.mirror();// pose for getting to PGP without hitting other balls
     public final Pose controlPoseGPP = pathsBlue.controlPoseGPP.mirror();// pose for getting to PGP without hitting other balls
-
+    public final Pose controlPoseGate = pathsBlue.controlPoseGate.mirror();
+    public final Pose gate = pathsBlue.gate.mirror();
     public final Pose GPP = pathsBlue.GPP.mirror();
     public final Pose PPG = pathsBlue.PPG.mirror();
     public final Pose PGP = pathsBlue.PGP.mirror();
@@ -58,6 +59,7 @@ public class PathsRed {
     public PathChain intakeGPP, intakePGP, intakePPG;
     public PathChain grabGPPFar, grabPGPFar;
     public PathChain scoreGPPFar;
+    public PathChain gatePGP, scoreGateClose;
 
     public PathChain scoreLeaveClose, scoreLeaveFar;
     public PathChain leaveClose, leaveFar;
@@ -104,6 +106,7 @@ public class PathsRed {
                 .setLinearHeadingInterpolation(scorePose.getHeading(), PPG.getHeading())
                 .build();
 
+
 //        grabPPGFar = follower.pathBuilder()
 //                .addPath(new BezierLine(scorePose, PPG))
 //                .setLinearHeadingInterpolation(scorePose.getHeading(), PPG.getHeading())
@@ -122,8 +125,18 @@ public class PathsRed {
                 .addPath(new BezierCurve(scorePose, controlPosePGP, PGP))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), PGP.getHeading())
                 .build();
+        gatePGP = follower.pathBuilder()
+                .addPath(new BezierCurve(afterPickupPGP,controlPoseGate,gate))
+                .setLinearHeadingInterpolation(afterPickupPGP.getHeading(), gate.getHeading())
+                .build();
+        scoreGateClose = follower.pathBuilder()
+                .addPath(new BezierLine(gate,scorePose))
+                .setLinearHeadingInterpolation(gate.getHeading(), scorePose.getHeading())
+                .build();
 
-        grabPGPFar = follower.pathBuilder()
+
+
+                grabPGPFar = follower.pathBuilder()
                 .addPath(new BezierLine(scorePoseFar, PGP))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), PGP.getHeading())
                 .build();
