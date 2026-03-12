@@ -92,9 +92,10 @@ public class TeleOpRed extends OpMode {
         boolean aang = false;
         double tick = 2000/(48*Math.PI); //per tick
 //        follower.setStartingPose(readWrite.readPose());
-        Pose lastPos = follower.getPose();
-        odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
         follower.update();
+        odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
+        odometry.update();
+        Pose lastPos = follower.getPose();
         DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -190,6 +191,7 @@ public class TeleOpRed extends OpMode {
 //            telemetry.addData("lastpos", lastPos);
 //            telemetry.addData("activated hold", activatedHold);
             telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+            telemetry.addData("pedro pos", readWrite.readPose());
             dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
             telemetry.update();
             dashboardTelemetry.update();

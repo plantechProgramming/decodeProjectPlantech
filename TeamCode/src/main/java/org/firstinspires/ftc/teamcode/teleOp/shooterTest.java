@@ -8,6 +8,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.OpMode;
+import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
@@ -28,6 +29,7 @@ public class shooterTest extends OpMode {
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
         Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
 //        Turret turret = new Turret(turretMotor, odometry);
+        ReadWrite readWrite = new ReadWrite();
         Utils utils = new Utils(telemetry,odometry);
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry);
         odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED

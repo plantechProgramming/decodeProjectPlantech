@@ -100,9 +100,10 @@ public class TeleOpBlue extends OpMode {
         boolean aang = false;
         double tick = 2000/(48*Math.PI); //per tick
 //        follower.setStartingPose(readWrite.readPose());
-        Pose lastPos = follower.getPose();
-        odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
         follower.update();
+        odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
+        odometry.update();
+        Pose lastPos = follower.getPose();
         DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
