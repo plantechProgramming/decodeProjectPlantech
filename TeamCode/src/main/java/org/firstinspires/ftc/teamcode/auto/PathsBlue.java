@@ -11,7 +11,7 @@ public class PathsBlue {
     public PathsBlue(){
     }
     // TODO: make stuff private with getter
-    private final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)); // Start Pose of our robot.
+    private final Pose startPose = new Pose(20.2, 122.5, Math.toRadians(144)); // Start Pose of our robot.
     private final Pose startPoseFar = new Pose(56.5, 8.1, Math.toRadians(180)); // Start Pose of our robot.
     public final Pose scorePoseFar = new Pose(59, 16, Math.toRadians(112)); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
 
