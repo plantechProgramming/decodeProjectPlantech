@@ -60,7 +60,7 @@ public class TeleOpRed extends OpMode {
 
 
         //TODO: find why didnt work outside
-        AprilTagLocalization test = new AprilTagLocalization("BLUE"); //TODO: change here for red
+        AprilTagLocalization test = new AprilTagLocalization("RED", telemetry); //TODO: change here for red
         AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
                 .setCameraPose(CAM_POS, CAM_ORIENTATION)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)

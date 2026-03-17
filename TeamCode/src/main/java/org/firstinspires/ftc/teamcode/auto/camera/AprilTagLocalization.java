@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.auto.camera;
 
+import android.util.Pair;
+
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -19,11 +22,14 @@ import java.util.List;
 public class AprilTagLocalization {
     private String team;
     private int id = 0;
-    private AprilTagProcessor aprilTag;
+    public AprilTagProcessor aprilTag;
     public String Order = "NNN";
 
     public double goalR_X = -1.55, goalR_Y = 1.55, goalR_Z = 95.0;
     public double goalB_X = -1.55, goalB_y = -1.55;
+    double currDeg = 0;
+    double bearing = 0;
+    double wantedDeg = 0;
     public double robotToTag = 0;
     public final Position CAM_POS = new Position(DistanceUnit.CM,
             0, 0, 0, 0);
@@ -34,13 +40,16 @@ public class AprilTagLocalization {
     public AprilTagDetection specialDetection = null;
     public int numDetected = 0;
     private VisionPortal visionPortal;
+    AprilTagDetection goalTag = null;
+    Telemetry telemetry;
 
-    public AprilTagLocalization(String team) {
+    public AprilTagLocalization(String team, Telemetry telemetry) {
         this.team = team;
+        this.telemetry = telemetry;
     }
 
     public void initProcessor(HardwareMap hardwareMap){
-        AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
+        aprilTag = new AprilTagProcessor.Builder()
                 .setCameraPose(CAM_POS, CAM_ORIENTATION)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getCurrentGameTagLibrary())
@@ -49,67 +58,87 @@ public class AprilTagLocalization {
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(CameraName.class,"webcam"));
+
+        builder.addProcessor(aprilTag);
+        visionPortal = builder.build();
     }
 
-    public void detectTags(AprilTagProcessor aprilTag) {
+    public void detectTags() {
 
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        ArrayList<AprilTagDetection> currentDetections = aprilTag.getDetections();
         numDetected = currentDetections.size();
-        AprilTagDetection detection = null;
-        List<AprilTagDetection> specialDetections = new ArrayList<AprilTagDetection>();
-
-        // find only non special
-        for (AprilTagDetection Detection : currentDetections) {
-            if (Detection.id != 20 && Detection.id != 24) {
-                detection = Detection;
-            }
+        telemetry.addData("num detected", numDetected);
+//        AprilTagDetection detection = null;
+//        List<AprilTagDetection> specialDetections = new ArrayList<AprilTagDetection>();
+//
+//        // find only non special
+//        for (AprilTagDetection Detection : currentDetections) {
+//            if (Detection.id != 20 && Detection.id != 24) {
+//                detection = Detection;
+//            }
+//        }
+//        if (detection == null) {
+//            Order = "NNN";
+//        }
+//        else if (detection.id == 21) {
+//            Order = "GPP";
+//        }
+//        else if (detection.id == 22) {
+//            Order = "PGP";
+//        }
+//        else if (detection.id == 23) {
+//            Order = "PPG";
+//        }
+//        // find only special, maybe combine with prev?
+//        for (AprilTagDetection Detection : currentDetections) {
+//            if (Detection.id != 21 && Detection.id != 22 && Detection.id != 23) {
+//                specialDetections.add(Detection);
+//            }
+//        }
+//        // done to know what to remove from list
+//        if(team == "RED"){// inverted on perpse
+//            id = 20;
+//        }
+//        else if(team == "BLUE"){ // inverted on perpse
+//            id = 24;
+//        }
+//        if(specialDetections.size() == 2){
+//            for (AprilTagDetection Detection : currentDetections){
+//                if(Detection.id == id){
+//                    specialDetections.remove(Detection);
+//                    specialDetection = specialDetections.get(0);
+//                }
+//            }
+//        }
+//
+//        /*
+//         * the x, y, z vals are literally the location in the field. y is toward programming table,
+//         * x is away from obelisk, z is just up. REQUIRES TAG LIBRARY TO BE THE RIGHT ONE TO USE,
+//         * OTHERWISE JUST NULL
+//         */
+//
+//
+//        if (specialDetection != null) {
+//            robotToTag = distanceToGoal(specialDetection.robotPose, specialDetection.id);
+//        }
+        goalTag = getGoalTag(currentDetections);
+        if(goalTag != null){
+            currDeg = goalTag.ftcPose.yaw;
+            bearing = goalTag.ftcPose.bearing;
+            wantedDeg = getWantedHeading(goalTag);
         }
-        if (detection == null) {
-            Order = "NNN";
-        }
-        else if (detection.id == 21) {
-            Order = "GPP";
-        }
-        else if (detection.id == 22) {
-            Order = "PGP";
-        }
-        else if (detection.id == 23) {
-            Order = "PPG";
-        }
-        // find only special, maybe combine with prev?
-        for (AprilTagDetection Detection : currentDetections) {
-            if (Detection.id != 21 && Detection.id != 22 && Detection.id != 23) {
-                specialDetections.add(Detection);
-            }
-        }
-        // done to know what to remove from list
-        if(team == "RED"){// inverted on perpse
-            id = 20;
-        }
-        else if(team == "BLUE"){ // inverted on perpse
-            id = 24;
-        }
-        if(specialDetections.size() == 2){
-            for (AprilTagDetection Detection : currentDetections){
-                if(Detection.id == id){
-                    specialDetections.remove(Detection);
-                    specialDetection = specialDetections.get(0);
-                }
-            }
-        }
-
-        /*
-         * the x, y, z vals are literally the location in the field. y is toward programming table,
-         * x is away from obelisk, z is just up. REQUIRES TAG LIBRARY TO BE THE RIGHT ONE TO USE,
-         * OTHERWISE JUST NULL
-         */
-
-
-        if (specialDetection != null) {
-            robotToTag = distanceToGoal(specialDetection.robotPose, specialDetection.id);
-        }
-
+        telemetry.addData("current deg", currDeg);
+        telemetry.addData("bearing", bearing);
+        telemetry.addData("wanted deg", wantedDeg);
+        telemetry.addData("goalTag", goalTag);
+        telemetry.update();
     }
+    public double getWantedHeading(AprilTagDetection goalTag){
+        double bearing = goalTag.ftcPose.bearing;
+        double currDeg = goalTag.ftcPose.yaw;
+        return currDeg + bearing; // might be minus instead of thew plus
+    }
+
     public int getGoalID(){
         return specialDetection.id;
     }
@@ -124,5 +153,23 @@ public class AprilTagLocalization {
             return Math.sqrt(distanceSquared);
         }
         return -1;
+    }
+
+    public AprilTagDetection getGoalTag(ArrayList<AprilTagDetection> detectedTags){
+        int teamid;
+        if(team.equals("BLUE")) teamid = 20;
+        else teamid = 24;
+
+        for(AprilTagDetection tag: detectedTags){
+            if(tag.id == teamid){
+                return tag;
+            }
+        }
+
+        return null;
+    }
+
+    public boolean isGoalTag(AprilTagDetection tag){
+        return tag.id == 24 || tag.id == 20;
     }
 }
