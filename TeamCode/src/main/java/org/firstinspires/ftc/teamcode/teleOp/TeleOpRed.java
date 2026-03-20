@@ -77,7 +77,6 @@ public class TeleOpRed extends OpMode {
         DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         while (opModeIsActive() ) {
-            tagLocalization.detectTags();
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
@@ -121,7 +120,8 @@ public class TeleOpRed extends OpMode {
             }else if (gamepad1.dpad_left){
                 intake.intake_motor.setPower(0.5);
             }
-           if(gamepad1.dpad_right && tagLocalization.goalTag != null){
+            tagLocalization.detectTags();
+            if(gamepad1.dpad_right && tagLocalization.goalTag != null){
                driveTrain.turnTowardsAprilTag(tagLocalization.goalTag);
            }
             else if(gamepad1.right_bumper){
@@ -145,18 +145,22 @@ public class TeleOpRed extends OpMode {
             else{
                 intake.stopIntake();
             }
-            if((gamepad1.left_bumper || turningTowardsGoal) && !gamepad1.right_bumper){
+            if(gamepad1.left_bumper && !gamepad1.right_bumper){
                 AprilTagDetection goalTag = tagLocalization.goalTag;
+                tagLocalization.detectTags();
                 driveTrain.turnToGoal("RED", goalTag);// TODO: change for RED
-                turningTowardsGoal = true;
-                if(goalTag != null){
-                    if(goalTag.ftcPose.bearing < 0.5){
-                        turningTowardsGoal = false;
-                    }
-                }
-                if(Math.abs(utils.getAngleFromGoal("RED") - odometry.getHeading(AngleUnit.DEGREES)) < 0.5){
-                    turningTowardsGoal = false;
-                }
+//                turningTowardsGoal = true;
+//                if(goalTag != null){
+//                    if(goalTag.ftcPose.bearing < 0.5){
+//                        turningTowardsGoal = false;
+//                    }
+//                }
+//                if(Math.abs(utils.getAngleFromGoal("RED") - odometry.getHeading(AngleUnit.DEGREES)) < 0.5){
+//                    turningTowardsGoal = false;
+//                }
+            }
+            if(!gamepad1.left_bumper || tagLocalization.goalTag == null){
+                driveTrain.usingCamForTurn = false;
             }
 
             if(gamepad1.back){
@@ -174,6 +178,7 @@ public class TeleOpRed extends OpMode {
 //            telemetry.addData("activated hold", activatedHold);
             telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
             telemetry.addData("pedro pos", readWrite.readPose());
+            telemetry.addData("turn to goal using cam", driveTrain.usingCamForTurn);
             dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
             telemetry.update();
             dashboardTelemetry.update();

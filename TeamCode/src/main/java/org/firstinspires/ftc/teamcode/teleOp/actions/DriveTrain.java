@@ -146,11 +146,13 @@ public class DriveTrain {
         telemetry.addData("pow using april tag", pow);
     }
     double deg = 0;
+    public boolean usingCamForTurn = false;
     public void turnToGoal(String team, AprilTagDetection goalTag){
         if(goalTag != null){
             turnTowardsAprilTag(goalTag);
+            usingCamForTurn = true;
         }
-        else {
+        else if(!usingCamForTurn){
             deg = utils.getAngleFromGoal(team);
             turnToGyro(deg);
         }
