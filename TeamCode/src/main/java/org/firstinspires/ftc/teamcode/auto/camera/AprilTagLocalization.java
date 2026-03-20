@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto.camera;
 
 import android.util.Pair;
+import android.util.Size;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -27,20 +28,19 @@ public class AprilTagLocalization {
 
     public double goalR_X = -1.55, goalR_Y = 1.55, goalR_Z = 95.0;
     public double goalB_X = -1.55, goalB_y = -1.55;
-    double currDeg = 0;
     double bearing = 0;
-    double wantedDeg = 0;
     public double robotToTag = 0;
     public final Position CAM_POS = new Position(DistanceUnit.CM,
-            0, 0, 0, 0);
+            0, 0, 0, 0);// need to make x bigger because x = forward of robot and z bigger because the cam is higher
 
     public final Position RED_GOAL_POS = new Position(DistanceUnit.CM,
             goalR_X, goalR_Y, goalR_Z, 0);
-    private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
+    private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,
+            0,0,0,0); // need to make pitch smaller because -pitch = cam facing up
     public AprilTagDetection specialDetection = null;
     public int numDetected = 0;
     private VisionPortal visionPortal;
-    AprilTagDetection goalTag = null;
+    public AprilTagDetection goalTag = null;
     Telemetry telemetry;
 
     public AprilTagLocalization(String team, Telemetry telemetry) {
@@ -54,12 +54,14 @@ public class AprilTagLocalization {
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getCurrentGameTagLibrary())
                 .setOutputUnits(DistanceUnit.METER, AngleUnit.DEGREES)
+                .setLensIntrinsics(822.317, 822.317, 319.495, 242.502) // constants chatgpt gave me for cam calibration
                 .build();
 
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(hardwareMap.get(CameraName.class,"webcam"));
 
         builder.addProcessor(aprilTag);
+        builder.setCameraResolution(new Size(640, 480));
         visionPortal = builder.build();
     }
 
@@ -123,21 +125,19 @@ public class AprilTagLocalization {
 //        }
         goalTag = getGoalTag(currentDetections);
         if(goalTag != null){
-            currDeg = goalTag.ftcPose.yaw;
             bearing = goalTag.ftcPose.bearing;
-            wantedDeg = getWantedHeading(goalTag);
         }
-        telemetry.addData("current deg", currDeg);
         telemetry.addData("bearing", bearing);
-        telemetry.addData("wanted deg", wantedDeg);
         telemetry.addData("goalTag", goalTag);
-        telemetry.update();
     }
-    public double getWantedHeading(AprilTagDetection goalTag){
-        double bearing = goalTag.ftcPose.bearing;
-        double currDeg = goalTag.ftcPose.yaw;
-        return currDeg + bearing; // might be minus instead of thew plus
-    }
+//    public double getWantedHeading(AprilTagDetection goalTag){
+//        double bearing = goalTag.ftcPose.bearing;
+//        double currDeg = goalTag.ftcPose.yaw;
+//        return currDeg + bearing; // might be minus instead of thew plus
+//    }
+//    public double getCurrHeading(AprilTagDetection goalTag){
+//        return goalTag.ftcPose.yaw;
+//    }
 
     public int getGoalID(){
         return specialDetection.id;

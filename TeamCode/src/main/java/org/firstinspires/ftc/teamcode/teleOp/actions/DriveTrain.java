@@ -22,6 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.teleOp.PID;
 import org.firstinspires.ftc.teamcode.teleOp.Utils;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.opencv.core.Mat;
 import org.openftc.easyopencv.OpenCvCamera;
 
@@ -134,11 +135,25 @@ public class DriveTrain {
         telemetry.addData("pow", power);
 //        telemetry.addData("heading", botAngleRaw);
     }
+    public void turnTowardsAprilTag(AprilTagDetection tag){
+        double error = tag.ftcPose.bearing;
+        double pow = pid.getPIDPower(error);
+        FL.setPower(-pow);
+        FR.setPower(pow);
+
+        BR.setPower(pow);
+        BL.setPower(-pow);
+        telemetry.addData("pow using april tag", pow);
+    }
     double deg = 0;
-    public void turnToGoal(String team){
-        deg = utils.getAngleFromGoal(team);
-        telemetry.addData("disToGoal", utils.getDistFromGoal(team));
-        turnToGyro(deg);
+    public void turnToGoal(String team, AprilTagDetection goalTag){
+        if(goalTag != null){
+            turnTowardsAprilTag(goalTag);
+        }
+        else {
+            deg = utils.getAngleFromGoal(team);
+            turnToGyro(deg);
+        }
     }
 
     public boolean isFar(){

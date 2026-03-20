@@ -83,7 +83,7 @@ public class PID {
         return getPIDPower(currentError);
     }
 
-    double getPIDPower(final double currentError){
+    public double getPIDPower(final double currentError){
         double currentTime = timer.milliseconds();
         double deltaTime = currentTime - prevTime;
 

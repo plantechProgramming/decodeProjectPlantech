@@ -22,6 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -42,6 +43,7 @@ import java.util.ListIterator;
 @TeleOp(name = "aprilTags", group = "camera")
 public class aprilTagsTest  extends LinearOpMode {
     AprilTagLocalization aprilTagLocalization = new AprilTagLocalization("RED", telemetry); //TODO: change here for red
+    DriveTrain driveTrain = new DriveTrain(null, null, null, null, telemetry, null, null); //TODO: change here for red
 
     @Override
     public void runOpMode() {
@@ -49,6 +51,9 @@ public class aprilTagsTest  extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             aprilTagLocalization.detectTags();
+            if(aprilTagLocalization.goalTag != null){
+                driveTrain.turnTowardsAprilTag(aprilTagLocalization.goalTag);
+            }
         }
     }
 }

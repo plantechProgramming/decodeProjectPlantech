@@ -38,14 +38,7 @@ public class TeleOpRed extends OpMode {
     @Override
     protected void postInit() {
         follower = Constants.createFollower(hardwareMap);
-
-////        odometry.recalibrateIMU();
-////        odometry.resetPosAndIMU();
     }
-
-    public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0);
-    private VisionPortal visionPortal;
-    private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
 
     @Override
     public void run(){
@@ -60,26 +53,8 @@ public class TeleOpRed extends OpMode {
 
 
         //TODO: find why didnt work outside
-        AprilTagLocalization test = new AprilTagLocalization("RED", telemetry); //TODO: change here for red
-        AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
-                .setCameraPose(CAM_POS, CAM_ORIENTATION)
-                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-                .setTagLibrary(AprilTagGameDatabase.getCurrentGameTagLibrary())
-                .setOutputUnits(DistanceUnit.METER, AngleUnit.DEGREES)
-                .build();
-
-        VisionPortal.Builder builder = new VisionPortal.Builder();
-        builder.setCamera(hardwareMap.get(CameraName.class,"webcam"));
-
-        builder.addProcessor(aprilTag);
-        visionPortal = builder.build();
-
-//
-//        VisionPortal visionPortal = new VisionPortal.Builder()
-//                .setCamera(hardwareMap.get(WebcamName.class, "webcam"))
-//                .addProcessor(aprilTag)
-//                .build();
-
+        AprilTagLocalization tagLocalization = new AprilTagLocalization("RED", telemetry); //TODO: change here for red
+        tagLocalization.initProcessor(hardwareMap);
         sleep(100);
         double forward; //-1 to 1
         double turn;
@@ -88,7 +63,7 @@ public class TeleOpRed extends OpMode {
         boolean slow = false;
         boolean turretActivated = false;
         boolean activatedHold = false;
-        boolean intakeStarted = false;
+        boolean turningTowardsGoal = false;
         boolean aang = false;
         double tick = 2000/(48*Math.PI); //per tick
 //        follower.setStartingPose(readWrite.readPose());
@@ -102,14 +77,14 @@ public class TeleOpRed extends OpMode {
         DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         while (opModeIsActive() ) {
-//                 AprilTagDetection goalTag = test.specialDetection;       test.detectTags(aprilTag);
+            tagLocalization.detectTags();
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
             //todo: pinpoint
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
 //            shooter.interpolate(utils.getDistFromGoal("RED")); //TODO: change for RED
-            shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, "RED"); //TODO: change for RED
+//            shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, "RED"); //TODO: change for RED
             ElapsedTime elapsedTime = new ElapsedTime();
             if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
                 driveTrain.drive(-forward, -drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
@@ -146,12 +121,9 @@ public class TeleOpRed extends OpMode {
             }else if (gamepad1.dpad_left){
                 intake.intake_motor.setPower(0.5);
             }
-//           if(gamepad1.dpad_up && test.specialDetection != null){
-//               double deg = test.specialDetection.ftcPose.bearing;
-//
-//               driveTrain.turnToGyro(odometry.getHeading(AngleUnit.DEGREES) + deg);
-//               telemetry.addData("yaw", deg);
-//           }
+           if(gamepad1.dpad_right && tagLocalization.goalTag != null){
+               driveTrain.turnTowardsAprilTag(tagLocalization.goalTag);
+           }
             else if(gamepad1.right_bumper){
                 if(shooter.isUpToGivenSpeed(shooter.interpolateTel(utils.getDistFromGoal("RED")))){ //TODO: change for RED
                     intake.inBetweenInFull();
@@ -173,8 +145,18 @@ public class TeleOpRed extends OpMode {
             else{
                 intake.stopIntake();
             }
-            if(gamepad1.left_bumper && !gamepad1.right_bumper){
-                driveTrain.turnToGoal("RED");// TODO: change for RED
+            if((gamepad1.left_bumper || turningTowardsGoal) && !gamepad1.right_bumper){
+                AprilTagDetection goalTag = tagLocalization.goalTag;
+                driveTrain.turnToGoal("RED", goalTag);// TODO: change for RED
+                turningTowardsGoal = true;
+                if(goalTag != null){
+                    if(goalTag.ftcPose.bearing < 0.5){
+                        turningTowardsGoal = false;
+                    }
+                }
+                if(Math.abs(utils.getAngleFromGoal("RED") - odometry.getHeading(AngleUnit.DEGREES)) < 0.5){
+                    turningTowardsGoal = false;
+                }
             }
 
             if(gamepad1.back){

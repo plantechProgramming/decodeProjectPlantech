@@ -46,14 +46,11 @@ public class TeleOpBlue extends OpMode {
     @Override
     protected void postInit() {
         follower = Constants.createFollower(hardwareMap);
-
-////        odometry.recalibrateIMU();
-////        odometry.resetPosAndIMU();
     }
 
-    public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0);
+    public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0); // need to make x bigger because x = forward of robot
     private VisionPortal visionPortal;
-    private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,-90,0,0);
+    private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,0,0,0); // need to make pitch smaller because -pitch = cam facing up
 
     @Override
     public void run(){
@@ -177,7 +174,7 @@ public class TeleOpBlue extends OpMode {
                     intake.stopIntake();
                 }
                 if(gamepad1.left_bumper && !gamepad1.right_bumper){
-                    driveTrain.turnToGoal("BLUE");// TODO: change for RED
+                    driveTrain.turnToGoal("BLUE", test.goalTag);// TODO: change for RED
                 }
 
                 if(gamepad1.back){
