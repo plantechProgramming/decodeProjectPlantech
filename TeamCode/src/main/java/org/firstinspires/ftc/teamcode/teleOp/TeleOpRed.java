@@ -145,10 +145,14 @@ public class TeleOpRed extends OpMode {
             else{
                 intake.stopIntake();
             }
+            if(!gamepad1.left_bumper){
+                driveTrain.usingCamForTurn = false;
+            }
             if(gamepad1.left_bumper && !gamepad1.right_bumper){
                 AprilTagDetection goalTag = tagLocalization.goalTag;
                 tagLocalization.detectTags();
-                driveTrain.turnToGoal("RED", goalTag);// TODO: change for RED
+//                driveTrain.turnToGyro(utils.getAngleFromGoal("RED"));// TODO: change for RED
+                driveTrain.turnToGoal("RED", goalTag);
 //                turningTowardsGoal = true;
 //                if(goalTag != null){
 //                    if(goalTag.ftcPose.bearing < 0.5){
@@ -159,9 +163,7 @@ public class TeleOpRed extends OpMode {
 //                    turningTowardsGoal = false;
 //                }
             }
-            if(!gamepad1.left_bumper || tagLocalization.goalTag == null){
-                driveTrain.usingCamForTurn = false;
-            }
+
 
             if(gamepad1.back){
                 odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED

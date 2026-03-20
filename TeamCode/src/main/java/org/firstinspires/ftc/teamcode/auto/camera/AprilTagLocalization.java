@@ -31,12 +31,12 @@ public class AprilTagLocalization {
     double bearing = 0;
     public double robotToTag = 0;
     public final Position CAM_POS = new Position(DistanceUnit.CM,
-            0, 0, 0, 0);// need to make x bigger because x = forward of robot and z bigger because the cam is higher
+            0, 10, 38, 0);// need to make y bigger because y = forward of robot and z bigger because the cam is higher
 
     public final Position RED_GOAL_POS = new Position(DistanceUnit.CM,
             goalR_X, goalR_Y, goalR_Z, 0);
     private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,
-            0,0,0,0); // need to make pitch smaller because -pitch = cam facing up
+            0,-11.2,0,0); // need to make pitch smaller because -pitch = cam facing up
     public AprilTagDetection specialDetection = null;
     public int numDetected = 0;
     private VisionPortal visionPortal;

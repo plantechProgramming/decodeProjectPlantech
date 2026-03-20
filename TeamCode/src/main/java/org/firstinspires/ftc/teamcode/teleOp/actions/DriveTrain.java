@@ -37,10 +37,12 @@ public class DriveTrain {
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     Utils utils;
-    public static double Kp = 0.034, Ki = 3e-9, Kd = 2.5, Kf = 0;
+    public static double Kp = 0.015, Ki = 0, Kd = 0.8, Kf = 0;
+    public static double KpShort = 0, KiShort = 0, KdShort = 0, KfShort = 0;
     public static int t = 1;
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     private PID pid;
+    private PID shortTurnPID;
     static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
 
     public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu, GoBildaPinpointDriver odometry) {
@@ -56,6 +58,7 @@ public class DriveTrain {
 
         this.utils  = new Utils(this.telemetry, this.odometry);
         pid = new PID(Kp, Ki, Kd, Kf,t, this.telemetry);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
+        shortTurnPID = new PID(KpShort, KiShort, KdShort, KfShort);
 
     }
 
@@ -122,7 +125,7 @@ public class DriveTrain {
         double power = 0;
         pid.setWanted(degrees);
 //        if(Math.abs(utils.getDiffBetweenAngles(degrees, botAngleRaw)) > threshold){ // if not in threshold
-            power = pid.getPIDPowerWithT(botAngleRaw);
+        power = pid.getPIDPowerWithT(botAngleRaw);
 //        }
 //        else{
 //            power = 0;
@@ -137,13 +140,13 @@ public class DriveTrain {
     }
     public void turnTowardsAprilTag(AprilTagDetection tag){
         double error = tag.ftcPose.bearing;
-        double pow = pid.getPIDPower(error);
+        double pow = shortTurnPID.getPIDPower(error); // not a loop around pid, cuz how could we detect apriltags that far?
         FL.setPower(-pow);
         FR.setPower(pow);
 
         BR.setPower(pow);
         BL.setPower(-pow);
-        telemetry.addData("pow using april tag", pow);
+        telemetry.addData("pow using April tag", pow);
     }
     double deg = 0;
     public boolean usingCamForTurn = false;
@@ -156,6 +159,29 @@ public class DriveTrain {
             deg = utils.getAngleFromGoal(team);
             turnToGyro(deg);
         }
+        else{ // start of endless turning
+            usingCamForTurn = false;
+        }
+    }
+    public void turnToGoalWithThresh(String team, AprilTagDetection goalTag){
+        double thresh = 1;
+        if(goalTag != null){
+            if(!(Math.abs(goalTag.ftcPose.bearing) < thresh)){
+                turnToGoal(team, goalTag);
+            }
+            else{
+/*
+                stop();
+*/
+            }
+        }
+        else if(!(Math.abs(utils.getAngleFromGoal(team)-odometry.getHeading(AngleUnit.DEGREES)) < thresh)){
+            turnToGoal(team, goalTag);
+        }
+        else{
+//            stop();
+            telemetry.addLine("aaaaaaaa");
+        }
     }
 
     public boolean isFar(){
@@ -164,7 +190,7 @@ public class DriveTrain {
 
     public void setDriveTelemetry(Telemetry telemetry){
         telemetry.addData("botheading", odometry.getHeading(AngleUnit.DEGREES));
-        telemetry.addData("deg to goal",deg);
+        telemetry.addData("deg to goal red",utils.getAngleFromGoal("RED"));
         telemetry.addData("disToGoalred", utils.getDistFromGoal("RED"));
         telemetry.addData("disToGoalblue", utils.getDistFromGoal("BLUE"));
 //        telemetry.addData("mode", FL.getZeroPowerBehavior());
