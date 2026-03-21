@@ -85,9 +85,9 @@ public class AprilTagLocalization {
         whiteBalanceControl.setMode(WhiteBalanceControl.Mode.MANUAL);
         whiteBalanceControl.setWhiteBalanceTemperature(3250); // 3250K
 
-        gainControl.setGain(0); // ISO 100
+        gainControl.setGain(120); // ISO 100
 
-        // contrast, saturation and brightness are saved in the cam
+        // contrast, saturation and brightness are saved in the cam?
     }
 
     public void detectTags() {

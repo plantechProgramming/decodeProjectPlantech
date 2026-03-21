@@ -42,15 +42,18 @@ import java.util.ListIterator;
  */
 @TeleOp(name = "aprilTags", group = "camera")
 public class aprilTagsTest  extends LinearOpMode {
-    AprilTagLocalization aprilTagLocalization = new AprilTagLocalization("RED", telemetry); //TODO: change here for red
-    DriveTrain driveTrain = new DriveTrain(null, null, null, null, telemetry, null, null); //TODO: change here for red
+    AprilTagLocalization tagLocalization = new AprilTagLocalization("RED", telemetry); //TODO: change here for red
 
     @Override
     public void runOpMode() {
-        aprilTagLocalization.initProcessor(hardwareMap);
+        tagLocalization.initProcessor(hardwareMap);
+        while (tagLocalization.visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING){
+            sleep(20);
+        }
+        tagLocalization.applySettings();
         waitForStart();
         while (opModeIsActive()) {
-            aprilTagLocalization.detectTags();
+            tagLocalization.detectTags();
         }
     }
 }
