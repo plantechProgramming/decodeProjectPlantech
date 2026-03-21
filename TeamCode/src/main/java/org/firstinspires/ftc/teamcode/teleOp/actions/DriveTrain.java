@@ -20,6 +20,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.teleOp.PID;
 import org.firstinspires.ftc.teamcode.teleOp.Utils;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -37,28 +38,27 @@ public class DriveTrain {
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     Utils utils;
-    public static double Kp = 0.0325, Ki = 0, Kd = 2.1, Kf = 0;
+    public static double Kp = 0.0325, Ki = 0, Kd = 2.13, Kf = 0;
     public static int t = 1;
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     private PID pid;
+    AprilTagLocalization tagLocalization;
+    String team;
 //    private PID shortTurnPID;
     static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
 
-    public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu, GoBildaPinpointDriver odometry) {
+    public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu, GoBildaPinpointDriver odometry, String team) {
         this.BL = BL;
         this.BR = BR;
         this.FL = FL;
         this.FR = FR;
         this.odometry = odometry;
         this.Imu = imu;
-
-
         this.telemetry = telemetry;
-
-        this.utils  = new Utils(this.telemetry, this.odometry);
+        this.team = team;
+        this.utils = new Utils(this.telemetry, this.odometry);
         pid = new PID(Kp, Ki, Kd, Kf,t, this.telemetry);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
-//        shortTurnPID = new PID(KpShort, KiShort, KdShort, KfShort);
-
+        tagLocalization = new AprilTagLocalization(team,telemetry);
     }
 
 
