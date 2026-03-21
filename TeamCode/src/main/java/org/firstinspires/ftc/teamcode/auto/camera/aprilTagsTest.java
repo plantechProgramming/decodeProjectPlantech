@@ -51,9 +51,6 @@ public class aprilTagsTest  extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             aprilTagLocalization.detectTags();
-            if(aprilTagLocalization.goalTag != null){
-                driveTrain.turnTowardsAprilTag(aprilTagLocalization.goalTag);
-            }
         }
     }
 }

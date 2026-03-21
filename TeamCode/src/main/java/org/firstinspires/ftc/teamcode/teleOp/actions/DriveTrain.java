@@ -37,12 +37,11 @@ public class DriveTrain {
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     Utils utils;
-    public static double Kp = 0.015, Ki = 0, Kd = 0.8, Kf = 0;
-    public static double KpShort = 0, KiShort = 0, KdShort = 0, KfShort = 0;
+    public static double Kp = 0.0325, Ki = 0, Kd = 2.1, Kf = 0;
     public static int t = 1;
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     private PID pid;
-    private PID shortTurnPID;
+//    private PID shortTurnPID;
     static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
 
     public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu, GoBildaPinpointDriver odometry) {
@@ -58,7 +57,7 @@ public class DriveTrain {
 
         this.utils  = new Utils(this.telemetry, this.odometry);
         pid = new PID(Kp, Ki, Kd, Kf,t, this.telemetry);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
-        shortTurnPID = new PID(KpShort, KiShort, KdShort, KfShort);
+//        shortTurnPID = new PID(KpShort, KiShort, KdShort, KfShort);
 
     }
 
@@ -140,7 +139,7 @@ public class DriveTrain {
     }
     public void turnTowardsAprilTag(AprilTagDetection tag){
         double error = tag.ftcPose.bearing;
-        double pow = shortTurnPID.getPIDPower(error); // not a loop around pid, cuz how could we detect apriltags that far?
+        double pow = pid.getPIDPower(error); // not a loop around pid, cuz how could we detect apriltags that far?
         FL.setPower(-pow);
         FR.setPower(pow);
 

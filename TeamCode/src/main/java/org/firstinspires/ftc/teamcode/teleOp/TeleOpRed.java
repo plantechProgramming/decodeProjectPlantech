@@ -35,9 +35,16 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOpRed extends OpMode {
     Follower follower;
+    AprilTagLocalization tagLocalization;
     @Override
     protected void postInit() {
         follower = Constants.createFollower(hardwareMap);
+        tagLocalization = new AprilTagLocalization("RED", telemetry); //TODO: change here for red
+        tagLocalization.initProcessor(hardwareMap);
+        while (tagLocalization.visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING){
+            sleep(20);
+        }
+        tagLocalization.applySettings();
     }
 
     @Override
@@ -53,8 +60,6 @@ public class TeleOpRed extends OpMode {
 
 
         //TODO: find why didnt work outside
-        AprilTagLocalization tagLocalization = new AprilTagLocalization("RED", telemetry); //TODO: change here for red
-        tagLocalization.initProcessor(hardwareMap);
         sleep(100);
         double forward; //-1 to 1
         double turn;
@@ -151,8 +156,8 @@ public class TeleOpRed extends OpMode {
             if(gamepad1.left_bumper && !gamepad1.right_bumper){
                 AprilTagDetection goalTag = tagLocalization.goalTag;
                 tagLocalization.detectTags();
-//                driveTrain.turnToGyro(utils.getAngleFromGoal("RED"));// TODO: change for RED
-                driveTrain.turnToGoal("RED", goalTag);
+                driveTrain.turnToGyro(utils.getAngleFromGoal("RED"));// TODO: change for RED
+//                driveTrain.turnToGoal("RED", goalTag);
 //                turningTowardsGoal = true;
 //                if(goalTag != null){
 //                    if(goalTag.ftcPose.bearing < 0.5){

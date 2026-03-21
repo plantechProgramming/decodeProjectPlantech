@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.camera;
 
+
 import android.util.Pair;
 import android.util.Size;
 
@@ -7,6 +8,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.FocusControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.WhiteBalanceControl;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
@@ -19,6 +24,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class AprilTagLocalization {
     private String team;
@@ -39,7 +45,7 @@ public class AprilTagLocalization {
             0,-11.2,0,0); // need to make pitch smaller because -pitch = cam facing up
     public AprilTagDetection specialDetection = null;
     public int numDetected = 0;
-    private VisionPortal visionPortal;
+    public VisionPortal visionPortal;
     public AprilTagDetection goalTag = null;
     Telemetry telemetry;
 
@@ -63,6 +69,25 @@ public class AprilTagLocalization {
         builder.addProcessor(aprilTag);
         builder.setCameraResolution(new Size(640, 480));
         visionPortal = builder.build();
+    }
+    public void applySettings(){
+        ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        FocusControl focusControl = visionPortal.getCameraControl(FocusControl.class);
+        GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
+        WhiteBalanceControl whiteBalanceControl = visionPortal.getCameraControl(WhiteBalanceControl.class);
+
+        exposureControl.setMode(ExposureControl.Mode.Manual);
+        exposureControl.setExposure(8, TimeUnit.MILLISECONDS); // 1/120 sec
+
+        focusControl.setMode(FocusControl.Mode.Fixed);
+        focusControl.setFocusLength(25); // 10% focus
+
+        whiteBalanceControl.setMode(WhiteBalanceControl.Mode.MANUAL);
+        whiteBalanceControl.setWhiteBalanceTemperature(3250); // 3250K
+
+        gainControl.setGain(0); // ISO 100
+
+        // contrast, saturation and brightness are saved in the cam
     }
 
     public void detectTags() {
