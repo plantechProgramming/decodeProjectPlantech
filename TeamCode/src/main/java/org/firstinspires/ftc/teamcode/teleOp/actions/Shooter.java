@@ -33,10 +33,10 @@ public class Shooter {
 //    public static double kI = 0.1;//0.5
 //    public static double kD = 1; //0
 //    public static double kF = 0.6; // OG = 14.5
-    public static double kP = 30; // 0.55
-    public static double kI = 0; // 0.02
-    public static double kD = 0; // 0.15
-    public static double kF = 1.4; // 1
+    public static double kP = 30;
+    public static double kI = 0;
+    public static double kD = 0;
+    public static double kF = 1; // 1.4
     Utils utils;
 
     GetVelocity shooterVelocity;
@@ -227,7 +227,7 @@ public class Shooter {
         return Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000) < threshold;
     }
     public boolean isUpToGivenSpeed(double speed){
-        double threshold = 65; //TODO: tune!! should be the biggest reliably scoring value
+        double threshold = 120; //TODO: tune!! should be the biggest reliably scoring value
         return Math.abs(shooterVelocity.getVelocityFilter() - speed*6000) < threshold;
     }
     public void out(){

@@ -40,10 +40,10 @@ public class MegidoAutoB extends NextFTCOpMode{
         return new SequentialGroup(
                 command.startShooter(false),
                 command.score(path.scorePreload),
-                command.intake(path.intakePPG,path.grabPPG,0.75),
+                command.intake(path.intakePPG,path.grabPPG),
 
                 command.score(path.scorePPG),
-                command.intake(path.intakePGP,path.grabPGP,0.75),
+                command.intake(path.intakePGP,path.grabPGP),
 
                 command.score(path.scorePGP),
                 new FollowPath(path.scoreLeaveClose)

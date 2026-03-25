@@ -72,16 +72,16 @@ public class AutoCommands implements Component{
         return new SequentialGroup(
                 new FollowPath(path),
                 shoot(),
-                new Delay(2.6)
+                new Delay(1.6)
         );
     }
 
-    public Command intake(PathChain intakePath,PathChain toGrabPath, double speed){
+    public Command intake(PathChain intakePath,PathChain toGrabPath){
         return new SequentialGroup(
                 new FollowPath(toGrabPath),
                 inBetween.inBetweenInPart(),
                 intake.take(),
-                new FollowPath(intakePath, true, speed),
+                new FollowPath(intakePath),
                 stopAll()
         );
     }

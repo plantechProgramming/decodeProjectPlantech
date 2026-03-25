@@ -9,14 +9,20 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
+import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.robotcore.internal.network.ControlHubApChannelManager;
 import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
+import org.firstinspires.ftc.teamcode.auto.camera.aprilTagsTest;
 import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
@@ -71,6 +77,7 @@ public class TeleOpRed extends OpMode {
         boolean turningTowardsGoal = false;
         boolean aang = false;
         double tick = 2000/(48*Math.PI); //per tick
+        Pose2D robotPoseFromCam = null;
 //        follower.setStartingPose(readWrite.readPose());
         follower.update();
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
@@ -88,7 +95,7 @@ public class TeleOpRed extends OpMode {
             //todo: pinpoint
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
 //            shooter.interpolate(utils.getDistFromGoal("RED")); //TODO: change for RED
-//            shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, "RED"); //TODO: change for RED
+            shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, "RED"); //TODO: change for RED
             ElapsedTime elapsedTime = new ElapsedTime();
             if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
                 driveTrain.drive(-forward, -drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
@@ -120,14 +127,18 @@ public class TeleOpRed extends OpMode {
                 intake.inBetweenOut();
                 intake.intakeOut();
                 shooter.out();
-            } else if (gamepad1.dpad_right) {
-                intake.inBetweenInFull();
-            }else if (gamepad1.dpad_left){
-                intake.intake_motor.setPower(0.5);
             }
+//            else if (gamepad1.dpad_right) {
+//                intake.inBetweenInFull();
+//            }else if (gamepad1.dpad_left){
+//                intake.intake_motor.setPower(0.5);
+//            }
             else if(gamepad1.right_bumper){
                 if(shooter.isUpToGivenSpeed(shooter.interpolateTel(utils.getDistFromGoal("RED")))){ //TODO: change for RED
                     intake.inBetweenInFull();
+                }
+                else{
+                    intake.stopIntake();
                 }
                 intake.intakeIn();
                 if(aang){
@@ -174,6 +185,11 @@ public class TeleOpRed extends OpMode {
             if(gamepad1.back){
                 odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
             }
+            if (tagLocalization.goalTag != null){
+//                robotPoseFromCam = tagLocalization.getRobotPoseFromTag(tagLocalization.goalTag);
+//                telemetry.addData("XY distace to tag cam", tagLocalization.XYDisToGoal(tagLocalization.goalTag));
+            }
+            telemetry.addData("redTagPose", utils.GOAL_TAG_RED);
 
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);
@@ -188,6 +204,7 @@ public class TeleOpRed extends OpMode {
             telemetry.addData("pedro pos", readWrite.readPose());
             telemetry.addData("turn to goal using cam", driveTrain.usingCamForTurn);
             dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+            telemetry.addData("robot pose from cam", robotPoseFromCam);
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();

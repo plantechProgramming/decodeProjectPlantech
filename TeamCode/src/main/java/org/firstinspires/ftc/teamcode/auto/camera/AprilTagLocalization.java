@@ -14,9 +14,11 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainCon
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.WhiteBalanceControl;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.teleOp.Utils;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -27,22 +29,18 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AprilTagLocalization {
+    Utils utils = new Utils();
     private String team;
     private int id = 0;
     public AprilTagProcessor aprilTag;
     public String Order = "NNN";
 
-    public double goalR_X = -1.55, goalR_Y = 1.55, goalR_Z = 95.0;
-    public double goalB_X = -1.55, goalB_y = -1.55;
     double bearing = 0;
     public double robotToTag = 0;
     public final Position CAM_POS = new Position(DistanceUnit.CM,
-            0, 10, 38, 0);// need to make y bigger because y = forward of robot and z bigger because the cam is higher
-
-    public final Position RED_GOAL_POS = new Position(DistanceUnit.CM,
-            goalR_X, goalR_Y, goalR_Z, 0);
+            0, 12, 38, 0);// need to make y bigger because y = forward of robot and z bigger because the cam is higher
     private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,
-            0,-11.2,0,0); // need to make pitch smaller because -pitch = cam facing up
+            0,-11.5,0,0); // need to make pitch smaller because -pitch = cam facing up
     public AprilTagDetection specialDetection = null;
     public int numDetected = 0;
     public VisionPortal visionPortal;
@@ -59,7 +57,7 @@ public class AprilTagLocalization {
                 .setCameraPose(CAM_POS, CAM_ORIENTATION)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getCurrentGameTagLibrary())
-                .setOutputUnits(DistanceUnit.METER, AngleUnit.DEGREES)
+                .setOutputUnits(DistanceUnit.CM, AngleUnit.DEGREES)
                 .setLensIntrinsics(822.317, 822.317, 319.495, 242.502) // constants chatgpt gave me for cam calibration
                 .build();
 
@@ -167,18 +165,18 @@ public class AprilTagLocalization {
     public int getGoalID(){
         return specialDetection.id;
     }
-    public double distanceToGoal(Pose3D robotPose, int id){
-        double x = robotPose.getPosition().x, y = robotPose.getPosition().y;
-
-        if (id == 20){
-            double distanceSquared = (goalB_X - x)*(goalB_X - x) + (goalB_y - y)*(goalB_y - y);
-            return Math.sqrt(distanceSquared);
-        } else if (id == 24) {
-            double distanceSquared = (goalR_X - x)*(goalR_X - x) + (goalR_Y - y)*(goalR_Y - y);
-            return Math.sqrt(distanceSquared);
-        }
-        return -1;
-    }
+//    public double distanceToGoal(Pose3D robotPose, int id){
+//        double x = robotPose.getPosition().x, y = robotPose.getPosition().y;
+//
+//        if (id == 20){
+//            double distanceSquared = (goalB_X - x)*(goalB_X - x) + (goalB_y - y)*(goalB_y - y);
+//            return Math.sqrt(distanceSquared);
+//        } else if (id == 24) {
+//            double distanceSquared = (goalR_X - x)*(goalR_X - x) + (goalR_Y - y)*(goalR_Y - y);
+//            return Math.sqrt(distanceSquared);
+//        }
+//        return -1;
+//    }
 
     public AprilTagDetection getGoalTag(ArrayList<AprilTagDetection> detectedTags){
         int teamid;
@@ -197,4 +195,40 @@ public class AprilTagLocalization {
     public boolean isGoalTag(AprilTagDetection tag){
         return tag.id == 24 || tag.id == 20;
     }
+//    public Pose2D getRobotPoseFromTag(AprilTagDetection tag){ // only goal tags
+//        double heading = tag.ftcPose.yaw;
+//        double x = tag.ftcPose.x;
+//        double y = tag.ftcPose.y;
+//        if(tag.id == 24){
+//            heading += utils.GOAL_TAG_RED.getHeading(AngleUnit.DEGREES);
+//            x += utils.GOAL_TAG_RED.getX(DistanceUnit.CM);
+//            y += utils.GOAL_TAG_RED.getY(DistanceUnit.CM);
+//        }
+//        else if (tag.id == 20){
+//            heading += utils.GOAL_TAG_BLUE.getHeading(AngleUnit.DEGREES);
+//            x += utils.GOAL_TAG_BLUE.getX(DistanceUnit.CM);
+//            y += utils.GOAL_TAG_BLUE.getY(DistanceUnit.CM);
+//        }
+//        else {
+//            return null;
+//        }
+//        Pose2D robotPose = new Pose2D(DistanceUnit.CM, x, y, AngleUnit.DEGREES, heading); // field pose in the same cords as pinpoint
+//        return robotPose;
+//    }
+//    public Pair<Double, Double> XYDisToGoal(AprilTagDetection tag){//tagPose
+//        double yaw = tag.ftcPose.yaw;
+//        double x = tag.ftcPose.x;
+//        double y = tag.ftcPose.y;
+//        return utils.rotation2D(x, y, yaw);
+//    }
+//    public double getBearingToGoal(AprilTagDetection tag){ // the bearing to the actual goal not the tag
+//
+//    }
+    public double getWantedDeg(AprilTagDetection tag){
+        double x = tag.ftcPose.x + 20;
+        double y = tag.ftcPose.y + 20;
+        return Math.atan2(y, x);
+    }
+//    public double getCurrDeg(AprilTagDetection tag){
+//    }
 }

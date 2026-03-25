@@ -33,13 +33,13 @@ public class AutoFullFarLeave extends NextFTCOpMode {
         public Command autoRoutine(){
             return new SequentialGroup(
                     command.startShooter(true),
-                    new Delay(0.4),
+//                    new Delay(0.4),
                     command.score(path.scorePreloadFar),
-                    command.intake(path.intakeGPP, path.grabGPPFar, 0.75),
+                    command.intake(path.intakeGPP, path.grabGPPFar),
                     command.score(path.scoreGPPFar),
 
                     command.startShooter(false),
-                    command.intake(path.intakePGP,path.grabPGPFar,0.8),
+                    command.intake(path.intakePGP,path.grabPGPFar),
                     command.score(path.scorePGP),
                     new FollowPath(path.scoreLeaveFar)
 //                    command.intake(path.intakePPG,path.grabPPG,0.75)

@@ -18,7 +18,7 @@ public class NextInBetween implements Subsystem {
 
     public Command inBetweenInFull(){
         return new ParallelGroup(
-//                new SetPower(inbetweenMotor, 0.5),
+                new SetPower(inbetweenMotor, -0.85),
                 new SetPower(sr, 1),
                 new SetPower(sl, -1)
         );
@@ -26,7 +26,7 @@ public class NextInBetween implements Subsystem {
 
     public Command inBetweenInPart(){
         return new ParallelGroup(
-//                new SetPower(inbetweenMotor, 0.5),
+                new SetPower(inbetweenMotor, -0.85),
                 new SetPower(sr, -1),
                 new SetPower(sl, 1)
         );
@@ -34,7 +34,7 @@ public class NextInBetween implements Subsystem {
 
     public Command inBetweenOut() {
         return new ParallelGroup(
-//                new SetPower(inbetweenMotor, -0.5),
+                new SetPower(inbetweenMotor, 0.85),
                 new SetPower(sr, -1),
                 new SetPower(sl, 1)
         );
@@ -43,7 +43,7 @@ public class NextInBetween implements Subsystem {
 
     public Command stop(){
         return new ParallelGroup(
-//                new SetPower(inbetweenMotor, 0),
+                new SetPower(inbetweenMotor, 0),
                 new SetPower(sr, 0),
                 new SetPower(sl, 0)
         );

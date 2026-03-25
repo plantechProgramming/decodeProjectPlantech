@@ -22,11 +22,14 @@ public class Utils {
     }
     public Utils(){}
     public final double LEN_FIELD = 360.172; // in cm
-    double yOffset = 20;//prev = 18
-    double xOffset = 20; // prev = 16
-    public final Pose2D GOAL_RED = new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+xOffset, -LEN_FIELD/2 + yOffset,AngleUnit.DEGREES,0);
-    public final Pose2D GOAL_BLUE = new Pose2D(DistanceUnit.CM,LEN_FIELD/2-xOffset, -LEN_FIELD/2 + yOffset,AngleUnit.DEGREES,0);
-
+    double yOffsetGoal = 20;//prev = 18
+    double xOffsetGoal = 20; // prev = 16
+    double yOffsetGoalTag = 30;
+    double xOffsetGoalTag = 35;
+    public final Pose2D GOAL_RED = new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+xOffsetGoal, -LEN_FIELD/2 + yOffsetGoal,AngleUnit.DEGREES,0);
+    public final Pose2D GOAL_BLUE = new Pose2D(DistanceUnit.CM,LEN_FIELD/2-xOffsetGoal, -LEN_FIELD/2 + yOffsetGoal,AngleUnit.DEGREES,0);
+    public final Pose2D GOAL_TAG_RED = new Pose2D(DistanceUnit.CM, -LEN_FIELD/2+xOffsetGoalTag, -LEN_FIELD/2+yOffsetGoalTag, AngleUnit.DEGREES, -144);
+    public final Pose2D GOAL_TAG_BLUE = new Pose2D(DistanceUnit.CM, LEN_FIELD/2-xOffsetGoalTag, -LEN_FIELD/2+yOffsetGoalTag, AngleUnit.DEGREES, -36);
     public Pair<Double, Double> getXYdistToPoint(Pose2D point){
         double robotX = odometry.getPosX(DistanceUnit.CM);
         double robotY = odometry.getPosY(DistanceUnit.CM);
@@ -113,5 +116,10 @@ public class Utils {
              newDeg = 360 - Math.abs(deg);
         }
         return newDeg;
+    }
+
+    public Pair<Double, Double> rotation2D(double x, double y, double deg){
+        double rad = Math.toRadians(deg);
+        return new Pair<>(x*Math.cos(rad)-y*Math.sin(rad), x*Math.sin(rad)+y*Math.cos(rad));
     }
 }

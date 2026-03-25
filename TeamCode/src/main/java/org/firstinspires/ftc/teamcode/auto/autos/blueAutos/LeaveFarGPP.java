@@ -40,7 +40,7 @@ public class LeaveFarGPP extends NextFTCOpMode {
                 command.startShooter(true),
                 new Delay(2.5),
                 command.score(path.scorePreloadFar),
-                command.intake(path.intakeGPP, path.grabGPPFar, 0.5),
+                command.intake(path.intakeGPP, path.grabGPPFar),
                 command.score(path.scoreGPPFar),
                 new FollowPath(path.scoreLeaveFar)
         );
