@@ -78,7 +78,7 @@ public class TeleOpRed extends OpMode {
         boolean aang = false;
         double tick = 2000/(48*Math.PI); //per tick
         Pose2D robotPoseFromCam = null;
-        int count = 100;
+        int count = 200;
 //        follower.setStartingPose(readWrite.readPose());
         follower.update();
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
@@ -162,8 +162,7 @@ public class TeleOpRed extends OpMode {
                 driveTrain.usingCamForTurn = false;
             }
             if(gamepad1.left_bumper && !gamepad1.right_bumper){
-                tagLocalization.detectTags();
-                driveTrain.turnToGoal("RED", tagLocalization.goalTag);
+                driveTrain.turnToGyro(utils.getAngleFromGoal("RED"));// TODO: change for RED
 //                turningTowardsGoal = true;
 //                if(goalTag != null){
 //                    if(goalTag.ftcPose.bearing < 0.5){
@@ -179,7 +178,8 @@ public class TeleOpRed extends OpMode {
                driveTrain.turnTowardsAprilTag(tagLocalization.goalTag);
             }
             if(gamepad1.dpad_left){
-                driveTrain.turnToGyro(utils.getAngleFromGoal("RED"));// TODO: change for RED
+                tagLocalization.detectTags();
+                driveTrain.turnToGoal("RED", tagLocalization.goalTag);
             }
 
 
@@ -189,8 +189,8 @@ public class TeleOpRed extends OpMode {
             if(tagLocalization.goalTag != null){
                 if(driveTrain.isStopped()){
                     Pose2D filteredPose = driveTrain.filterCamPose(tagLocalization.getRobotPose(tagLocalization.goalTag));
-                    if(count >= 300){
-                        odometry.setPosition(new Pose2D(DistanceUnit.CM, filteredPose.getY(DistanceUnit.CM), filteredPose.getX(DistanceUnit.CM), AngleUnit.DEGREES, filteredPose.getHeading(AngleUnit.DEGREES))); // ??
+                    if(count >= 300 && !gamepad1.right_bumper){
+                        odometry.setPosition(new Pose2D(DistanceUnit.CM, filteredPose.getX(DistanceUnit.CM), filteredPose.getY(DistanceUnit.CM), AngleUnit.DEGREES, filteredPose.getHeading(AngleUnit.DEGREES))); // ??
                         sleep(150);
                         telemetry.addLine("SET POSITION");
                         count = 0;
