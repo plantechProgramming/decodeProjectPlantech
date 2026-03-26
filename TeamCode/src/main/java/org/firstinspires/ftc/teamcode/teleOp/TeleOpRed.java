@@ -78,6 +78,7 @@ public class TeleOpRed extends OpMode {
         boolean aang = false;
         double tick = 2000/(48*Math.PI); //per tick
         Pose2D robotPoseFromCam = null;
+        int count = 100;
 //        follower.setStartingPose(readWrite.readPose());
         follower.update();
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
@@ -182,29 +183,37 @@ public class TeleOpRed extends OpMode {
             }
 
 
-            if(gamepad1.back){
-                odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
+            if(gamepad1.back) {
+                odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 180)); //TODO: change for RED
             }
-            if (tagLocalization.goalTag != null){
-//                robotPoseFromCam = tagLocalization.getRobotPoseFromTag(tagLocalization.goalTag);
-//                telemetry.addData("XY distace to tag cam", tagLocalization.XYDisToGoal(tagLocalization.goalTag));
+            if(tagLocalization.goalTag != null){
+                if(driveTrain.isStopped()){
+                    Pose2D filteredPose = driveTrain.filterCamPose(tagLocalization.getRobotPose(tagLocalization.goalTag));
+                    if(count >= 300){
+                        odometry.setPosition(new Pose2D(DistanceUnit.CM, filteredPose.getY(DistanceUnit.CM), filteredPose.getX(DistanceUnit.CM), AngleUnit.DEGREES, filteredPose.getHeading(AngleUnit.DEGREES))); // ??
+                        sleep(150);
+                        telemetry.addLine("SET POSITION");
+                        count = 0;
+                    }
+                }
+                else{
+                    driveTrain.lastFilteredPose = tagLocalization.getRobotPose(tagLocalization.goalTag);
+                    driveTrain.filteredPose = tagLocalization.getRobotPose(tagLocalization.goalTag);
+                }
             }
-            telemetry.addData("redTagPose", utils.GOAL_TAG_RED);
-
+            count++;
+            telemetry.addData("count", count);
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);
 //
             shooter.setShooterTelemetry(telemetry);
             shooter.setShooterTelemetry(dashboardTelemetry);
 
-//            telemetry.addData("pos", follower.getPose());
-//            telemetry.addData("lastpos", lastPos);
-//            telemetry.addData("activated hold", activatedHold);
+            tagLocalization.setCameraTelemetry(telemetry);
+            tagLocalization.setCameraTelemetry(dashboardTelemetry);
+
             telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
-            telemetry.addData("pedro pos", readWrite.readPose());
-            telemetry.addData("turn to goal using cam", driveTrain.usingCamForTurn);
             dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
-            telemetry.addData("robot pose from cam", robotPoseFromCam);
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();

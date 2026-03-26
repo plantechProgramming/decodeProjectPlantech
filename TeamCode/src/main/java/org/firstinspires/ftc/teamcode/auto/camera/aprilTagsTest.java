@@ -54,6 +54,15 @@ public class aprilTagsTest  extends LinearOpMode {
         waitForStart();
         while (opModeIsActive()) {
             tagLocalization.detectTags();
+            if(tagLocalization.goalTag != null){
+                telemetry.addData("yaw", tagLocalization.goalTag.ftcPose.yaw);
+                telemetry.addData("x", tagLocalization.goalTag.ftcPose.x);
+                telemetry.addData("y", tagLocalization.goalTag.ftcPose.y);
+                telemetry.addData("cur deg",tagLocalization.getCurrDeg(tagLocalization.goalTag, "RED"));
+                telemetry.addData("xy reloc",tagLocalization.getRelocXY(tagLocalization.goalTag, "RED"));
+                telemetry.addData("xy rotated",tagLocalization.getXYToTag(tagLocalization.goalTag, "RED"));
+                telemetry.update();
+            }
         }
     }
 }

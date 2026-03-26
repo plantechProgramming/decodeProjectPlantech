@@ -26,8 +26,8 @@ public class Utils {
     double xOffsetGoal = 20; // prev = 16
     double yOffsetGoalTag = 30;
     double xOffsetGoalTag = 35;
-    public final Pose2D GOAL_RED = new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+xOffsetGoal, -LEN_FIELD/2 + yOffsetGoal,AngleUnit.DEGREES,0);
-    public final Pose2D GOAL_BLUE = new Pose2D(DistanceUnit.CM,LEN_FIELD/2-xOffsetGoal, -LEN_FIELD/2 + yOffsetGoal,AngleUnit.DEGREES,0);
+    public final Pose2D GOAL_RED = new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+xOffsetGoal, -LEN_FIELD/2 + yOffsetGoal,AngleUnit.DEGREES,-144);
+    public final Pose2D GOAL_BLUE = new Pose2D(DistanceUnit.CM,LEN_FIELD/2-xOffsetGoal, -LEN_FIELD/2 + yOffsetGoal,AngleUnit.DEGREES,-36);
     public final Pose2D GOAL_TAG_RED = new Pose2D(DistanceUnit.CM, -LEN_FIELD/2+xOffsetGoalTag, -LEN_FIELD/2+yOffsetGoalTag, AngleUnit.DEGREES, -144);
     public final Pose2D GOAL_TAG_BLUE = new Pose2D(DistanceUnit.CM, LEN_FIELD/2-xOffsetGoalTag, -LEN_FIELD/2+yOffsetGoalTag, AngleUnit.DEGREES, -36);
     public Pair<Double, Double> getXYdistToPoint(Pose2D point){
@@ -121,5 +121,28 @@ public class Utils {
     public Pair<Double, Double> rotation2D(double x, double y, double deg){
         double rad = Math.toRadians(deg);
         return new Pair<>(x*Math.cos(rad)-y*Math.sin(rad), x*Math.sin(rad)+y*Math.cos(rad));
+    }
+    public double filter(double alpha, double val, double prevVal){
+        return alpha * val + (1 - alpha) * prevVal;
+    }
+
+    public Pose2D filterPose(double alpha, Pose2D pose, Pose2D lastPose){
+        double filteredX = filter(alpha, pose.getX(DistanceUnit.CM), lastPose.getX(DistanceUnit.CM));
+        double filteredY = filter(alpha, pose.getY(DistanceUnit.CM), lastPose.getY(DistanceUnit.CM));
+        double filteredHeading = filter(alpha, pose.getHeading(AngleUnit.DEGREES), lastPose.getHeading(AngleUnit.DEGREES));
+        return new Pose2D(DistanceUnit.CM, filteredX, filteredY, AngleUnit.DEGREES, filteredHeading);
+    }
+    public Pose2D subtractPoses(Pose2D pos1, Pose2D pos2){
+        double subtractedX = pos1.getX(DistanceUnit.CM) - pos2.getX(DistanceUnit.CM);
+        double subtractedY = pos1.getY(DistanceUnit.CM) - pos2.getY(DistanceUnit.CM);
+        double subtractedHeading = pos1.getHeading(AngleUnit.DEGREES) - pos2.getHeading(AngleUnit.DEGREES);
+        return new Pose2D(DistanceUnit.CM, subtractedX, subtractedY, AngleUnit.DEGREES, subtractedHeading);
+    }
+    public boolean PoseThreshold(Pose2D pos1, Pose2D pos2, double xyThresh, double headingThresh){
+        Pose2D subtractedPose = subtractPoses(pos1, pos2);
+        boolean xInThresh = Math.abs(subtractedPose.getX(DistanceUnit.CM)) < xyThresh;
+        boolean yInThresh = Math.abs(subtractedPose.getY(DistanceUnit.CM)) < xyThresh;
+        boolean headingInThresh = Math.abs(subtractedPose.getHeading(AngleUnit.DEGREES)) < headingThresh;
+        return xInThresh && yInThresh && headingInThresh;
     }
 }

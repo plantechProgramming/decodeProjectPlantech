@@ -186,12 +186,28 @@ public class DriveTrain {
     public boolean isFar(){
         return odometry.getPosY(DistanceUnit.CM) > 60;
     }
+    public boolean isStopped(){
+        boolean xInThresh = Math.abs(odometry.getVelX(DistanceUnit.CM)) < 3;
+        boolean yInThresh = Math.abs(odometry.getVelY(DistanceUnit.CM)) < 3;
+        boolean headInThresh = Math.abs(odometry.getHeadingVelocity(AngleUnit.DEGREES.getUnnormalized())) < 2;
+        return xInThresh && yInThresh && headInThresh;
+    }
 
+    public Pose2D lastFilteredPose = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
+    public Pose2D filteredPose = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
+    public Pose2D filterCamPose(Pose2D pose){
+        if(utils.PoseThreshold(pose, filteredPose, 15, 15)){
+            filteredPose = utils.filterPose(0.08, pose, lastFilteredPose);
+        }
+        lastFilteredPose = filteredPose;
+        return filteredPose;
+    }
     public void setDriveTelemetry(Telemetry telemetry){
         telemetry.addData("botheading", odometry.getHeading(AngleUnit.DEGREES));
         telemetry.addData("deg to goal red",utils.getAngleFromGoal("RED"));
         telemetry.addData("disToGoalred", utils.getDistFromGoal("RED"));
         telemetry.addData("disToGoalblue", utils.getDistFromGoal("BLUE"));
+        telemetry.addData("robot is stopping", isStopped());
 //        telemetry.addData("mode", FL.getZeroPowerBehavior());
 //        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
