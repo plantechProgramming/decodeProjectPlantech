@@ -76,12 +76,11 @@ public class AutoCommands implements Component{
         );
     }
 
-    public Command intake(PathChain intakePath,PathChain toGrabPath){
+    public Command intake(PathChain grabPath){
         return new SequentialGroup(
-                new FollowPath(toGrabPath),
                 inBetween.inBetweenInPart(),
                 intake.take(),
-                new FollowPath(intakePath),
+                new FollowPath(grabPath),
                 stopAll()
         );
     }

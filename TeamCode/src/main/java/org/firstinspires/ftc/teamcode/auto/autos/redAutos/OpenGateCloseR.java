@@ -40,16 +40,14 @@ public class OpenGateCloseR extends NextFTCOpMode {
         return new SequentialGroup(
                 command.startShooter(false),
                 command.score(path.scorePreload),
-                command.intake(path.intakePPG,path.grabPPG),
 
-                command.score(path.scorePPG),
-                command.intake(path.intakePGP,path.grabPGP),
-
+                command.intake(path.grabPGP),
                 new FollowPath(path.gatePGP),
-
                 command.score(path.scoreGateClose),
-                new FollowPath(path.scoreLeaveClose)
-        );
+
+                command.intake(path.grabPPG),
+                command.score(path.gateLeaveScoreClose)
+                );
     }
     @Override
     public void onUpdate(){

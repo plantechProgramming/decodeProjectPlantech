@@ -38,14 +38,14 @@ public class OpenGateClose extends NextFTCOpMode{
         return new SequentialGroup(
                 command.startShooter(false),
                 command.score(path.scorePreload),
-                command.intake(path.intakePPG,path.grabPPG),
 
+                command.intake(path.grabPPG),
                 command.score(path.scorePPG),
-                command.intake(path.intakePGP,path.grabPGP),
 
+                command.intake(path.grabPGP),
                 new FollowPath(path.gatePGP),
 
-                command.score(path.scorePGP),
+                command.score(path.scoreGateClose),
                 new FollowPath(path.scoreLeaveClose)
                         );
     }

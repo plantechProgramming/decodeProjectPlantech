@@ -38,7 +38,7 @@ public class NextShooter implements Subsystem {
 
     double Szonedis = 0.5;
     public static double farPow = 0.539;
-    public static double closePow = 0.406;
+    public static double closePow = 0.387;
     double kp = 0.01, ki = 0, kd = 0, kf = 0.012;
     ControlSystem controlSystem = ControlSystem.builder() // next pid
             .velPid(kp, ki, kd)

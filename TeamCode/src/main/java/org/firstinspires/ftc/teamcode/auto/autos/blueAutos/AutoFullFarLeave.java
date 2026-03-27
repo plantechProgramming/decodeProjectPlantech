@@ -35,11 +35,11 @@ public class AutoFullFarLeave extends NextFTCOpMode {
                     command.startShooter(true),
 //                    new Delay(0.4),
                     command.score(path.scorePreloadFar),
-                    command.intake(path.intakeGPP, path.grabGPPFar),
+                    command.intake(path.grabGPPFar),
                     command.score(path.scoreGPPFar),
 
                     command.startShooter(false),
-                    command.intake(path.intakePGP,path.grabPGPFar),
+                    command.intake(path.grabPGPFar),
                     command.score(path.scorePGP),
                     new FollowPath(path.scoreLeaveFar)
 //                    command.intake(path.intakePPG,path.grabPPG,0.75)
