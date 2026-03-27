@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.SequentialGroup;
 import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
@@ -39,15 +40,12 @@ public class OpenGateClose extends NextFTCOpMode{
                 command.startShooter(false),
                 command.score(path.scorePreload),
 
-                command.intake(path.grabPPG),
-                command.score(path.scorePPG),
-
                 command.intake(path.grabPGP),
-                new FollowPath(path.gatePGP),
+                command.score(path.scoreGateFromPGP),
 
-                command.score(path.scoreGateClose),
-                new FollowPath(path.scoreLeaveClose)
-                        );
+                command.intake(path.grabPPG),
+                command.score(path.leavePPGClose)
+        );
     }
     @Override
     public void onUpdate(){

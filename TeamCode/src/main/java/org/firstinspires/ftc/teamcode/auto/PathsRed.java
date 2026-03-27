@@ -59,8 +59,9 @@ public class PathsRed {
     public PathChain scoreGPP, scorePGP, scorePPG;
     public PathChain grabGPPFar, grabPGPFar;
     public PathChain scoreGPPFar;
-    public PathChain gatePGP, scoreGateClose, gateLeaveScoreClose;
-    public PathChain scoreLeaveClose, scoreLeaveFar, leaveClose, leaveFar;
+    public PathChain scoreGateFromPGP;
+    public PathChain scoreLeaveClose, leavePPGClose, leaveClose;
+    public PathChain scoreLeaveFar, leaveFar;
 
     private Pose Mymirror(Pose pPose) {
         Pose k = pPose;
@@ -154,6 +155,11 @@ public class PathsRed {
                 .setLinearHeadingInterpolation(startPose.getHeading(), leaveClosePose.getHeading())
                 .build();
 
+        leavePPGClose = follower.pathBuilder()
+                .addPath(new BezierLine(afterPickupPPG, leaveClosePose))
+                .setLinearHeadingInterpolation(afterPickupPPG.getHeading(), leaveClosePose.getHeading())
+                .build();
+
         scoreLeaveFar = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, leaveFarPose))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), leaveFarPose.getHeading())
@@ -164,21 +170,35 @@ public class PathsRed {
                 .setLinearHeadingInterpolation(startPose.getHeading(), leaveFarPose.getHeading())
                 .build();
 
-        //-------------GATE------------------
+        //-------------Gate------------------
 
-        gatePGP = follower.pathBuilder()
-                .addPath(new BezierCurve(afterPickupPGP,controlPoseGate,gate))
+        scoreGateFromPGP = follower.pathBuilder()
+                .addPath(new BezierCurve(afterPickupPGP, controlPoseGate, gate))
                 .setLinearHeadingInterpolation(afterPickupPGP.getHeading(), gate.getHeading())
-                .build();
-
-        scoreGateClose = follower.pathBuilder()
-                .addPath(new BezierCurve(gate, controlPoseGatePPG,scorePose))
+                .addPath(new BezierCurve(gate, controlPoseGatePPG, scorePose))
                 .setLinearHeadingInterpolation(gate.getHeading(), scorePose.getHeading())
                 .build();
 
-        gateLeaveScoreClose = follower.pathBuilder()
-                .addPath(new BezierLine(gate, leaveClosePose))
-                .setLinearHeadingInterpolation(gate.getHeading(), leaveClosePose.getHeading())
-                .build();
+//        scoreCloseGateFromScore = follower.pathBuilder()
+//                .addPath(new BezierCurve(scorePose, controlPosePGP, PGP))
+//                .setLinearHeadingInterpolation(scorePose.getHeading(), PGP.getHeading())
+//                .setVelocityConstraint(0.1)
+//                .addPath(new BezierLine(PGP, afterPickupPGP))
+//                .addPath(new BezierCurve(afterPickupPGP,controlPoseGate,gate))
+//                .setLinearHeadingInterpolation(afterPickupPGP.getHeading(), gate.getHeading())
+//                .addPath(new BezierCurve(gate, controlPoseGatePPG,scorePose))
+//                .setLinearHeadingInterpolation(gate.getHeading(), scorePose.getHeading())
+//                .build();
+//
+//        leaveClosePPGFromScore = follower.pathBuilder()
+//                .addPath(new BezierLine(scorePose, PPG))
+//                .setLinearHeadingInterpolation(scorePose.getHeading(), PPG.getHeading())
+//                .addPath(new BezierLine(GPP, afterPickupGPP))
+//                .addPath(new BezierLine(afterPickupPPG, leaveClosePose))
+//                .setLinearHeadingInterpolation(afterPickupPPG.getHeading(), leaveClosePose.getHeading())
+//                .build();
+
+
+
     }
 }

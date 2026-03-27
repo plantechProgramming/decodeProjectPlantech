@@ -85,6 +85,16 @@ public class AutoCommands implements Component{
         );
     }
 
+    public Command intakeAndShoot(PathChain grabAndShootPath){
+        return new SequentialGroup(
+                inBetween.inBetweenInPart(),
+                intake.take(),
+                new FollowPath(grabAndShootPath),
+                shoot(),
+                new Delay(1.6)
+        );
+    }
+
     public Command startShooter(boolean far){
         return new SequentialGroup(
                 shooter.naiveShooter(far),
