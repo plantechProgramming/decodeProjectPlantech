@@ -33,10 +33,10 @@ public class Shooter {
 //    public static double kI = 0.1;//0.5
 //    public static double kD = 1; //0
 //    public static double kF = 0.6; // OG = 14.5
-    public static double kP = 30;
+    public static double kP = 20;
     public static double kI = 0;
-    public static double kD = 0;
-    public static double kF = 1; // 1.4
+    public static double kD = 500;
+    public static double kF = 1.175;
     Utils utils;
 
     GetVelocity shooterVelocity;
@@ -147,10 +147,10 @@ public class Shooter {
 
 
     public void interpolate(double dis){
-        noPhysShootHomeostasis( 4.27503E-7 * Math.pow(dis, 2) + 0.000437294 * dis + 0.33109);
+        noPhysShootHomeostasis( 0.00000149018 * Math.pow(dis, 2) + 0.0000836022 * dis + 0.35805);
     }
     public double interpolateTel(double dis){
-        return   (4.27503E-7 * Math.pow(dis, 2) + 0.000437294 * dis + 0.33109);
+        return   (0.00000149018 * Math.pow(dis, 2) + 0.0000836022 * dis + 0.35805);
     }
 
 //    / @param dis: distance from goal

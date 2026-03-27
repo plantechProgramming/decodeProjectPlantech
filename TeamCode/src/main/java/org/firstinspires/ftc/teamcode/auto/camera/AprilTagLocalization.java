@@ -197,7 +197,7 @@ public class AprilTagLocalization {
     public Pair<Double, Double> getXYToTag(AprilTagDetection tag, String team) {
         double heading = getCurrDeg(tag, team);
         double x = tag.ftcPose.x;
-        double y = tag.ftcPose.y;
+        double y = tag.ftcPose.y + 12;
         Pair<Double, Double> rotated = utils.rotation2D(x, y, heading+90);
         Pair<Double, Double> rotFixed = new Pair<>(rotated.first, rotated.second);
         return rotFixed;
