@@ -78,6 +78,7 @@ public class TeleOpRed extends OpMode {
         boolean aang = false;
         double tick = 2000/(48*Math.PI); //per tick
         Pose2D robotPoseFromCam = null;
+        Pose2D filteredPose = null;
         int count = 200;
 //        follower.setStartingPose(readWrite.readPose());
         follower.update();
@@ -186,20 +187,22 @@ public class TeleOpRed extends OpMode {
             if(gamepad1.back) {
                 odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 180)); //TODO: change for RED
             }
-            if(tagLocalization.goalTag != null){
-                if(driveTrain.isStopped()){
-                    Pose2D filteredPose = driveTrain.filterCamPose(tagLocalization.getRobotPose(tagLocalization.goalTag));
-                    if(count >= 300 && !gamepad1.right_bumper){
-                        odometry.setPosition(new Pose2D(DistanceUnit.CM, filteredPose.getX(DistanceUnit.CM), filteredPose.getY(DistanceUnit.CM), AngleUnit.DEGREES, filteredPose.getHeading(AngleUnit.DEGREES))); // ??
+            if(driveTrain.isStopped()){
+                if(tagLocalization.goalTag != null){
+                    filteredPose = driveTrain.filterCamPose(tagLocalization.getRobotPose(tagLocalization.goalTag));
+                    if((count >= 300 && !gamepad1.right_bumper && utils.PoseThreshold(filteredPose, odometry.getPosition(), 10, 1000)) || count >= 1000){ // heading threshold is big because were not using it
+                        odometry.setPosition(new Pose2D(DistanceUnit.CM, filteredPose.getX(DistanceUnit.CM), filteredPose.getY(DistanceUnit.CM), AngleUnit.DEGREES, tagLocalization.getCurrDeg(tagLocalization.goalTag, "RED")));
                         sleep(150);
                         telemetry.addLine("SET POSITION");
                         count = 0;
                     }
                 }
-                else{
-                    driveTrain.lastFilteredPose = tagLocalization.getRobotPose(tagLocalization.goalTag);
-                    driveTrain.filteredPose = tagLocalization.getRobotPose(tagLocalization.goalTag);
-                }
+            }
+            else{
+//                driveTrain.lastFilteredPose = driveTrain.filteredPose;
+                utils.xPos.clear();
+                utils.yPos.clear();
+                utils.headPos.clear();
             }
             count++;
             telemetry.addData("count", count);
@@ -214,6 +217,7 @@ public class TeleOpRed extends OpMode {
 
             telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
             dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+            telemetry.addData("filtered cam pose", filteredPose);
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();

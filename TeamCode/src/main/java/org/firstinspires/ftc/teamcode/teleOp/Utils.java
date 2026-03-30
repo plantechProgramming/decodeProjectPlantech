@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
+import static java.util.Collections.sort;
+
 import android.util.Pair;
 
 import com.pedropathing.geometry.Pose;
@@ -11,6 +13,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Utils {
 
@@ -126,16 +132,25 @@ public class Utils {
         return alpha * val + (1 - alpha) * prevVal;
     }
 
-    public Pose2D filterPose(double alpha, Pose2D pose, Pose2D lastPose){
+    public Pose2D filterPose(double alpha, Pose2D pose, Pose2D lastPose){ // DO NOT USE FOR HEADING THERE ISN'T A WRAP AROUND
         double filteredX = filter(alpha, pose.getX(DistanceUnit.CM), lastPose.getX(DistanceUnit.CM));
         double filteredY = filter(alpha, pose.getY(DistanceUnit.CM), lastPose.getY(DistanceUnit.CM));
         double filteredHeading = filter(alpha, pose.getHeading(AngleUnit.DEGREES), lastPose.getHeading(AngleUnit.DEGREES));
         return new Pose2D(DistanceUnit.CM, filteredX, filteredY, AngleUnit.DEGREES, filteredHeading);
     }
+    ArrayList<Double> xPos = new ArrayList<>();
+    ArrayList<Double> yPos = new ArrayList<>();
+    ArrayList<Double> headPos = new ArrayList<>();
+    public Pose2D medianPose(Pose2D pose){
+        double filteredX = median(xPos, pose.getX(DistanceUnit.CM));
+        double filteredY = median(yPos, pose.getY(DistanceUnit.CM));
+        double filteredHeading = median(headPos, pose.getHeading(AngleUnit.DEGREES));
+        return new Pose2D(DistanceUnit.CM, filteredX, filteredY, AngleUnit.DEGREES, filteredHeading);
+    }
     public Pose2D subtractPoses(Pose2D pos1, Pose2D pos2){
         double subtractedX = pos1.getX(DistanceUnit.CM) - pos2.getX(DistanceUnit.CM);
         double subtractedY = pos1.getY(DistanceUnit.CM) - pos2.getY(DistanceUnit.CM);
-        double subtractedHeading = pos1.getHeading(AngleUnit.DEGREES) - pos2.getHeading(AngleUnit.DEGREES);
+        double subtractedHeading = getDiffBetweenAngles(pos1.getHeading(AngleUnit.DEGREES), pos2.getHeading(AngleUnit.DEGREES));
         return new Pose2D(DistanceUnit.CM, subtractedX, subtractedY, AngleUnit.DEGREES, subtractedHeading);
     }
     public boolean PoseThreshold(Pose2D pos1, Pose2D pos2, double xyThresh, double headingThresh){
@@ -144,5 +159,14 @@ public class Utils {
         boolean yInThresh = Math.abs(subtractedPose.getY(DistanceUnit.CM)) < xyThresh;
         boolean headingInThresh = Math.abs(subtractedPose.getHeading(AngleUnit.DEGREES)) < headingThresh;
         return xInThresh && yInThresh && headingInThresh;
+    }
+    public double median(ArrayList<Double> numbers,  double val){
+        numbers.add(val);
+        Collections.sort(numbers);
+        int size = numbers.size();
+        if(size % 2 == 0){
+            return (numbers.get(size/2) + numbers.get(size/2 - 1) / 2);
+        }
+        return numbers.get(size/2);
     }
 }
