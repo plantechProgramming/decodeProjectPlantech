@@ -193,14 +193,14 @@ public class DriveTrain {
         return xInThresh && yInThresh && headInThresh;
     }
 
-//    public Pose2D lastFilteredPose = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
-    public Pose2D filteredPose = null;
+    public Pose2D lastFilteredPose = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
+    public Pose2D filteredPose =  new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
     public Pose2D filterCamPose(Pose2D pose){
-//        if(utils.PoseThreshold(pose, filteredPose, 15, 15)){
-//        filteredPose = utils.filterPose(0.7, pose, lastFilteredPose);
+//        if(utils.PoseThreshold(pose, filteredPose, 15, 10)){ // heading threshold is big because were not using the heading filtered
+//            filteredPose = utils.filterPose(0.7, pose, lastFilteredPose);
         filteredPose = utils.medianPose(pose);
 //        }
-//        lastFilteredPose = filteredPose;
+        lastFilteredPose = filteredPose;
         return filteredPose;
     }
     public void setDriveTelemetry(Telemetry telemetry){

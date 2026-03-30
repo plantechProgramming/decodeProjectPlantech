@@ -99,13 +99,16 @@ public class Utils {
 
     public double getDiffBetweenAngles(double wanted, double current){// positive = left, negative = right// gyro coordinate system
         double currentError = wanted - current;
-        if (currentError < -180){
-            currentError += 360;
+        return convertToWrapAroundAngle(currentError);
+    }
+    public double convertToWrapAroundAngle(double angle){
+        if (angle < -180){
+            angle += 360;
         }
-        if (currentError > 180){
-            currentError -= 360;
+        if (angle > 180){
+            angle -= 360;
         }
-        return currentError;
+        return angle;
     }
     public double getLongestDiffBetweenAngles(double wanted, double current){// positive = left, negative = right // gyro coordinate system
         double shortestPath = getDiffBetweenAngles(wanted, current);
@@ -142,9 +145,9 @@ public class Utils {
     ArrayList<Double> yPos = new ArrayList<>();
     ArrayList<Double> headPos = new ArrayList<>();
     public Pose2D medianPose(Pose2D pose){
-        double filteredX = median(xPos, pose.getX(DistanceUnit.CM));
-        double filteredY = median(yPos, pose.getY(DistanceUnit.CM));
-        double filteredHeading = median(headPos, pose.getHeading(AngleUnit.DEGREES));
+        double filteredX = updateMedian(xPos, pose.getX(DistanceUnit.CM));
+        double filteredY = updateMedian(yPos, pose.getY(DistanceUnit.CM));
+        double filteredHeading = updateAngleMedian(headPos, pose.getHeading(AngleUnit.DEGREES));
         return new Pose2D(DistanceUnit.CM, filteredX, filteredY, AngleUnit.DEGREES, filteredHeading);
     }
     public Pose2D subtractPoses(Pose2D pos1, Pose2D pos2){
@@ -160,13 +163,26 @@ public class Utils {
         boolean headingInThresh = Math.abs(subtractedPose.getHeading(AngleUnit.DEGREES)) < headingThresh;
         return xInThresh && yInThresh && headingInThresh;
     }
-    public double median(ArrayList<Double> numbers,  double val){
+    public double updateMedian(ArrayList<Double> numbers, double val){
         numbers.add(val);
+        return median(numbers);
+    }
+    public double median(ArrayList<Double> numbers){
         Collections.sort(numbers);
         int size = numbers.size();
         if(size % 2 == 0){
             return (numbers.get(size/2) + numbers.get(size/2 - 1) / 2);
         }
         return numbers.get(size/2);
+    }
+    ArrayList<Double> diffs = new ArrayList<>();
+    public double updateAngleMedian(ArrayList<Double> numbers,  double angle){
+        numbers.add(angle);
+        for (int i = 0; i < numbers.size(); i++){
+            diffs.add(getDiffBetweenAngles(angle, numbers.get(i)));
+        }
+        double filteredAngle = convertToWrapAroundAngle(angle + median(diffs));
+        diffs.clear();
+        return filteredAngle;
     }
 }
