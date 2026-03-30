@@ -194,11 +194,20 @@ public class DriveTrain {
     }
 
     public Pose2D lastFilteredPose = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
-    public Pose2D filteredPose =  new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
+    public Pose2D filteredPose = null;
     public Pose2D filterCamPose(Pose2D pose){
+        if(filteredPose != null)
+            if(utils.PoseThreshold(filteredPose, odometry.getPosition(), 100, 10)){
+                filteredPose = utils.medianPose(pose);
+            }else{
+                filteredPose = pose;
+            }
+        else{
+            filteredPose = pose;
+        }
+
 //        if(utils.PoseThreshold(pose, filteredPose, 15, 10)){ // heading threshold is big because were not using the heading filtered
 //            filteredPose = utils.filterPose(0.7, pose, lastFilteredPose);
-        filteredPose = utils.medianPose(pose);
 //        }
         lastFilteredPose = filteredPose;
         return filteredPose;

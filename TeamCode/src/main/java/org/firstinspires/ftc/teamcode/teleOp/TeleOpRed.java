@@ -183,14 +183,13 @@ public class TeleOpRed extends OpMode {
                 driveTrain.turnToGoal("RED", tagLocalization.goalTag);
             }
 
-
             if(gamepad1.back) {
                 odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 180)); //TODO: change for RED
             }
             if(driveTrain.isStopped()){
                 if(tagLocalization.goalTag != null){
                     filteredPose = driveTrain.filterCamPose(tagLocalization.getRobotPose(tagLocalization.goalTag));
-                    if((count >= 300 && !gamepad1.right_bumper && utils.PoseThreshold(filteredPose, odometry.getPosition(), 100, 10))){
+                    if((count >= 200 && !gamepad1.right_bumper) && utils.PoseThreshold(filteredPose, odometry.getPosition(), 10000, 10)){
                         odometry.setPosition(new Pose2D(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, filteredPose.getHeading(AngleUnit.DEGREES)));
                         sleep(150);
                         telemetry.addLine("SET POSITION");
@@ -205,7 +204,9 @@ public class TeleOpRed extends OpMode {
                 utils.headPos.clear();
             }
             count++;
+            telemetry.addData("thresh", utils.PoseThreshold(filteredPose, odometry.getPosition(), 10000, 10));
             telemetry.addData("count", count);
+            dashboardTelemetry.addData("count", count);
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);
 //

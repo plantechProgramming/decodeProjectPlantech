@@ -176,13 +176,27 @@ public class Utils {
         return numbers.get(size/2);
     }
     ArrayList<Double> diffs = new ArrayList<>();
+    double filteredDiffsPrev = 0;
+    double alpha = 0.1;
     public double updateAngleMedian(ArrayList<Double> numbers,  double angle){
         numbers.add(angle);
+        double filteredDiffs = 0;
         for (int i = 0; i < numbers.size(); i++){
+            // not wrap around, cuz the sort needs that
             diffs.add(getDiffBetweenAngles(angle, numbers.get(i)));
+            filteredDiffs = filter(alpha,diffs.get(diffs.size()-1),filteredDiffsPrev);
         }
-        double filteredAngle = convertToWrapAroundAngle(angle + median(diffs));
+        double filteredAngle = convertToWrapAroundAngle(angle + filteredDiffs);
+        filteredDiffsPrev = filteredDiffs;
         diffs.clear();
         return filteredAngle;
+    }
+
+    public double getAVG(ArrayList<Double> numbers){
+        double sum = 0;
+        for(double number : numbers){
+            sum += number;
+        }
+        return sum/numbers.size();
     }
 }
