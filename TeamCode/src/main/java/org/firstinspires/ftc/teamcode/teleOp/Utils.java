@@ -199,4 +199,8 @@ public class Utils {
         }
         return sum/numbers.size();
     }
+
+    public boolean threshold(double curr, double wanted, double threshold){
+        return Math.abs(wanted - curr) < threshold;
+    }
 }

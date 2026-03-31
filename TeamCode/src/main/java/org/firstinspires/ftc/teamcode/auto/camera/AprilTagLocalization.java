@@ -176,16 +176,19 @@ public class AprilTagLocalization {
     public boolean isGoalTag(AprilTagDetection tag) {
         return tag.id == 24 || tag.id == 20;
     }
-
-    public double getCurrDeg(AprilTagDetection tag, String team) { // in pinpoint cords
+    public double filteredYaw = 0;
+    public double filteredYawPrev = 0;
+    public double getCurrDeg(AprilTagDetection tag) { // in pinpoint cords
         double yaw = tag.ftcPose.yaw;
+        filteredYaw = utils.filter(0.1,yaw,filteredYawPrev);
+        filteredYawPrev = filteredYaw;
         Pose2D goal;
         if (team.equals("BLUE")) {
             goal = utils.GOAL_BLUE;
         } else {
             goal = utils.GOAL_RED;
         }
-        double heading = goal.getHeading(AngleUnit.DEGREES) - yaw;
+        double heading = goal.getHeading(AngleUnit.DEGREES) - filteredYaw;
         if (heading < -180) {
             return heading + 360;
         } else if (heading > 180) {
@@ -194,8 +197,8 @@ public class AprilTagLocalization {
         return heading;
     }
 
-    public Pair<Double, Double> getXYToTag(AprilTagDetection tag, String team) {
-        double heading = getCurrDeg(tag, team);
+    public Pair<Double, Double> getXYToTag(AprilTagDetection tag) {
+        double heading = getCurrDeg(tag);
         double x = tag.ftcPose.x;
         double y = tag.ftcPose.y + 12;
         Pair<Double, Double> rotated = utils.rotation2D(x, y, heading+90);
@@ -203,26 +206,26 @@ public class AprilTagLocalization {
         return rotFixed;
     }
 
-    public Pair<Double, Double> getRelocXY(AprilTagDetection tag, String team) { // in pinpoint cords
+    public Pair<Double, Double> getRelocXY(AprilTagDetection tag) { // in pinpoint cords
         Pose2D tagPose; // in absolute ftc coords
         if (team.equals("BLUE")) {
             tagPose = utils.GOAL_TAG_BLUE;
         } else {
             tagPose = utils.GOAL_TAG_RED;
         }
-        Pair<Double, Double> xy = getXYToTag(tag, team); // we know what it is
+        Pair<Double, Double> xy = getXYToTag(tag); // we know what it is
         return new Pair<>(tagPose.getX(DistanceUnit.CM) + xy.first, tagPose.getX(DistanceUnit.CM) + xy.second);
     }
     public Pose2D getRobotPose(AprilTagDetection tag){//in pinpoint cords
-        Pair<Double, Double> robotXY= getRelocXY(tag, team);
-        return new Pose2D(DistanceUnit.CM, robotXY.first, robotXY.second, AngleUnit.DEGREES, getCurrDeg(tag, team));
+        Pair<Double, Double> robotXY= getRelocXY(tag);
+        return new Pose2D(DistanceUnit.CM, robotXY.first, robotXY.second, AngleUnit.DEGREES, getCurrDeg(tag));
     }
     Pair<Double, Double> robotPoseAbs = null;
    double robotHeadingAbs = 0;
     public void setCameraTelemetry(Telemetry telemetry) {
         if(goalTag != null){
-            robotPoseAbs = getRelocXY(goalTag, team);
-            robotHeadingAbs = getCurrDeg(goalTag, team);
+            robotPoseAbs = getRelocXY(goalTag);
+            robotHeadingAbs = getCurrDeg(goalTag);
         }
         telemetry.addData("absolute robot pose cam", robotPoseAbs);
         telemetry.addData("absolute robot heading cam", robotHeadingAbs);
