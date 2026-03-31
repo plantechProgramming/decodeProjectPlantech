@@ -7,6 +7,7 @@ import com.pedropathing.geometry.CoordinateSystem;
 import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.math.MathFunctions;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 
 public class PathsRed {
@@ -43,7 +44,7 @@ public class PathsRed {
     public final Pose controlPoseGPP = pathsBlue.controlPoseGPP.mirror();// pose for getting to PGP without hitting other balls
     public final Pose controlPoseGate = pathsBlue.controlPoseGate.mirror();
     public final Pose controlPoseGatePPG = pathsBlue.controlPoseGatePPG.mirror();
-    public final Pose gate = pathsBlue.gate.mirror();
+    public final Pose controlPoseGatePickUp = pathsBlue.controlPoseGatePickUp.mirror();
     public final Pose GPP = pathsBlue.GPP.mirror();
     public final Pose PPG = pathsBlue.PPG.mirror();
     public final Pose PGP = pathsBlue.PGP.mirror();
@@ -53,16 +54,22 @@ public class PathsRed {
     public final Pose afterPickupPGP = pathsBlue.afterPickupPGP.mirror();
 //
     public final Pose leaveFarPose = pathsBlue.leaveFarPose.mirror();
+    public final Pose gate = pathsBlue.gate.mirror();
+    public final Pose pickUpGate = pathsBlue.pickUpGate.mirror();
+    public final Pose humanPlayer = pathsBlue.humanPlayer.mirror();
+    public final Pose eatLeftoverGate = pathsBlue.eatLeftoverGate.mirror();
+    public final Pose controlPoseEatLeftoverGate = pathsBlue.controlPoseEatLeftoverGate.mirror();
 
     public PathChain scorePreload, scorePreloadFar;
     public PathChain grabGPP, grabPGP, grabPPG;
     public PathChain scoreGPP, scorePGP, scorePPG;
     public PathChain grabGPPFar, grabPGPFar;
     public PathChain scoreGPPFar;
-    public PathChain scoreGateFromPGP;
+    public PathChain scoreGateFromPGP, pickUpOpenGateFromScore, scorePickUpGate;
+    public PathChain scoreHumanPlayer, grabHumanPlayer;
+    public PathChain grabLeftoverBallsGate, scoreLeftoverBallsGate;
     public PathChain scoreLeaveClose, leavePPGClose, leaveClose;
     public PathChain scoreLeaveFar, leaveFar;
-
     private Pose Mymirror(Pose pPose) {
         Pose k = pPose;
         return new Pose(141.5 - k.getX(), k.getY()-2, MathFunctions.normalizeAngle(Math.PI - k.getHeading()), PedroCoordinates.INSTANCE);
@@ -179,6 +186,41 @@ public class PathsRed {
                 .setLinearHeadingInterpolation(gate.getHeading(), scorePose.getHeading())
                 .build();
 
+        pickUpOpenGateFromScore = follower.pathBuilder()
+                .addPath(new BezierCurve(scorePose, controlPoseGatePPG, gate))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), gate.getHeading())
+                .addPath(new BezierLine(gate, pickUpGate))
+                .setLinearHeadingInterpolation(gate.getHeading(), pickUpGate.getHeading())
+                .build();
+
+        scorePickUpGate = follower.pathBuilder()
+                .addPath(new BezierCurve(pickUpGate, controlPoseGatePPG, scorePose))
+                .setLinearHeadingInterpolation(pickUpGate.getHeading(), scorePose.getHeading())
+                .build();
+
+        // ------------- HUMAN PLAYER ------------------
+
+        grabHumanPlayer = follower.pathBuilder()
+                .addPath(new BezierLine(scorePoseFar,humanPlayer))
+                .setLinearHeadingInterpolation(scorePoseFar.getHeading(), humanPlayer.getHeading())
+                .build();
+
+        scoreHumanPlayer = follower.pathBuilder()
+                .addPath(new BezierLine(humanPlayer,scorePoseFar))
+                .setLinearHeadingInterpolation(humanPlayer.getHeading(), scorePoseFar.getHeading())
+                .build();
+
+        // ------------- LEFT OVER BALLS FROM THE GATE ------------------
+
+        grabLeftoverBallsGate = follower.pathBuilder()
+                .addPath(new BezierCurve(scorePoseFar, controlPoseEatLeftoverGate, eatLeftoverGate))
+                .setTangentHeadingInterpolation()
+                .build();
+
+        scoreLeftoverBallsGate = follower.pathBuilder()
+                .addPath(new BezierLine(eatLeftoverGate, scorePoseFar))
+                .setLinearHeadingInterpolation(eatLeftoverGate.getHeading(), scorePoseFar.getHeading())
+                .build();
 //        scoreCloseGateFromScore = follower.pathBuilder()
 //                .addPath(new BezierCurve(scorePose, controlPosePGP, PGP))
 //                .setLinearHeadingInterpolation(scorePose.getHeading(), PGP.getHeading())
@@ -197,8 +239,5 @@ public class PathsRed {
 //                .addPath(new BezierLine(afterPickupPPG, leaveClosePose))
 //                .setLinearHeadingInterpolation(afterPickupPPG.getHeading(), leaveClosePose.getHeading())
 //                .build();
-
-
-
     }
 }

@@ -41,7 +41,10 @@ public class LeaveFarPre extends NextFTCOpMode {
                 command.startShooter(true),
                 new Delay(1),
                 command.score(path.scorePreloadFar),
-                new FollowPath(path.scoreLeaveFar)
+                new FollowPath(path.scoreLeaveFar),
+
+                command.intake(path.grabHumanPlayer),
+                command.score(path.scoreHumanPlayer)
         );
     }
 

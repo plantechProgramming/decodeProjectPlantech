@@ -71,7 +71,7 @@ public class TeleOpRed extends OpMode {
         double botHeading;
         boolean activatedHold = false;
         boolean aang = false;
-        int count = 200;
+        int count = 0;
         String team = "RED"; //TODO: change for BLUE
 //        follower.setStartingPose(readWrite.readPose());
         follower.update();
@@ -181,9 +181,8 @@ public class TeleOpRed extends OpMode {
                 tagLocalization.detectTags();
                 if(tagLocalization.goalTag != null){
                     double curHeading = tagLocalization.getCurrDeg(tagLocalization.goalTag);
-                    if(count >= 200 && !gamepad1.right_bumper && utils.threshold(curHeading,odometry.getHeading(AngleUnit.DEGREES), 8)){
+                    if(count >= 125 && !gamepad1.right_bumper && utils.threshold(curHeading,odometry.getHeading(AngleUnit.DEGREES), 5)){
                         odometry.setPosition(new Pose2D(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, curHeading));
-                        sleep(150);
                         telemetry.addLine("SET POSITION");
                         count = 0;
                     }

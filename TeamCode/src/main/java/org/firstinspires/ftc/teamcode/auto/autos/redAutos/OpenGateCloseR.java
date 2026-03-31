@@ -43,7 +43,13 @@ public class OpenGateCloseR extends NextFTCOpMode {
                 command.score(path.scorePreload),
 
                 command.intake(path.grabPGP),
-                command.score(path.scoreGateFromPGP),
+                command.score(path.scorePGP),
+
+                command.intake(path.pickUpOpenGateFromScore),
+                command.take(),
+                new Delay(0.5),
+                command.stopAll(),
+                command.score(path.scorePickUpGate),
 
                 command.intake(path.grabPPG),
                 command.score(path.leavePPGClose)
