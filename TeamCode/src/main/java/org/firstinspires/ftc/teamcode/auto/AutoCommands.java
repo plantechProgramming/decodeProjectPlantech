@@ -84,6 +84,13 @@ public class AutoCommands implements Component{
                 stopAll()
         );
     }
+    public Command intakeWithoutStop(PathChain grabPath, double speed){
+        return new SequentialGroup(
+                inBetween.inBetweenInPart(),
+                intake.take(),
+                new FollowPath(grabPath, true, speed)
+        );
+    }
 
     public Command intakeAndShoot(PathChain grabAndShootPath){
         return new SequentialGroup(

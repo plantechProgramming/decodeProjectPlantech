@@ -59,6 +59,7 @@ public class PathsRed {
     public final Pose humanPlayer = pathsBlue.humanPlayer.mirror();
     public final Pose eatLeftoverGate = pathsBlue.eatLeftoverGate.mirror();
     public final Pose controlPoseEatLeftoverGate = pathsBlue.controlPoseEatLeftoverGate.mirror();
+    public final Pose humanPlayerControlPose = pathsBlue.humanPlayerControlPose.mirror();
 
     public PathChain scorePreload, scorePreloadFar;
     public PathChain grabGPP, grabPGP, grabPPG;
@@ -66,7 +67,7 @@ public class PathsRed {
     public PathChain grabGPPFar, grabPGPFar;
     public PathChain scoreGPPFar;
     public PathChain scoreGateFromPGP, pickUpOpenGateFromScore, scorePickUpGate;
-    public PathChain scoreHumanPlayer, grabHumanPlayer;
+    public PathChain scoreHumanPlayer, grabHumanPlayer, grabHumanPlayerTangent;
     public PathChain grabLeftoverBallsGate, scoreLeftoverBallsGate;
     public PathChain scoreLeaveClose, leavePPGClose, leaveClose;
     public PathChain scoreLeaveFar, leaveFar;
@@ -201,12 +202,17 @@ public class PathsRed {
         // ------------- HUMAN PLAYER ------------------
 
         grabHumanPlayer = follower.pathBuilder()
-                .addPath(new BezierLine(scorePoseFar,humanPlayer))
+                .addPath(new BezierCurve(scorePoseFar,humanPlayerControlPose,humanPlayer))
                 .setLinearHeadingInterpolation(scorePoseFar.getHeading(), humanPlayer.getHeading())
                 .build();
 
+        grabHumanPlayerTangent = follower.pathBuilder()
+                .addPath(new BezierCurve(scorePoseFar,humanPlayerControlPose,humanPlayer))
+                .setTangentHeadingInterpolation()
+                .build();
+
         scoreHumanPlayer = follower.pathBuilder()
-                .addPath(new BezierLine(humanPlayer,scorePoseFar))
+                .addPath(new BezierCurve(humanPlayer,humanPlayerControlPose,scorePoseFar))
                 .setLinearHeadingInterpolation(humanPlayer.getHeading(), scorePoseFar.getHeading())
                 .build();
 
