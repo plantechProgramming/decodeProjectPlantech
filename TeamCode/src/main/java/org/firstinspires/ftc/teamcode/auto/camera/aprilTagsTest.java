@@ -51,7 +51,7 @@ import java.util.ListIterator;
 public class aprilTagsTest  extends OpMode {
     AprilTagLocalization tagLocalization = new AprilTagLocalization("RED", telemetry); //TODO: change here for red
 
-    public static int loopsPerUpdate = 50;
+    public static int loopsPerUpdate = 150;
 
     @Override
     public void run() {
@@ -69,29 +69,28 @@ public class aprilTagsTest  extends OpMode {
         double sum = 0;
         while (opModeIsActive()) {
             tagLocalization.detectTags();
-            shooter.noPhysShootHomeostasis(0.5);
+            shooter.noPhysShootHomeostasis(0.4);
             if(tagLocalization.goalTag != null){
-                count++;
-                tagLocalization.getCurrDeg(tagLocalization.goalTag);
-                if(count >= loopsPerUpdate){
-                    count = 0;
-                    curr = tagLocalization.getCurrDeg(tagLocalization.goalTag);
-                    tagLocalization.filteredYawPrev = -144.5;
-                    utils.resetSum();
-                }
-//                telemetry.addData("yaw", tagLocalization.goalTag.ftcPose.yaw);
-//                telemetry.addData("x", tagLocalization.goalTag.ftcPose.x);
-//                telemetry.addData("y", tagLocalization.goalTag.ftcPose.y);
-//                telemetry.addData("cur deg",tagLocalization.getCurrDeg(tagLocalization.goalTag));
-//                telemetry.addData("xy reloc",tagLocalization.getRelocXY(tagLocalization.goalTag));
-//                telemetry.addData("xy rotated",tagLocalization.getXYToTag(tagLocalization.goalTag));
-//                telemetry.update();
+//                count++;
+//                tagLocalization.getCurrDeg(tagLocalization.goalTag);
+//                if(count >= loopsPerUpdate){
+//                    count = 0;
+//                    curr = tagLocalization.getCurrDeg(tagLocalization.goalTag);
+//                    tagLocalization.filteredYawPrev = -144.5;
+//                    utils.resetSum();
+//               }
+                telemetry.addData("yaw", tagLocalization.goalTag.ftcPose.yaw);
+                telemetry.addData("x", tagLocalization.goalTag.ftcPose.x);
+                telemetry.addData("y", tagLocalization.goalTag.ftcPose.y);
+                telemetry.addData("cur deg",tagLocalization.getCurrDeg(tagLocalization.goalTag));
+                telemetry.addData("xy reloc",tagLocalization.getRelocXY(tagLocalization.goalTag));
+                telemetry.addData("xy rotated",tagLocalization.getXYToTag(tagLocalization.goalTag));
+                telemetry.update();
             }
             else{
                 errorCounter++;
             }
             dashboardTelemetry.addData("error Counter", errorCounter);
-            dashboardTelemetry.addData("wanted", -144.5);
             dashboardTelemetry.addData("current", curr);
             dashboardTelemetry.addData("count", count);
             dashboardTelemetry.update();

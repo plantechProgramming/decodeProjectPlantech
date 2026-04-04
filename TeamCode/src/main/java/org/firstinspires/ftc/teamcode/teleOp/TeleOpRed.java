@@ -183,10 +183,10 @@ public class TeleOpRed extends OpMode {
             if(forward == 0 && drift == 0 && turn == 0){
                 stopCount++;
                 tagLocalization.detectTags();
-                if(tagLocalization.goalTag != null){
+                if(tagLocalization.goalTag != null && utils.getDistFromGoal(team) < 220){
                     count++;
                     tagLocalization.getCurrDeg(tagLocalization.goalTag);
-                    if(count >= 100 && !gamepad1.right_bumper){
+                    if(count >= 150 && !gamepad1.right_bumper){
                         double curHeading = tagLocalization.getCurrDeg(tagLocalization.goalTag);
                         odometry.setPosition(new Pose2D(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, curHeading));
                         telemetry.addLine("SET POSITION");
@@ -200,21 +200,21 @@ public class TeleOpRed extends OpMode {
                 tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
             }
 
-            telemetry.addData("count", count);
-            dashboardTelemetry.addData("count", count);
+//            telemetry.addData("count", count);
+//            dashboardTelemetry.addData("count", count);
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);
-
-            shooter.setShooterTelemetry(telemetry);
-            shooter.setShooterTelemetry(dashboardTelemetry);
-
+//
+//            shooter.setShooterTelemetry(telemetry);
+//            shooter.setShooterTelemetry(dashboardTelemetry);
+//
             tagLocalization.setCameraTelemetry(telemetry);
             tagLocalization.setCameraTelemetry(dashboardTelemetry);
-
-            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
-            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
-            telemetry.addData("time",elapsedTime.milliseconds());
-            telemetry.addData("stop count",stopCount);
+//
+//            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+//            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+//            telemetry.addData("time",elapsedTime.milliseconds());
+//            telemetry.addData("stop count",stopCount);
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();
