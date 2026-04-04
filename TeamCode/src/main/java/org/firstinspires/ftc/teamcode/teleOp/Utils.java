@@ -199,7 +199,7 @@ public class Utils {
         return sum/numbers.size();
     }
 
-    public double sum = 0;
+    double sum = 0;
     public double updateAverage(double curr, int loops){
         sum += curr/loops;
         return sum;

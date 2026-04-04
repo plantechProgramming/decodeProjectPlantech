@@ -64,19 +64,20 @@ public class aprilTagsTest  extends OpMode {
         Utils utils = new Utils();
         int count = 0;
         int errorCounter = 0;
-        double curr = 180;
+        double curr = -144;
         double raw;
         double sum = 0;
         while (opModeIsActive()) {
             tagLocalization.detectTags();
-//            shooter.noPhysShootHomeostasis(0.5);
+            shooter.noPhysShootHomeostasis(0.5);
             if(tagLocalization.goalTag != null){
                 count++;
                 tagLocalization.getCurrDeg(tagLocalization.goalTag);
                 if(count >= loopsPerUpdate){
                     count = 0;
                     curr = tagLocalization.getCurrDeg(tagLocalization.goalTag);
-                    tagLocalization.filteredYawPrev = -90;
+                    tagLocalization.filteredYawPrev = -144.5;
+                    utils.resetSum();
                 }
 //                telemetry.addData("yaw", tagLocalization.goalTag.ftcPose.yaw);
 //                telemetry.addData("x", tagLocalization.goalTag.ftcPose.x);
@@ -90,7 +91,7 @@ public class aprilTagsTest  extends OpMode {
                 errorCounter++;
             }
             dashboardTelemetry.addData("error Counter", errorCounter);
-            dashboardTelemetry.addData("wanted", -6.7);
+            dashboardTelemetry.addData("wanted", -144.5);
             dashboardTelemetry.addData("current", curr);
             dashboardTelemetry.addData("count", count);
             dashboardTelemetry.update();

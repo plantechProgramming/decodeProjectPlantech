@@ -187,10 +187,33 @@ public class DriveTrain {
         return odometry.getPosY(DistanceUnit.CM) > 60;
     }
     public boolean isStopped(){
-        boolean xInThresh = Math.abs(odometry.getVelX(DistanceUnit.CM)) < 5;
-        boolean yInThresh = Math.abs(odometry.getVelY(DistanceUnit.CM)) < 5;
+        boolean xInThresh = Math.abs(odometry.getVelX(DistanceUnit.CM)) < 7;
+        boolean yInThresh = Math.abs(odometry.getVelY(DistanceUnit.CM)) < 7;
         boolean headInThresh = Math.abs(odometry.getHeadingVelocity(AngleUnit.DEGREES.getUnnormalized())) < 5;
         return xInThresh && yInThresh && headInThresh;
+    }
+    public String isXStoppedTel() {
+        if (Math.abs(odometry.getVelX(DistanceUnit.CM)) < 7) {
+            return "x is stopped";
+        } else {
+            return "x isn't stopped";
+        }
+    }
+    public String isYStoppedTel(){
+        if(Math.abs(odometry.getVelY(DistanceUnit.CM)) < 7){
+            return "y is stopped";
+        }
+        else{
+            return "y isn't stopped";
+        }
+    }
+    public String isHeadingStoppedTel(){
+        if(Math.abs(odometry.getHeadingVelocity(AngleUnit.DEGREES.getUnnormalized())) < 5){
+            return "heading is stopped";
+        }
+        else{
+            return "heading isn't stopped";
+        }
     }
 
     public Pose2D lastFilteredPose = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
