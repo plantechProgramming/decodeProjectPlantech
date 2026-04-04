@@ -180,7 +180,8 @@ public class AprilTagLocalization {
     public double filteredYawPrev = 0;
     public double getCurrDeg(AprilTagDetection tag) { // in pinpoint cords
         double yaw = tag.ftcPose.yaw;
-        filteredYaw = utils.filter(0.1,yaw,filteredYawPrev);
+        filteredYaw = utils.filter(0.01,yaw,filteredYawPrev);
+//        filteredYaw = utils.updateAverage(yaw, aprilTagsTest.loopsPerUpdate);
         filteredYawPrev = filteredYaw;
         Pose2D goal;
         if (team.equals("BLUE")) {

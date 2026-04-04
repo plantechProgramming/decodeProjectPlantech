@@ -134,7 +134,6 @@ public class Utils {
     public double filter(double alpha, double val, double prevVal){
         return alpha * val + (1 - alpha) * prevVal;
     }
-
     public Pose2D filterPose(double alpha, Pose2D pose, Pose2D lastPose){ // DO NOT USE FOR HEADING THERE ISN'T A WRAP AROUND
         double filteredX = filter(alpha, pose.getX(DistanceUnit.CM), lastPose.getX(DistanceUnit.CM));
         double filteredY = filter(alpha, pose.getY(DistanceUnit.CM), lastPose.getY(DistanceUnit.CM));
@@ -200,6 +199,14 @@ public class Utils {
         return sum/numbers.size();
     }
 
+    public double sum = 0;
+    public double updateAverage(double curr, int loops){
+        sum += curr/loops;
+        return sum;
+    }
+    public void resetSum(){
+        sum = 0;
+    }
     public boolean threshold(double curr, double wanted, double threshold){
         return Math.abs(wanted - curr) < threshold;
     }

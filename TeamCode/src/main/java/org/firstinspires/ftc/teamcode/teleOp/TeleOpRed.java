@@ -64,6 +64,7 @@ public class TeleOpRed extends OpMode {
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
         ReadWrite readWrite = new ReadWrite();
         Utils utils = new Utils(telemetry,odometry);
+        ElapsedTime elapsedTime = new ElapsedTime();
 
         double forward; //-1 to 1
         double turn;
@@ -84,6 +85,7 @@ public class TeleOpRed extends OpMode {
         DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         while (opModeIsActive() ) {
+            elapsedTime.reset();
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
@@ -180,8 +182,9 @@ public class TeleOpRed extends OpMode {
             if(driveTrain.isStopped()){
                 tagLocalization.detectTags();
                 if(tagLocalization.goalTag != null){
+                    count++;
                     double curHeading = tagLocalization.getCurrDeg(tagLocalization.goalTag);
-                    if(count >= 125 && !gamepad1.right_bumper && utils.threshold(curHeading,odometry.getHeading(AngleUnit.DEGREES), 5)){
+                    if(count >= 100 && !gamepad1.right_bumper){
                         odometry.setPosition(new Pose2D(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, curHeading));
                         telemetry.addLine("SET POSITION");
                         count = 0;
@@ -189,23 +192,24 @@ public class TeleOpRed extends OpMode {
                 }
             }
             else{
+                count = 0;
                 tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
             }
-            count++;
 
             telemetry.addData("count", count);
             dashboardTelemetry.addData("count", count);
-            driveTrain.setDriveTelemetry(telemetry);
-            driveTrain.setDriveTelemetry(dashboardTelemetry);
+//            driveTrain.setDriveTelemetry(telemetry);
+//            driveTrain.setDriveTelemetry(dashboardTelemetry);
+////
+//            shooter.setShooterTelemetry(telemetry);
+//            shooter.setShooterTelemetry(dashboardTelemetry);
 //
-            shooter.setShooterTelemetry(telemetry);
-            shooter.setShooterTelemetry(dashboardTelemetry);
-
-            tagLocalization.setCameraTelemetry(telemetry);
-            tagLocalization.setCameraTelemetry(dashboardTelemetry);
-
-            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
-            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+//            tagLocalization.setCameraTelemetry(telemetry);
+//            tagLocalization.setCameraTelemetry(dashboardTelemetry);
+//
+//            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+//            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+//            telemetry.addData("time",elapsedTime.milliseconds());
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();

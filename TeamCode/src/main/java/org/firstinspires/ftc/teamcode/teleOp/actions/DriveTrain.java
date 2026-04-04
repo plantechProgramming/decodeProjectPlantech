@@ -187,9 +187,9 @@ public class DriveTrain {
         return odometry.getPosY(DistanceUnit.CM) > 60;
     }
     public boolean isStopped(){
-        boolean xInThresh = Math.abs(odometry.getVelX(DistanceUnit.CM)) < 3;
-        boolean yInThresh = Math.abs(odometry.getVelY(DistanceUnit.CM)) < 3;
-        boolean headInThresh = Math.abs(odometry.getHeadingVelocity(AngleUnit.DEGREES.getUnnormalized())) < 2;
+        boolean xInThresh = Math.abs(odometry.getVelX(DistanceUnit.CM)) < 5;
+        boolean yInThresh = Math.abs(odometry.getVelY(DistanceUnit.CM)) < 5;
+        boolean headInThresh = Math.abs(odometry.getHeadingVelocity(AngleUnit.DEGREES.getUnnormalized())) < 5;
         return xInThresh && yInThresh && headInThresh;
     }
 
