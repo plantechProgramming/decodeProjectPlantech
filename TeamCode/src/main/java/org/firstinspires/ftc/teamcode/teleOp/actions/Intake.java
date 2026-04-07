@@ -75,5 +75,9 @@ public class Intake {
         sr.setPower(0);
         sl.setPower(0);
     }
+    public void stopPrimers(){
+        sr.setPower(0);
+        sl.setPower(0);
+    }
 }
 

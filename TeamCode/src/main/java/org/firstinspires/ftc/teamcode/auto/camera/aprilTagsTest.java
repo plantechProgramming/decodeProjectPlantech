@@ -85,17 +85,21 @@ public class aprilTagsTest  extends OpMode {
                 telemetry.addData("cur deg",tagLocalization.getCurrDeg(tagLocalization.goalTag));
                 telemetry.addData("xy reloc",tagLocalization.getRelocXY(tagLocalization.goalTag));
                 telemetry.addData("xy rotated",tagLocalization.getXYToTag(tagLocalization.goalTag));
+                telemetry.addData("wanted deg", Math.toDegrees(Math.atan2(tagLocalization.getXYToTag(tagLocalization.goalTag).second, tagLocalization.getXYToTag(tagLocalization.goalTag).first)));
                 telemetry.update();
+                dashboardTelemetry.addData("yaw", tagLocalization.goalTag.ftcPose.yaw);
+                dashboardTelemetry.addData("x", tagLocalization.goalTag.ftcPose.x);
+                dashboardTelemetry.addData("y", tagLocalization.goalTag.ftcPose.y);
+                dashboardTelemetry.addData("cur deg",tagLocalization.getCurrDeg(tagLocalization.goalTag));
+                dashboardTelemetry.addData("xy reloc",tagLocalization.getRelocXY(tagLocalization.goalTag));
+                dashboardTelemetry.addData("xy rotated",tagLocalization.getXYToTag(tagLocalization.goalTag));
+                dashboardTelemetry.addData("wanted deg", Math.toDegrees(Math.atan2(utils.GOAL_RED.getY(DistanceUnit.CM) - tagLocalization.getRelocXY(tagLocalization.goalTag).second, utils.GOAL_RED.getX(DistanceUnit.CM) - tagLocalization.getRelocXY(tagLocalization.goalTag).first)));
+                dashboardTelemetry.update();
             }
             else{
                 errorCounter++;
             }
-            dashboardTelemetry.addData("error Counter", errorCounter);
-            dashboardTelemetry.addData("current", curr);
-            dashboardTelemetry.addData("count", count);
-            dashboardTelemetry.update();
 
-            sleep(10);
         }
     }
 

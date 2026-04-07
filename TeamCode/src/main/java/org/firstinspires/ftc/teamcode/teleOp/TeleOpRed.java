@@ -131,12 +131,12 @@ public class TeleOpRed extends OpMode {
 //                intake.intake_motor.setPower(0.5);
 //            }
             else if(gamepad1.right_bumper){
-                if(shooter.isUpToGivenSpeed(shooter.interpolateTel(utils.getDistFromGoal(team)))){
+//                if(shooter.isUpToGivenSpeed(shooter.interpolateTel(utils.getDistFromGoal(team)))){
                     intake.inBetweenInFull();
-                }
-                else{
-                    intake.stopIntake();
-                }
+//                }
+//                else{
+//                    intake.stopPrimers();
+//                }
                 intake.intakeIn();
                 if(aang){
                     DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -200,19 +200,19 @@ public class TeleOpRed extends OpMode {
                 tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
             }
 
-//            telemetry.addData("count", count);
-//            dashboardTelemetry.addData("count", count);
+            telemetry.addData("count", count);
+            dashboardTelemetry.addData("count", count);
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);
 //
-//            shooter.setShooterTelemetry(telemetry);
-//            shooter.setShooterTelemetry(dashboardTelemetry);
+            shooter.setShooterTelemetry(telemetry);
+            shooter.setShooterTelemetry(dashboardTelemetry);
 //
             tagLocalization.setCameraTelemetry(telemetry);
             tagLocalization.setCameraTelemetry(dashboardTelemetry);
 //
-//            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
-//            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
 //            telemetry.addData("time",elapsedTime.milliseconds());
 //            telemetry.addData("stop count",stopCount);
             telemetry.update();

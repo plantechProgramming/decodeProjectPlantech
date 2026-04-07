@@ -32,22 +32,18 @@ public class FullAutoFarLeave extends NextFTCOpMode {
     PathsRed path;
 
 
-    private final Pose startPose = new Pose(56.15, 8.4, Math.toRadians(90)).mirror(); // Start Pose of our robot.
-
     public Command autoRoutine(){
         return new SequentialGroup(
                 command.startShooter(true),
-//                new Delay(0.3),
                 command.score(path.scorePreloadFar),
+
                 command.intake(path.grabGPPFar),
                 command.score(path.scoreGPPFar),
 
-                command.startShooter(false),
-                command.intake(path.grabPGPFar),
-                command.score(path.scorePGP),
-                new FollowPath(path.scoreLeaveFar)
-//                command.intake(path.intakePPG,path.grabPPG,0.4)
+                command.intake(path.grabLeftoverBallsGate),
+                command.score(path.scoreLeftoverBallsGate),
 
+                new FollowPath(path.scoreLeaveFar)
         );
     }
 

@@ -26,7 +26,7 @@ public class PathsBlue {
 
     public final Pose controlPoseGatePPG = new Pose(50, 59); // pose for getting from gate to score without hitting ppg
     public final Pose controlPoseGatePickUp = new Pose(50, 59); // pose for getting from gate to gate pick up without hitting the gate
-    public final Pose controlPoseEatLeftoverGate = new Pose(9, -4); // pose for getting from leftover balls from the gate
+    public final Pose controlPoseEatLeftoverGate = new Pose(5, -6); // pose for getting from leftover balls from the gate
 
     public final Pose leaveClosePose = new Pose(55, 122.5, Math.toRadians(165));
     public final Pose leaveFarPose = new Pose(39, 16, Math.toRadians(180));
@@ -40,7 +40,7 @@ public class PathsBlue {
     public final Pose gate = new Pose(18,67,Math.toRadians(180));
     public final Pose pickUpGate = new Pose(10.3, 59.5, Math.toRadians(130));
     public final Pose humanPlayer = new Pose(11.5,8.1,Math.toRadians(180));
-    public final Pose eatLeftoverGate = new Pose(8,46);
+    public final Pose eatLeftoverGate = new Pose(7.8,45.5);
     public final Pose humanPlayerControlPose = new Pose(30,18);
     public PathChain scorePreload, scorePreloadFar;
     public PathChain grabGPP, grabPGP, grabPPG;
