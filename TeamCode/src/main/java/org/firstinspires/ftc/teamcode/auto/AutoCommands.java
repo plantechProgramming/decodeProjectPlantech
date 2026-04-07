@@ -72,7 +72,15 @@ public class AutoCommands implements Component{
         return new SequentialGroup(
                 new FollowPath(path),
                 shoot(),
-                new Delay(1.6)
+                new Delay(0.9)
+        );
+    }
+
+    public Command scoreWithDelay(PathChain path, double delay){
+        return new SequentialGroup(
+                new FollowPath(path),
+                shoot(),
+                new Delay(delay)
         );
     }
 
@@ -84,11 +92,12 @@ public class AutoCommands implements Component{
                 stopAll()
         );
     }
-    public Command intakeWithoutStop(PathChain grabPath, double speed){
+    public Command intakeWithSpeed(PathChain grabPath, double speed){
         return new SequentialGroup(
                 inBetween.inBetweenInPart(),
                 intake.take(),
-                new FollowPath(grabPath, true, speed)
+                new FollowPath(grabPath, true, speed),
+                stopAll()
         );
     }
 
@@ -104,9 +113,9 @@ public class AutoCommands implements Component{
 
     public Command startShooter(boolean far){
         return new SequentialGroup(
-                shooter.naiveShooter(far),
-                intake.take(),
-                inBetween.inBetweenInPart()
+                shooter.naiveShooter(far)
+//                intake.take(),
+//                inBetween.inBetweenInPart()
         );
     }
 
