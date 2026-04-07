@@ -44,8 +44,8 @@ public class Intake {
     }
     public void inBetweenInPart(){
         inbetween_motor.setPower(0.9);
-        sr.setPower(-1);
-        sl.setPower(1);
+        sr.setPower(-0.33);
+        sl.setPower(0.33);
     }
     public void inBetweenOut(){
         inbetween_motor.setPower(-0.9);

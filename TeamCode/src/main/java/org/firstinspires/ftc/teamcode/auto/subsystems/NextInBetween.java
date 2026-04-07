@@ -27,9 +27,9 @@ public class NextInBetween implements Subsystem {
     public Command inBetweenInPart(){
         return new ParallelGroup(
                 new SetPower(inbetweenMotor, -0.95),
-                new NextInBetween().stopShooterPrimers()
-//                new SetPower(sr, -1),
-//                new SetPower(sl, 1)
+//                new NextInBetween().stopShooterPrimers()
+                new SetPower(sr, -0.33),
+                new SetPower(sl, 0.33)
         );
     }
 
