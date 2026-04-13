@@ -142,13 +142,6 @@ public abstract class OpMode extends LinearOpMode {
 
         end();
     }
-    public void push(CRServo pushT){
-        double Power = 0.5;
-        if (pushed == false)
-            pushT.setPower(Power);
-        else
-            pushT.setPower(-Power);
-    }
 
     protected void postInit() {
 

@@ -38,8 +38,7 @@ dependencies {
     // pedroPathing
     implementation 'com.pedropathing:ftc:2.0.6'
     implementation 'com.pedropathing:telemetry:1.0.0'
-
-
+    implementation 'com.pedropathing:ivy:1.0.0'
 
     // panels
     implementation "com.bylazar:fullpanels:1.0.11"

@@ -1,28 +1,30 @@
 package org.firstinspires.ftc.teamcode.auto.subsystems;
 
-import com.acmerobotics.dashboard.FtcDashboard;
+import com.pedropathing.ivy.CommandBuilder;
+import com.pedropathing.ivy.commands.Commands;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+public class NextIntake{
+    DcMotorEx intakeMotor;
+    double STOP_POWER = 0;
+    double OUT_POWER = -1;
+    double IN_POWER = 1;
+    public NextIntake(HardwareMap hardwareMap) {
 
-import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.subsystems.Subsystem;
-import dev.nextftc.hardware.impl.MotorEx;
-import dev.nextftc.hardware.powerable.SetPower;
-
-public class NextIntake implements Subsystem {
-    public static final NextIntake INSTANCE = new NextIntake();
-    public NextIntake() { }
-    FtcDashboard dashboard = FtcDashboard.getInstance();
-    Telemetry dashboardTelemetry =  dashboard.getTelemetry();
-    MotorEx intakeMotor = new MotorEx("Intake", -1).reversed();
-
-    public Command take(){
-        return new SetPower(intakeMotor,1);
     }
-    public Command out(){
-        return new SetPower(intakeMotor,-1);
+
+    public CommandBuilder take(){
+        return Commands.instant(()->intakeMotor.setPower(IN_POWER));
     }
-    public Command stop(){
-        return new SetPower(intakeMotor,0);
+    public CommandBuilder out(){
+        return Commands.instant(()->intakeMotor.setPower(OUT_POWER));
+    }
+    public CommandBuilder stop(){
+        return Commands.instant(()->intakeMotor.setPower(STOP_POWER));
+    }
+
+    public CommandBuilder setPowerAsCommand(double pow){
+        return Commands.instant(()->intakeMotor.setPower(pow));
     }
 }
