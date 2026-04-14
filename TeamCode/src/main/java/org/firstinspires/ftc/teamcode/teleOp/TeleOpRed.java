@@ -42,11 +42,12 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 public class TeleOpRed extends OpMode {
     Follower follower;
     AprilTagLocalization tagLocalization;
+    String team = "RED"; //TODO: change for BLUE
     @Override
     protected void postInit() {
         odometry.recalibrateIMU();
         follower = Constants.createFollower(hardwareMap);
-        tagLocalization = new AprilTagLocalization("RED", telemetry); //TODO: change here for red
+        tagLocalization = new AprilTagLocalization(team, telemetry); //TODO: change here for red
         tagLocalization.initProcessor(hardwareMap);
 
         // while camera is not awake, sleep
@@ -60,7 +61,7 @@ public class TeleOpRed extends OpMode {
     @Override
     public void run(){
         Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
-        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, "RED");
+        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, team);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
         ReadWrite readWrite = new ReadWrite();
         Utils utils = new Utils(telemetry,odometry);
@@ -74,7 +75,6 @@ public class TeleOpRed extends OpMode {
         boolean aang = false;
         int count = 0;
         int stopCount = 0;
-        String team = "RED"; //TODO: change for BLUE
 //        follower.setStartingPose(readWrite.readPose());
         follower.update();
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
@@ -211,8 +211,8 @@ public class TeleOpRed extends OpMode {
             tagLocalization.setCameraTelemetry(telemetry);
             tagLocalization.setCameraTelemetry(dashboardTelemetry);
 //
-            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
-            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal("RED")) *6000);
+            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
+            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
 //            telemetry.addData("time",elapsedTime.milliseconds());
 //            telemetry.addData("stop count",stopCount);
             telemetry.update();

@@ -37,8 +37,8 @@ public class PathsBlue {
     public final Pose afterPickupGPP = new Pose(11.5, 36, Math.toRadians(180));
     public final Pose afterPickupPPG = new Pose(18, 83.5, Math.toRadians(180));
     public final Pose afterPickupPGP = new Pose(11.5, 58.5, Math.toRadians(180));
-    public final Pose gate = new Pose(18,67,Math.toRadians(180));
-    public final Pose pickUpGate = new Pose(10.3, 59.5, Math.toRadians(130));
+    public final Pose gate = new Pose(18,64.8,Math.toRadians(180));
+    public final Pose pickUpGate = new Pose(11.7, 59.5, Math.toRadians(130));
     public final Pose humanPlayer = new Pose(11.5,8.1,Math.toRadians(180));
     public final Pose eatLeftoverGate = new Pose(7.8,45.5);
     public final Pose humanPlayerControlPose = new Pose(30,18);
