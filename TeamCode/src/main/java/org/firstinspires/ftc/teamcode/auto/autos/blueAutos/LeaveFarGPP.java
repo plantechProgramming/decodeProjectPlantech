@@ -20,48 +20,48 @@ import dev.nextftc.ftc.NextFTCOpMode;
 
 @Autonomous(name = "Leave Far PPG Blue",group = "Blue")
 public class LeaveFarGPP extends NextFTCOpMode {
-    private Follower follower;
-
-    public LeaveFarGPP() {
-        addComponents(
-//                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
-                new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE_BLUE
-        );
-    }
-
-    AutoCommands command = AutoCommands.INSTANCE_BLUE;
-    PathsBlue path;
-    ReadWrite readWrite = new ReadWrite();
-
-
-    public Command autoRoutine(){
-        return new SequentialGroup(
-                command.startShooter(true),
-                new Delay(2.5),
-                command.score(path.scorePreloadFar),
-                command.intake(path.grabGPPFar),
-                command.score(path.scoreGPPFar),
-                new FollowPath(path.scoreLeaveFar)
-        );
-    }
-    @Override
-    public void onUpdate(){
-        telemetry.addData("x", follower().getPose().getX());
-        telemetry.addData("y", follower().getPose().getY());
-        telemetry.addData("heading", follower().getPose().getHeading());
-        telemetry.update();
-    }
-    @Override
-    public void onStartButtonPressed() {
-        path = new PathsBlue();
-        follower().setStartingPose(path.getSPoseFar());
-        path.buildPaths(follower());
-        autoRoutine().schedule();
-    }
-    @Override
-    public void onStop(){
-        ReadWrite readWrite = new ReadWrite();
-        readWrite.writePose(follower().getPose());
-    }
+//    private Follower follower;
+//
+//    public LeaveFarGPP() {
+//        addComponents(
+////                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
+//                new PedroComponent(Constants::createFollower),
+//                AutoCommands.INSTANCE_BLUE
+//        );
+//    }
+//
+//    AutoCommands command = AutoCommands.INSTANCE_BLUE;
+//    PathsBlue path;
+//    ReadWrite readWrite = new ReadWrite();
+//
+//
+//    public Command autoRoutine(){
+//        return new SequentialGroup(
+//                command.startShooter(true),
+//                new Delay(2.5),
+//                command.score(path.scorePreloadFar),
+//                command.intake(path.grabGPPFar),
+//                command.score(path.scoreGPPFar),
+//                new FollowPath(path.scoreLeaveFar)
+//        );
+//    }
+//    @Override
+//    public void onUpdate(){
+//        telemetry.addData("x", follower().getPose().getX());
+//        telemetry.addData("y", follower().getPose().getY());
+//        telemetry.addData("heading", follower().getPose().getHeading());
+//        telemetry.update();
+//    }
+//    @Override
+//    public void onStartButtonPressed() {
+//        path = new PathsBlue();
+//        follower().setStartingPose(path.getSPoseFar());
+//        path.buildPaths(follower());
+//        autoRoutine().schedule();
+//    }
+//    @Override
+//    public void onStop(){
+//        ReadWrite readWrite = new ReadWrite();
+//        readWrite.writePose(follower().getPose());
+//    }
 }

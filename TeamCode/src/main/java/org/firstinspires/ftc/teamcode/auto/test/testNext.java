@@ -1,63 +1,53 @@
 package org.firstinspires.ftc.teamcode.auto.test;
 
-
-import static dev.nextftc.extensions.pedro.PedroComponent.follower;
-
-import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
-import com.pedropathing.paths.PathChain;
+import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.commands.Commands;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.pedropathing.ivy.Scheduler;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.auto.AutoCommands;
-import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
-import org.firstinspires.ftc.teamcode.auto.subsystems.NextInBetween;
+import static com.pedropathing.ivy.Scheduler.schedule;
+import static com.pedropathing.ivy.commands.Commands.*;
+import static com.pedropathing.ivy.groups.Groups.*;
+
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextIntake;
-import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
 
-import dev.nextftc.core.commands.Command;
-import dev.nextftc.core.commands.delays.Delay;
-import dev.nextftc.core.commands.groups.ParallelGroup;
-import dev.nextftc.core.commands.groups.ParallelRaceGroup;
-import dev.nextftc.core.commands.groups.SequentialGroup;
-import dev.nextftc.core.components.SubsystemComponent;
-import dev.nextftc.extensions.pedro.FollowPath;
-import dev.nextftc.extensions.pedro.PedroComponent;
-import dev.nextftc.ftc.NextFTCOpMode;
-import dev.nextftc.ftc.components.BulkReadComponent;
-import dev.nextftc.core.commands.CommandManager;
-@Autonomous(name = "test Next",group = "tests")
-public class testNext extends NextFTCOpMode {
-
-
-    public testNext() {
-        addComponents(
-                BulkReadComponent.INSTANCE,
-                AutoCommands.INSTANCE_BLUE,
-                new SubsystemComponent(
-                        NextInBetween.INSTANCE,
-                        NextIntake.INSTANCE
-                )
-        );
-
-    }
-    AutoCommands command = AutoCommands.INSTANCE_BLUE;
-
-
-    private Command autonomousRoutine() {
-        return new SequentialGroup(
-                command.startShooter(false),
-                NextIntake.INSTANCE.take(),
-                NextInBetween.INSTANCE.inBetweenInFull()
-
-        );
-    }
+//@Autonomous(name="testNext", group="test")
+@TeleOp
+public class testNext extends LinearOpMode {
+    DcMotorEx intake;
     @Override
-    public void onStartButtonPressed() {
-        autonomousRoutine().schedule();
+    public void runOpMode() {
+        intake = hardwareMap.get(DcMotorEx.class, "Intake");
+        NextIntake intake = new NextIntake(hardwareMap);
+        intake.stop();
+        //Since the scheduler is static, we need to reset it before each OpMode
+        //so commands don't carry over from one OpMode to the next
+//        Scheduler.reset();
+        // Initialize hardware
+//        Servo claw = hardwareMap.get(Servo.class, "claw");
+        // Define commands
+//        Command raiseArm = Command.build()
+//                .setExecute(() -> armMotor.setPower(0.5))
+//                .setDone(() -> armMotor.getCurrentPosition() > 1000)
+//                .setEnd(endCondition -> armMotor.setPower(0))
+//                .requiring(armMotor);
+        // Compose: raise the arm, wait 200ms, then open the claw
+//        Command sequence = sequential(
+//            pickUp
+//        );
+//        schedule(Commands.instant(() -> intake.setPower(1.0)));
+        telemetry.addLine("aaaaaa");
+        telemetry.update();
+        waitForStart();
+        // Schedule the sequence when the OpMode starts
+        while (opModeIsActive()) {
+            // Run the scheduler each loop
+            Scheduler.execute();
+        }
     }
-
 }

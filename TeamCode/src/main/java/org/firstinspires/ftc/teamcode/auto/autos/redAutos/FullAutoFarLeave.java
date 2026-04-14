@@ -20,56 +20,56 @@ import dev.nextftc.ftc.NextFTCOpMode;
 
 @Autonomous(name = "Full Far Red leave", group = "Red")
 public class FullAutoFarLeave extends NextFTCOpMode {
-
-    public FullAutoFarLeave() {
-        addComponents(
-                new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE_RED
-        );
-    }
-
-    AutoCommands command = AutoCommands.INSTANCE_RED;
-    PathsRed path;
-
-
-    public Command autoRoutine(){
-        return new SequentialGroup(
-                command.startShooter(true),
-                command.score(path.scorePreloadFar),
-
-                command.intake(path.grabGPPFar),
-                command.score(path.scoreGPPFar),
-
-                command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.6),
-                command.score(path.scoreLeftoverBallsGate),
-
-                new FollowPath(path.scoreLeaveFar)
-        );
-    }
-
-    @Override
-    public void onUpdate(){
-        telemetry.addData("x", follower().getPose().getX());
-        telemetry.addData("y", follower().getPose().getY());
-        telemetry.addData("heading", follower().getPose().getHeading());
-        telemetry.update();
-    }
-    @Override
-    public void onStartButtonPressed() {
-        path = new PathsRed();
-        follower().setStartingPose(path.getSPoseFar());
-        path.buildPaths(follower());
-//        telemetry.addData("start x", follower().getPose().getX());
-//        telemetry.addData("start y", follower().getPose().getY());
-//        telemetry.addData("start heading", follower().getPose().getHeading());
+//
+//    public FullAutoFarLeave() {
+//        addComponents(
+//                new PedroComponent(Constants::createFollower),
+//                AutoCommands.INSTANCE_RED
+//        );
+//    }
+//
+//    AutoCommands command = AutoCommands.INSTANCE_RED;
+//    PathsRed path;
+//
+//
+//    public Command autoRoutine(){
+//        return new SequentialGroup(
+//                command.startShooter(true),
+//                command.score(path.scorePreloadFar),
+//
+//                command.intake(path.grabGPPFar),
+//                command.score(path.scoreGPPFar),
+//
+//                command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.6),
+//                command.score(path.scoreLeftoverBallsGate),
+//
+//                new FollowPath(path.scoreLeaveFar)
+//        );
+//    }
+//
+//    @Override
+//    public void onUpdate(){
+//        telemetry.addData("x", follower().getPose().getX());
+//        telemetry.addData("y", follower().getPose().getY());
+//        telemetry.addData("heading", follower().getPose().getHeading());
 //        telemetry.update();
-        autoRoutine().schedule();
-    }
-
-
-    @Override
-    public void onStop(){
-        ReadWrite readWrite = new ReadWrite();
-        readWrite.writePose(follower().getPose());
-    }
+//    }
+//    @Override
+//    public void onStartButtonPressed() {
+//        path = new PathsRed();
+//        follower().setStartingPose(path.getSPoseFar());
+//        path.buildPaths(follower());
+////        telemetry.addData("start x", follower().getPose().getX());
+////        telemetry.addData("start y", follower().getPose().getY());
+////        telemetry.addData("start heading", follower().getPose().getHeading());
+////        telemetry.update();
+//        autoRoutine().schedule();
+//    }
+//
+//
+//    @Override
+//    public void onStop(){
+//        ReadWrite readWrite = new ReadWrite();
+//        readWrite.writePose(follower().getPose());
+//    }
 }

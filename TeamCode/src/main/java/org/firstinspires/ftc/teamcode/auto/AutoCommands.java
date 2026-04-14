@@ -1,14 +1,22 @@
 package org.firstinspires.ftc.teamcode.auto;
 
+import static com.pedropathing.ivy.commands.Commands.waitMs;
+import static com.pedropathing.ivy.groups.Groups.parallel;
+import static com.pedropathing.ivy.groups.Groups.sequential;
+import static com.pedropathing.ivy.pedro.PedroCommands.follow;
+
 import com.pedropathing.follower.Follower;
 import com.pedropathing.ftc.PoseConverter;
 import com.pedropathing.geometry.CoordinateSystem;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.ivy.CommandBuilder;
+import com.pedropathing.ivy.Command;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
@@ -22,7 +30,6 @@ import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
 import java.nio.channels.NetworkChannel;
 import java.security.PublicKey;
 
-import dev.nextftc.core.commands.Command;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
@@ -33,86 +40,73 @@ import dev.nextftc.ftc.NextFTCOpMode;
 import dev.nextftc.ftc.components.BulkReadComponent;
 import dev.nextftc.hardware.impl.MotorEx;
 
-public class AutoCommands implements Component{
+public class AutoCommands{
     NextShooter shooter;
     NextIntake intake;
     NextInBetween inBetween;
-    NextTurret turret;
     Follower follower;
-    String team;
-    public static final AutoCommands INSTANCE_RED = new AutoCommands("RED");
-    public static final AutoCommands INSTANCE_BLUE = new AutoCommands("BLUE");
     Utils util = new Utils();
 
-    public AutoCommands(Follower follower) {
-        shooter = new NextShooter();
-        intake = new NextIntake();
-        inBetween = new NextInBetween();
-        turret = new NextTurret();
+    public AutoCommands(Follower follower, HardwareMap hardwareMap) {
+        shooter = new NextShooter(hardwareMap);
+        intake = new NextIntake(hardwareMap);
+        inBetween = new NextInBetween(hardwareMap);
         this.follower = follower;
-    }
-
-    public AutoCommands(String team){
-        shooter = new NextShooter();
-        intake = new NextIntake();
-        inBetween = new NextInBetween();
-        turret = new NextTurret();
-        this.team = team;
     }
 
 
     public Command shoot(){
-        return new SequentialGroup(
+        return sequential(
                 inBetween.inBetweenInFull(),
                 intake.take()
         );
     }
 
     public Command score(PathChain path){
-        return new SequentialGroup(
-                new FollowPath(path),
+        return sequential(
+                follow(follower, path),
                 shoot(),
-                new Delay(0.9)
+                waitMs(900)
         );
     }
 
     public Command scoreWithDelay(PathChain path, double delay){
-        return new SequentialGroup(
-                new FollowPath(path),
+        return sequential(
+                follow(follower, path),
                 shoot(),
-                new Delay(delay)
+                waitMs(delay)
         );
     }
 
     public Command intake(PathChain grabPath){
-        return new SequentialGroup(
+        return sequential(
                 inBetween.inBetweenInPart(),
                 intake.take(),
-                new FollowPath(grabPath),
+                follow(follower, grabPath),
                 stopAll()
         );
     }
     public Command intakeWithSpeed(PathChain grabPath, double speed){
-        return new SequentialGroup(
+        return sequential(
                 inBetween.inBetweenInPart(),
                 intake.take(),
-                new FollowPath(grabPath, true, speed),
+                follow(follower, grabPath, speed),
                 stopAll()
         );
     }
 
     public Command intakeAndShoot(PathChain grabAndShootPath){
-        return new SequentialGroup(
+        return sequential(
                 inBetween.inBetweenInPart(),
                 intake.take(),
-                new FollowPath(grabAndShootPath),
+                follow(follower, grabAndShootPath),
                 shoot(),
-                new Delay(1.6)
+                waitMs(1600)
         );
     }
 
     public Command startShooter(boolean far){
-        return new SequentialGroup(
+        return sequential(
                 shooter.naiveShooter(far)
 //                intake.take(),
 //                inBetween.inBetweenInPart()
@@ -120,40 +114,25 @@ public class AutoCommands implements Component{
     }
 
     public Command stopAll(){
-        return new ParallelGroup(
+        return parallel(
                 intake.stop(),
                 inBetween.stop()
         );
     }
 
     public Command take(){
-        return new ParallelGroup(
+        return parallel(
                 inBetween.inBetweenInPart(),
                 intake.take()
         );
     }
-    public Command turnTurret(){
-        Pose pose = follower.getPose();
-        Pose2D ftcPose = util.PedroPoseConverter(pose);
-        double heading = ftcPose.getHeading(AngleUnit.DEGREES);
-        return turret.turnToDeg(heading);
-    }
 
-    @Override
-    public void postUpdate(){
-        shooter.Periodic();
-    }
-    public Command turnTurretToGoal(){
-        Pose pose = follower.getPose();
-        Pose2D ftcPose = util.PedroPoseConverter(pose);
-        return turret.turnToDeg(util.getPointToGoalAngle(ftcPose,team));
-    }
-    @Override
-    public void postInit(){
-        shooter.stop();
-        inBetween.stop();
-        intake.stop();
-    }
+//    @Override
+//    public void postInit(){
+//        shooter.stop();
+//        inBetween.stop();
+//        intake.stop();
+//    }
 
 }
 

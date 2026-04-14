@@ -19,44 +19,44 @@ import dev.nextftc.ftc.NextFTCOpMode;
 
 @Autonomous(name = "Leave Far Red",group = "Red")
 public class LeaveFarRed extends NextFTCOpMode {
-    private Follower follower;
-
-    public LeaveFarRed() {
-        addComponents(
-//                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
-                new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE_RED
-        );
-    }
-
-    AutoCommands command = AutoCommands.INSTANCE_RED;
-    PathsRed path;
-    ReadWrite readWrite = new ReadWrite();
-
-    private final Pose startPose = new Pose(56.15, 8.4, Math.toRadians(90)); // Start Pose of our robot.
-
-
-    public Command autoRoutine() {
-        return new FollowPath(path.leaveFar);
-    }
-    @Override
-    public void onUpdate(){
-        telemetry.addData("x", follower().getPose().getX());
-        telemetry.addData("y", follower().getPose().getY());
-        telemetry.addData("heading", follower().getPose().getHeading());
-        telemetry.update();
-    }
-    @Override
-    public void onStartButtonPressed() {
-        path = new PathsRed();
-        follower().setStartingPose(path.getSPoseFar());
-        path.buildPaths(follower());
-        autoRoutine().schedule();
-    }
-    @Override
-    public void onStop(){
-        ReadWrite readWrite = new ReadWrite();
-        readWrite.writePose(follower().getPose());
-    }
+//    private Follower follower;
+//
+//    public LeaveFarRed() {
+//        addComponents(
+////                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
+//                new PedroComponent(Constants::createFollower),
+//                AutoCommands.INSTANCE_RED
+//        );
+//    }
+//
+//    AutoCommands command = AutoCommands.INSTANCE_RED;
+//    PathsRed path;
+//    ReadWrite readWrite = new ReadWrite();
+//
+//    private final Pose startPose = new Pose(56.15, 8.4, Math.toRadians(90)); // Start Pose of our robot.
+//
+//
+//    public Command autoRoutine() {
+//        return new FollowPath(path.leaveFar);
+//    }
+//    @Override
+//    public void onUpdate(){
+//        telemetry.addData("x", follower().getPose().getX());
+//        telemetry.addData("y", follower().getPose().getY());
+//        telemetry.addData("heading", follower().getPose().getHeading());
+//        telemetry.update();
+//    }
+//    @Override
+//    public void onStartButtonPressed() {
+//        path = new PathsRed();
+//        follower().setStartingPose(path.getSPoseFar());
+//        path.buildPaths(follower());
+//        autoRoutine().schedule();
+//    }
+//    @Override
+//    public void onStop(){
+//        ReadWrite readWrite = new ReadWrite();
+//        readWrite.writePose(follower().getPose());
+//    }
 
 }

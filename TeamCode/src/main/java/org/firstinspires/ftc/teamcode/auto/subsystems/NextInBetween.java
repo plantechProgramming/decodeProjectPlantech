@@ -1,66 +1,76 @@
 package org.firstinspires.ftc.teamcode.auto.subsystems;
 
-import dev.nextftc.core.commands.Command;
+import static com.pedropathing.ivy.groups.Groups.parallel;
+
+import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.commands.Commands;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 import dev.nextftc.core.commands.groups.ParallelGroup;
-import dev.nextftc.core.subsystems.Subsystem;
-import dev.nextftc.hardware.impl.CRServoEx;
-import dev.nextftc.hardware.impl.MotorEx;
 import dev.nextftc.hardware.powerable.SetPower;
 
+public class NextInBetween{
+    CRServo sl, sr;
+    DcMotorEx inBetweenMotor;
+    double IN_POWER = 1;
+    double OUT_POWER = -0.5;
+    double STOP_POWER = 0;
+    double STOP_POWER_MOTOR = 0;
+    double IN_POWER_MOTOR = 0.95;
 
-public class NextInBetween implements Subsystem {
-    public static final NextInBetween INSTANCE = new NextInBetween();
-    public NextInBetween(){}
-    CRServoEx sl = new CRServoEx("SIBL",-1)
-            ,sr = new CRServoEx("SIBR",-1); // ib = inbetween, s = shooter
+    public NextInBetween(HardwareMap hardwareMap){
+        initHardware(hardwareMap);
+    }
 
-    MotorEx inbetweenMotor = new MotorEx("inbetween", -1);
+    private void initHardware(HardwareMap hardwareMap){
+        inBetweenMotor = hardwareMap.get(DcMotorEx.class, "inbetween");
+        inBetweenMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        inBetweenMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        inBetweenMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        sl = hardwareMap.get(CRServo.class,"SIBR");
+        sr = hardwareMap.get(CRServo.class,"SIBL");
+    }
     public Command inBetweenInFull(){
-        return new ParallelGroup(
-                new SetPower(inbetweenMotor, -0.95),
-                new SetPower(sr, -1),
-                new SetPower(sl, 1)
+        return parallel(
+                inShooterPrimers(),
+                setMotorPowerAsCommand(IN_POWER_MOTOR)
         );
     }
 
     public Command inBetweenInPart(){
-        return new ParallelGroup(
-                new SetPower(inbetweenMotor, -0.95),
-//                new NextInBetween().stopShooterPrimers()
-                new SetPower(sr, 0.5),
-                new SetPower(sl, -0.5)
+        return parallel(
+                setPrimerPowerAsCommand(OUT_POWER),
+                setMotorPowerAsCommand(IN_POWER_MOTOR)
         );
-    }
-
-    public Command inBetweenOut() {
-        return new ParallelGroup(
-                new SetPower(inbetweenMotor, 0.95),
-                new SetPower(sr, 1),
-                new SetPower(sl, -1)
-        );
-
     }
 
     public Command stop(){
-        return new ParallelGroup(
-                new SetPower(inbetweenMotor, 0),
-                new SetPower(sr, 0),
-                new SetPower(sl, 0)
+        return parallel(
+                stopShooterPrimers(),
+                setMotorPowerAsCommand(STOP_POWER_MOTOR)
         );
     }
 
     public Command stopShooterPrimers(){
-        return new ParallelGroup(
-                new SetPower(sl,0),
-                new SetPower(sr,0)
-        );
+        return setPrimerPowerAsCommand(STOP_POWER);
     }
     public Command inShooterPrimers(){
-        return new ParallelGroup(
-                new SetPower(sl,1),
-                new SetPower(sr,-1)
+        return setPrimerPowerAsCommand(IN_POWER);
+    }
+
+    public Command setPrimerPowerAsCommand(double pow){
+        return parallel(
+                Commands.instant(()->sl.setPower(-pow)),
+                Commands.instant(()->sr.setPower(pow))
         );
     }
 
+    public Command setMotorPowerAsCommand(double pow){
+        return Commands.instant(()->inBetweenMotor.setPower(pow));
+    }
 }
