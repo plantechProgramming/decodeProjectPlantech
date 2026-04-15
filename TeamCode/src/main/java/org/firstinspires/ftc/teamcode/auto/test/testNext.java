@@ -17,37 +17,29 @@ import static com.pedropathing.ivy.groups.Groups.*;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextIntake;
 
 //@Autonomous(name="testNext", group="test")
-@TeleOp
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class testNext extends LinearOpMode {
     DcMotorEx intake;
     @Override
     public void runOpMode() {
-        intake = hardwareMap.get(DcMotorEx.class, "Intake");
-        NextIntake intake = new NextIntake(hardwareMap);
-        intake.stop();
-        //Since the scheduler is static, we need to reset it before each OpMode
-        //so commands don't carry over from one OpMode to the next
 //        Scheduler.reset();
-        // Initialize hardware
-//        Servo claw = hardwareMap.get(Servo.class, "claw");
-        // Define commands
-//        Command raiseArm = Command.build()
-//                .setExecute(() -> armMotor.setPower(0.5))
-//                .setDone(() -> armMotor.getCurrentPosition() > 1000)
-//                .setEnd(endCondition -> armMotor.setPower(0))
-//                .requiring(armMotor);
-        // Compose: raise the arm, wait 200ms, then open the claw
-//        Command sequence = sequential(
-//            pickUp
-//        );
-//        schedule(Commands.instant(() -> intake.setPower(1.0)));
-        telemetry.addLine("aaaaaa");
-        telemetry.update();
+
+        DcMotorEx intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
+        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        NextIntake intake = new NextIntake(hardwareMap);
+
         waitForStart();
+        Command test = Commands.instant(()->intakeMotor.setPower(0.5));
+//        Scheduler.schedule(test);
         // Schedule the sequence when the OpMode starts
         while (opModeIsActive()) {
             // Run the scheduler each loop
-            Scheduler.execute();
+//            Scheduler.execute();
+            telemetry.addLine("aaaaaa");
+            telemetry.update();
         }
     }
 }

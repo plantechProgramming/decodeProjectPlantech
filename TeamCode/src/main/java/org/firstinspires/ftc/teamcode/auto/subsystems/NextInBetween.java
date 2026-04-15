@@ -35,6 +35,7 @@ public class NextInBetween{
         sl = hardwareMap.get(CRServo.class,"SIBR");
         sr = hardwareMap.get(CRServo.class,"SIBL");
     }
+
     public Command inBetweenInFull(){
         return parallel(
                 inShooterPrimers(),
@@ -59,6 +60,7 @@ public class NextInBetween{
     public Command stopShooterPrimers(){
         return setPrimerPowerAsCommand(STOP_POWER);
     }
+
     public Command inShooterPrimers(){
         return setPrimerPowerAsCommand(IN_POWER);
     }

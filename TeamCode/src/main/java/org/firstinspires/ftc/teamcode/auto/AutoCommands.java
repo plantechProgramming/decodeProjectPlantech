@@ -127,13 +127,6 @@ public class AutoCommands{
         );
     }
 
-//    @Override
-//    public void postInit(){
-//        shooter.stop();
-//        inBetween.stop();
-//        intake.stop();
-//    }
-
 }
 
 
