@@ -16,6 +16,7 @@ import static com.pedropathing.ivy.commands.Commands.*;
 import static com.pedropathing.ivy.groups.Groups.*;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextInBetween;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextIntake;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
@@ -41,11 +42,11 @@ public class testNext extends LinearOpMode {
         );
         Scheduler.reset();
         waitForStart();
-        shooter.periodic();
         Scheduler.schedule(test);
         // Schedule the sequence when the OpMode starts
         while (opModeIsActive()) {
             // Run the scheduler each loop
+            shooter.periodic(); //TODO: make this work when scheduled
             shooter.updateTelemetry(telemetry);
             shooter.updateTelemetry(dashboardTelemetry);
             Scheduler.execute();

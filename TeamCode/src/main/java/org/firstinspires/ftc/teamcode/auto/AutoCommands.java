@@ -54,6 +54,9 @@ public class AutoCommands{
         this.follower = follower;
     }
 
+    public void periodic(){
+        shooter.periodic();
+    }
 
     public Command shoot(){
         return sequential(
@@ -106,7 +109,7 @@ public class AutoCommands{
     }
 
     public Command startShooter(boolean far){
-        return sequential(
+        return parallel(
                 shooter.naiveShooter(far)
 //                intake.take(),
 //                inBetween.inBetweenInPart()
