@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.test;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.commands.Commands;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -14,32 +15,41 @@ import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.commands.Commands.*;
 import static com.pedropathing.ivy.groups.Groups.*;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.auto.subsystems.NextInBetween;
 import org.firstinspires.ftc.teamcode.auto.subsystems.NextIntake;
+import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
 
 //@Autonomous(name="testNext", group="test")
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp
+@TeleOp
 public class testNext extends LinearOpMode {
-    DcMotorEx intake;
+    Telemetry dashboardTelemetry;
     @Override
     public void runOpMode() {
-//        Scheduler.reset();
-
-        DcMotorEx intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
-        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        Scheduler.reset();
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        dashboardTelemetry = dashboard.getTelemetry();
 
         NextIntake intake = new NextIntake(hardwareMap);
+        NextShooter shooter = new NextShooter(hardwareMap);
+        NextInBetween inBetween = new NextInBetween(hardwareMap);
+
+        Command test = parallel(
+                intake.take(),
+                shooter.naiveShooter(false),
+                inBetween.inBetweenInFull()
+        );
 
         waitForStart();
-        Command test = Commands.instant(()->intakeMotor.setPower(0.5));
-//        Scheduler.schedule(test);
+
+        Scheduler.schedule(test);
         // Schedule the sequence when the OpMode starts
         while (opModeIsActive()) {
             // Run the scheduler each loop
-//            Scheduler.execute();
-            telemetry.addLine("aaaaaa");
-            telemetry.update();
+            shooter.periodic();
+            shooter.updateTelemetry(telemetry);
+            shooter.updateTelemetry(dashboardTelemetry);
+            Scheduler.execute();
         }
     }
 }

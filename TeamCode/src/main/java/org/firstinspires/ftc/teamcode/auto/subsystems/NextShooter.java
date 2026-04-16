@@ -48,6 +48,8 @@ public class NextShooter{
     double wantedPow;
     public static double farPow = 0.541;
     public static double closePow = 0.387;
+
+    // TODO: tune
     PID controller = new PID(kP,kI,kD,kF);
 
     public Command naiveShooter(boolean far) {
@@ -64,6 +66,10 @@ public class NextShooter{
     public void updateTelemetry(Telemetry telemetry){
         telemetry.addData("current pow",getCurPower());
         telemetry.addData("wanted pow", wantedPow);
+        telemetry.addData("wanted v", wantedPow*MAX_RPM);
+        telemetry.addData("cur v", shooterVel.getVelocityFilter());
+        telemetry.addData("pid wanted", controller.wanted);
+        telemetry.addData("pow motor", shootMotor.getPower());
         telemetry.update();
     }
 
@@ -79,6 +85,8 @@ public class NextShooter{
     }
 
     public void periodic(){
-        controller.update(getCurPower());
+        double cur = controller.update(getCurPower());
+        shootMotor.setPower(cur);
+        shootMotorOp.setPower(-cur);
     }
 }
