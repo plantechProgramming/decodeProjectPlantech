@@ -23,10 +23,10 @@ import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
 //@Autonomous(name="testNext", group="test")
 @TeleOp
 public class testNext extends LinearOpMode {
+
     Telemetry dashboardTelemetry;
     @Override
     public void runOpMode() {
-        Scheduler.reset();
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
 
@@ -39,14 +39,13 @@ public class testNext extends LinearOpMode {
                 shooter.naiveShooter(false),
                 inBetween.inBetweenInFull()
         );
-
+        Scheduler.reset();
         waitForStart();
-
+        shooter.periodic();
         Scheduler.schedule(test);
         // Schedule the sequence when the OpMode starts
         while (opModeIsActive()) {
             // Run the scheduler each loop
-            shooter.periodic();
             shooter.updateTelemetry(telemetry);
             shooter.updateTelemetry(dashboardTelemetry);
             Scheduler.execute();

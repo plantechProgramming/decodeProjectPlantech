@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.auto.subsystems;
 
 
+import static com.pedropathing.ivy.commands.Commands.infinite;
 import static com.pedropathing.ivy.groups.Groups.parallel;
 
 import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kD;
@@ -58,9 +59,7 @@ public class NextShooter{
         } else {
             wantedPow = closePow;
         }
-        controller.setWanted(wantedPow);
-        double output = controller.update(getCurPower());
-        return setShooterPowerAsCommand(output);
+        return Commands.instant(()->controller.setWanted(wantedPow));
     }
 
     public void updateTelemetry(Telemetry telemetry){
@@ -79,14 +78,18 @@ public class NextShooter{
                 Commands.instant(()->shootMotorOp.setPower(-pow))
         );
     }
-
     public double getCurPower(){
         return shooterVel.getVelocityFilter()/MAX_RPM;
     }
 
     public void periodic(){
-        double cur = controller.update(getCurPower());
-        shootMotor.setPower(cur);
-        shootMotorOp.setPower(-cur);
+        double output = controller.update(getCurPower());
+//        return infinite(() -> {setPower(output);});
+        setPower(output);
+    }
+
+    public void setPower(double pow){
+        shootMotor.setPower(pow);
+        shootMotorOp.setPower(-pow);
     }
 }
