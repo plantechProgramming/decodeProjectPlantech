@@ -7,6 +7,7 @@ import com.bylazar.gamepad.PanelsGamepad;
 import com.bylazar.panels.Panels;
 import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -38,6 +39,7 @@ public abstract class OpMode extends LinearOpMode {
     protected CameraName camera;
     protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight,inBetweenMotor, EH, EA,SU,SD, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
     protected ElapsedTime runtime = new ElapsedTime();
+    protected Limelight3A ll;
     public boolean liftFlag = false;
     protected Telemetry dashboardTelemetry;
     protected GoBildaPinpointDriver odometry;
@@ -111,10 +113,13 @@ public abstract class OpMode extends LinearOpMode {
 //        odometry.resetPosAndIMU();
 
         // until we find the fucking camera we can't scan it and add it to robot config :(((
-        camera = hardwareMap.get(CameraName.class,"webcam");
+//        camera = hardwareMap.get(CameraName.class,"webcam");
+        ll = hardwareMap.get(Limelight3A.class,"limelight");
+//        ll.pipelineSwitch(0);
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
+        FtcDashboard.getInstance().startCameraStream(ll, 30);
     }
 
     public DcMotorEx initMotor(String name, boolean encoder, boolean reversed){
@@ -141,13 +146,6 @@ public abstract class OpMode extends LinearOpMode {
         }
 
         end();
-    }
-    public void push(CRServo pushT){
-        double Power = 0.5;
-        if (pushed == false)
-            pushT.setPower(Power);
-        else
-            pushT.setPower(-Power);
     }
 
     protected void postInit() {

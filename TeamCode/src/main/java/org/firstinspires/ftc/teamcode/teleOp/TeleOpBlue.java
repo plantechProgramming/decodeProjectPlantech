@@ -79,7 +79,6 @@ public class TeleOpBlue extends OpMode {
         boolean activatedHold = false;
         boolean aang = false;
         int count = 0;
-        int stopCount = 0;
 //        follower.setStartingPose(readWrite.readPose());
         follower.update();
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
@@ -186,22 +185,16 @@ public class TeleOpBlue extends OpMode {
                 odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0)); //TODO: change for RED
             }
             if(forward == 0 && drift == 0 && turn == 0){
-                stopCount++;
-                tagLocalization.detectTags();
-                if(tagLocalization.goalTag != null && utils.getDistFromGoal(team) < 220){
                     count++;
-                    tagLocalization.getCurrDeg(tagLocalization.goalTag);
                     if(count >= 150 && !gamepad1.right_bumper){
                         double curHeading = tagLocalization.getCurrDeg(tagLocalization.goalTag);
                         odometry.setPosition(new Pose2D(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, curHeading));
                         telemetry.addLine("SET POSITION");
                         count = 0;
                     }
-                }
             }
             else{
                 count = 0;
-                stopCount = 0;
                 tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
             }
 
@@ -227,7 +220,6 @@ public class TeleOpBlue extends OpMode {
         }
 
     }
-
 
     @Override
     protected void end() {
