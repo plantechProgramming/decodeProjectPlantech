@@ -16,12 +16,15 @@ public class LLTest extends OpMode {
         telemetry.setMsTransmissionInterval(11);
         ll.start();
         waitForStart();
+        Limelight limeLight = new Limelight(ll);
 //        shootMotor.setPower(0.6);
 //        shootMotorOp.setPower(-0.6);
         while (opModeIsActive()) {
             LLResult result = ll.getLatestResult();
             if (result != null) {
                 if (result.isValid()) {
+                    limeLight.updateFilter(0.1);
+                    dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingOdoCoords(0.1));
                     Pose3D botpose = result.getBotpose();
 //                    telemetry.addData("tx", result.getTx());
 //                    telemetry.addData("ty", result.getTy());
