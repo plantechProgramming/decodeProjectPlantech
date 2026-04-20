@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.teleOp;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 public class Limelight {
@@ -39,18 +42,17 @@ public class Limelight {
 
     // WORK IN PROGRESS, please dont kill this, i had like 15 min. ill get it done
     // write some pseudo in lessons and stuff
-    double prevHeading = 0;
-    public double getFilteredHeadingOdoCoords(double alpha) throws NullPointerException{
+    public double getFilteredHeadingOdoCoords() throws NullPointerException{
         double heading = getRawHeadingOdoCoords();
-        double filteredHeading = utils.updateWraparoundFilter(alpha, heading, prevHeading);
-        prevHeading = heading;
-        return filteredHeading;
+        Pose2D filteredHeading = utils.medianPose(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, heading));
+//        prevHeading = heading;
+        return filteredHeading.getHeading(AngleUnit.DEGREES);
     }
 
-    public void updateFilter(double alpha) throws NullPointerException{
+    public void updateFilter() throws NullPointerException{
         double heading = getRawHeadingOdoCoords();
-        utils.updateWraparoundFilter(alpha, heading, prevHeading);
-        prevHeading = heading;
+        utils.medianPose(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, heading));
+//        prevHeading = heading;
     }
 
     public double covertLLHeadingToOdo(double heading){

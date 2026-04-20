@@ -143,7 +143,7 @@ public class Utils {
     }
     ArrayList<Double> xPos = new ArrayList<>();
     ArrayList<Double> yPos = new ArrayList<>();
-    ArrayList<Double> headPos = new ArrayList<>();
+    public ArrayList<Double> headPos = new ArrayList<>();
     public Pose2D medianPose(Pose2D pose){
         double filteredX = updateMedian(xPos, pose.getX(DistanceUnit.CM));
         double filteredY = updateMedian(yPos, pose.getY(DistanceUnit.CM));
@@ -184,24 +184,25 @@ public class Utils {
         for (int i = 0; i < numbers.size(); i++){
             // not wrap around, cuz the sort needs that
             diffs.add(getDiffBetweenAngles(angle, numbers.get(i)));
-            filteredDiffs = filter(alpha,diffs.get(diffs.size()-1),filteredDiffsPrev);
+//            filteredDiffs = filter(alpha,diffs.get(diffs.size()-1),filteredDiffsPrev);
         }
+        filteredDiffs = median(numbers);
         double filteredAngle = convertToWrapAroundAngle(angle + filteredDiffs);
-        filteredDiffsPrev = filteredDiffs;
+//        filteredDiffsPrev = filteredDiffs;
         diffs.clear();
         return filteredAngle;
     }
-    double prevFiltererdDiff = 0;
-    public double updateWraparoundFilter(double alpha, double angle, double prevAngle){
-        // new diff  = getDiffBetweenAngles(angle, prevHeading)
-        // filter(alpha,angle - prev,filteredDiffsPrev)
-        //         double filteredAngle = convertToWrapAroundAngle(angle + filteredDiffs);
-        double diff = getDiffBetweenAngles(angle, prevAngle);
-        double filtererdDiff = filter(alpha, diff, prevFiltererdDiff);
-        double filteredAngle = convertToWrapAroundAngle(angle + filtererdDiff);
-        prevFiltererdDiff = filtererdDiff;
-        return filteredAngle;
-    }
+//    double prevFiltererdDiff = 0;
+//    public double updateWraparoundFilter(double alpha, double angle, double prevAngle){
+//        // new diff  = getDiffBetweenAngles(angle, prevHeading)
+//        // filter(alpha,angle - prev,filteredDiffsPrev)
+//        //         double filteredAngle = convertToWrapAroundAngle(angle + filteredDiffs);
+//        double diff = getDiffBetweenAngles(angle, prevAngle);
+//        double filtererdDiff = filter(alpha, diff, prevFiltererdDiff);
+//        double filteredAngle = convertToWrapAroundAngle(angle + filtererdDiff);
+//        prevFiltererdDiff = filtererdDiff;
+//        return filteredAngle;
+//    }
 
     public double getAVG(ArrayList<Double> numbers){
         double sum = 0;

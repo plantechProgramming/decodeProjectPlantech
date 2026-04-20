@@ -43,21 +43,24 @@ import kotlin.contracts.HoldsIn;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOpBlue extends OpMode {
     Follower follower;
-    AprilTagLocalization tagLocalization;
+//    AprilTagLocalization tagLocalization;
+    Limelight limeLight;
     String team = "BLUE"; //TODO: change for BLUE
     @Override
     protected void postInit() {
         odometry.recalibrateIMU();
         follower = Constants.createFollower(hardwareMap);
-        tagLocalization = new AprilTagLocalization(team, telemetry); //TODO: change here for red
-        tagLocalization.initProcessor(hardwareMap);
+//        tagLocalization = new AprilTagLocalization(team, telemetry); //TODO: change here for red
+        limeLight = new Limelight(ll);
+//        tagLocalization.initProcessor(hardwareMap);
 
         // while camera is not awake, sleep
-        while (tagLocalization.visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING){
-            sleep(20);
-        }
-        tagLocalization.applySettings();
+//        while (tagLocalization.visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING){
+//            sleep(20);
+//        }
+//        tagLocalization.applySettings();
         odometry.resetPosAndIMU();
+        limeLight.start();
     }
     public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0); // need to make x bigger because x = forward of robot
     private VisionPortal visionPortal;
@@ -185,17 +188,26 @@ public class TeleOpBlue extends OpMode {
                 odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0)); //TODO: change for RED
             }
             if(forward == 0 && drift == 0 && turn == 0){
+                try{
+                    limeLight.updateFilter();
                     count++;
-                    if(count >= 150 && !gamepad1.right_bumper){
-                        double curHeading = tagLocalization.getCurrDeg(tagLocalization.goalTag);
-                        odometry.setPosition(new Pose2D(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, curHeading));
-                        telemetry.addLine("SET POSITION");
-                        count = 0;
+                }
+                catch (NullPointerException e){
+                    continue;
+                }
+                if(count > 100){
+                    try{
+                        dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingOdoCoords());
                     }
+                    catch (NullPointerException e){
+                        continue;
+                    }
+                }
             }
             else{
                 count = 0;
-                tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
+                utils.headPos.clear();
+//                tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
             }
 
             telemetry.addData("count", count);
@@ -206,8 +218,8 @@ public class TeleOpBlue extends OpMode {
             shooter.setShooterTelemetry(telemetry);
             shooter.setShooterTelemetry(dashboardTelemetry);
 //
-            tagLocalization.setCameraTelemetry(telemetry);
-            tagLocalization.setCameraTelemetry(dashboardTelemetry);
+//            tagLocalization.setCameraTelemetry(telemetry);
+//            tagLocalization.setCameraTelemetry(dashboardTelemetry);
 //
             telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
             dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
