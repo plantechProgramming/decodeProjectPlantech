@@ -184,9 +184,10 @@ public class Utils {
         for (int i = 0; i < numbers.size(); i++){
             // not wrap around, cuz the sort needs that
             diffs.add(getDiffBetweenAngles(angle, numbers.get(i)));
-//            filteredDiffs = filter(alpha,diffs.get(diffs.size()-1),filteredDiffsPrev);
+            filteredDiffs = filter(alpha,diffs.get(diffs.size()-1),filteredDiffsPrev);
         }
-        filteredDiffs = median(numbers);
+//        filteredDiffs = median(numbers);
+//        filteredDiffs = getAVG(numbers);
         double filteredAngle = convertToWrapAroundAngle(angle + filteredDiffs);
 //        filteredDiffsPrev = filteredDiffs;
         diffs.clear();

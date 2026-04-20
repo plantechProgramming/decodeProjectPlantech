@@ -5,6 +5,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.OpMode;
 
@@ -18,11 +19,16 @@ public class LLTest extends OpMode {
         ll.start();
         waitForStart();
         Limelight limeLight = new Limelight(ll);
-//        shootMotor.setPower(0.6);
-//        shootMotorOp.setPower(-0.6);
+        shootMotor.setPower(0.6);
+        shootMotorOp.setPower(-0.6);
         while (opModeIsActive()) {
+            LLResult result = ll.getLatestResult();
             try{
                 limeLight.updateFilter();
+                dashboardTelemetry.addData("raw heading", result.getBotpose().getOrientation().getYaw(AngleUnit.DEGREES));
+                dashboardTelemetry.addData("raw heading", limeLight.getRawHeadingOdoCoords());
+                count++;
+
             }
             catch (NullPointerException e){
                 continue;
@@ -53,7 +59,6 @@ public class LLTest extends OpMode {
 //                dashboardTelemetry.addLine("doesnt see anything :(((");
 //            }
             dashboardTelemetry.update();
-            count++;
         }
     }
 
