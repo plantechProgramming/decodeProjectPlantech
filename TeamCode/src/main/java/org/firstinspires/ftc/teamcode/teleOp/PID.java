@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.teleOp.actions.Turret;
 
 public class PID {
     private static final ElapsedTime timer = new ElapsedTime();
@@ -63,23 +61,6 @@ public class PID {
         if (currentError > 180){
             currentError -= 360;
         }
-        return getPIDPower(currentError);
-    }
-    int prevTurretDir = 0;
-    public double updateTurretDeg(final double current, Turret turret){
-        int currentDir = 0;
-        double currentError = utils.getDiffBetweenAngles(wanted, current);
-
-        if(turret.isCableStretched != 0){
-            currentError = utils.getLongestDiffBetweenAngles(wanted, current);
-            currentDir = (int)Math.signum(currentError);
-
-            if(currentDir != prevTurretDir){
-                currentError = utils.getDiffBetweenAngles(wanted, current);
-//                turret.isCableStretched = 0;
-            }
-        }
-        prevTurretDir = currentDir;
         return getPIDPower(currentError);
     }
 

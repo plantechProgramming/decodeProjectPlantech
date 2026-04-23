@@ -36,14 +36,11 @@ public abstract class OpMode extends LinearOpMode {
 //    protected NormalizedColorSensor colorSensor;
 
     protected CameraName camera;
-    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight,inBetweenMotor, EH, EA,SU,SD, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
-    protected ElapsedTime runtime = new ElapsedTime();
-    public boolean liftFlag = false;
+    protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight,inBetweenMotor, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
     protected Telemetry dashboardTelemetry;
     protected GoBildaPinpointDriver odometry;
     protected IMU Imu;
     public FtcDashboard dashboard;
-    public boolean pushed = false;
     void initialize() {
 
         DriveFrontLeft = hardwareMap.get(DcMotorEx.class, "FL");
@@ -117,8 +114,90 @@ public abstract class OpMode extends LinearOpMode {
         dashboardTelemetry = dashboard.getTelemetry();
     }
 
-    public DcMotorEx initMotor(String name, boolean encoder, boolean reversed){
+    void initDriveTrain(){
+        DriveFrontLeft = hardwareMap.get(DcMotorEx.class, "FL");
+        DriveFrontLeft.setDirection(DcMotorEx.Direction.REVERSE);
+        DriveFrontLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        DriveFrontLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        DriveFrontLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        DriveFrontRight = hardwareMap.get(DcMotorEx.class, "FR");
+        DriveFrontRight.setDirection(DcMotorEx.Direction.FORWARD);
+        DriveFrontRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        DriveFrontRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        DriveFrontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER );
+
+        DriveBackLeft = hardwareMap.get(DcMotorEx.class, "BL");
+        DriveBackLeft.setDirection(DcMotorEx.Direction.REVERSE);
+        DriveBackLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        DriveBackLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        DriveBackLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
+        DriveBackRight = hardwareMap.get(DcMotorEx.class, "BR");
+        DriveBackRight.setDirection(DcMotorEx.Direction.FORWARD);
+        DriveBackRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+    }
+
+    void initIntake(){
+        intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
+        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+    }
+
+    void initInBetween(){
+        shooterIBL = hardwareMap.get(CRServo.class,"SIBR");
+        shooterIBR = hardwareMap.get(CRServo.class,"SIBL");
+
+        inBetweenMotor = hardwareMap.get(DcMotorEx.class, "inbetween");
+        inBetweenMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        inBetweenMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        inBetweenMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    void initShooter(){
+        shootMotor = hardwareMap.get(DcMotorEx.class, "shooter");
+        shootMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        shootMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+        shootMotorOp = hardwareMap.get(DcMotorEx.class, "shooter2");
+        shootMotorOp.setDirection(DcMotorSimple.Direction.FORWARD);
+        shootMotorOp.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    void initIMU(){
+        Imu = hardwareMap.get(IMU.class, "imu");
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP));
+        Imu.initialize(parameters);
+        Imu.resetYaw();
+    }
+
+    void initOdometry(){
+        odometry = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+        odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        odometry.setOffsets(-155,-90, DistanceUnit.MM);
+    }
+
+    void initCamera(){
+        camera = hardwareMap.get(CameraName.class,"webcam");
+    }
+
+    void initDashboard(){
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        dashboardTelemetry = dashboard.getTelemetry();
+    }
+    public DcMotorEx initMotor(String name, boolean encoder, boolean reversed, boolean brake, boolean resetEncoder){
         DcMotorEx motor = hardwareMap.get(DcMotorEx.class,name);
+
+        if(resetEncoder){motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);}
+
+        if(brake){motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
+        else{motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);}
 
         if(encoder) {motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);}
         else {motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);}

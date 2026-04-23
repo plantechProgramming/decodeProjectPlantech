@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
-import org.firstinspires.ftc.teamcode.teleOp.actions.Turret;
 
 @Configurable
 @Config
