@@ -28,19 +28,14 @@ public class LLTest extends OpMode {
                 dashboardTelemetry.addData("raw heading", result.getBotpose().getOrientation().getYaw(AngleUnit.DEGREES));
                 dashboardTelemetry.addData("raw heading", limeLight.getRawHeadingOdoCoords());
                 count++;
-
+                if(count > 100) {
+                    dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingOdoCoords());
+                }
             }
             catch (NullPointerException e){
                 continue;
             }
-            if(count > 100){
-                try{
-                    dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingOdoCoords());
-                }
-                catch (NullPointerException e){
-                    continue;
-                }
-            }
+
 
 //            if (result != null) {
 //                if (result.isValid()) {

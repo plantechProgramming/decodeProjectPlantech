@@ -186,12 +186,31 @@ public class Utils {
             diffs.add(getDiffBetweenAngles(angle, numbers.get(i)));
             filteredDiffs = filter(alpha,diffs.get(diffs.size()-1),filteredDiffsPrev);
         }
-//        filteredDiffs = median(numbers);
-//        filteredDiffs = getAVG(numbers);
+
         double filteredAngle = convertToWrapAroundAngle(angle + filteredDiffs);
-//        filteredDiffsPrev = filteredDiffs;
+        filteredDiffsPrev = filteredDiffs;
         diffs.clear();
         return filteredAngle;
+    }
+
+    public double convertSignedDistToAngle(double dist){
+        if(dist < 0){
+            return 180+dist;
+        }
+        else{
+            return dist-180;
+        }
+    }
+    double prevFiltered = 0;
+    public double updateWraparoundFilter(double angle){
+        double signedDist = getDiffBetweenAngles(angle,180);
+        double filteredSignedDiff = filter(0.1,signedDist,prevFiltered);
+        prevFiltered = filteredSignedDiff;
+        return convertSignedDistToAngle(filteredSignedDiff);
+    }
+
+    public double getWraparoundFilter(){
+        return prevFiltered;
     }
 //    double prevFiltererdDiff = 0;
 //    public double updateWraparoundFilter(double alpha, double angle, double prevAngle){

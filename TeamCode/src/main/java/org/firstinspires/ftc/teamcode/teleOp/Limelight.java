@@ -44,14 +44,14 @@ public class Limelight {
     // write some pseudo in lessons and stuff
     public double getFilteredHeadingOdoCoords() throws NullPointerException{
         double heading = getRawHeadingOdoCoords();
-        Pose2D filteredHeading = utils.medianPose(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, heading));
-//        prevHeading = heading;
-        return filteredHeading.getHeading(AngleUnit.DEGREES);
+//        Pose2D filteredHeading = utils.medianPose(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, heading));
+////        prevHeading = heading;
+        return utils.getWraparoundFilter();
     }
 
     public void updateFilter() throws NullPointerException{
         double heading = getRawHeadingOdoCoords();
-        utils.medianPose(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, heading));
+        utils.updateWraparoundFilter(heading);
 //        prevHeading = heading;
     }
 
