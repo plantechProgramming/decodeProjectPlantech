@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.OpMode;
+import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
 
 @TeleOp
 public class LLTest extends OpMode {
@@ -19,17 +20,19 @@ public class LLTest extends OpMode {
         ll.start();
         waitForStart();
         Limelight limeLight = new Limelight(ll);
-        shootMotor.setPower(0.6);
-        shootMotorOp.setPower(-0.6);
+        Shooter shooter = new Shooter(shootMotor,telemetry,shootMotorOp,odometry);
         while (opModeIsActive()) {
             LLResult result = ll.getLatestResult();
+            shooter.noPhysShootHomeostasis(0.6);
             try{
                 limeLight.updateFilter();
-                dashboardTelemetry.addData("raw heading", result.getBotpose().getOrientation().getYaw(AngleUnit.DEGREES));
-                dashboardTelemetry.addData("raw heading", limeLight.getRawHeadingOdoCoords());
+//                dashboardTelemetry.addData("raw heading", result.getBotpose().getOrientation().getYaw(AngleUnit.DEGREES));
+                dashboardTelemetry.addData("raw heading", limeLight.getRawHeadingLLCoords());
+//                dashboardTelemetry.addData("filtered signed diffs", limeLight.utils.getFilteredSignedDiff());
                 count++;
                 if(count > 100) {
-                    dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingOdoCoords());
+                    dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingLLCoords());
+                    count = 0;
                 }
             }
             catch (NullPointerException e){

@@ -197,7 +197,7 @@ public class TeleOpBlue extends OpMode {
                 }
                 if(count > 100){
                     try{
-                        dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingOdoCoords());
+//                        dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingOdoCoords());
                     }
                     catch (NullPointerException e){
                         continue;

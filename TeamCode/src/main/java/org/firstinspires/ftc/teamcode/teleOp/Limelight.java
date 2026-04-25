@@ -34,28 +34,31 @@ public class Limelight {
         throw new NullPointerException("No valid apriltag found");
     }
 
-    public double getRawHeadingOdoCoords() throws NullPointerException{
+    public double getRawHeadingLLCoords() throws NullPointerException{
         Pose3D botPose = getLatestBotpose();
-        double heading = botPose.getOrientation().getYaw();
-        return covertLLHeadingToOdo(heading);
+        return botPose.getOrientation().getYaw();
+    }
+
+    public double getRawHeadingOdoCoords() throws NullPointerException{
+        return convertLLHeadingToOdo(getRawHeadingLLCoords());
     }
 
     // WORK IN PROGRESS, please dont kill this, i had like 15 min. ill get it done
     // write some pseudo in lessons and stuff
-    public double getFilteredHeadingOdoCoords() throws NullPointerException{
-        double heading = getRawHeadingOdoCoords();
+    public double getFilteredHeadingLLCoords() throws NullPointerException{
+        double heading = getRawHeadingLLCoords();
 //        Pose2D filteredHeading = utils.medianPose(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, heading));
 ////        prevHeading = heading;
         return utils.getWraparoundFilter();
     }
 
     public void updateFilter() throws NullPointerException{
-        double heading = getRawHeadingOdoCoords();
+        double heading = getRawHeadingLLCoords();
         utils.updateWraparoundFilter(heading);
 //        prevHeading = heading;
     }
 
-    public double covertLLHeadingToOdo(double heading){
+    public double convertLLHeadingToOdo(double heading){
         if(heading > 0 && heading < 90) {
             return heading + 90;
         }
