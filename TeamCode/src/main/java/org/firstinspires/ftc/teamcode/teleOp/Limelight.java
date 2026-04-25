@@ -39,25 +39,21 @@ public class Limelight {
         return botPose.getOrientation().getYaw();
     }
 
-    public double getRawHeadingOdoCoords() throws NullPointerException{
-        return convertLLHeadingToOdo(getRawHeadingLLCoords());
+    public double getFilteredHeadingOdoCoords() throws NullPointerException{
+        return convertLLHeadingToOdo(getFilteredHeadingLLCoords());
     }
 
-    // WORK IN PROGRESS, please dont kill this, i had like 15 min. ill get it done
-    // write some pseudo in lessons and stuff
     public double getFilteredHeadingLLCoords() throws NullPointerException{
-        double heading = getRawHeadingLLCoords();
-//        Pose2D filteredHeading = utils.medianPose(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, heading));
-////        prevHeading = heading;
         return utils.getWraparoundFilter();
     }
 
     public void updateFilter() throws NullPointerException{
         double heading = getRawHeadingLLCoords();
         utils.updateWraparoundFilter(heading);
-//        prevHeading = heading;
     }
-
+    public double getRawHeadingOdoCoords() throws NullPointerException{
+        return convertLLHeadingToOdo(getRawHeadingLLCoords());
+    }
     public double convertLLHeadingToOdo(double heading){
         if(heading > 0 && heading < 90) {
             return heading + 90;

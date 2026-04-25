@@ -60,7 +60,6 @@ public class TeleOpBlue extends OpMode {
 //        }
 //        tagLocalization.applySettings();
         odometry.resetPosAndIMU();
-        limeLight.start();
     }
     public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0); // need to make x bigger because x = forward of robot
     private VisionPortal visionPortal;
@@ -91,6 +90,7 @@ public class TeleOpBlue extends OpMode {
         DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        limeLight.start();
 
         while (opModeIsActive() ) {
             elapsedTime.reset();
@@ -189,24 +189,25 @@ public class TeleOpBlue extends OpMode {
             }
             if(forward == 0 && drift == 0 && turn == 0){
                 try{
+                    limeLight.start();
                     limeLight.updateFilter();
+                    dashboardTelemetry.addData("raw heading", limeLight.getRawHeadingLLCoords());
                     count++;
+                    dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingLLCoords());
+                    dashboardTelemetry.addData("odo heading", limeLight.getFilteredHeadingOdoCoords());
+                    if(count > 100) {
+                        // placeholder for reloc code
+                        count = 0;
+                    }
                 }
                 catch (NullPointerException e){
-                    continue;
-                }
-                if(count > 100){
-                    try{
-//                        dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingOdoCoords());
-                    }
-                    catch (NullPointerException e){
-                        continue;
-                    }
+                    telemetry.addLine("no tag detected");
                 }
             }
             else{
                 count = 0;
-                utils.headPos.clear();
+                limeLight.utils.prevFiltered = 0;
+                limeLight.stop();
 //                tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
             }
 
@@ -235,6 +236,6 @@ public class TeleOpBlue extends OpMode {
 
     @Override
     protected void end() {
-
+        limeLight.shutDown();
     }
 }

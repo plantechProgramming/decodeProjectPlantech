@@ -101,11 +101,6 @@ public class DriveTrain {
         double frontRightPower = (rotY - rotX - rx) / denominator;// before - rotX
         double backRightPower = (rotY + rotX - rx) / denominator;// before + rotX
 
-        telemetry.addData("FL", frontLeftPower);
-        telemetry.addData("FR", frontRightPower);
-        telemetry.addData("BR", backRightPower);
-        telemetry.addData("BL", backLeftPower);
-
         FL.setPower(frontLeftPower * slowRatio);
         BL.setPower(backLeftPower * slowRatio);
 
