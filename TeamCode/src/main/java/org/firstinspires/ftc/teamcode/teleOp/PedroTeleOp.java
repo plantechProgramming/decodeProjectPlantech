@@ -7,7 +7,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.teamcode.OpMode;
+import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
 import java.util.function.Supplier;
 @Configurable
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
-public class PedroTeleOp extends OpMode {
+public class PedroTeleOp extends TeamOpMode {
 
     private Follower follower;
     public static Pose startingPose = new Pose(72,72,180);

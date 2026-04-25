@@ -1,34 +1,21 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.bylazar.gamepad.Gamepad;
-import com.bylazar.gamepad.GamepadManager;
-import com.bylazar.gamepad.PanelsGamepad;
-import com.bylazar.panels.Panels;
-import com.bylazar.telemetry.PanelsTelemetry;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
-import org.firstinspires.ftc.teamcode.teleOp.actions.*;
 
 
-public abstract class OpMode extends LinearOpMode {
+public abstract class TeamOpMode extends LinearOpMode {
 
 //    protected CRServo ;
 //    protected Servo roni2_intake,IntakeR;
@@ -114,107 +101,12 @@ public abstract class OpMode extends LinearOpMode {
         dashboardTelemetry = dashboard.getTelemetry();
     }
 
-    void initDriveTrain(){
-        DriveFrontLeft = hardwareMap.get(DcMotorEx.class, "FL");
-        DriveFrontLeft.setDirection(DcMotorEx.Direction.REVERSE);
-        DriveFrontLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        DriveFrontLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        DriveFrontLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-
-        DriveFrontRight = hardwareMap.get(DcMotorEx.class, "FR");
-        DriveFrontRight.setDirection(DcMotorEx.Direction.FORWARD);
-        DriveFrontRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        DriveFrontRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        DriveFrontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER );
-
-        DriveBackLeft = hardwareMap.get(DcMotorEx.class, "BL");
-        DriveBackLeft.setDirection(DcMotorEx.Direction.REVERSE);
-        DriveBackLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        DriveBackLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        DriveBackLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-
-        DriveBackRight = hardwareMap.get(DcMotorEx.class, "BR");
-        DriveBackRight.setDirection(DcMotorEx.Direction.FORWARD);
-        DriveBackRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-    }
-
-    void initIntake(){
-        intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
-        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-    }
-
-    void initInBetween(){
-        shooterIBL = hardwareMap.get(CRServo.class,"SIBR");
-        shooterIBR = hardwareMap.get(CRServo.class,"SIBL");
-
-        inBetweenMotor = hardwareMap.get(DcMotorEx.class, "inbetween");
-        inBetweenMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        inBetweenMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        inBetweenMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    void initShooter(){
-        shootMotor = hardwareMap.get(DcMotorEx.class, "shooter");
-        shootMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        shootMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-
-        shootMotorOp = hardwareMap.get(DcMotorEx.class, "shooter2");
-        shootMotorOp.setDirection(DcMotorSimple.Direction.FORWARD);
-        shootMotorOp.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    void initIMU(){
-        Imu = hardwareMap.get(IMU.class, "imu");
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-                RevHubOrientationOnRobot.UsbFacingDirection.UP));
-        Imu.initialize(parameters);
-        Imu.resetYaw();
-    }
-
-    void initOdometry(){
-        odometry = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
-        odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-        odometry.setOffsets(-155,-90, DistanceUnit.MM);
-    }
-
-    void initCamera(){
-        camera = hardwareMap.get(CameraName.class,"webcam");
-    }
-
-    void initDashboard(){
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        dashboardTelemetry = dashboard.getTelemetry();
-    }
-    public DcMotorEx initMotor(String name, boolean encoder, boolean reversed, boolean brake, boolean resetEncoder){
-        DcMotorEx motor = hardwareMap.get(DcMotorEx.class,name);
-
-        if(resetEncoder){motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);}
-
-        if(brake){motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);}
-        else{motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);}
-
-        if(encoder) {motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);}
-        else {motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);}
-
-        if(reversed){motor.setDirection(DcMotorEx.Direction.REVERSE);}
-        else{motor.setDirection(DcMotorSimple.Direction.FORWARD);}
-
-        return motor;
-    }
-
     @Override
     public void runOpMode() throws InterruptedException  {
         initialize();
         waitForStart();
         postInit();
 
-        dashboard = FtcDashboard.getInstance();
         if (opModeIsActive()) {
             run();
         }

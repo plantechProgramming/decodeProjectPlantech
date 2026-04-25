@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import static com.pedropathing.ivy.groups.Groups.parallel;
 
@@ -10,10 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import dev.nextftc.core.commands.groups.ParallelGroup;
-import dev.nextftc.hardware.powerable.SetPower;
-
-public class NextInBetween{
+public class InBetween {
     CRServo sl, sr;
     DcMotorEx inBetweenMotor;
     double IN_POWER = 1;
@@ -22,7 +19,7 @@ public class NextInBetween{
     double STOP_POWER_MOTOR = 0;
     double IN_POWER_MOTOR = 0.95;
 
-    public NextInBetween(HardwareMap hardwareMap){
+    public InBetween(HardwareMap hardwareMap){
         initHardware(hardwareMap);
     }
 

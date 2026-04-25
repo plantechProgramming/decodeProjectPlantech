@@ -10,22 +10,22 @@ import com.pedropathing.ivy.Command;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.auto.subsystems.NextInBetween;
-import org.firstinspires.ftc.teamcode.auto.subsystems.NextIntake;
-import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
+import org.firstinspires.ftc.teamcode.subsystems.InBetween;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.teleOp.Utils;
 
 public class AutoCommands{
-    NextShooter shooter;
-    NextIntake intake;
-    NextInBetween inBetween;
+    Shooter shooter;
+    Intake intake;
+    InBetween inBetween;
     Follower follower;
     Utils util = new Utils();
 
     public AutoCommands(Follower follower, HardwareMap hardwareMap) {
-        shooter = new NextShooter(hardwareMap);
-        intake = new NextIntake(hardwareMap);
-        inBetween = new NextInBetween(hardwareMap);
+        shooter = new Shooter(hardwareMap);
+        intake = new Intake(hardwareMap);
+        inBetween = new InBetween(hardwareMap);
         this.follower = follower;
     }
 

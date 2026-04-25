@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
-import static com.pedropathing.ivy.groups.Groups.sequential;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -16,17 +14,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
-import org.firstinspires.ftc.teamcode.auto.subsystems.NextInBetween;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
-import org.firstinspires.ftc.teamcode.OpMode;
+import org.firstinspires.ftc.teamcode.TeamOpMode;
 
 import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
-public class TeleOpBlue extends OpMode {
+public class TeleOpBlue extends TeamOpMode {
     Follower follower;
     AprilTagLocalization tagLocalization;
     @Override

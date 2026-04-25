@@ -1,21 +1,12 @@
-package org.firstinspires.ftc.teamcode.auto.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
-
-import static com.pedropathing.ivy.commands.Commands.infinite;
 import static com.pedropathing.ivy.groups.Groups.parallel;
-
 import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kD;
 import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kF;
 import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kI;
 import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kP;
 
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
-import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.ivy.Command;
-import com.pedropathing.ivy.CommandBuilder;
 import com.pedropathing.ivy.commands.Commands;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -25,13 +16,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.teleOp.PID;
 import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
 
-@Configurable
-@Config
-public class NextShooter{
+public class Shooter {
     DcMotorEx shootMotor, shootMotorOp;
     GetVelocity shooterVel;
     double MAX_RPM = 6000;
-    public NextShooter(HardwareMap hardwareMap) {
+    public Shooter(HardwareMap hardwareMap) {
         initHardware(hardwareMap);
         shooterVel = new GetVelocity(shootMotor, 0.1);
     }

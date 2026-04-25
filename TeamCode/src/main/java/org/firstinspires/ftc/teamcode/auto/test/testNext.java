@@ -17,9 +17,9 @@ import static com.pedropathing.ivy.groups.Groups.*;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
-import org.firstinspires.ftc.teamcode.auto.subsystems.NextInBetween;
-import org.firstinspires.ftc.teamcode.auto.subsystems.NextIntake;
-import org.firstinspires.ftc.teamcode.auto.subsystems.NextShooter;
+import org.firstinspires.ftc.teamcode.subsystems.InBetween;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 //@Autonomous(name="testNext", group="test")
 @TeleOp
@@ -31,9 +31,9 @@ public class testNext extends LinearOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
 
-        NextIntake intake = new NextIntake(hardwareMap);
-        NextShooter shooter = new NextShooter(hardwareMap);
-        NextInBetween inBetween = new NextInBetween(hardwareMap);
+        Intake intake = new Intake(hardwareMap);
+        Shooter shooter = new Shooter(hardwareMap);
+        InBetween inBetween = new InBetween(hardwareMap);
 
         Command test = parallel(
                 intake.take(),

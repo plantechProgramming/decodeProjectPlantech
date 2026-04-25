@@ -1,20 +1,17 @@
-package org.firstinspires.ftc.teamcode.auto.subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.pedropathing.ivy.Command;
-import com.pedropathing.ivy.CommandBuilder;
 import com.pedropathing.ivy.commands.Commands;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class NextIntake{
+public class Intake {
     DcMotorEx intakeMotor;
     double STOP_POWER = 0;
     double OUT_POWER = -1;
     double IN_POWER = 1;
-    public NextIntake(HardwareMap hardwareMap) {
+    public Intake(HardwareMap hardwareMap) {
         initHardware(hardwareMap);
     }
 

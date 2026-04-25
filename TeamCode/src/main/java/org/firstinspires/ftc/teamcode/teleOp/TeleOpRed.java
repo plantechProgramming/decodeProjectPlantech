@@ -16,14 +16,14 @@ import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
-import org.firstinspires.ftc.teamcode.OpMode;
+import org.firstinspires.ftc.teamcode.TeamOpMode.TeamOpMode;
 
 import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
-public class TeleOpRed extends OpMode {
+public class TeleOpRed extends TeamOpMode {
     Follower follower;
     AprilTagLocalization tagLocalization;
     @Override
