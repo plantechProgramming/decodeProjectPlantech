@@ -55,11 +55,11 @@ public class Limelight {
         return convertLLHeadingToOdo(getRawHeadingLLCoords());
     }
     public double convertLLHeadingToOdo(double heading){
-        if(heading > 0 && heading < 90) {
-            return heading + 90;
+        if(heading > 90 && heading < 180) {
+            return heading - 270;
         }
         else {
-            return heading - 270;
+            return heading + 90;
         }
     }
 }

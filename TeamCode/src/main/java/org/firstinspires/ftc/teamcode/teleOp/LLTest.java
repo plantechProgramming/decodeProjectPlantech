@@ -17,17 +17,20 @@ public class LLTest extends OpMode {
     @Override
     protected void run() {
         telemetry.setMsTransmissionInterval(11);
-        ll.start();
         waitForStart();
+        ll.start();
         Limelight limeLight = new Limelight(ll);
         Shooter shooter = new Shooter(shootMotor,telemetry,shootMotorOp,odometry);
         while (opModeIsActive()) {
-            shooter.noPhysShootHomeostasis(0.6);
+//            shooter.shooter.setPower(0.6);
+//            shooter.shooter2.setPower(-0.6);
             try{
                 limeLight.updateFilter();
 //                dashboardTelemetry.addData("raw heading", result.getBotpose().getOrientation().getYaw(AngleUnit.DEGREES));
                 dashboardTelemetry.addData("raw heading", limeLight.getRawHeadingLLCoords());
                 dashboardTelemetry.addData("raw odo heading", limeLight.getRawHeadingOdoCoords());
+                dashboardTelemetry.addData("X pos raw", limeLight.getLatestBotpose().getPosition().x);
+                dashboardTelemetry.addData("Y pos raw", limeLight.getLatestBotpose().getPosition().y);
 //                dashboardTelemetry.addData("filtered signed diffs", limeLight.utils.getFilteredSignedDiff());
                 count++;
                 if(count > 100) {
@@ -36,7 +39,8 @@ public class LLTest extends OpMode {
                     count = 0;
                 }
             }
-            catch (NullPointerException ignored){
+            catch (NullPointerException e){
+                telemetry.addLine("no tag detected");
             }
 
 
@@ -56,6 +60,7 @@ public class LLTest extends OpMode {
 //            else{
 //                dashboardTelemetry.addLine("doesnt see anything :(((");
 //            }
+            dashboardTelemetry.addData("count", count);
             dashboardTelemetry.update();
         }
     }

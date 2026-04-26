@@ -205,7 +205,7 @@ public class Utils {
     double filteredSignedDiff;
     public double updateWraparoundFilter(double angle) {
         double signedDist = getDiffBetweenAngles(angle, 180);
-        filteredSignedDiff = filter(0.1, signedDist, prevFiltered);
+        filteredSignedDiff = filter(0.05, signedDist, prevFiltered);
         prevFiltered = filteredSignedDiff;
         return convertSignedDistToAngle(filteredSignedDiff);
     }
