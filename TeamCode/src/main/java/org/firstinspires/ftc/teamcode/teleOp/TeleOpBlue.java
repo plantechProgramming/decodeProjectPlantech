@@ -191,31 +191,31 @@ public class TeleOpBlue extends OpMode {
                 try{
                     limeLight.start();
                     limeLight.updateFilter();
-                    dashboardTelemetry.addData("raw heading", limeLight.getRawHeadingLLCoords());
+//                    dashboardTelemetry.addData("raw heading", limeLight.getRawHeadingLLCoords());
                     count++;
-                    dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingLLCoords());
-                    dashboardTelemetry.addData("odo heading", limeLight.getFilteredHeadingOdoCoords());
-                    if(count > 100) {
+//                    dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingLLCoords());
+//                    dashboardTelemetry.addData("odo heading", limeLight.getFilteredHeadingOdoCoords());
+                    if(count > 50) {
                         odometry.setPosition(new Pose2D(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, limeLight.getFilteredHeadingOdoCoords()));
                         count = 0;
                     }
                 }
                 catch (NullPointerException e){
-                    telemetry.addLine("no tag detected");
+//                    telemetry.addLine("no tag detected");
                 }
             }
             else{
                 count = 0;
                 limeLight.utils.prevFiltered = odometry.getHeading(AngleUnit.DEGREES);
                 limeLight.stop();
-                telemetry.addLine("started moving");
+//                telemetry.addLine("started moving");
 //                tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
             }
 
-            telemetry.addData("count", count);
-            dashboardTelemetry.addData("count", count);
-            driveTrain.setDriveTelemetry(telemetry);
-            driveTrain.setDriveTelemetry(dashboardTelemetry);
+//            telemetry.addData("count", count);
+//            dashboardTelemetry.addData("count", count);
+//            driveTrain.setDriveTelemetry(telemetry);
+//            driveTrain.setDriveTelemetry(dashboardTelemetry);
 //
 //            shooter.setShooterTelemetry(telemetry);
 //            shooter.setShooterTelemetry(dashboardTelemetry);
@@ -227,8 +227,8 @@ public class TeleOpBlue extends OpMode {
 //            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
 //            telemetry.addData("time",elapsedTime.milliseconds());
 //            telemetry.addData("stop count",stopCount);
-            telemetry.update();
-            dashboardTelemetry.update();
+//            telemetry.update();
+//            dashboardTelemetry.update();
             odometry.update();
             follower.update();
         }

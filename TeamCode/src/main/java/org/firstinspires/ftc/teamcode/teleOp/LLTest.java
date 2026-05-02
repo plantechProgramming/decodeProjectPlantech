@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,12 +21,15 @@ public class LLTest extends OpMode {
     protected void run() {
         telemetry.setMsTransmissionInterval(11);
         waitForStart();
-        ll.start();
         Limelight limeLight = new Limelight(ll);
         Shooter shooter = new Shooter(shootMotor,telemetry,shootMotorOp,odometry);
+        double maxHeading = -190;
+        double minHeading = 370;
+        limeLight.start();
         while (opModeIsActive()) {
-//            shooter.shooter.setPower(0.6);
-//            shooter.shooter2.setPower(-0.6);
+            shooter.shooter.setPower(0.6);
+            shooter.shooter2.setPower(-0.6);
+
             try{
                 limeLight.updateFilter();
 //                dashboardTelemetry.addData("raw heading", result.getBotpose().getOrientation().getYaw(AngleUnit.DEGREES));
@@ -31,6 +37,12 @@ public class LLTest extends OpMode {
                 dashboardTelemetry.addData("raw odo heading", limeLight.getRawHeadingOdoCoords());
                 dashboardTelemetry.addData("X pos raw", limeLight.getLatestBotpose().getPosition().x);
                 dashboardTelemetry.addData("Y pos raw", limeLight.getLatestBotpose().getPosition().y);
+                maxHeading = max(maxHeading, limeLight.getFilteredHeadingOdoCoords());
+                minHeading = min(minHeading, limeLight.getFilteredHeadingOdoCoords());
+                dashboardTelemetry.addData("min", minHeading);
+                dashboardTelemetry.addData("max", maxHeading);
+                dashboardTelemetry.addData("speed", shooter.getVelocity(shooter.shooter));
+
 //                dashboardTelemetry.addData("filtered signed diffs", limeLight.utils.getFilteredSignedDiff());
                 count++;
                 if(count > 100) {
