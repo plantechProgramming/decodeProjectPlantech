@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.OpMode;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
@@ -34,7 +36,7 @@ public class LLTest extends OpMode {
                 limeLight.updateFilter();
 //                dashboardTelemetry.addData("raw heading", result.getBotpose().getOrientation().getYaw(AngleUnit.DEGREES));
                 dashboardTelemetry.addData("raw heading", limeLight.getRawHeadingLLCoords());
-                dashboardTelemetry.addData("raw odo heading", limeLight.getRawHeadingOdoCoords());
+                dashboardTelemetry.addData("raw heading in odo coords", limeLight.getRawHeadingOdoCoords());
                 dashboardTelemetry.addData("X pos raw", limeLight.getLatestBotpose().getPosition().x);
                 dashboardTelemetry.addData("Y pos raw", limeLight.getLatestBotpose().getPosition().y);
                 maxHeading = max(maxHeading, limeLight.getFilteredHeadingOdoCoords());
@@ -47,7 +49,7 @@ public class LLTest extends OpMode {
                 count++;
                 if(count > 100) {
                     dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingLLCoords());
-                    dashboardTelemetry.addData("odo Heading", limeLight.getFilteredHeadingOdoCoords());
+                    dashboardTelemetry.addData("Heading in odo coords", limeLight.getFilteredHeadingOdoCoords());
                     count = 0;
                 }
             }
@@ -55,7 +57,11 @@ public class LLTest extends OpMode {
                 telemetry.addLine("no tag detected");
             }
 
+            if(gamepad1.x){
+                odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0));
+            }
 
+            dashboardTelemetry.addData("odo heading", odometry.getHeading(AngleUnit.DEGREES));
 //            if (result != null) {
 //                if (result.isValid()) {
 
@@ -74,6 +80,7 @@ public class LLTest extends OpMode {
 //            }
             dashboardTelemetry.addData("count", count);
             dashboardTelemetry.update();
+            odometry.update();
         }
     }
 
