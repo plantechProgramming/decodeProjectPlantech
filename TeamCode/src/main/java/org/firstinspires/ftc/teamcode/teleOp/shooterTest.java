@@ -31,7 +31,6 @@ public class shooterTest extends OpMode {
 //        Turret turret = new Turret(turretMotor, odometry);
         ReadWrite readWrite = new ReadWrite();
         Utils utils = new Utils(telemetry,odometry);
-        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, "RED");
         odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
         DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -41,8 +40,7 @@ public class shooterTest extends OpMode {
             double forward = -gamepad1.left_stick_y;
             double turn = gamepad1.right_stick_x;
             double drift = gamepad1.left_stick_x;
-            shooter.noPhysShootHomeostasis(0.5);
-            driveTrain.drive(-forward, -drift, turn, odometry.getHeading(AngleUnit.DEGREES), 1);//TODO: change for RED -forward, -drift
+            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01);
 
 //            shooter.noPhysShootHomeostasis(0.5);
             if(gamepad1.a){
@@ -61,8 +59,6 @@ public class shooterTest extends OpMode {
 
             shooter.setShooterTelemetry(dashboardTelemetry);
             shooter.setShooterTelemetry(telemetry);
-            driveTrain.setDriveTelemetry(telemetry);
-            driveTrain.setDriveTelemetry(dashboardTelemetry);
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();

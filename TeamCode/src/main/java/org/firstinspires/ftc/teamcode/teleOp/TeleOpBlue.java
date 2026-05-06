@@ -51,7 +51,7 @@ public class TeleOpBlue extends OpMode {
         odometry.recalibrateIMU();
         follower = Constants.createFollower(hardwareMap);
 //        tagLocalization = new AprilTagLocalization(team, telemetry); //TODO: change here for red
-        limeLight = new Limelight(ll);
+//        limeLight = new Limelight(ll);
 //        tagLocalization.initProcessor(hardwareMap);
 
         // while camera is not awake, sleep
@@ -90,7 +90,7 @@ public class TeleOpBlue extends OpMode {
         DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        limeLight.start();
+//        limeLight.start();
 
         while (opModeIsActive() ) {
             elapsedTime.reset();
@@ -187,48 +187,46 @@ public class TeleOpBlue extends OpMode {
             if(gamepad1.back) {
                 odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0)); //TODO: change for RED
             }
-            if(forward == 0 && drift == 0 && turn == 0 && utils.getDistFromGoal(team) < 260){
-                try{
-                    limeLight.start();
-                    limeLight.updateFilter();
-//                    dashboardTelemetry.addData("raw heading", limeLight.getRawHeadingLLCoords());
-                    count++;
-//                    dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingLLCoords());
-//                    dashboardTelemetry.addData("odo heading", limeLight.getFilteredHeadingOdoCoords());
-                    if(count > 50) {
-                        odometry.setPosition(new Pose2D(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, limeLight.getFilteredHeadingOdoCoords()));
-                        count = 0;
-                    }
-                }
-                catch (NullPointerException e){
-//                    telemetry.addLine("no tag detected");
-                }
-            }
-            else{
-                count = 0;
-                limeLight.utils.prevFiltered = odometry.getHeading(AngleUnit.DEGREES);
-                limeLight.stop();
-//                telemetry.addLine("started moving");
-//                tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
-            }
+//            if(forward == 0 && drift == 0 && turn == 0 && utils.getDistFromGoal(team) < 260){
+//                try{
+//                    if(!limeLight.ll.isRunning()) limeLight.start(); // this try is called every loop,
+//                    limeLight.updateFilter();
+////                    dashboardTelemetry.addData("raw heading", limeLight.getRawHeadingLLCoords());
+//                    count++;
+////                    dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingLLCoords());
+////                    dashboardTelemetry.addData("odo heading", limeLight.getFilteredHeadingOdoCoords());
+//                    if(count > 50) {
+//                        odometry.setPosition(new Pose2D(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, limeLight.getFilteredHeadingOdoCoords()));
+//                        count = 0;
+//                    }
+//                }
+//                catch (NullPointerException e){
+////                    telemetry.addLine("no tag detected");
+//                }
+//            }
+//            else{
+//                count = 0;
+//                limeLight.utils.prevFiltered = odometry.getHeading(AngleUnit.DEGREES);
+//                limeLight.stop();
+////                telemetry.addLine("started moving");
+////                tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
+//            }
 
 //            telemetry.addData("count", count);
 //            dashboardTelemetry.addData("count", count);
-//            driveTrain.setDriveTelemetry(telemetry);
-//            driveTrain.setDriveTelemetry(dashboardTelemetry);
-//
-//            shooter.setShooterTelemetry(telemetry);
-//            shooter.setShooterTelemetry(dashboardTelemetry);
-//
+            driveTrain.setDriveTelemetry(telemetry);
+            driveTrain.setDriveTelemetry(dashboardTelemetry);
+
+            shooter.setShooterTelemetry(telemetry);
+            shooter.setShooterTelemetry(dashboardTelemetry);
 //            tagLocalization.setCameraTelemetry(telemetry);
 //            tagLocalization.setCameraTelemetry(dashboardTelemetry);
 //
-//            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
-//            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
-//            telemetry.addData("time",elapsedTime.milliseconds());
-//            telemetry.addData("stop count",stopCount);
-//            telemetry.update();
-//            dashboardTelemetry.update();
+            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
+            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
+            telemetry.addData("time",elapsedTime.milliseconds());
+            telemetry.update();
+            dashboardTelemetry.update();
             odometry.update();
             follower.update();
         }
@@ -237,6 +235,6 @@ public class TeleOpBlue extends OpMode {
 
     @Override
     protected void end() {
-        limeLight.shutDown();
+//        limeLight.shutDown();
     }
 }

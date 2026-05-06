@@ -114,12 +114,12 @@ public abstract class OpMode extends LinearOpMode {
 
         // until we find the fucking camera we can't scan it and add it to robot config :(((
 //        camera = hardwareMap.get(CameraName.class,"webcam");
-        ll = hardwareMap.get(Limelight3A.class,"limelight");
-        ll.pipelineSwitch(0);
+//        ll = hardwareMap.get(Limelight3A.class,"limelight");
+//        ll.pipelineSwitch(0);
 
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
-        FtcDashboard.getInstance().startCameraStream(ll, 30);
+//        FtcDashboard.getInstance().startCameraStream(ll, 30);
     }
 
     public DcMotorEx initMotor(String name, boolean encoder, boolean reversed){
