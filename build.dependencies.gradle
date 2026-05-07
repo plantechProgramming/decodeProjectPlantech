@@ -46,7 +46,5 @@ dependencies {
 
     // homeostasis (control lib)
 //    implementation 'com.github.Thermal-Equilibrium:homeostasis-FTC:1.0.8'
-    implementation "org.solverslib:core:0.3.4" // core
-
 }
 

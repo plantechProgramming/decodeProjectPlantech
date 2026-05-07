@@ -14,8 +14,6 @@ import org.firstinspires.ftc.teamcode.teleOp.Utils;
 
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.seattlesolvers.solverslib.controller.PIDFController;
-import com.seattlesolvers.solverslib.hardware.motors.Motor;
 //import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 
 import dev.nextftc.control.ControlSystem;

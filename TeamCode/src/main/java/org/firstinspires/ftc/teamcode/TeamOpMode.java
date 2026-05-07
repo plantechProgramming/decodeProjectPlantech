@@ -94,9 +94,6 @@ public abstract class TeamOpMode extends LinearOpMode {
         odometry.setOffsets(-155,-90, DistanceUnit.MM); //x = -155, y= -90
 //        odometry.resetPosAndIMU();
 
-        // until we find the fucking camera we can't scan it and add it to robot config :(((
-        camera = hardwareMap.get(CameraName.class,"webcam");
-
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
     }

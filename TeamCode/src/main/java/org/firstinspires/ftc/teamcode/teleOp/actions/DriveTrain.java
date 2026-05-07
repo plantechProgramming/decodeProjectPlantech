@@ -12,8 +12,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import com.seattlesolvers.solverslib.controller.Controller;
-import com.seattlesolvers.solverslib.controller.PIDFController;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;

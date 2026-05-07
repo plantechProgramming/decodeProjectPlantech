@@ -40,7 +40,9 @@ public class shooterTest extends TeamOpMode {
             double forward = -gamepad1.left_stick_y;
             double turn = gamepad1.right_stick_x;
             double drift = gamepad1.left_stick_x;
-            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .01);
+//            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .01);
+            shooter.shooter.setPower(0.3);
+            shooter.shooter2.setPower(-0.3);
             driveTrain.drive(-forward, -drift, turn, odometry.getHeading(AngleUnit.DEGREES), 1);//TODO: change for RED -forward, -drift
 
 //            shooter.noPhysShootHomeostasis(0.5);
