@@ -36,7 +36,7 @@ public class Shooter {
     public static double kP = 14;
     public static double kI = 0;
     public static double kD = 0;
-    public static double kF = 1.5;
+    public static double kF = 1.4;
     Utils utils;
 
     GetVelocity shooterVelocity;
