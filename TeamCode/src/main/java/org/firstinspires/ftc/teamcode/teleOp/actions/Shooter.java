@@ -33,10 +33,10 @@ public class Shooter {
 //    public static double kI = 0.1;//0.5
 //    public static double kD = 1; //0
 //    public static double kF = 0.6; // OG = 14.5
-    public static double kP = 0;
+    public static double kP = 14;
     public static double kI = 0;
     public static double kD = 0;
-    public static double kF = 2;
+    public static double kF = 1.5;
     Utils utils;
 
     GetVelocity shooterVelocity;
@@ -51,7 +51,7 @@ public class Shooter {
 
 
         shooterVelocity = new GetVelocity(shooter,0.1);
-        shooter2Velocity = new GetVelocity(shooter2,0.1);
+        shooter2Velocity = new GetVelocity(this.shooter2,0.1);
     }
 
     // g - gravity acceleration
@@ -82,7 +82,7 @@ public class Shooter {
     PID controller = new PID(kP,kI,kD,kF);
     public void noPhysShootHomeostasis(double x){
         controller.setWanted(x);
-        double output = controller.update(shooterVelocity.getVelocityFilter()/6000);
+        double output = controller.update(shooterVelocity.getVelocityFilter()/MAX_RPM);
 
         shooter.setPower(output);
         shooter2.setPower(-output);
@@ -100,7 +100,7 @@ public class Shooter {
             power -= jumps;
         }
         else{
-            telemetry.addData("wanted variable", power*6000);
+            telemetry.addData("wanted variable", power*MAX_RPM);
             prevLess = less;
             prevMore = more;
             noPhysShootHomeostasis(power);
@@ -208,9 +208,12 @@ public class Shooter {
 
 
     public void setShooterTelemetry(Telemetry telemetry){
-        telemetry.addData("wanted", Szonedis*6000);
+        telemetry.addData("wanted", Szonedis*MAX_RPM);
         telemetry.addData("vel",shooterVelocity.getVelocityFilter());
-        telemetry.addData("vel2", shooter2Velocity.getVelocityFilter());
+        telemetry.addData("vel2", Math.abs(shooter2Velocity.getVelocityFilter()));
+
+        telemetry.addData("vel raw",shooterVelocity.getRawVelocity());
+        telemetry.addData("vel2 raw", Math.abs(shooter2Velocity.getRawVelocity()));
 //        telemetry.addData("th",Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000));
         telemetry.addData("pow 1", shooter.getPower());
         telemetry.addData("pow 2", shooter2.getPower());
@@ -218,7 +221,7 @@ public class Shooter {
         telemetry.addData("p", coefficients.p);
         telemetry.addData("i", coefficients.i);
         telemetry.addData("d", coefficients.d);
-        telemetry.addData("wanted variable", power*6000);
+        telemetry.addData("wanted variable", power*MAX_RPM);
         telemetry.addData("f",coefficients.f);
     }
 

@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.teleOp.actions.Turret;
 
 @Configurable
 @Config
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(group = "tests")
 public class shooterTest extends OpMode {
     @Override
     protected void postInit() {
@@ -42,7 +42,9 @@ public class shooterTest extends OpMode {
             double drift = gamepad1.left_stick_x;
             shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01);
 
+
 //            shooter.noPhysShootHomeostasis(0.5);
+
             if(gamepad1.a){
                if(shooter.isUpToGivenSpeed(shooter.power)){
                    intake.inBetweenInFull();

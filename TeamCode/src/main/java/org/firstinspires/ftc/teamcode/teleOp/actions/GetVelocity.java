@@ -22,6 +22,16 @@ public class GetVelocity {
     double prevVelocity = 0;
 
     public double getVelocityFilter() {
+        double velocity = getRawVelocity();
+
+        prevTime = curTime;
+        prevEncoder = curEncoder;
+        double filteredVelocity = filtered(alpha, velocity, prevVelocity);
+        prevVelocity = filteredVelocity;
+        return filteredVelocity;
+    }
+
+    public double getRawVelocity() {
         curEncoder = motor.getCurrentPosition();
         curTime = timer.milliseconds();
 
@@ -29,13 +39,7 @@ public class GetVelocity {
         double encoderDiff = curEncoder - prevEncoder;
 
         double tickVelocity = encoderDiff / timeDiff; // ticks/milliseconds
-        double velocity = (tickVelocity * millisecondsToMinute) / ticksPerRevolution;
-
-        prevTime = curTime;
-        prevEncoder = curEncoder;
-        double filteredVelocity = filtered(alpha, velocity, prevVelocity);
-        prevVelocity = filteredVelocity;
-        return filteredVelocity;
+        return (tickVelocity * millisecondsToMinute) / ticksPerRevolution;
     }
     public double filtered(double alpha, double val, double prevVal){
         return alpha * val + (1 - alpha) * prevVal;
