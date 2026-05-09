@@ -33,10 +33,10 @@ public class Shooter {
 //    public static double kI = 0.1;//0.5
 //    public static double kD = 1; //0
 //    public static double kF = 0.6; // OG = 14.5
-    public static double kP = 13.5;
+    public static double kP = 14;
     public static double kI = 0;
-    public static double kD = 0;
-    public static double kF = 1.24;
+    public static double kD = 500;
+    public static double kF = 1.47;
     Utils utils;
 
     GetVelocity shooterVelocity;
@@ -82,7 +82,7 @@ public class Shooter {
     PID controller = new PID(kP,kI,kD,kF);
     public void noPhysShootHomeostasis(double x){
         controller.setWanted(x);
-        double output = controller.update(shooterVelocity.getVelocityFilter()/MAX_RPM);
+        double output = controller.update(shooterVelocity.getRawVelocity()/MAX_RPM);
 
         shooter.setPower(output);
         shooter2.setPower(-output);

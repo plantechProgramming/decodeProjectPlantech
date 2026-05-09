@@ -140,7 +140,7 @@ public class TeleOpBlue extends OpMode {
                 intake.inBetweenInFull();
 //                }
 //                else{
-//                    intake.stopPrimers();
+//                    intake.inBetweenInPart();
 //                }
                 intake.intakeIn();
                 if(aang){
@@ -161,27 +161,9 @@ public class TeleOpBlue extends OpMode {
 
             if(gamepad1.left_bumper && !gamepad1.right_bumper){
                 driveTrain.turnToGyro(utils.getAngleFromGoal(team));
-//                turningTowardsGoal = true;
-//                if(goalTag != null){
-//                    if(goalTag.ftcPose.bearing < 0.5){
-//                        turningTowardsGoal = false;
-//                    }
-//                }
-//                if(Math.abs(utils.getAngleFromGoal("RED") - odometry.getHeading(AngleUnit.DEGREES)) < 0.5){
-//                    turningTowardsGoal = false;
-//                }
+
             }
-//            tagLocalization.detectTags();
-//            if(gamepad1.dpad_right && tagLocalization.goalTag != null){
-//               driveTrain.turnTowardsAprilTag(tagLocalization.goalTag);
-//            }
-//            if(gamepad1.dpad_left){
-//                tagLocalization.detectTags();
-//                driveTrain.turnToGoal("RED", tagLocalization.goalTag);
-//            }
-//            if(!gamepad1.left_bumper){
-//                driveTrain.usingCamForTurn = false;
-//            }
+
             if(gamepad1.back) {
                 odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0)); //TODO: change for RED
             }
