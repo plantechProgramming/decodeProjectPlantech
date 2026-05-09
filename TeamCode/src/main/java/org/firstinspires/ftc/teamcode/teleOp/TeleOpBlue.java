@@ -48,7 +48,7 @@ public class TeleOpBlue extends OpMode {
     String team = "BLUE"; //TODO: change for BLUE
     @Override
     protected void postInit() {
-        odometry.recalibrateIMU();
+//        odometry.recalibrateIMU();
         follower = Constants.createFollower(hardwareMap);
 //        tagLocalization = new AprilTagLocalization(team, telemetry); //TODO: change here for red
 //        limeLight = new Limelight(ll);
@@ -59,7 +59,7 @@ public class TeleOpBlue extends OpMode {
 //            sleep(20);
 //        }
 //        tagLocalization.applySettings();
-        odometry.resetPosAndIMU();
+//        odometry.resetPosAndIMU();
     }
     public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0); // need to make x bigger because x = forward of robot
     private VisionPortal visionPortal;
@@ -81,8 +81,6 @@ public class TeleOpBlue extends OpMode {
         boolean activatedHold = false;
         boolean aang = false;
         int count = 0;
-//        follower.setStartingPose(readWrite.readPose());
-//        follower.update();
         odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
         odometry.update();
         Pose lastPos = follower.getPose();
@@ -224,6 +222,8 @@ public class TeleOpBlue extends OpMode {
 //
             dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
             dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
+            dashboardTelemetry.addData("pedro pose", follower.getPose());
+            telemetry.addData("pedro pose", follower.getPose());
             telemetry.addData("time",elapsedTime.milliseconds());
             telemetry.update();
             dashboardTelemetry.update();
