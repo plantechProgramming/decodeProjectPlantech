@@ -48,12 +48,18 @@ public class PID {
 
     public void setWanted(final double wanted) {this.wanted = wanted;}
 
+    double currentError;
     public double update(final double current) {
-        final double currentError = wanted - current;
+        currentError = wanted - current;
         final double currentTime = timer.milliseconds();
         final double deltaTime = currentTime - prevTime;
-
         return getPIDPower(currentError);
+    }
+
+
+    // only for tests
+    public double getError(){
+        return currentError;
     }
     public double updatedeg(final double current) {
         double currentError = wanted - current;

@@ -80,13 +80,12 @@ public class Shooter {
         telemetry.addData("wanted", x*6000);
     }
     PID controller = new PID(kP,kI,kD,kF);
+    double output;
     public void noPhysShootHomeostasis(double x){
         controller.setWanted(x);
-        double output = controller.update(shooterVelocity.getRawVelocity()/MAX_RPM);
-
+        output = controller.update(shooterVelocity.getRawVelocity()/MAX_RPM);
         shooter.setPower(output);
         shooter2.setPower(-output);
-        telemetry.addData("output", output);
     }
     int count = 0;
     boolean prevMore = false;
@@ -223,6 +222,8 @@ public class Shooter {
         telemetry.addData("d", coefficients.d);
         telemetry.addData("wanted variable", power*MAX_RPM);
         telemetry.addData("f",coefficients.f);
+        telemetry.addData("pid error",controller.getError()*6000);
+        telemetry.addData("POW", output);
     }
 
     public boolean isUpToSpeed(){

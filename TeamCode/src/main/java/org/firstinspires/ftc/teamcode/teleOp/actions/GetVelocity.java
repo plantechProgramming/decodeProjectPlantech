@@ -17,7 +17,7 @@ public class GetVelocity {
     public long curEncoder;
     public double prevTime = 0;
     public double curTime;
-    int ticksPerRevolution = 28;
+    int ticksPerRevolution = 8192; // for thru bore, 28 for built in
     int millisecondsToMinute = 60000;
     double prevVelocity = 0;
 
@@ -31,15 +31,22 @@ public class GetVelocity {
         return filteredVelocity;
     }
 
+    double prevRawVelocity;
     public double getRawVelocity() {
         curEncoder = motor.getCurrentPosition();
         curTime = timer.milliseconds();
+        double LOW_PASS_CONST = 500;
 
         double timeDiff = curTime - prevTime;
         double encoderDiff = curEncoder - prevEncoder;
 
         double tickVelocity = encoderDiff / timeDiff; // ticks/milliseconds
-        return (tickVelocity * millisecondsToMinute) / ticksPerRevolution;
+        double curVelocity = (tickVelocity * millisecondsToMinute) / ticksPerRevolution;
+        if(Math.abs(prevRawVelocity - curVelocity) > LOW_PASS_CONST){
+            curVelocity = prevRawVelocity;
+        }
+        prevRawVelocity = curVelocity;
+        return curVelocity;
     }
     public double filtered(double alpha, double val, double prevVal){
         return alpha * val + (1 - alpha) * prevVal;
