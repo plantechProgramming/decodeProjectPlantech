@@ -1,11 +1,10 @@
-package org.firstinspires.ftc.teamcode.auto.camera.colorsensor;
+package org.firstinspires.ftc.teamcode.subsystems.colorsensor;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 public class ColorTests extends OpMode {
-    ColorSensorTest color = new ColorSensorTest();
-    ColorSensorTest.DetectedColor detectedColor;
+    ColorSensor color = new ColorSensor();
+    ColorSensor.DetectedColor detectedColor;
 //    public boolean colormatch;
 
     @Override

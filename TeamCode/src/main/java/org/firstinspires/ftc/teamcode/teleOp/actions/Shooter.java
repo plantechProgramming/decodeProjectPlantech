@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleOp.actions;
 
 //import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
@@ -9,19 +8,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.teleOp.PID;
+import org.firstinspires.ftc.teamcode.Misc.PID;
 import org.firstinspires.ftc.teamcode.teleOp.Utils;
 
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.seattlesolvers.solverslib.controller.PIDFController;
-import com.seattlesolvers.solverslib.hardware.motors.Motor;
 //import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 
-import dev.nextftc.control.ControlSystem;
-import dev.nextftc.control.KineticState;
-import dev.nextftc.core.commands.Command;
-import dev.nextftc.hardware.impl.MotorEx;
 
 @Configurable
 @Config

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.autos;
+package org.firstinspires.ftc.teamcode.Misc.Txt;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.util.ReadWriteFile;

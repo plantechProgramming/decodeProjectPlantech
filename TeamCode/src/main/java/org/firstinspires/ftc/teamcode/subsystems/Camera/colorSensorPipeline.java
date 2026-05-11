@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.auto.camera.colorsensor;
+package org.firstinspires.ftc.teamcode.subsystems.Camera;
 
 import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.teamcode.auto.camera.Color;
+import org.firstinspires.ftc.teamcode.Misc.Colors;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -47,7 +47,7 @@ public class colorSensorPipeline implements VisionProcessor {
         return avgColor;
     }
 
-    public boolean isColor(Color color) {
+    public boolean isColor(Colors color) {
         Mat pixelMat = new Mat(1, 1, CvType.CV_8UC3);
         pixelMat.setTo(avgColor);
         Mat mask = new Mat();

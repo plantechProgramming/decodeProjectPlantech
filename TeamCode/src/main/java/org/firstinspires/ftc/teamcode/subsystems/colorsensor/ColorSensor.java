@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.camera.colorsensor;
+package org.firstinspires.ftc.teamcode.subsystems.colorsensor;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class ColorSensorTest {
+public class ColorSensor {
     NormalizedColorSensor colorSensor;
 //    public boolean
     DetectedColor lastDetected = DetectedColor.UNKNOWN;

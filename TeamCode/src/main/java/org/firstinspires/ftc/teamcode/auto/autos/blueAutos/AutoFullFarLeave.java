@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.auto.autos.blueAutos; // make sure this aligns with class location
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
-import static org.firstinspires.ftc.teamcode.auto.pedro.Tuning.follower;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.ivy.Command;
@@ -12,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Paths;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Points;
-import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
+import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 
 @Autonomous(name = "Full Far Blue leave", group = "Blue")

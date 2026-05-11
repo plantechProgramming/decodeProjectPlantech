@@ -11,12 +11,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
-import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
+import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
+import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
 import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
 import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
-import org.firstinspires.ftc.teamcode.TeamOpMode.TeamOpMode;
+import org.firstinspires.ftc.teamcode.TeamOpMode;
 
 import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;

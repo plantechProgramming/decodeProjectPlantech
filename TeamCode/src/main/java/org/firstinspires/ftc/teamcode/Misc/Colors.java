@@ -1,23 +1,23 @@
-package org.firstinspires.ftc.teamcode.auto.camera;
+package org.firstinspires.ftc.teamcode.Misc;
 
 import org.opencv.core.Scalar;
 
-public class Color {
+public class Colors {
     private Scalar min;
     private Scalar max;
-    public static final Color RED = new Color(
+    public static final Colors RED = new Colors(
             new Scalar(112, 153, 230),
             new Scalar(190, 230, 255)
     );
 
-    public static final Color YELLOW = new Color(
+    public static final Colors YELLOW = new Colors(
             new Scalar(16, 150, 99),
             new Scalar(40, 255, 255)
     );
 
     // yellow - in opencv hsv
     // opencv hsv != normal hsv, h:0-179, s:0-255,v:0-255
-    public Color(Scalar min, Scalar max){
+    public Colors(Scalar min, Scalar max){
         this.min = min;
         this.max = max;
     }

@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.teleOp.actions;
 
-import android.util.Pair;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -11,20 +9,16 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import com.seattlesolvers.solverslib.controller.Controller;
-import com.seattlesolvers.solverslib.controller.PIDFController;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
-import org.firstinspires.ftc.teamcode.teleOp.PID;
+import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
+import org.firstinspires.ftc.teamcode.Misc.PID;
 import org.firstinspires.ftc.teamcode.teleOp.Utils;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.opencv.core.Mat;
 import org.openftc.easyopencv.OpenCvCamera;
 
 @Config

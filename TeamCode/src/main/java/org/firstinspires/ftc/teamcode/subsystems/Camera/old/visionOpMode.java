@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.camera.old;
+package org.firstinspires.ftc.teamcode.subsystems.Camera.old;
 
 
 import android.util.Size;
@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.auto.camera.Color;
-import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.colorSensorPipeline;
+import org.firstinspires.ftc.teamcode.Misc.Colors;
+import org.firstinspires.ftc.teamcode.subsystems.Camera.colorSensorPipeline;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.opencv.core.Rect;
 
@@ -25,7 +25,7 @@ public class visionOpMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         Rect rect = new Rect(150, 100, 50, 50);
 
-        pipeLine = new visionPipeline(Color.YELLOW);
+        pipeLine = new visionPipeline(Colors.YELLOW);
         colorSensor = new colorSensorPipeline(rect);
 
         waitForStart();
@@ -41,11 +41,11 @@ public class visionOpMode extends LinearOpMode {
                 .setCamera(hardwareMap.get(WebcamName.class, "Webcam"))
                 .build();
 
-        List<Color> colors = new ArrayList<Color>();
-        colors.add(Color.YELLOW);
+        List<Colors> colors = new ArrayList<Colors>();
+        colors.add(Colors.YELLOW);
         // needed to run continuously
         while (opModeIsActive() || opModeInInit()) {
-            telemetry.addData("color",colorSensor.isColor(Color.YELLOW));
+            telemetry.addData("color",colorSensor.isColor(Colors.YELLOW));
             telemetry.addLine("hello world");
             telemetry.update();
             sleep(20);

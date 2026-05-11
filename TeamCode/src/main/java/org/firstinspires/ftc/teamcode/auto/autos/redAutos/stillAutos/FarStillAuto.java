@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.auto.autos.redAutos.stillAutos;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
-
 import dev.nextftc.ftc.NextFTCOpMode;
 
 @Autonomous(name = "still Far Red", group = "still")
