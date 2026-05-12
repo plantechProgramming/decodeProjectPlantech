@@ -6,8 +6,10 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
@@ -33,13 +35,12 @@ public class NextShooter implements Subsystem {
     }
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry =  dashboard.getTelemetry();
-    private MotorEx shooter1 = new MotorEx("shooter", -1);
+    private MotorEx shooter1 = new MotorEx("shooter", -1).reversed();
     private MotorEx shooter2 = new MotorEx("shooter2", -1);
-
     double Szonedis = 0.5;
     public static double farPow = 0.541;
     public static double closePow = 0.387;
-    double kp = 0.01, ki = 0, kd = 0, kf = 0.012;
+    public static double kp = 0.01, ki = 0, kd = 0, kf = 0.012;
     ControlSystem controlSystem = ControlSystem.builder() // next pid
             .velPid(kp, ki, kd)
             .basicFF(0,0,kf)
@@ -71,8 +72,7 @@ public class NextShooter implements Subsystem {
 
     public void setTelemetry(Telemetry telemetry){
         telemetry.addData("wanted", ticksToRPM(controlSystem.getGoal().getVelocity()));
-        telemetry.addData("vel",ticksToRPM(shooter1.getVelocity()));
-        telemetry.addData("vel2", -ticksToRPM(shooter2.getVelocity()));
+        telemetry.addData("vel",getRawVelocity());
         telemetry.addData("measured pow", shooter1.getPower());
         telemetry.addData("goal", controlSystem.getGoal());
         telemetry.addData("szonedis", Szonedis);
@@ -106,5 +106,29 @@ public class NextShooter implements Subsystem {
     public void stop(){
         shooter2.setPower(0);
         shooter1.setPower(0);
+    }
+    double prevRawVelocity;
+    public long prevEncoder = 0;
+    public long curEncoder;
+    public double prevTime = 0;
+    public double curTime;
+    int millisecondsToMinute = 60000;
+    int ticksPerRevolution = 8192; // 8192 for thru bore, 28 for built in
+    private static final ElapsedTime timer = new ElapsedTime();
+    public double getRawVelocity() {
+        curEncoder = (long)shooter1.getCurrentPosition();
+        curTime = timer.milliseconds();
+        double LOW_PASS_CONST = 1500;
+
+        double timeDiff = curTime - prevTime;
+        double encoderDiff = curEncoder - prevEncoder;
+
+        double tickVelocity = encoderDiff / timeDiff; // ticks/milliseconds
+        double curVelocity = (tickVelocity * millisecondsToMinute) / ticksPerRevolution;
+        if (Math.abs(curVelocity - prevRawVelocity) > LOW_PASS_CONST) {
+            curVelocity = prevRawVelocity;
+        }
+        prevRawVelocity = curVelocity;
+        return curVelocity;
     }
 }

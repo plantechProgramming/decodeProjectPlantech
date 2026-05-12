@@ -97,7 +97,8 @@ public class TeleOpBlue extends OpMode {
             drift = gamepad1.left_stick_x;
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
 
-            shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team);
+//            shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team);
+            shooter.noPhysShootHomeostasis(0.2);
 
             if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
                 driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
