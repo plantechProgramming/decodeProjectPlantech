@@ -17,7 +17,7 @@ public class GetVelocity {
     public long curEncoder;
     public double prevTime = 0;
     public double curTime;
-    int ticksPerRevolution = 8192; // for thru bore, 28 for built in
+    int ticksPerRevolution = 28; //8192 for thru bore, 28 for built in
     int millisecondsToMinute = 60000;
     double prevVelocity = 0;
 
@@ -42,9 +42,6 @@ public class GetVelocity {
 
         double tickVelocity = encoderDiff / timeDiff; // ticks/milliseconds
         double curVelocity = (tickVelocity * millisecondsToMinute) / ticksPerRevolution;
-        if(Math.abs(prevRawVelocity - curVelocity) > LOW_PASS_CONST){
-            curVelocity = prevRawVelocity;
-        }
         prevRawVelocity = curVelocity;
         return curVelocity;
     }

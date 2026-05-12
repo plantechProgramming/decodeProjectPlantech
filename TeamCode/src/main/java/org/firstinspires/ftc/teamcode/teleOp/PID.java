@@ -15,6 +15,7 @@ public class PID {
     public double kI = 0;
     public double kD = 0;
     public double kF = 0;
+    public double kS = 0;
     public double iZone = 0;
     public Telemetry telemetry;
 
@@ -32,6 +33,15 @@ public class PID {
         this.kI = kI;
         this.kD = kD;
         this.kF = kF;
+//        this.iZone = iZone;
+    }
+
+    public PID(final double kP, final double kI, final double kD, final double kF, final double kS) {
+        this.kP = kP;
+        this.kI = kI;
+        this.kD = kD;
+        this.kF = kF;
+        this.kS = kS;
 //        this.iZone = iZone;
     }
 
@@ -98,7 +108,7 @@ public class PID {
 
         prevError = currentError;
         prevTime = currentTime;
-        power = kP * currentError + kI * integral + kD * derivative + kF * wanted;
+        power = kP * currentError + kI * integral + kD * derivative + kF * wanted + kS;
 //        telemetry.addData("derivative",derivative);
 //        telemetry.addData("integral", integral);
 //        telemetry.addData("error", currentError);

@@ -33,10 +33,11 @@ public class Shooter {
 //    public static double kI = 0.1;//0.5
 //    public static double kD = 1; //0
 //    public static double kF = 0.6; // OG = 14.5
-    public static double kP = 14;
-    public static double kI = 0;
-    public static double kD = 500;
-    public static double kF = 1.47;
+    public static double kP = 3.5;
+    public static double kI = 5e-9;
+    public static double kD = 0;
+    public static double kF = 0.06;
+    public static double kS = 0.13;
     Utils utils;
 
     GetVelocity shooterVelocity;
@@ -50,8 +51,8 @@ public class Shooter {
         this.utils = new Utils(telemetry, odometry);
 
 
-        shooterVelocity = new GetVelocity(shooter,0.1);
-        shooter2Velocity = new GetVelocity(this.shooter2,0.1);
+        shooterVelocity = new GetVelocity(shooter,0.2);
+        shooter2Velocity = new GetVelocity(this.shooter2,0.2);
     }
 
     // g - gravity acceleration
@@ -79,13 +80,14 @@ public class Shooter {
         telemetry.addData("velocity noisy", getVelocity(shooter));
         telemetry.addData("wanted", x*6000);
     }
-    PID controller = new PID(kP,kI,kD,kF);
+    PID controller = new PID(kP,kI,kD,kF,kS);
     double output;
     public void noPhysShootHomeostasis(double x){
         controller.setWanted(x);
         output = controller.update(shooterVelocity.getRawVelocity()/MAX_RPM);
-        shooter.setPower(output);
-        shooter2.setPower(-output);
+        double power = output+shooterVelocity.getRawVelocity()/MAX_RPM;
+        shooter.setPower(power);
+        shooter2.setPower(-power);
     }
     int count = 0;
     boolean prevMore = false;

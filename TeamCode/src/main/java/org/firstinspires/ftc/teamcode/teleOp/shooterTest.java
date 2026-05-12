@@ -40,7 +40,7 @@ public class shooterTest extends OpMode {
             double forward = -gamepad1.left_stick_y;
             double turn = gamepad1.right_stick_x;
             double drift = gamepad1.left_stick_x;
-//            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01);
+            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01);
 
 //            shooter.shooter.setPower(0.3);
 //            shooter.shooter2.setPower(-0.3);
