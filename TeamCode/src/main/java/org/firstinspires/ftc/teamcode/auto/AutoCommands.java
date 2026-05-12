@@ -13,14 +13,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.subsystems.InBetween;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.teamcode.teleOp.Utils;
 
 public class AutoCommands{
     Shooter shooter;
     Intake intake;
     InBetween inBetween;
     Follower follower;
-    Utils util = new Utils();
 
     public AutoCommands(Follower follower, HardwareMap hardwareMap) {
         shooter = new Shooter(hardwareMap);

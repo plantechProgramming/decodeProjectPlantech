@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import static com.pedropathing.ivy.groups.Groups.parallel;
-import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kD;
-import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kF;
-import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kI;
-import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kP;
+import static org.firstinspires.ftc.teamcode.teleOp.Shooter.kD;
+import static org.firstinspires.ftc.teamcode.teleOp.Shooter.kF;
+import static org.firstinspires.ftc.teamcode.teleOp.Shooter.kI;
+import static org.firstinspires.ftc.teamcode.teleOp.Shooter.kP;
 
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.commands.Commands;
@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Misc.PID;
-import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
+import org.firstinspires.ftc.teamcode.Misc.GetVelocity;
 
 public class Shooter {
     DcMotorEx shootMotor, shootMotorOp;
@@ -80,5 +80,9 @@ public class Shooter {
     public void setPower(double pow){
         shootMotor.setPower(pow);
         shootMotorOp.setPower(-pow);
+    }
+
+    public void out(){
+        setPower(-0.2);
     }
 }

@@ -1,13 +1,11 @@
-package org.firstinspires.ftc.teamcode.Tests;
+package org.firstinspires.ftc.teamcode.Tests.TeleOp;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
-import org.firstinspires.ftc.teamcode.teleOp.Utils;
-import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
+import org.firstinspires.ftc.teamcode.teleOp.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 /**
@@ -29,7 +27,6 @@ public class aprilTagsTest  extends TeamOpMode {
         }
         tagLocalization.applySettings();
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
-        Utils utils = new Utils();
         int count = 0;
         int errorCounter = 0;
         double curr = -144;
@@ -37,7 +34,7 @@ public class aprilTagsTest  extends TeamOpMode {
         double sum = 0;
         while (opModeIsActive()) {
             tagLocalization.detectTags();
-            shooter.noPhysShootHomeostasis(0.4);
+            shooter.shoot(0.4);
             if(tagLocalization.goalTag != null){
 //                count++;
 //                tagLocalization.getCurrDeg(tagLocalization.goalTag);
@@ -61,7 +58,6 @@ public class aprilTagsTest  extends TeamOpMode {
                 dashboardTelemetry.addData("cur deg",tagLocalization.getCurrDeg(tagLocalization.goalTag));
                 dashboardTelemetry.addData("xy reloc",tagLocalization.getRelocXY(tagLocalization.goalTag));
                 dashboardTelemetry.addData("xy rotated",tagLocalization.getXYToTag(tagLocalization.goalTag));
-                dashboardTelemetry.addData("wanted deg", Math.toDegrees(Math.atan2(utils.GOAL_RED.getY(DistanceUnit.CM) - tagLocalization.getRelocXY(tagLocalization.goalTag).second, utils.GOAL_RED.getX(DistanceUnit.CM) - tagLocalization.getRelocXY(tagLocalization.goalTag).first)));
                 dashboardTelemetry.update();
             }
             else{

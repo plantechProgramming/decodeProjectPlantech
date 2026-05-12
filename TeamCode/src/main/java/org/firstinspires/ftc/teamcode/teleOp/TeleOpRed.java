@@ -13,12 +13,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
 import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
-import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
-import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
-import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
+import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 
-import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Config
@@ -47,7 +45,6 @@ public class TeleOpRed extends TeamOpMode {
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, "RED");
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
         ReadWrite readWrite = new ReadWrite();
-        Utils utils = new Utils(telemetry,odometry);
         ElapsedTime elapsedTime = new ElapsedTime();
 
         double forward; //-1 to 1
@@ -163,25 +160,6 @@ public class TeleOpRed extends TeamOpMode {
 //            }
             if(gamepad1.back) {
                 odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 180)); //TODO: change for RED
-            }
-            if(forward == 0 && drift == 0 && turn == 0){
-                stopCount++;
-                tagLocalization.detectTags();
-                if(tagLocalization.goalTag != null && utils.getDistFromGoal(team) < 220){
-                    count++;
-                    tagLocalization.getCurrDeg(tagLocalization.goalTag);
-                    if(count >= 150 && !gamepad1.right_bumper){
-                        double curHeading = tagLocalization.getCurrDeg(tagLocalization.goalTag);
-                        odometry.setPosition(new Pose2D(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, curHeading));
-                        telemetry.addLine("SET POSITION");
-                        count = 0;
-                    }
-                }
-            }
-            else{
-                count = 0;
-                stopCount = 0;
-                tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
             }
 
             telemetry.addData("count", count);

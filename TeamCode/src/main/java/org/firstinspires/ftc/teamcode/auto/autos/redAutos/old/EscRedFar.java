@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
+import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 
 @Disabled
 @Autonomous(name = "EscRedFar")

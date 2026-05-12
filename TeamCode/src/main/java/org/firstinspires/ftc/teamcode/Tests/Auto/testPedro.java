@@ -1,17 +1,15 @@
-package org.firstinspires.ftc.teamcode.auto.test; // make sure this aligns with class location
+package org.firstinspires.ftc.teamcode.Tests.Auto; // make sure this aligns with class location
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.auto.AutoCommands;
-import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
+import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 @Disabled
 @Autonomous(name = "Test Pedro", group = "tests")
 public class testPedro extends OpMode {

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Paths;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Points;
 import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
-import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
+import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 
 @Autonomous(name = "Full Far Blue leave", group = "Blue")
 public class AutoFullFarLeave extends LinearOpMode {

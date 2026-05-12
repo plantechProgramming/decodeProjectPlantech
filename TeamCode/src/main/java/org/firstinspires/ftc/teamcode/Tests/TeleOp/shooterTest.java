@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Tests;
+package org.firstinspires.ftc.teamcode.Tests.TeleOp;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
@@ -9,10 +9,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
-import org.firstinspires.ftc.teamcode.teleOp.Utils;
-import org.firstinspires.ftc.teamcode.teleOp.actions.DriveTrain;
-import org.firstinspires.ftc.teamcode.teleOp.actions.Intake;
-import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
+import org.firstinspires.ftc.teamcode.teleOp.Shooter;
 
 @Configurable
 @Config
@@ -30,7 +28,6 @@ public class shooterTest extends TeamOpMode {
         Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
 //        Turret turret = new Turret(turretMotor, odometry);
         ReadWrite readWrite = new ReadWrite();
-        Utils utils = new Utils(telemetry,odometry);
         DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, "RED");
         odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
         DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -44,20 +41,12 @@ public class shooterTest extends TeamOpMode {
             shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .01);
             driveTrain.drive(-forward, -drift, turn, odometry.getHeading(AngleUnit.DEGREES), 1);//TODO: change for RED -forward, -drift
 
-//            shooter.noPhysShootHomeostasis(0.5);
             if(gamepad1.a){
                if(shooter.isUpToGivenSpeed(shooter.power)){
                    intake.inBetweenInFull();
                    intake.intakeIn();
                }
            }
-
-
-//           if(gamepad1.b){
-//               shooter.noPhysShoot(0.5);
-//           }
-//            if(gamepad1.a) shooter.noPhysShoot(0.5);
-//            shooter.shooter2.setPower(0.1);
 
             shooter.setShooterTelemetry(dashboardTelemetry);
             shooter.setShooterTelemetry(telemetry);
