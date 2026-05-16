@@ -15,7 +15,7 @@ public class Filters {
 
         double AVGsum = 0;
         double AVGCounter = 0;
-        public void updateAVG(double curr){
+        public void updateFilter(double curr){
             AVGsum += curr;
             AVGCounter++;
         }

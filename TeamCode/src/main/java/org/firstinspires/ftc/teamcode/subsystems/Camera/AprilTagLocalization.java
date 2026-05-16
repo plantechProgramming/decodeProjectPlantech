@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class AprilTagLocalization {
-    Utils utils = new Utils();
+//    Utils utils = new Utils();
     private String team;
     private int id = 0;
     public AprilTagProcessor aprilTag;
