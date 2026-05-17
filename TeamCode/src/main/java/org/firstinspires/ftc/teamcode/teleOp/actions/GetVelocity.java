@@ -44,16 +44,12 @@ public class GetVelocity {
     public double getRawVelocity() {
         curEncoder = motor.getCurrentPosition();
         curTime = timer.milliseconds();
-        double LOW_PASS_CONST = 1500;
 
         double timeDiff = curTime - prevTime;
         double encoderDiff = curEncoder - prevEncoder;
 
         double tickVelocity = encoderDiff / timeDiff; // ticks/milliseconds
         double curVelocity = (tickVelocity * millisecondsToMinute) / ticksPerRevolution;
-        if (Math.abs(curVelocity - prevRawVelocity) > LOW_PASS_CONST) {
-            curVelocity = prevRawVelocity;
-        }
         prevRawVelocity = curVelocity;
         return curVelocity;
     }

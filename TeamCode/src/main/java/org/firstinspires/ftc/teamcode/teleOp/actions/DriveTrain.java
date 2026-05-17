@@ -38,8 +38,7 @@ public class DriveTrain {
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     Utils utils;
-    public static double Kp = 0.034, Ki = 3e-9, Kd = 2.5, Kf = 0; // prev kp = 0.0325, ki = 0, kd = 2.1, kf=0
-    public static int t = 1;
+    public static double Kp = 0.034, Ki = 0, Kd = 2, Kf = 0, Ks = 0; // prev kp = 0.0325, ki = 0, kd = 2.1, kf=0
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     private PID pid;
     AprilTagLocalization tagLocalization;
@@ -57,7 +56,7 @@ public class DriveTrain {
         this.telemetry = telemetry;
         this.team = team;
         this.utils = new Utils(this.telemetry, this.odometry);
-        pid = new PID(Kp, Ki, Kd, Kf,t, this.telemetry);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
+        pid = new PID(Kp, Ki, Kd, Kf, Ks);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
         tagLocalization = new AprilTagLocalization(team,telemetry);
     }
 
@@ -124,7 +123,7 @@ public class DriveTrain {
         double power = 0;
         pid.setWanted(degrees);
 //        if(Math.abs(utils.getDiffBetweenAngles(degrees, botAngleRaw)) > threshold){ // if not in threshold
-        power = pid.getPIDPowerWithT(botAngleRaw);
+        power = pid.updatedeg(botAngleRaw);
 //        }
 //        else{
 //            power = 0;
