@@ -12,6 +12,7 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -61,9 +62,6 @@ public class TeleOpBlue extends OpMode {
 //        tagLocalization.applySettings();
 //        odometry.resetPosAndIMU();
     }
-    public final Position CAM_POS = new Position(DistanceUnit.CM, 0, 0, 0, 0); // need to make x bigger because x = forward of robot
-    private VisionPortal visionPortal;
-    private final YawPitchRollAngles CAM_ORIENTATION = new YawPitchRollAngles(AngleUnit.DEGREES,0,0,0,0); // need to make pitch smaller because -pitch = cam facing up
 
     @Override
     public void run(){
@@ -96,8 +94,9 @@ public class TeleOpBlue extends OpMode {
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
-
-            shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team);
+            if(!gamepad1.x){
+                shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team);
+            }
 //            shooter.noPhysShootHomeostasis(0.2);
 
             if(!gamepad1.left_bumper && !gamepad1.right_bumper) {

@@ -59,7 +59,7 @@ public class NextShooter implements Subsystem {
         );
     }
     double diameter = 0.096;
-    double TICK_PER_REV = 28;
+    double TICK_PER_REV = 8192;
     double powerToTicks(double power){
         double rpm = power*6000;
         double rotPerSec = rpm/60;
@@ -80,10 +80,10 @@ public class NextShooter implements Subsystem {
     }
     public void setPowerPID(MotorEx motor, MotorEx motor2){
         KineticState state = motor.getState();
-        KineticState state2 = motor2.getState();
-        motor.setPower(controlSystem.calculate(state));
-        motor2.setPower(-controlSystem.calculate(state2));
-        dashboardTelemetry.addData("pow", controlSystem.calculate(state));
+        double pow = controlSystem.calculate(state);
+        motor.setPower(pow);
+        motor2.setPower(-pow);
+        dashboardTelemetry.addData("pow", pow);
     }
 
     public Command setPow(){
@@ -107,7 +107,6 @@ public class NextShooter implements Subsystem {
         shooter2.setPower(0);
         shooter1.setPower(0);
     }
-    double prevRawVelocity;
     public long prevEncoder = 0;
     public long curEncoder;
     public double prevTime = 0;
@@ -118,17 +117,14 @@ public class NextShooter implements Subsystem {
     public double getRawVelocity() {
         curEncoder = (long)shooter1.getCurrentPosition();
         curTime = timer.milliseconds();
-        double LOW_PASS_CONST = 1500;
 
         double timeDiff = curTime - prevTime;
         double encoderDiff = curEncoder - prevEncoder;
 
         double tickVelocity = encoderDiff / timeDiff; // ticks/milliseconds
         double curVelocity = (tickVelocity * millisecondsToMinute) / ticksPerRevolution;
-        if (Math.abs(curVelocity - prevRawVelocity) > LOW_PASS_CONST) {
-            curVelocity = prevRawVelocity;
-        }
-        prevRawVelocity = curVelocity;
+        prevEncoder = curEncoder;
+        prevTime = curTime;
         return curVelocity;
     }
 }

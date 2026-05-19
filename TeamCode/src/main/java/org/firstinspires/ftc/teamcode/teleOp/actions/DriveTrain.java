@@ -238,6 +238,8 @@ public class DriveTrain {
         telemetry.addData("botheading", odometry.getHeading(AngleUnit.DEGREES));
         telemetry.addData("deg to goal red",utils.getAngleFromGoal("RED"));
         telemetry.addData("deg to goal blue",utils.getAngleFromGoal("BLUE"));
+        telemetry.addData("dis xy to goal red",utils.getXYdistToGoal("RED"));
+        telemetry.addData("dis xy to goal blue",utils.getXYdistToGoal("BLUE"));
         telemetry.addData("disToGoalred", utils.getDistFromGoal("RED"));
         telemetry.addData("disToGoalblue", utils.getDistFromGoal("BLUE"));
         telemetry.addData("robot is stopping", isStopped());

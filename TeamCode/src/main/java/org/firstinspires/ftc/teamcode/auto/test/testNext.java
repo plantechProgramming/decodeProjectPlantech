@@ -39,17 +39,18 @@ public class testNext extends NextFTCOpMode {
                 AutoCommands.INSTANCE_BLUE,
                 new SubsystemComponent(
                         NextInBetween.INSTANCE,
-                        NextIntake.INSTANCE
+                        NextIntake.INSTANCE,
+                        NextShooter.INSTANCE
                 )
         );
 
     }
     AutoCommands command = AutoCommands.INSTANCE_BLUE;
 
-
     private Command autonomousRoutine() {
         return new SequentialGroup(
                 command.startShooter(false),
+//                NextShooter.INSTANCE.setPow(),
                 NextIntake.INSTANCE.take(),
                 NextInBetween.INSTANCE.inBetweenInFull()
 
