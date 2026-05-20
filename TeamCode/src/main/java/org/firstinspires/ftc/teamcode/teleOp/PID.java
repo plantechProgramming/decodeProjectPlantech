@@ -61,8 +61,6 @@ public class PID {
     double currentError;
     public double update(final double current) {
         currentError = wanted - current;
-        final double currentTime = timer.milliseconds();
-        final double deltaTime = currentTime - prevTime;
         return getPIDPower(currentError);
     }
 

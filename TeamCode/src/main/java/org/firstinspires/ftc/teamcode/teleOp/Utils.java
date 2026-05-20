@@ -28,8 +28,8 @@ public class Utils {
     }
     public Utils(){}
     public final double LEN_FIELD = 360.172; // in cm
-    double yOffsetGoal = 20;//prev = 18
-    double xOffsetGoal = 20; // prev = 16
+    double yOffsetGoal = 12;//prev = 18
+    double xOffsetGoal = 12; // prev = 16
     double yOffsetGoalTag = 30;
     double xOffsetGoalTag = 35;
     public final Pose2D GOAL_RED = new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+xOffsetGoal, -LEN_FIELD/2 + yOffsetGoal,AngleUnit.DEGREES,-144);

@@ -9,7 +9,10 @@ import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.teleOp.PID;
+import org.firstinspires.ftc.teamcode.teleOp.Utils;
 import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
+import org.firstinspires.ftc.teamcode.teleOp.actions.Shooter;
 
 import dev.nextftc.control.ControlSystem;
 import dev.nextftc.control.KineticState;
@@ -38,13 +41,17 @@ public class NextShooter implements Subsystem {
     private MotorEx shooter1 = new MotorEx("shooter", -1);
     private MotorEx shooter2 = new MotorEx("shooter2", -1);
     double Szonedis = 0.5;
-    public static double farPow = 0.541;
-    public static double closePow = 0.387;
-    public static double kp = 0, ki = 0, kd = 0, kf = 0.0000011, kS = 0.1;
-    ControlSystem controlSystem = ControlSystem.builder() // next pid
-            .velPid(kp, ki, kd)
-            .basicFF(kf,0,kS)
-            .build();
+    public static double farPow = 0.534;
+    public static double closePow = 0.395;
+//    public static double kp = 0, ki = 0, kd = 0, kf = 0.0000011, ks = 0.1;
+    public static double kp = Shooter.kP, ki = Shooter.kI, kd = Shooter.kD, kf = Shooter.kF, ks = Shooter.kS;
+//    ControlSystem controlSystem = ControlSystem.builder() // next pid
+//            .velPid(kp, ki, kd)
+//            .basicFF(kf,0,ks)
+//            .build();
+    PID pid = new PID(kp, ki, kd, kf, ks);
+
+    Utils utils = new Utils();
 
     public Command naiveShooter(boolean far) {
         return new InstantCommand(
@@ -54,7 +61,8 @@ public class NextShooter implements Subsystem {
                     } else {
                         Szonedis = farPow;
                     }
-                    controlSystem.setGoal(new KineticState(0, powerToTicks(Szonedis)));
+//                    controlSystem.setGoal(new KineticState(0, powerToTicks(Szonedis)));
+                    pid.setWanted(Szonedis);
                 }
         );
     }
@@ -75,21 +83,28 @@ public class NextShooter implements Subsystem {
         return tickPerMin/60;
     }
 
-    public void setTelemetry(Telemetry telemetry){
-        telemetry.addData("wanted", ticksToRPM(controlSystem.getGoal().getVelocity()));
-        telemetry.addData("vel",getRawVelocity());
+    public void setTelemetry(Telemetry telemetry, double currVel){
+//        telemetry.addData("wanted", ticksToRPM(controlSystem.getGoal().getVelocity()));
+        telemetry.addData("vel", currVel);
         telemetry.addData("measured pow", shooter1.getPower());
 //        telemetry.addData("goal", controlSystem.getGoal());
-        telemetry.addData("szonedis", Szonedis);
+        telemetry.addData("wanted", Szonedis*6000);
         telemetry.update();
     }
-    public void setPowerPID(MotorEx motor, MotorEx motor2){
-        KineticState state = new KineticState(motor.getCurrentPosition(), RPMtoTicks(getRawVelocity()));
-        double pow = controlSystem.calculate(state);
+//    public void setPowerPID(MotorEx motor, MotorEx motor2){
+//        KineticState state = new KineticState(motor.getCurrentPosition(), RPMtoTicks(getRawVelocity()));
+//        double pow = controlSystem.calculate(state);
+//        motor.setPower(pow);
+//        motor2.setPower(-pow);
+//        dashboardTelemetry.addData("pow", pow);
+//        dashboardTelemetry.addData("motor state vel", ticksToRPM(state.getVelocity()));
+//    }
+    public void setPowerPID(MotorEx motor, MotorEx motor2, double currVel){
+        double pow = pid.update(currVel/6000);
         motor.setPower(pow);
         motor2.setPower(-pow);
         dashboardTelemetry.addData("pow", pow);
-        dashboardTelemetry.addData("motor state vel", ticksToRPM(state.getVelocity()));
+//        dashboardTelemetry.addData("motor state vel", ticksToRPM(state.getVelocity()));
     }
 
     public Command setPow(){
@@ -103,10 +118,11 @@ public class NextShooter implements Subsystem {
     // NOT subsystem periodic func, with normal periodic it initialized szonedis to 1 every second
     // loop
     public void Periodic(){
-        setPowerPID(shooter1, shooter2);
+        double vel = getVelocityFilter();
+        setPowerPID(shooter1, shooter2, vel);
 //        shooter1.setPower(Szonedis);
 //        shooter2.setPower(-Szonedis);
-        setTelemetry(dashboardTelemetry);
+        setTelemetry(dashboardTelemetry, vel);
     }
 
     public void stop(){
@@ -132,5 +148,13 @@ public class NextShooter implements Subsystem {
         prevEncoder = curEncoder;
         prevTime = curTime;
         return curVelocity;
+    }
+
+    double prevVelocity = 0;
+    public double getVelocityFilter() {
+        double velocity = getRawVelocity();
+        double filteredVelocity = utils.filter(0.1, velocity, prevVelocity);
+        prevVelocity = filteredVelocity;
+        return filteredVelocity;
     }
 }
