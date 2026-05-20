@@ -35,15 +35,15 @@ public class NextShooter implements Subsystem {
     }
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry =  dashboard.getTelemetry();
-    private MotorEx shooter1 = new MotorEx("shooter", -1).reversed();
+    private MotorEx shooter1 = new MotorEx("shooter", -1);
     private MotorEx shooter2 = new MotorEx("shooter2", -1);
     double Szonedis = 0.5;
     public static double farPow = 0.541;
     public static double closePow = 0.387;
-    public static double kp = 0.01, ki = 0, kd = 0, kf = 0.012;
+    public static double kp = 0, ki = 0, kd = 0, kf = 0.0000011, kS = 0.1;
     ControlSystem controlSystem = ControlSystem.builder() // next pid
             .velPid(kp, ki, kd)
-            .basicFF(0,0,kf)
+            .basicFF(kf,0,kS)
             .build();
 
     public Command naiveShooter(boolean far) {
@@ -70,20 +70,26 @@ public class NextShooter implements Subsystem {
         return tickPerMin/TICK_PER_REV;
     }
 
+    double RPMtoTicks(double RPM){
+        double tickPerMin = RPM*TICK_PER_REV;
+        return tickPerMin/60;
+    }
+
     public void setTelemetry(Telemetry telemetry){
         telemetry.addData("wanted", ticksToRPM(controlSystem.getGoal().getVelocity()));
         telemetry.addData("vel",getRawVelocity());
         telemetry.addData("measured pow", shooter1.getPower());
-        telemetry.addData("goal", controlSystem.getGoal());
+//        telemetry.addData("goal", controlSystem.getGoal());
         telemetry.addData("szonedis", Szonedis);
         telemetry.update();
     }
     public void setPowerPID(MotorEx motor, MotorEx motor2){
-        KineticState state = motor.getState();
+        KineticState state = new KineticState(motor.getCurrentPosition(), RPMtoTicks(getRawVelocity()));
         double pow = controlSystem.calculate(state);
         motor.setPower(pow);
         motor2.setPower(-pow);
         dashboardTelemetry.addData("pow", pow);
+        dashboardTelemetry.addData("motor state vel", ticksToRPM(state.getVelocity()));
     }
 
     public Command setPow(){
