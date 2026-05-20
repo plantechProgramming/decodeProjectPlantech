@@ -136,9 +136,12 @@ public class TeleOpBlue extends OpMode {
 //                intake.intake_motor.setPower(0.5);
 //            }
             else if(gamepad1.right_bumper){
-//                if(shooter.isUpToGivenSpeed(shooter.interpolateTel(utils.getDistFromGoal(team)))){
-                intake.inBetweenInFull();
-//                }
+                if(shooter.isUpToGivenSpeed(shooter.getVariableInterplationSpeedShoot(false, false, 0, team))){
+                    intake.inBetweenInFull();
+                }
+                else{
+                    intake.inBetweenInFullSlow();
+                }
 //                else{
 //                    intake.inBetweenInPart();
 //                }
@@ -207,6 +210,8 @@ public class TeleOpBlue extends OpMode {
             dashboardTelemetry.addData("pedro pose", follower.getPose());
             telemetry.addData("pedro pose", follower.getPose());
             telemetry.addData("time",elapsedTime.milliseconds());
+            telemetry.addData("xOffset", odometry.getXOffset(DistanceUnit.CM));
+            telemetry.addData("yOffset", odometry.getYOffset(DistanceUnit.CM));
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();

@@ -42,6 +42,12 @@ public class Intake {
         sr.setPower(1);
         sl.setPower(-1);
     }
+    public void inBetweenInFullSlow()
+    {
+        inbetween_motor.setPower(0.3);
+        sr.setPower(0.5);
+        sl.setPower(-0.5);
+    }
     public void inBetweenInPart(){
         inbetween_motor.setPower(0.9);
         sr.setPower(-0.33);

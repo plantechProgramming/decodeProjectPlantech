@@ -116,7 +116,7 @@ public class Shooter {
 //        telemetry.addData("wanted variable", power*6000);
 //        telemetry.addData("wanted fixed", errorFix*power*6000);
     }
-    public void variableInterplationSpeedShoot(boolean more, boolean less, double jumps, String Team){
+    public double getVariableInterplationSpeedShoot(boolean more, boolean less, double jumps, String Team){
 
         if(more && !prevMore){power += jumps;}
         else if(less && !prevLess){
@@ -126,8 +126,8 @@ public class Shooter {
             telemetry.addData("wanted variable", power*6000);
             prevLess = less;
             prevMore = more;
-            noPhysShootHomeostasis(interpolateTel(utils.getDistFromGoal(Team)) + power);
-            return;
+            return interpolateTel(utils.getDistFromGoal(Team)) + power;
+
         }
         if (power >= 0.8){
             power = 0.8;
@@ -135,16 +135,14 @@ public class Shooter {
         prevLess = less;
         prevMore = more;
 //        noPhysShootNext(power);
-        noPhysShootHomeostasis(interpolateTel(utils.getDistFromGoal(Team)) + power);
+        return interpolateTel(utils.getDistFromGoal(Team)) + power;
 //        telemetry.addData("wanted variable", power*6000);
 //        telemetry.addData("wanted fixed", errorFix*power*6000);
     }
-    public void setDashBoardPID(){
-        PIDFCoefficients pidNew = new PIDFCoefficients(kP, kI, kD,kF);
-        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-        shooter2.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-    }
 
+    public void variableInterplationSpeedShoot(boolean more, boolean less, double jumps, String Team){
+        noPhysShootHomeostasis(getVariableInterplationSpeedShoot(more, less, jumps, Team));
+    }
 
     public void interpolate(double dis){
         noPhysShootHomeostasis( (3.73803e-9) * Math.pow(dis, 3)- 0.00000276289 * Math.pow(dis, 2) + 0.00139588 * dis + 0.232989);
