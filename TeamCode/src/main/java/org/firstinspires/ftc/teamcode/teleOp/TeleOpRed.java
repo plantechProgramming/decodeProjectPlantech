@@ -77,7 +77,7 @@ public class TeleOpRed extends OpMode {
         int stopCount = 0;
 //        follower.setStartingPose(readWrite.readPose());
         follower.update();
-        odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
+        odometry.setPosition(utils.PedroPoseConverter(readWrite.readPose()));
         odometry.update();
         Pose lastPos = follower.getPose();
         DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

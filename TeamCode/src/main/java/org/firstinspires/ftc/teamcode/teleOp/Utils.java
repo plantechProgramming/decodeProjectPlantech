@@ -28,14 +28,55 @@ public class Utils {
     }
     public Utils(){}
     public final double LEN_FIELD = 360.172; // in cm
-    double yOffsetGoal = 12;//prev = 18
-    double xOffsetGoal = 12; // prev = 16
+    double yOffsetGoal = 10;//prev = 18
+    double xOffsetGoal = 20; // prev = 16
     double yOffsetGoalTag = 30;
     double xOffsetGoalTag = 35;
-    public final Pose2D GOAL_RED = new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+xOffsetGoal, -LEN_FIELD/2 + yOffsetGoal,AngleUnit.DEGREES,-144);
-    public final Pose2D GOAL_BLUE = new Pose2D(DistanceUnit.CM,LEN_FIELD/2-xOffsetGoal, -LEN_FIELD/2 + yOffsetGoal,AngleUnit.DEGREES,-36);
-    public final Pose2D GOAL_TAG_RED = new Pose2D(DistanceUnit.CM, -LEN_FIELD/2+xOffsetGoalTag, -LEN_FIELD/2+yOffsetGoalTag, AngleUnit.DEGREES, -144);
-    public final Pose2D GOAL_TAG_BLUE = new Pose2D(DistanceUnit.CM, LEN_FIELD/2-xOffsetGoalTag, -LEN_FIELD/2+yOffsetGoalTag, AngleUnit.DEGREES, -36);
+    public final Pose2D GOAL_RED_CLOSE = getGoal("RED",xOffsetGoal,yOffsetGoal);
+    public final Pose2D GOAL_BLUE_CLOSE = getGoal("BLUE",xOffsetGoal,yOffsetGoal);
+    public Pose2D GOAL_RED = getGoal("RED",xOffsetGoal,yOffsetGoal);
+    public Pose2D GOAL_BLUE = getGoal("BLUE",xOffsetGoal,yOffsetGoal);
+
+    // we want to swap the offset directions when we move to far, because
+    // we need to hit the side of the goal to mitigate backspin, and it's easier to
+    // hit a different side in far than close
+    public final Pose2D GOAL_RED_FAR = getGoal("RED",yOffsetGoal*1.45,xOffsetGoal);
+    public final Pose2D GOAL_BLUE_FAR = getGoal("BLUE",yOffsetGoal*1.45,xOffsetGoal);
+    public final Pose2D GOAL_TAG_RED = getGoal("RED",xOffsetGoalTag,yOffsetGoalTag);
+    public final Pose2D GOAL_TAG_BLUE = getGoal("BLUE",xOffsetGoalTag,yOffsetGoalTag);
+
+    public Pose2D getGoal(String team, double xOffset, double yOffset){
+        double GOAL_HEADING_BLUE = -36;
+        double GOAL_HEADING_RED = -144;
+        if(team.equals("RED")){
+            return new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+xOffset, -LEN_FIELD/2 + yOffset,AngleUnit.DEGREES,GOAL_HEADING_RED);
+        }
+        else{
+            return new Pose2D(DistanceUnit.CM,LEN_FIELD/2-xOffset, -LEN_FIELD/2 + yOffset,AngleUnit.DEGREES,GOAL_HEADING_BLUE);
+        }
+    }
+    public void setFarGoal(){
+        GOAL_BLUE = GOAL_BLUE_FAR;
+        GOAL_RED = GOAL_RED_FAR;
+    }
+
+    public void setCloseGoal(){
+        GOAL_BLUE = GOAL_BLUE_CLOSE;
+        GOAL_RED = GOAL_RED_CLOSE;
+    }
+
+    public void updateGoal(){
+        if(isFar()){
+            setFarGoal();
+        }
+        else{
+            setCloseGoal();
+        }
+    }
+
+    public boolean isFar(){
+        return odometry.getPosY(DistanceUnit.CM) > 60;
+    }
     public Pair<Double, Double> getXYdistToPoint(Pose2D point){
         double robotX = odometry.getPosX(DistanceUnit.CM);
         double robotY = odometry.getPosY(DistanceUnit.CM);

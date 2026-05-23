@@ -62,7 +62,7 @@ public class AutoCommands implements Component{
 
 
     public Command shoot(){
-        return new SequentialGroup(
+        return new ParallelGroup(
                 inBetween.inBetweenInFull(),
                 intake.take()
         );

@@ -79,7 +79,7 @@ public class TeleOpBlue extends OpMode {
         boolean activatedHold = false;
         boolean aang = false;
         int count = 0;
-        odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
+        odometry.setPosition(utils.PedroPoseConverter(readWrite.readPose()));
         odometry.update();
         Pose lastPos = follower.getPose();
         DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -212,10 +212,12 @@ public class TeleOpBlue extends OpMode {
             telemetry.addData("time",elapsedTime.milliseconds());
             telemetry.addData("xOffset", odometry.getXOffset(DistanceUnit.CM));
             telemetry.addData("yOffset", odometry.getYOffset(DistanceUnit.CM));
+
             telemetry.update();
             dashboardTelemetry.update();
             odometry.update();
             follower.update();
+//            utils.updateGoal();
         }
 
     }

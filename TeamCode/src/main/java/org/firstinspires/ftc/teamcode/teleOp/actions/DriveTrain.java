@@ -38,7 +38,7 @@ public class DriveTrain {
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     Utils utils;
-    public static double Kp = 0.034, Ki = 0, Kd = 2, Kf = 0, Ks = 0; // prev kp = 0.0325, ki = 0, kd = 2.1, kf=0
+    public static double Kp = 0.038, Ki = 0, Kd = 2.5, Kf = 0, Ks = 0; // prev kp = 0.0325, ki = 0, kd = 2.1, kf=0
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     private PID pid;
     AprilTagLocalization tagLocalization;
@@ -182,9 +182,6 @@ public class DriveTrain {
         }
     }
 
-    public boolean isFar(){
-        return odometry.getPosY(DistanceUnit.CM) > 60;
-    }
     public boolean isStopped(){
         boolean xInThresh = Math.abs(odometry.getVelX(DistanceUnit.CM)) < 7;
         boolean yInThresh = Math.abs(odometry.getVelY(DistanceUnit.CM)) < 7;
@@ -247,20 +244,10 @@ public class DriveTrain {
 //        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
         telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
         telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
-        telemetry.addData("is far", isFar());
-    }
-    public Pose2D PedroPoseConverter(Pose pose){
-        double x = pose.getX();
-        double y = pose.getY();
-        double hed = Math.toDegrees(pose.getHeading());
-        double lenField = 365.76; // 144 inch to cm
-        double newx = ((-lenField/144)*x)+lenField/2;
-        double newy = ((-lenField/144)*y)+lenField/2;
-        hed = hed - 180;
-        if(hed <= 180){
-            hed += 360;
-        }
-        return new Pose2D(DistanceUnit.CM, newx, newy, AngleUnit.DEGREES, hed);
+        telemetry.addData("is far", utils.isFar());
+        telemetry.addData("blue goal", utils.GOAL_BLUE);
+        telemetry.addData("blue goal far", utils.GOAL_BLUE_FAR);
+        telemetry.addData("blue goal close", utils.GOAL_BLUE_CLOSE);
     }
 }
 
