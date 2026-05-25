@@ -144,11 +144,8 @@ public class Shooter {
         noPhysShootHomeostasis(getVariableInterplationSpeedShoot(more, less, jumps, Team));
     }
 
-    public void interpolate(double dis){
-        noPhysShootHomeostasis( (3.73803e-9) * Math.pow(dis, 3)- 0.00000276289 * Math.pow(dis, 2) + 0.00139588 * dis + 0.232989);
-    }
     public double interpolateTel(double dis){
-        return   ((3.73803e-9) * Math.pow(dis, 3)- 0.00000276289 * Math.pow(dis, 2) + 0.00139588 * dis + 0.232989);
+        return   (((1.82866e-8) * Math.pow(dis, 3) - 0.000010495 * Math.pow(dis, 2) + 0.00251889 * dis + 0.194511)+0.00000001);
     }
 
 //    / @param dis: distance from goal
@@ -225,10 +222,6 @@ public class Shooter {
         telemetry.addData("POW", output);
     }
 
-    public boolean isUpToSpeed(){
-        double threshold = 65; //TODO: tune!! should be the biggest reliably scoring value
-        return Math.abs(shooterVelocity.getVelocityFilter() - Szonedis*6000) < threshold;
-    }
     public boolean isUpToGivenSpeed(double speed){
         double threshold = 100; //TODO: tune!! should be the biggest reliably scoring value
         return Math.abs(shooterVelocity.getVelocityFilter() - speed*6000) < threshold;
