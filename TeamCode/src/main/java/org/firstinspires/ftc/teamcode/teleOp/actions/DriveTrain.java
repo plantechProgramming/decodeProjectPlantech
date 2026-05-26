@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.seattlesolvers.solverslib.controller.Controller;
@@ -38,15 +39,16 @@ public class DriveTrain {
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     Utils utils;
-    public static double Kp = 0.038, Ki = 0, Kd = 2.5, Kf = 0, Ks = 0; // prev kp = 0.0325, ki = 0, kd = 2.1, kf=0
+    public static double Kp = 0.021, Ki = 0, Kd = 1.9, Kf = 0, Ks = 0.06; // prev kp = 0.0325, ki = 0, kd = 2.1, kf=0
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     private PID pid;
     AprilTagLocalization tagLocalization;
     String team;
+    VoltageSensor voltageSensor;
 //    private PID shortTurnPID;
     static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
 
-    public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu, GoBildaPinpointDriver odometry, String team) {
+    public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu, GoBildaPinpointDriver odometry, String team, VoltageSensor voltageSensor) {
         this.BL = BL;
         this.BR = BR;
         this.FL = FL;
@@ -56,6 +58,7 @@ public class DriveTrain {
         this.telemetry = telemetry;
         this.team = team;
         this.utils = new Utils(this.telemetry, this.odometry);
+        this.voltageSensor = voltageSensor;
         pid = new PID(Kp, Ki, Kd, Kf, Ks);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
         tagLocalization = new AprilTagLocalization(team,telemetry);
     }
@@ -115,19 +118,23 @@ public class DriveTrain {
         BL.setPower(0);
     }
     double count;
-
+    double error;
     public void turnToGyro(double degrees) {
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
 
-        double threshold = 0.55;
+        double threshold = 1;
         double power = 0;
         pid.setWanted(degrees);
-//        if(Math.abs(utils.getDiffBetweenAngles(degrees, botAngleRaw)) > threshold){ // if not in threshold
-        power = pid.updatedeg(botAngleRaw);
+        if(Math.abs(utils.getDiffBetweenAngles(degrees, botAngleRaw)) > threshold) { // if not in threshold
+            power = pid.updatedeg(botAngleRaw);
+            error = degrees - botAngleRaw;
+
 //        }
 //        else{
 //            power = 0;
 //        }
+            power = utils.getVoltageCompensatedPow(power, voltageSensor.getVoltage());
+        }
         FL.setPower(-power);
         FR.setPower(power);
 
@@ -161,26 +168,6 @@ public class DriveTrain {
             usingCamForTurn = false;
         }
     }
-    public void turnToGoalWithThresh(String team, AprilTagDetection goalTag){
-        double thresh = 1;
-        if(goalTag != null){
-            if(!(Math.abs(goalTag.ftcPose.bearing) < thresh)){
-                turnToGoal(team, goalTag);
-            }
-            else{
-/*
-                stop();
-*/
-            }
-        }
-        else if(!(Math.abs(utils.getAngleFromGoal(team)-odometry.getHeading(AngleUnit.DEGREES)) < thresh)){
-            turnToGoal(team, goalTag);
-        }
-        else{
-//            stop();
-            telemetry.addLine("aaaaaaaa");
-        }
-    }
 
     public boolean isStopped(){
         boolean xInThresh = Math.abs(odometry.getVelX(DistanceUnit.CM)) < 7;
@@ -188,49 +175,8 @@ public class DriveTrain {
         boolean headInThresh = Math.abs(odometry.getHeadingVelocity(AngleUnit.DEGREES.getUnnormalized())) < 5;
         return xInThresh && yInThresh && headInThresh;
     }
-    public String isXStoppedTel() {
-        if (Math.abs(odometry.getVelX(DistanceUnit.CM)) < 7) {
-            return "x is stopped";
-        } else {
-            return "x isn't stopped";
-        }
-    }
-    public String isYStoppedTel(){
-        if(Math.abs(odometry.getVelY(DistanceUnit.CM)) < 7){
-            return "y is stopped";
-        }
-        else{
-            return "y isn't stopped";
-        }
-    }
-    public String isHeadingStoppedTel(){
-        if(Math.abs(odometry.getHeadingVelocity(AngleUnit.DEGREES.getUnnormalized())) < 5){
-            return "heading is stopped";
-        }
-        else{
-            return "heading isn't stopped";
-        }
-    }
 
-    public Pose2D lastFilteredPose = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
-    public Pose2D filteredPose = null;
-    public Pose2D filterCamPose(Pose2D pose){
-        if(filteredPose != null)
-            if(utils.PoseThreshold(filteredPose, odometry.getPosition(), 100, 10)){
-                filteredPose = utils.medianPose(pose);
-            }else{
-                filteredPose = pose;
-            }
-        else{
-            filteredPose = pose;
-        }
 
-//        if(utils.PoseThreshold(pose, filteredPose, 15, 10)){ // heading threshold is big because were not using the heading filtered
-//            filteredPose = utils.filterPose(0.7, pose, lastFilteredPose);
-//        }
-        lastFilteredPose = filteredPose;
-        return filteredPose;
-    }
     public void setDriveTelemetry(Telemetry telemetry){
         telemetry.addData("botheading", odometry.getHeading(AngleUnit.DEGREES));
         telemetry.addData("deg to goal red",utils.getAngleFromGoal("RED"));
@@ -248,6 +194,9 @@ public class DriveTrain {
         telemetry.addData("blue goal", utils.GOAL_BLUE);
         telemetry.addData("blue goal far", utils.GOAL_BLUE_FAR);
         telemetry.addData("blue goal close", utils.GOAL_BLUE_CLOSE);
+        telemetry.addData("voltage", voltageSensor.getVoltage());
+        telemetry.addData("error deg", error);
+        telemetry.addData("wrap around error", utils.convertToWrapAroundAngle(error));
     }
 }
 

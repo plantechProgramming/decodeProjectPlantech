@@ -26,7 +26,7 @@ public class shooterTest extends OpMode {
 
     @Override
     protected void run() {
-        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
+        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry,voltageSensor);
         Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
 //        Turret turret = new Turret(turretMotor, odometry);
         ReadWrite readWrite = new ReadWrite();

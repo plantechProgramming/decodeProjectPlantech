@@ -61,8 +61,8 @@ public class TeleOpRed extends OpMode {
     @Override
     public void run(){
         Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
-        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, team);
-        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
+        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, team, voltageSensor);
+        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry,voltageSensor);
         ReadWrite readWrite = new ReadWrite();
         Utils utils = new Utils(telemetry,odometry);
         ElapsedTime elapsedTime = new ElapsedTime();

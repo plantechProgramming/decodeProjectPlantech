@@ -97,16 +97,23 @@ public class PID {
         return getPIDPower(currentError);
     }
 
+    double prevSign = 0;
     public double getPIDPower(final double currentError){
         double currentTime = timer.milliseconds();
         double deltaTime = currentTime - prevTime;
+        double sign = Math.signum(currentError);
 
         integral += currentError * deltaTime;
         final double derivative = deltaTime == 0 ? 0 : (currentError - prevError) / deltaTime;
 
+        if (sign != prevSign) {
+            integral = 0;
+        }
+
         prevError = currentError;
         prevTime = currentTime;
-        power = kP * currentError + kI * integral + kD * derivative + kF * wanted + kS;
+        prevSign = sign;
+        power = kP * currentError + kI * integral + kD * derivative + kF * wanted + kS*sign;
 //        telemetry.addData("derivative",derivative);
 //        telemetry.addData("integral", integral);
 //        telemetry.addData("error", currentError);

@@ -60,7 +60,7 @@ public class aprilTagsTest  extends OpMode {
             sleep(20);
         }
         tagLocalization.applySettings();
-        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
+        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry, voltageSensor);
         Utils utils = new Utils();
         int count = 0;
         int errorCounter = 0;

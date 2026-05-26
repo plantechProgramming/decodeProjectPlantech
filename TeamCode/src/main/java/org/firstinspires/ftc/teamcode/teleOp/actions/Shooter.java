@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.teleOp.PID;
 import org.firstinspires.ftc.teamcode.teleOp.Utils;
 
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.controller.PIDFController;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
@@ -29,26 +30,29 @@ public class Shooter {
     public DcMotorEx shooter, shooter2;
     Telemetry telemetry;
     GoBildaPinpointDriver odometry;
+
+    VoltageSensor voltageSensor;
 //    public static double kP = 24.5; //og = 215
 //    public static double kI = 0.1;//0.5
 //    public static double kD = 1; //0
 //    public static double kF = 0.6; // OG = 14.5
-    public static double kP = 15;
+    public static double kP = 13;
     public static double kI = 0;
     public static double kD = 0;
-    public static double kF = 1.123;
-    public static double kS = 0.11;
+    public static double kF = 1.315;
+    public static double kS = 0.04;
     Utils utils;
 
     GetVelocity shooterVelocity;
     GetVelocity shooter2Velocity;
 
-    public Shooter(DcMotorEx shootMotor, Telemetry telemetry, DcMotorEx shooter2, GoBildaPinpointDriver odometry){
+    public Shooter(DcMotorEx shootMotor, Telemetry telemetry, DcMotorEx shooter2, GoBildaPinpointDriver odometry, VoltageSensor voltageSensor){
         this.shooter = shootMotor;
         this.telemetry = telemetry;
         this.shooter2 = shooter2;
         this.odometry = odometry;
         this.utils = new Utils(telemetry, odometry);
+        this.voltageSensor = voltageSensor;
 
         shooterVelocity = new GetVelocity(shooter,0.1, 8192);
         shooter2Velocity = new GetVelocity(this.shooter2,0.1,28);
@@ -141,7 +145,8 @@ public class Shooter {
     }
 
     public void variableInterplationSpeedShoot(boolean more, boolean less, double jumps, String Team){
-        noPhysShootHomeostasis(getVariableInterplationSpeedShoot(more, less, jumps, Team));
+        double vel = getVariableInterplationSpeedShoot(more, less, jumps, Team);
+        noPhysShootHomeostasis(vel);
     }
 
     public double interpolateTel(double dis){

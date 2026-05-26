@@ -66,8 +66,8 @@ public class TeleOpBlue extends OpMode {
     @Override
     public void run(){
         Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
-        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, team);
-        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
+        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, team,voltageSensor);
+        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry,voltageSensor);
         ReadWrite readWrite = new ReadWrite();
         Utils utils = new Utils(telemetry,odometry);
         ElapsedTime elapsedTime = new ElapsedTime();
@@ -197,24 +197,24 @@ public class TeleOpBlue extends OpMode {
 
 //            telemetry.addData("count", count);
 //            dashboardTelemetry.addData("count", count);
-            driveTrain.setDriveTelemetry(telemetry);
-            driveTrain.setDriveTelemetry(dashboardTelemetry);
-
-            shooter.setShooterTelemetry(telemetry);
-            shooter.setShooterTelemetry(dashboardTelemetry);
-//            tagLocalization.setCameraTelemetry(telemetry);
-//            tagLocalization.setCameraTelemetry(dashboardTelemetry);
+//            driveTrain.setDriveTelemetry(telemetry);
+//            driveTrain.setDriveTelemetry(dashboardTelemetry);
 //
-            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
-            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
-            dashboardTelemetry.addData("pedro pose", follower.getPose());
-            telemetry.addData("pedro pose", follower.getPose());
-            telemetry.addData("time",elapsedTime.milliseconds());
-            telemetry.addData("xOffset", odometry.getXOffset(DistanceUnit.CM));
-            telemetry.addData("yOffset", odometry.getYOffset(DistanceUnit.CM));
+//            shooter.setShooterTelemetry(telemetry);
+//            shooter.setShooterTelemetry(dashboardTelemetry);
+////            tagLocalization.setCameraTelemetry(telemetry);
+////            tagLocalization.setCameraTelemetry(dashboardTelemetry);
+////
+//            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
+//            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
+//            dashboardTelemetry.addData("pedro pose", follower.getPose());
+//            telemetry.addData("pedro pose", follower.getPose());
+//            telemetry.addData("time",elapsedTime.milliseconds());
+//            telemetry.addData("xOffset", odometry.getXOffset(DistanceUnit.CM));
+//            telemetry.addData("yOffset", odometry.getYOffset(DistanceUnit.CM));
 
-            telemetry.update();
-            dashboardTelemetry.update();
+//            telemetry.update();
+//            dashboardTelemetry.update();
             odometry.update();
             follower.update();
 //            utils.updateGoal();

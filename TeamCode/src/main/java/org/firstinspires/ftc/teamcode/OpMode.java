@@ -19,6 +19,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorColor;
@@ -39,6 +40,7 @@ public abstract class OpMode extends LinearOpMode {
     protected CameraName camera;
     protected DcMotorEx DriveFrontLeft, DriveFrontRight, DriveBackLeft, DriveBackRight,inBetweenMotor, EH, EA,SU,SD, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
     protected ElapsedTime runtime = new ElapsedTime();
+    protected VoltageSensor voltageSensor;
     protected Limelight3A ll;
     public boolean liftFlag = false;
     protected Telemetry dashboardTelemetry;
@@ -72,10 +74,10 @@ public abstract class OpMode extends LinearOpMode {
         DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         //servos connected funny
-        intakeIBR = hardwareMap.get(CRServo.class,"IBL");
-        intakeIBL = hardwareMap.get(CRServo.class,"IBR");
-        shooterIBL = hardwareMap.get(CRServo.class,"SIBR");
-        shooterIBR = hardwareMap.get(CRServo.class,"SIBL");
+//        intakeIBR = hardwareMap.get(CRServo.class,"IBL");
+//        intakeIBL = hardwareMap.get(CRServo.class,"IBR");
+        shooterIBL = hardwareMap.get(CRServo.class,"SR");
+        shooterIBR = hardwareMap.get(CRServo.class,"SL");
 
 //
         intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
@@ -91,12 +93,12 @@ public abstract class OpMode extends LinearOpMode {
         Imu.initialize(parameters);
         Imu.resetYaw();
 
-        shootMotor = hardwareMap.get(DcMotorEx.class, "shooter");
+        shootMotor = hardwareMap.get(DcMotorEx.class, "ShooterClose");
         shootMotor.setDirection(DcMotorSimple.Direction.FORWARD);
 //        shootMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shootMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        shootMotorOp = hardwareMap.get(DcMotorEx.class, "shooter2");
+        shootMotorOp = hardwareMap.get(DcMotorEx.class, "ShooterFar");
         shootMotorOp.setDirection(DcMotorSimple.Direction.FORWARD);
 //        shootMotorOp.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shootMotorOp.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
@@ -110,6 +112,8 @@ public abstract class OpMode extends LinearOpMode {
         odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         odometry.setOffsets(-155,-100, DistanceUnit.MM); //x = -155, y= -90
+
+        voltageSensor = hardwareMap.voltageSensor.iterator().next(); // wtf
 //        odometry.resetPosAndIMU();
 
         // until we find the fucking camera we can't scan it and add it to robot config :(((

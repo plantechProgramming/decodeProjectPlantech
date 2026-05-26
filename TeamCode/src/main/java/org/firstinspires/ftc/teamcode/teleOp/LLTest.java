@@ -24,7 +24,7 @@ public class LLTest extends OpMode {
         telemetry.setMsTransmissionInterval(11);
         waitForStart();
         Limelight limeLight = new Limelight(ll);
-        Shooter shooter = new Shooter(shootMotor,telemetry,shootMotorOp,odometry);
+        Shooter shooter = new Shooter(shootMotor,telemetry,shootMotorOp,odometry,voltageSensor);
         double maxHeading = -190;
         double minHeading = 370;
         limeLight.start();
