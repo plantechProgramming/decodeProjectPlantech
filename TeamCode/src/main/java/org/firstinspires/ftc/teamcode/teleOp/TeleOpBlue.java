@@ -197,25 +197,25 @@ public class TeleOpBlue extends OpMode {
 ////                tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
 //            }
 
-            telemetry.addData("count", count);
-            dashboardTelemetry.addData("count", count);
-            driveTrain.setDriveTelemetry(telemetry);
-            driveTrain.setDriveTelemetry(dashboardTelemetry);
-
-            shooter.setShooterTelemetry(telemetry);
-            shooter.setShooterTelemetry(dashboardTelemetry);
-//            tagLocalization.setCameraTelemetry(telemetry);
-//            tagLocalization.setCameraTelemetry(dashboardTelemetry);
+//            telemetry.addData("count", count);
+//            dashboardTelemetry.addData("count", count);
+//            driveTrain.setDriveTelemetry(telemetry);
+//            driveTrain.setDriveTelemetry(dashboardTelemetry);
 //
-            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
-            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
-            dashboardTelemetry.addData("pedro pose", follower.getPose());
-            telemetry.addData("pedro pose", follower.getPose());
-            telemetry.addData("time",elapsedTime.milliseconds());
-
-
-            telemetry.update();
-            dashboardTelemetry.update();
+//            shooter.setShooterTelemetry(telemetry);
+//            shooter.setShooterTelemetry(dashboardTelemetry);
+//////            tagLocalization.setCameraTelemetry(telemetry);
+//////            tagLocalization.setCameraTelemetry(dashboardTelemetry);
+//////
+//            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
+//            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
+//            dashboardTelemetry.addData("pedro pose", follower.getPose());
+//            telemetry.addData("pedro pose", follower.getPose());
+//            telemetry.addData("time",elapsedTime.milliseconds());
+//
+//
+//            telemetry.update();
+//            dashboardTelemetry.update();
             odometry.update();
             follower.update();
 //            utils.updateGoal();

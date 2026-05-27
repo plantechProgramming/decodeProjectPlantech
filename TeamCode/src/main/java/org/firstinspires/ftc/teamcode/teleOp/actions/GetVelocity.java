@@ -33,8 +33,7 @@ public class GetVelocity {
     public double getVelocityFilter() {
         double velocity = getRawVelocity();
 
-        prevTime = curTime;
-        prevEncoder = curEncoder;
+
         double filteredVelocity = filtered(alpha, velocity, prevVelocity);
         prevVelocity = filteredVelocity;
         return filteredVelocity;
@@ -51,6 +50,8 @@ public class GetVelocity {
         double tickVelocity = encoderDiff / timeDiff; // ticks/milliseconds
         double curVelocity = (tickVelocity * millisecondsToMinute) / ticksPerRevolution;
         prevRawVelocity = curVelocity;
+        prevTime = curTime;
+        prevEncoder = curEncoder;
         return curVelocity;
     }
     public double filtered(double alpha, double val, double prevVal){
