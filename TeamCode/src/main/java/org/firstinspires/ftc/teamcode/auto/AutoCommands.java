@@ -113,9 +113,9 @@ public class AutoCommands implements Component{
 
     public Command startShooter(boolean far){
         return new SequentialGroup(
-                shooter.naiveShooter(far)
-//                intake.take(),
-//                inBetween.inBetweenInPart()
+                shooter.naiveShooter(far),
+                inBetween.startAxons(),
+                intake.take()
         );
     }
 

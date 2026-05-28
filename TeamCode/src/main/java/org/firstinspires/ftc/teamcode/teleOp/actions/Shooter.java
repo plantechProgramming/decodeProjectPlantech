@@ -150,7 +150,7 @@ public class Shooter {
     }
 
     public double interpolateTel(double dis){
-        return   (((1.82866e-8) * Math.pow(dis, 3) - 0.000010495 * Math.pow(dis, 2) + 0.00251889 * dis + 0.194511)+0.00000001);
+        return   (((1.82866e-8) * Math.pow(dis, 3) - 0.000010495 * Math.pow(dis, 2) + 0.00251889 * dis + 0.194511));
     }
 
 //    / @param dis: distance from goal

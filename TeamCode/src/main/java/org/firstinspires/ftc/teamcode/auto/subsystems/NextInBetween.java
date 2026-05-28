@@ -11,8 +11,8 @@ import dev.nextftc.hardware.powerable.SetPower;
 public class NextInBetween implements Subsystem {
     public static final NextInBetween INSTANCE = new NextInBetween();
     public NextInBetween(){}
-    CRServoEx sl = new CRServoEx("SIBL",-1)
-            ,sr = new CRServoEx("SIBR",-1); // ib = inbetween, s = shooter
+    CRServoEx sl = new CRServoEx("SL",-1)
+            ,sr = new CRServoEx("SR",-1); // ib = inbetween, s = shooter
 
     MotorEx inbetweenMotor = new MotorEx("inbetween", -1);
 
@@ -30,6 +30,14 @@ public class NextInBetween implements Subsystem {
 //                new NextInBetween().stopShooterPrimers()
                 new SetPower(sr, 0.5),
                 new SetPower(sl, -0.5)
+        );
+    }
+
+    public Command startAxons(){
+        return new ParallelGroup(
+                new SetPower(inbetweenMotor, -0.3),
+                new SetPower(sr, 0.3),
+                new SetPower(sl, -0.3)
         );
     }
 

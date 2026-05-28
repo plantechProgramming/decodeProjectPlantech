@@ -122,7 +122,7 @@ public class DriveTrain {
     public void turnToGyro(double degrees) {
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
 
-        double threshold = 1;
+        double threshold = 1.2;
         double power = 0;
         pid.setWanted(degrees);
         if(Math.abs(utils.getDiffBetweenAngles(degrees, botAngleRaw)) > threshold) { // if not in threshold

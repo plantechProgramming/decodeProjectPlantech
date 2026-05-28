@@ -202,8 +202,8 @@ public class TeleOpBlue extends OpMode {
 //            driveTrain.setDriveTelemetry(telemetry);
 //            driveTrain.setDriveTelemetry(dashboardTelemetry);
 //
-//            shooter.setShooterTelemetry(telemetry);
-//            shooter.setShooterTelemetry(dashboardTelemetry);
+            shooter.setShooterTelemetry(telemetry);
+            shooter.setShooterTelemetry(dashboardTelemetry);
 //////            tagLocalization.setCameraTelemetry(telemetry);
 //////            tagLocalization.setCameraTelemetry(dashboardTelemetry);
 //////

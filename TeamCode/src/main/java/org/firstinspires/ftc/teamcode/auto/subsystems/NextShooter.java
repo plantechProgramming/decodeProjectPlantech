@@ -38,10 +38,10 @@ public class NextShooter implements Subsystem {
     }
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry =  dashboard.getTelemetry();
-    private MotorEx shooter1 = new MotorEx("shooter", -1);
-    private MotorEx shooter2 = new MotorEx("shooter2", -1);
+    private MotorEx shooter1 = new MotorEx("ShooterClose", -1);
+    private MotorEx shooter2 = new MotorEx("ShooterFar", -1);
     double Szonedis = 0.5;
-    public static double farPow = 0.534;
+    public static double farPow = 0.532;
     public static double closePow = 0.395;
 //    public static double kp = 0, ki = 0, kd = 0, kf = 0.0000011, ks = 0.1;
     public static double kp = Shooter.kP, ki = Shooter.kI, kd = Shooter.kD, kf = Shooter.kF, ks = Shooter.kS;
