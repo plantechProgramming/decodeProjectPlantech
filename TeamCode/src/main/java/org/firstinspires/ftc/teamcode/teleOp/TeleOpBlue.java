@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -202,13 +203,11 @@ public class TeleOpBlue extends OpMode {
 //            driveTrain.setDriveTelemetry(telemetry);
 //            driveTrain.setDriveTelemetry(dashboardTelemetry);
 //
-            shooter.setShooterTelemetry(telemetry);
-            shooter.setShooterTelemetry(dashboardTelemetry);
-//////            tagLocalization.setCameraTelemetry(telemetry);
-//////            tagLocalization.setCameraTelemetry(dashboardTelemetry);
-//////
+//            shooter.setShooterTelemetry(telemetry);
+//            shooter.setShooterTelemetry(dashboardTelemetry);
+//
 //            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
-//            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
+//            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
 //            dashboardTelemetry.addData("pedro pose", follower.getPose());
 //            telemetry.addData("pedro pose", follower.getPose());
 //            telemetry.addData("time",elapsedTime.milliseconds());

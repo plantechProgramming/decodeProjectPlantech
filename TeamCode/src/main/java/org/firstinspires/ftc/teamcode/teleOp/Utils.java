@@ -289,8 +289,10 @@ public class Utils {
     public boolean threshold(double curr, double wanted, double threshold){
         return Math.abs(wanted - curr) < threshold;
     }
-
+    double prevVoltage = 0;
     public double getVoltageCompensatedPow(double pow, double voltage){
+        filter(0.05, voltage, prevVoltage);
+        prevVoltage = voltage;
         return pow * (14/voltage);
     }
 }

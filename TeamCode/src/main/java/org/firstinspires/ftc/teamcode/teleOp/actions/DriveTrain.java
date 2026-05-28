@@ -39,7 +39,7 @@ public class DriveTrain {
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     Utils utils;
-    public static double Kp = 0.021, Ki = 0, Kd = 1.9, Kf = 0, Ks = 0.06; // prev kp = 0.0325, ki = 0, kd = 2.1, kf=0
+    public static double Kp = 0.035, Ki = 0, Kd = 2, Kf = 0, Ks = 0.04; // prev kp = 0.0325, ki = 0, kd = 2.1, kf=0
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     private PID pid;
     AprilTagLocalization tagLocalization;
@@ -122,19 +122,19 @@ public class DriveTrain {
     public void turnToGyro(double degrees) {
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
 
-        double threshold = 1.2;
+        double threshold = 0.5;
         double power = 0;
         pid.setWanted(degrees);
         if(Math.abs(utils.getDiffBetweenAngles(degrees, botAngleRaw)) > threshold) { // if not in threshold
             power = pid.updatedeg(botAngleRaw);
             error = degrees - botAngleRaw;
 
-//        }
+        }
 //        else{
 //            power = 0;
 //        }
             power = utils.getVoltageCompensatedPow(power, voltageSensor.getVoltage());
-        }
+//        }
         FL.setPower(-power);
         FR.setPower(power);
 
@@ -179,24 +179,24 @@ public class DriveTrain {
 
     public void setDriveTelemetry(Telemetry telemetry){
         telemetry.addData("botheading", odometry.getHeading(AngleUnit.DEGREES));
-        telemetry.addData("deg to goal red",utils.getAngleFromGoal("RED"));
+//        telemetry.addData("deg to goal red",utils.getAngleFromGoal("RED"));
         telemetry.addData("deg to goal blue",utils.getAngleFromGoal("BLUE"));
-        telemetry.addData("dis xy to goal red",utils.getXYdistToGoal("RED"));
-        telemetry.addData("dis xy to goal blue",utils.getXYdistToGoal("BLUE"));
-        telemetry.addData("disToGoalred", utils.getDistFromGoal("RED"));
-        telemetry.addData("disToGoalblue", utils.getDistFromGoal("BLUE"));
-        telemetry.addData("robot is stopping", isStopped());
+//        telemetry.addData("dis xy to goal red",utils.getXYdistToGoal("RED"));
+//        telemetry.addData("dis xy to goal blue",utils.getXYdistToGoal("BLUE"));
+//        telemetry.addData("disToGoalred", utils.getDistFromGoal("RED"));
+//        telemetry.addData("disToGoalblue", utils.getDistFromGoal("BLUE"));
+//        telemetry.addData("robot is stopping", isStopped());
 //        telemetry.addData("mode", FL.getZeroPowerBehavior());
 //        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-        telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
-        telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
-        telemetry.addData("is far", utils.isFar());
-        telemetry.addData("blue goal", utils.GOAL_BLUE);
-        telemetry.addData("blue goal far", utils.GOAL_BLUE_FAR);
-        telemetry.addData("blue goal close", utils.GOAL_BLUE_CLOSE);
-        telemetry.addData("voltage", voltageSensor.getVoltage());
-        telemetry.addData("error deg", error);
-        telemetry.addData("wrap around error", utils.convertToWrapAroundAngle(error));
+//        telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
+//        telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
+//        telemetry.addData("is far", utils.isFar());
+//        telemetry.addData("blue goal", utils.GOAL_BLUE);
+//        telemetry.addData("blue goal far", utils.GOAL_BLUE_FAR);
+//        telemetry.addData("blue goal close", utils.GOAL_BLUE_CLOSE);
+//        telemetry.addData("voltage", voltageSensor.getVoltage());
+//        telemetry.addData("error deg", error);
+//        telemetry.addData("wrap around error", utils.convertToWrapAroundAngle(error));
     }
 }
 

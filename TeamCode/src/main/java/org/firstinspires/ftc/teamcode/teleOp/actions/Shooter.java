@@ -36,11 +36,11 @@ public class Shooter {
 //    public static double kI = 0.1;//0.5
 //    public static double kD = 1; //0
 //    public static double kF = 0.6; // OG = 14.5
-    public static double kP = 13;
+    public static double kP = 7;
     public static double kI = 0;
     public static double kD = 0;
-    public static double kF = 1.315;
-    public static double kS = 0.04;
+    public static double kF = 1.15;
+    public static double kS = 0.1;
     Utils utils;
 
     GetVelocity shooterVelocity;
@@ -88,7 +88,7 @@ public class Shooter {
     public void noPhysShootHomeostasis(double x){
         controller.setWanted(x);
         output = controller.update(shooterVelocity.getRawVelocity()/MAX_RPM);
-//        double power = shooterVelocity.getRawVelocity()/MAX_RPM;
+        output = utils.getVoltageCompensatedPow(output, voltageSensor.getVoltage());
         shooter.setPower(output);
         shooter2.setPower(-output);
     }
