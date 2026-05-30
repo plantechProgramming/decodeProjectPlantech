@@ -38,6 +38,9 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import dev.nextftc.core.commands.delays.Delay;
 import kotlin.contracts.HoldsIn;
 
@@ -141,6 +144,8 @@ public class TeleOpBlue extends OpMode {
             else if(gamepad1.right_bumper){
                 if(shooter.isUpToGivenSpeed(shooter.getVariableInterplationSpeedShoot(false, false, 0, team))){
                     intake.inBetweenInFull();
+//                    gamepad1.rumble(100);
+
                 }
                 else{
                     intake.inBetweenInFullSlow();
@@ -197,12 +202,13 @@ public class TeleOpBlue extends OpMode {
 ////                telemetry.addLine("started moving");
 ////                tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
 //            }
-
 //            telemetry.addData("count", count);
 //            dashboardTelemetry.addData("count", count);
+//            sleep(100);
 //            driveTrain.setDriveTelemetry(telemetry);
 //            driveTrain.setDriveTelemetry(dashboardTelemetry);
-//
+//            telemetry.addData("loop time", elapsedTime.milliseconds());
+            updateHisto(elapsedTime.milliseconds());
 //            shooter.setShooterTelemetry(telemetry);
 //            shooter.setShooterTelemetry(dashboardTelemetry);
 //
@@ -215,7 +221,6 @@ public class TeleOpBlue extends OpMode {
 //
 //            telemetry.update();
 //            dashboardTelemetry.update();
-            odometry.update();
             follower.update();
 //            utils.updateGoal();
         }
@@ -225,5 +230,32 @@ public class TeleOpBlue extends OpMode {
     @Override
     protected void end() {
 //        limeLight.shutDown();
+//        telemetry.addData("histo", Arrays.toString(getHisto()));
+//        telemetry.update();
+//        System.out.println(Arrays.toString(getHisto()));
+//        sleep(10000);
+    }
+    int[] arr = new int[5];
+    public void updateHisto(double loopTime){
+        if(0 <= loopTime && loopTime <= 0.5){
+            arr[0]++;
+        }
+        else if(0.5 < loopTime && loopTime <= 1){
+            arr[1]++;
+        }
+        else if(1 < loopTime && loopTime <= 10){
+            arr[2]++;
+        }
+        else if(10 < loopTime && loopTime <= 20){
+            arr[3]++;
+        }
+        else{
+            arr[4]++;
+        }
+
+    }
+
+    public int[] getHisto(){
+        return arr;
     }
 }
