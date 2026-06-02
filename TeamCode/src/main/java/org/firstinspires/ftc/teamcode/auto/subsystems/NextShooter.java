@@ -41,7 +41,7 @@ public class NextShooter implements Subsystem {
     private MotorEx shooter1 = new MotorEx("ShooterClose", -1);
     private MotorEx shooter2 = new MotorEx("ShooterFar", -1);
     double Szonedis = 0.5;
-    public static double farPow = 0.532;
+    public static double farPow = 0.535;
     public static double closePow = 0.395;
 //    public static double kp = 0, ki = 0, kd = 0, kf = 0.0000011, ks = 0.1;
     public static double kp = Shooter.kP, ki = Shooter.kI, kd = Shooter.kD, kf = Shooter.kF, ks = Shooter.kS;
@@ -118,7 +118,7 @@ public class NextShooter implements Subsystem {
     // NOT subsystem periodic func, with normal periodic it initialized szonedis to 1 every second
     // loop
     public void Periodic(){
-        double vel = getVelocityFilter();
+        double vel = getRawVelocity();
         setPowerPID(shooter1, shooter2, vel);
 //        shooter1.setPower(Szonedis);
 //        shooter2.setPower(-Szonedis);

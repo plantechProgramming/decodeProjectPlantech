@@ -188,8 +188,8 @@ public class DriveTrain {
 //        telemetry.addData("robot is stopping", isStopped());
 //        telemetry.addData("mode", FL.getZeroPowerBehavior());
 //        telemetry.addData("botheadingIMU",Imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-//        telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
-//        telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
+        telemetry.addData("X pos: ", odometry.getPosX(DistanceUnit.CM));
+        telemetry.addData("Y pos: ", odometry.getPosY(DistanceUnit.CM));
 //        telemetry.addData("is far", utils.isFar());
 //        telemetry.addData("blue goal", utils.GOAL_BLUE);
 //        telemetry.addData("blue goal far", utils.GOAL_BLUE_FAR);

@@ -174,8 +174,11 @@ public class TeleOpBlue extends OpMode {
 
             }
 
-            if(gamepad1.back) {
+            if(gamepad1.start) {
                 odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0)); //TODO: change for RED
+            }
+            if(gamepad1.back){
+                odometry.setPosition(new Pose2D(DistanceUnit.CM, -158, 157, AngleUnit.DEGREES, 0));
             }
 //            if(forward == 0 && drift == 0 && turn == 0 && utils.getDistFromGoal(team) < 260){
 //                try{
@@ -204,10 +207,10 @@ public class TeleOpBlue extends OpMode {
 //            telemetry.addData("count", count);
 //            dashboardTelemetry.addData("count", count);
 //            sleep(100);
-//            driveTrain.setDriveTelemetry(telemetry);
-//            driveTrain.setDriveTelemetry(dashboardTelemetry);
+            driveTrain.setDriveTelemetry(telemetry);
+            driveTrain.setDriveTelemetry(dashboardTelemetry);
 //            telemetry.addData("loop time", elapsedTime.milliseconds());
-            updateHisto(elapsedTime.milliseconds());
+//            updateHisto(elapsedTime.milliseconds());
 //            shooter.setShooterTelemetry(telemetry);
 //            shooter.setShooterTelemetry(dashboardTelemetry);
 //
@@ -218,8 +221,8 @@ public class TeleOpBlue extends OpMode {
 //            telemetry.addData("time",elapsedTime.milliseconds());
 //
 //
-//            telemetry.update();
-//            dashboardTelemetry.update();
+            telemetry.update();
+            dashboardTelemetry.update();
             follower.update();
 //            utils.updateGoal();
         }

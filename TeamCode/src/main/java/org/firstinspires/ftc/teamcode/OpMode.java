@@ -124,6 +124,7 @@ public abstract class OpMode extends LinearOpMode {
         FtcDashboard dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
 //        FtcDashboard.getInstance().startCameraStream(ll, 30);
+
     }
 
     public DcMotorEx initMotor(String name, boolean encoder, boolean reversed){
