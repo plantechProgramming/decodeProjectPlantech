@@ -66,7 +66,7 @@ public class PathsRed {
     public PathChain scoreGPP, scorePGP, scorePPG;
     public PathChain grabGPPFar, grabPGPFar;
     public PathChain scoreGPPFar;
-    public PathChain scoreGateFromPGP, pickUpOpenGateFromScore, scorePickUpGate;
+    public PathChain scoreGateFromPGP, pickUpGateFromScore, scorePickUpGate;
     public PathChain scoreHumanPlayer, grabHumanPlayer, grabHumanPlayerTangent;
     public PathChain grabLeftoverBallsGate, scoreLeftoverBallsGate;
     public PathChain scoreLeaveClose, leavePPGClose, leaveClose;
@@ -187,11 +187,9 @@ public class PathsRed {
                 .setLinearHeadingInterpolation(gate.getHeading(), scorePose.getHeading())
                 .build();
 
-        pickUpOpenGateFromScore = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, controlPoseGatePPG, gate))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), gate.getHeading())
-                .addPath(new BezierLine(gate, pickUpGate))
-                .setLinearHeadingInterpolation(gate.getHeading(), pickUpGate.getHeading())
+        pickUpGateFromScore = follower.pathBuilder()
+                .addPath(new BezierCurve(scorePose,controlPoseGatePPG, pickUpGate))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), pickUpGate.getHeading())
                 .build();
 
         scorePickUpGate = follower.pathBuilder()

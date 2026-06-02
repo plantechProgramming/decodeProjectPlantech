@@ -9,6 +9,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.seattlesolvers.solverslib.command.ConditionalCommand;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
@@ -21,11 +22,14 @@ import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
 
 import java.nio.channels.NetworkChannel;
 import java.security.PublicKey;
+import java.util.function.BooleanSupplier;
 
 import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.conditionals.IfElseCommand;
 import dev.nextftc.core.commands.delays.Delay;
 import dev.nextftc.core.commands.groups.ParallelGroup;
 import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.core.commands.utility.InstantCommand;
 import dev.nextftc.core.components.Component;
 import dev.nextftc.core.components.SubsystemComponent;
 import dev.nextftc.extensions.pedro.FollowPath;
@@ -112,7 +116,12 @@ public class AutoCommands implements Component{
     }
 
     public Command startShooter(boolean far){
+        double delay = 0;
+        if(far){
+            delay = 1;
+        }
         return new SequentialGroup(
+                new Delay(delay),
                 shooter.naiveShooter(far),
                 inBetween.startAxons(),
                 intake.take()

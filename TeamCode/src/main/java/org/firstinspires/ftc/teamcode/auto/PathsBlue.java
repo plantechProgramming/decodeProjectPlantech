@@ -16,8 +16,7 @@ public class PathsBlue {
     // TODO: make stuff private with getter
     private final Pose startPose = new Pose(20.2, 122.5, Math.toRadians(144)); // Start Pose of our robot.
     private final Pose startPoseFar = new Pose(56.5, 8.1, Math.toRadians(180)); // Start Pose of our robot.
-    public final Pose scorePoseFar = new Pose(59, 16, Math.toRadians(111.3
-    )); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
+    public final Pose scorePoseFar = new Pose(59, 16, Math.toRadians(111.3)); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
 
     public final Pose scorePose = new Pose(47.5, 95, Math.toRadians(135)); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public final Pose controlPosePPG = new Pose(70,60);// pose for getting to PPG without hitting other balls
@@ -39,7 +38,7 @@ public class PathsBlue {
     public final Pose afterPickupPPG = new Pose(18.5, PPG.getY(), Math.toRadians(180));
     public final Pose afterPickupPGP = new Pose(12, PGP.getY(), Math.toRadians(180));
     public final Pose gate = new Pose(18,65.3,Math.toRadians(180));
-    public final Pose pickUpGate = new Pose(12.5, 58.5, Math.toRadians(130));
+    public final Pose pickUpGate = new Pose(13.2, 62, Math.toRadians(157));
     public final Pose humanPlayer = new Pose(11.5,8.1,Math.toRadians(180));
     public final Pose eatLeftoverGate = new Pose(7.8,45.5);
     public final Pose humanPlayerControlPose = new Pose(30,18);
@@ -48,7 +47,7 @@ public class PathsBlue {
     public PathChain scoreGPP, scorePGP, scorePPG;
     public PathChain grabGPPFar, grabPGPFar;
     public PathChain scoreGPPFar;
-    public PathChain scoreGateFromPGP, scorePickUpGate, pickUpOpenGateFromScore;
+    public PathChain scoreGateFromPGP, scorePickUpGate, pickUpGateFromScore;
     public PathChain grabLeftoverBallsGate, scoreLeftoverBallsGate;
     public PathChain scoreLeaveClose, leavePPGClose, leaveClose;
     public PathChain scoreLeaveFar, leaveFar;
@@ -169,11 +168,9 @@ public class PathsBlue {
                 .setLinearHeadingInterpolation(gate.getHeading(), scorePose.getHeading())
                 .build();
 
-        pickUpOpenGateFromScore = follower.pathBuilder()
-                .addPath(new BezierCurve(scorePose, controlPoseGatePPG, gate))
-                .setLinearHeadingInterpolation(scorePose.getHeading(), gate.getHeading())
-                .addPath(new BezierLine(gate, pickUpGate))
-                .setLinearHeadingInterpolation(gate.getHeading(), pickUpGate.getHeading())
+        pickUpGateFromScore = follower.pathBuilder()
+                .addPath(new BezierCurve(scorePose,controlPoseGatePPG, pickUpGate))
+                .setLinearHeadingInterpolation(scorePose.getHeading(), pickUpGate.getHeading())
                 .build();
 
         scorePickUpGate = follower.pathBuilder()

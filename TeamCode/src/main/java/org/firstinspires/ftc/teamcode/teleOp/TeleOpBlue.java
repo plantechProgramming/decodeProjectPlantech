@@ -144,7 +144,6 @@ public class TeleOpBlue extends OpMode {
             else if(gamepad1.right_bumper){
                 if(shooter.isUpToGivenSpeed(shooter.getVariableInterplationSpeedShoot(false, false, 0, team))){
                     intake.inBetweenInFull();
-//                    gamepad1.rumble(100);
 
                 }
                 else{
