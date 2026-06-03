@@ -105,12 +105,11 @@ public class TeleOpBlue extends OpMode {
             }
 //            shooter.noPhysShootHomeostasis(0.2);
 
-            if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
+            if(!gamepad1.right_bumper) {
                 driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
             }
 
             if(!gamepad1.right_bumper){
-                lastPos = follower.getPose();
                 aang = true;
                 if(activatedHold){
                     activatedHold = false;
@@ -162,7 +161,8 @@ public class TeleOpBlue extends OpMode {
                     lastPos = follower.getPose();
 
                 }
-                follower.holdPoint(lastPos, false);
+//                follower.followPath(new Path(new BezierLine(follower.getPose(), lastPos)), false);
+                follower.holdPoint(lastPos, true);
                 activatedHold = true;
             }
             else{
@@ -207,8 +207,9 @@ public class TeleOpBlue extends OpMode {
 //            telemetry.addData("count", count);
 //            dashboardTelemetry.addData("count", count);
 //            sleep(100);
-            driveTrain.setDriveTelemetry(telemetry);
-            driveTrain.setDriveTelemetry(dashboardTelemetry);
+
+//            driveTrain.setDriveTelemetry(telemetry);
+//            driveTrain.setDriveTelemetry(dashboardTelemetry);
 //            telemetry.addData("loop time", elapsedTime.milliseconds());
 //            updateHisto(elapsedTime.milliseconds());
 //            shooter.setShooterTelemetry(telemetry);
@@ -221,8 +222,8 @@ public class TeleOpBlue extends OpMode {
 //            telemetry.addData("time",elapsedTime.milliseconds());
 //
 //
-            telemetry.update();
-            dashboardTelemetry.update();
+//            telemetry.update();
+//            dashboardTelemetry.update();
             follower.update();
 //            utils.updateGoal();
         }

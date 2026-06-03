@@ -53,26 +53,22 @@ public abstract class OpMode extends LinearOpMode {
         DriveFrontLeft = hardwareMap.get(DcMotorEx.class, "FL");
         DriveFrontLeft.setDirection(DcMotorEx.Direction.REVERSE);
         DriveFrontLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        DriveFrontLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        DriveFrontLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        DriveFrontLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         DriveFrontRight = hardwareMap.get(DcMotorEx.class, "FR");
         DriveFrontRight.setDirection(DcMotorEx.Direction.FORWARD);
         DriveFrontRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        DriveFrontRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        DriveFrontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER );
+        DriveFrontRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER );
 
         DriveBackLeft = hardwareMap.get(DcMotorEx.class, "BL");
         DriveBackLeft.setDirection(DcMotorEx.Direction.REVERSE);
         DriveBackLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        DriveBackLeft.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        DriveBackLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        DriveBackLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         DriveBackRight = hardwareMap.get(DcMotorEx.class, "BR");
         DriveBackRight.setDirection(DcMotorEx.Direction.FORWARD);
         DriveBackRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        DriveBackRight.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        DriveBackRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        DriveBackRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         //servos connected funny
 //        intakeIBR = hardwareMap.get(CRServo.class,"IBL");
 //        intakeIBL = hardwareMap.get(CRServo.class,"IBR");

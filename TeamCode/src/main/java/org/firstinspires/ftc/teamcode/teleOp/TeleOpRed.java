@@ -45,23 +45,24 @@ public class TeleOpRed extends OpMode {
     String team = "RED"; //TODO: change for BLUE
     @Override
     protected void postInit() {
-        odometry.recalibrateIMU();
+//        odometry.recalibrateIMU();
         follower = Constants.createFollower(hardwareMap);
-        tagLocalization = new AprilTagLocalization(team, telemetry); //TODO: change here for red
-        tagLocalization.initProcessor(hardwareMap);
+//        tagLocalization = new AprilTagLocalization(team, telemetry); //TODO: change here for red
+//        limeLight = new Limelight(ll);
+//        tagLocalization.initProcessor(hardwareMap);
 
         // while camera is not awake, sleep
-        while (tagLocalization.visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING){
-            sleep(20);
-        }
-        tagLocalization.applySettings();
-        odometry.resetPosAndIMU();
+//        while (tagLocalization.visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING){
+//            sleep(20);
+//        }
+//        tagLocalization.applySettings();
+//        odometry.resetPosAndIMU();
     }
 
     @Override
     public void run(){
         Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
-        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, team, voltageSensor);
+        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, team,voltageSensor);
         Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry,voltageSensor);
         ReadWrite readWrite = new ReadWrite();
         Utils utils = new Utils(telemetry,odometry);
@@ -74,9 +75,6 @@ public class TeleOpRed extends OpMode {
         boolean activatedHold = false;
         boolean aang = false;
         int count = 0;
-        int stopCount = 0;
-//        follower.setStartingPose(readWrite.readPose());
-        follower.update();
         odometry.setPosition(utils.PedroPoseConverter(readWrite.readPose()));
         odometry.update();
         Pose lastPos = follower.getPose();
@@ -84,6 +82,7 @@ public class TeleOpRed extends OpMode {
         DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        limeLight.start();
 
         while (opModeIsActive() ) {
             elapsedTime.reset();
@@ -91,8 +90,12 @@ public class TeleOpRed extends OpMode {
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
-
-            shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team);
+            if(!gamepad1.x){
+                shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team);
+//                shooter.shooter.setPower(0.5);
+//                shooter.shooter2.setPower(-0.5);
+            }
+//            shooter.noPhysShootHomeostasis(0.2);
 
             if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
                 driveTrain.drive(-forward, -drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
@@ -131,11 +134,15 @@ public class TeleOpRed extends OpMode {
 //                intake.intake_motor.setPower(0.5);
 //            }
             else if(gamepad1.right_bumper){
-//                if(shooter.isUpToGivenSpeed(shooter.interpolateTel(utils.getDistFromGoal(team)))){
+                if(shooter.isUpToGivenSpeed(shooter.getVariableInterplationSpeedShoot(false, false, 0, team))){
                     intake.inBetweenInFull();
-//                }
+
+                }
+                else{
+                    intake.inBetweenInFullSlow();
+                }
 //                else{
-//                    intake.stopPrimers();
+//                    intake.inBetweenInPart();
 //                }
                 intake.intakeIn();
                 if(aang){
@@ -156,69 +163,33 @@ public class TeleOpRed extends OpMode {
 
             if(gamepad1.left_bumper && !gamepad1.right_bumper){
                 driveTrain.turnToGyro(utils.getAngleFromGoal(team));
-//                turningTowardsGoal = true;
-//                if(goalTag != null){
-//                    if(goalTag.ftcPose.bearing < 0.5){
-//                        turningTowardsGoal = false;
-//                    }
-//                }
-//                if(Math.abs(utils.getAngleFromGoal("RED") - odometry.getHeading(AngleUnit.DEGREES)) < 0.5){
-//                    turningTowardsGoal = false;
-//                }
-            }
-//            tagLocalization.detectTags();
-//            if(gamepad1.dpad_right && tagLocalization.goalTag != null){
-//               driveTrain.turnTowardsAprilTag(tagLocalization.goalTag);
-//            }
-//            if(gamepad1.dpad_left){
-//                tagLocalization.detectTags();
-//                driveTrain.turnToGoal("RED", tagLocalization.goalTag);
-//            }
-//            if(!gamepad1.left_bumper){
-//                driveTrain.usingCamForTurn = false;
-//            }
-            if(gamepad1.back) {
-                odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 180)); //TODO: change for RED
-            }
-            if(forward == 0 && drift == 0 && turn == 0){
-                stopCount++;
-                tagLocalization.detectTags();
-                if(tagLocalization.goalTag != null && utils.getDistFromGoal(team) < 220){
-                    count++;
-                    tagLocalization.getCurrDeg(tagLocalization.goalTag);
-                    if(count >= 150 && !gamepad1.right_bumper){
-                        double curHeading = tagLocalization.getCurrDeg(tagLocalization.goalTag);
-                        odometry.setPosition(new Pose2D(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, curHeading));
-                        telemetry.addLine("SET POSITION");
-                        count = 0;
-                    }
-                }
-            }
-            else{
-                count = 0;
-                stopCount = 0;
-                tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
+
             }
 
-            telemetry.addData("count", count);
-            dashboardTelemetry.addData("count", count);
+            if(gamepad1.start) {
+                odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0)); //TODO: change for RED
+            }
+            if(gamepad1.back){
+                odometry.setPosition(new Pose2D(DistanceUnit.CM, -158, -157, AngleUnit.DEGREES, 180));
+            }
             driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);
+//            telemetry.addData("loop time", elapsedTime.milliseconds());
+
+//            shooter.setShooterTelemetry(telemetry);
+//            shooter.setShooterTelemetry(dashboardTelemetry);
 //
-            shooter.setShooterTelemetry(telemetry);
-            shooter.setShooterTelemetry(dashboardTelemetry);
-//
-            tagLocalization.setCameraTelemetry(telemetry);
-            tagLocalization.setCameraTelemetry(dashboardTelemetry);
-//
-            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
-            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
+//            dashboardTelemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
+//            telemetry.addData("wanted interpolation", shooter.interpolateTel(utils.getDistFromGoal(team)) *6000);
+//            dashboardTelemetry.addData("pedro pose", follower.getPose());
+//            telemetry.addData("pedro pose", follower.getPose());
 //            telemetry.addData("time",elapsedTime.milliseconds());
-//            telemetry.addData("stop count",stopCount);
+//
+//
             telemetry.update();
             dashboardTelemetry.update();
-            odometry.update();
             follower.update();
+//            utils.updateGoal();
         }
 
     }

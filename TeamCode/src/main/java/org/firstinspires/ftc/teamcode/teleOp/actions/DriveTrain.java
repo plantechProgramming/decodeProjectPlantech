@@ -82,10 +82,6 @@ public class DriveTrain {
 
         // slowRatio [0,1] - output power multiplier
 
-        FL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Rotate the movement direction counter to the bot's rotation
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -103,11 +99,12 @@ public class DriveTrain {
         double frontRightPower = (rotY - rotX - rx) / denominator;// before - rotX
         double backRightPower = (rotY + rotX - rx) / denominator;// before + rotX
 
-        FL.setPower(frontLeftPower * slowRatio);
-        BL.setPower(backLeftPower * slowRatio);
+        FL.setPower(frontLeftPower * slowRatio-turnPow);
+        BL.setPower(backLeftPower * slowRatio-turnPow);
 
-        FR.setPower(frontRightPower * slowRatio);
-        BR.setPower(backRightPower * slowRatio);
+        FR.setPower(frontRightPower * slowRatio+turnPow);
+        BR.setPower(backRightPower * slowRatio+turnPow);
+        turnPow = 0;
 
     }
     
@@ -119,6 +116,8 @@ public class DriveTrain {
     }
     double count;
     double error;
+
+    double turnPow = 0;
     public void turnToGyro(double degrees) {
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
 
@@ -135,12 +134,13 @@ public class DriveTrain {
 //        }
             power = utils.getVoltageCompensatedPow(power, voltageSensor.getVoltage());
 //        }
-        FL.setPower(-power);
-        FR.setPower(power);
-
-        BR.setPower(power);
-        BL.setPower(-power);
+//        FL.setPower(-power);
+//        FR.setPower(power);
+//
+//        BR.setPower(power);
+//        BL.setPower(-power);
         telemetry.addData("pow", power);
+        turnPow = power;
 //        telemetry.addData("heading", botAngleRaw);
     }
     public void turnTowardsAprilTag(AprilTagDetection tag){
