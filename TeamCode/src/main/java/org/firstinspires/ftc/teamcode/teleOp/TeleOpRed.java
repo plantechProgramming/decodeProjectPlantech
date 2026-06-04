@@ -72,10 +72,9 @@ public class TeleOpRed extends OpMode {
         double turn;
         double drift;
         double botHeading;
-        double voltage;
         boolean activatedHold = false;
+        double voltage;
         boolean aang = false;
-        int count = 0;
         odometry.setPosition(utils.PedroPoseConverter(readWrite.readPose()));
         odometry.update();
         Pose lastPos = follower.getPose();
@@ -97,14 +96,13 @@ public class TeleOpRed extends OpMode {
 //                shooter.shooter.setPower(0.5);
 //                shooter.shooter2.setPower(-0.5);
             }
-//            shooter.noPhysShootHomeostasis(0.2);
+//            shooter.noPhysShootHomeostasis(0.5);
 
-            if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
+            if(!gamepad1.right_bumper) {
                 driveTrain.drive(-forward, -drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
             }
 
             if(!gamepad1.right_bumper){
-                lastPos = follower.getPose();
                 aang = true;
                 if(activatedHold){
                     activatedHold = false;
@@ -136,28 +134,33 @@ public class TeleOpRed extends OpMode {
 //                intake.intake_motor.setPower(0.5);
 //            }
             else if(gamepad1.right_bumper){
-                if(shooter.isUpToGivenSpeed(shooter.getVariableInterplationSpeedShoot(false, false, 0, team))){
-                    intake.inBetweenInFull();
-
+                if(aang) {
+                    driveTrain.stop();
                 }
-                else{
-                    intake.inBetweenInFullSlow();
-                }
+                if(driveTrain.isStopped() || !aang){
+                    if(shooter.isUpToGivenSpeed(shooter.getVariableInterplationSpeedShoot(false, false, 0, team))){
+                        intake.inBetweenInFull();
+                    }
+                    else{
+                        intake.inBetweenInFullSlow();
+                    }
 //                else{
 //                    intake.inBetweenInPart();
 //                }
-                intake.intakeIn();
-                if(aang){
-                    DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    aang = false;
-                    lastPos = follower.getPose();
+                    intake.intakeIn();
+                    if(aang){
+                        DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        aang = false;
+                        lastPos = follower.getPose();
 
+                    }
+//                follower.followPath(new Path(new BezierLine(follower.getPose(), lastPos)), false);
+                    follower.holdPoint(lastPos, true);
+                    activatedHold = true;
                 }
-                follower.holdPoint(lastPos, false);
-                activatedHold = true;
             }
             else{
                 intake.stopIntake();
@@ -169,15 +172,42 @@ public class TeleOpRed extends OpMode {
             }
 
             if(gamepad1.start) {
-                odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0)); //TODO: change for RED
+                odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 180)); //TODO: change for RED
             }
             if(gamepad1.back){
-                odometry.setPosition(new Pose2D(DistanceUnit.CM, -158, -157, AngleUnit.DEGREES, 180));
+                odometry.setPosition(new Pose2D(DistanceUnit.CM, 158, 157, AngleUnit.DEGREES, 180)); //TODO: change for red
             }
-            driveTrain.setDriveTelemetry(telemetry);
-            driveTrain.setDriveTelemetry(dashboardTelemetry);
-//            telemetry.addData("loop time", elapsedTime.milliseconds());
+//            if(forward == 0 && drift == 0 && turn == 0 && utils.getDistFromGoal(team) < 260){
+//                try{
+//                    if(!limeLight.ll.isRunning()) limeLight.start(); // this try is called every loop,
+//                    limeLight.updateFilter();
+////                    dashboardTelemetry.addData("raw heading", limeLight.getRawHeadingLLCoords());
+//                    count++;
+////                    dashboardTelemetry.addData("Heading", limeLight.getFilteredHeadingLLCoords());
+////                    dashboardTelemetry.addData("odo heading", limeLight.getFilteredHeadingOdoCoords());
+//                    if(count > 50) {
+//                        odometry.setPosition(new Pose2D(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM), AngleUnit.DEGREES, limeLight.getFilteredHeadingOdoCoords()));
+//                        count = 0;
+//                    }
+//                }
+//                catch (NullPointerException e){
+////                    telemetry.addLine("no tag detected");
+//                }
+//            }
+//            else{
+//                count = 0;
+//                limeLight.utils.prevFiltered = odometry.getHeading(AngleUnit.DEGREES);
+//                limeLight.stop();
+////                telemetry.addLine("started moving");
+////                tagLocalization.filteredYawPrev = odometry.getHeading(AngleUnit.DEGREES);
+//            }
+//            telemetry.addData("count", count);
+//            dashboardTelemetry.addData("count", count);
+//            sleep(100);
 
+//            driveTrain.setDriveTelemetry(telemetry);
+//            driveTrain.setDriveTelemetry(dashboardTelemetry);
+//            telemetry.addData("loop time", elapsedTime.milliseconds());
 //            shooter.setShooterTelemetry(telemetry);
 //            shooter.setShooterTelemetry(dashboardTelemetry);
 //
@@ -188,10 +218,10 @@ public class TeleOpRed extends OpMode {
 //            telemetry.addData("time",elapsedTime.milliseconds());
 //
 //
-            telemetry.update();
-            dashboardTelemetry.update();
+//            telemetry.update();
+//            dashboardTelemetry.update();
             follower.update();
-//            utils.updateGoal();
+            utils.updateGoal();
         }
 
     }
