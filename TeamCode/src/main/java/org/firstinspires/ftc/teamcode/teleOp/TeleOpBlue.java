@@ -44,12 +44,10 @@ import java.util.Arrays;
 import dev.nextftc.core.commands.delays.Delay;
 import kotlin.contracts.HoldsIn;
 
-@Config
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp
 public class TeleOpBlue extends OpMode {
     Follower follower;
 //    AprilTagLocalization tagLocalization;
-    Limelight limeLight;
     String team = "BLUE"; //TODO: change for BLUE
     @Override
     protected void postInit() {
@@ -70,8 +68,8 @@ public class TeleOpBlue extends OpMode {
     @Override
     public void run(){
         Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
-        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, team,voltageSensor);
-        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry,voltageSensor);
+        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, team);
+        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
         ReadWrite readWrite = new ReadWrite();
         Utils utils = new Utils(telemetry,odometry);
         ElapsedTime elapsedTime = new ElapsedTime();
@@ -81,8 +79,8 @@ public class TeleOpBlue extends OpMode {
         double drift;
         double botHeading;
         boolean activatedHold = false;
+        double voltage;
         boolean aang = false;
-        int count = 0;
         odometry.setPosition(utils.PedroPoseConverter(readWrite.readPose()));
         odometry.update();
         Pose lastPos = follower.getPose();
@@ -97,13 +95,14 @@ public class TeleOpBlue extends OpMode {
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
+            voltage = voltageSensor.getVoltage();
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
             if(!gamepad1.x){
-                shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team);
+                shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team, voltage);
 //                shooter.shooter.setPower(0.5);
 //                shooter.shooter2.setPower(-0.5);
             }
-//            shooter.noPhysShootHomeostasis(0.2);
+//            shooter.noPhysShootHomeostasis(0.5);
 
             if(!gamepad1.right_bumper) {
                 driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
@@ -141,36 +140,40 @@ public class TeleOpBlue extends OpMode {
 //                intake.intake_motor.setPower(0.5);
 //            }
             else if(gamepad1.right_bumper){
-                if(shooter.isUpToGivenSpeed(shooter.getVariableInterplationSpeedShoot(false, false, 0, team))){
-                    intake.inBetweenInFull();
-
+                if(aang) {
+                    driveTrain.stop();
                 }
-                else{
-                    intake.inBetweenInFullSlow();
-                }
+                if(driveTrain.isStopped() || !aang){
+                    if(shooter.isUpToGivenSpeed(shooter.getVariableInterplationSpeedShoot(false, false, 0, team))){
+                        intake.inBetweenInFull();
+                    }
+                    else{
+                        intake.inBetweenInFullSlow();
+                    }
 //                else{
 //                    intake.inBetweenInPart();
 //                }
-                intake.intakeIn();
-                if(aang){
-                    DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-                    aang = false;
-                    lastPos = follower.getPose();
+                    intake.intakeIn();
+                    if(aang){
+                        DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                        aang = false;
+                        lastPos = follower.getPose();
 
-                }
+                    }
 //                follower.followPath(new Path(new BezierLine(follower.getPose(), lastPos)), false);
-                follower.holdPoint(lastPos, true);
-                activatedHold = true;
+                    follower.holdPoint(lastPos, true);
+                    activatedHold = true;
+                }
             }
             else{
                 intake.stopIntake();
             }
 
             if(gamepad1.left_bumper && !gamepad1.right_bumper){
-                driveTrain.turnToGyro(utils.getAngleFromGoal(team));
+                driveTrain.turnToGyro(utils.getAngleFromGoal(team), voltage);
 
             }
 
@@ -211,7 +214,7 @@ public class TeleOpBlue extends OpMode {
 //            driveTrain.setDriveTelemetry(telemetry);
 //            driveTrain.setDriveTelemetry(dashboardTelemetry);
 //            telemetry.addData("loop time", elapsedTime.milliseconds());
-//            updateHisto(elapsedTime.milliseconds());
+            updateHisto(elapsedTime.milliseconds());
 //            shooter.setShooterTelemetry(telemetry);
 //            shooter.setShooterTelemetry(dashboardTelemetry);
 //
@@ -225,7 +228,7 @@ public class TeleOpBlue extends OpMode {
 //            telemetry.update();
 //            dashboardTelemetry.update();
             follower.update();
-//            utils.updateGoal();
+            utils.updateGoal();
         }
 
     }
@@ -235,8 +238,8 @@ public class TeleOpBlue extends OpMode {
 //        limeLight.shutDown();
 //        telemetry.addData("histo", Arrays.toString(getHisto()));
 //        telemetry.update();
-//        System.out.println(Arrays.toString(getHisto()));
-//        sleep(10000);
+        System.out.println(Arrays.toString(getHisto()));
+        sleep(10000);
     }
     int[] arr = new int[5];
     public void updateHisto(double loopTime){

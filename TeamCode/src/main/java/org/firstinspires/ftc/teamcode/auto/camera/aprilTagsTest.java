@@ -60,7 +60,7 @@ public class aprilTagsTest  extends OpMode {
             sleep(20);
         }
         tagLocalization.applySettings();
-        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry, voltageSensor);
+        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
         Utils utils = new Utils();
         int count = 0;
         int errorCounter = 0;
@@ -69,7 +69,6 @@ public class aprilTagsTest  extends OpMode {
         double sum = 0;
         while (opModeIsActive()) {
             tagLocalization.detectTags();
-            shooter.noPhysShootHomeostasis(0.4);
             if(tagLocalization.goalTag != null){
 //                count++;
 //                tagLocalization.getCurrDeg(tagLocalization.goalTag);

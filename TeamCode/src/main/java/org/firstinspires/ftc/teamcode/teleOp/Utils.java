@@ -28,8 +28,8 @@ public class Utils {
     }
     public Utils(){}
     public final double LEN_FIELD = 360.172; // in cm
-    double yOffsetGoal = 10;//prev = 18
-    double xOffsetGoal = 20; // prev = 16
+    double yOffsetGoal = 15;//prev = 18
+    double xOffsetGoal = 0; // prev = 16
     double yOffsetGoalTag = 30;
     double xOffsetGoalTag = 35;
     public final Pose2D GOAL_RED_CLOSE = getGoal("RED",xOffsetGoal,yOffsetGoal);
@@ -40,8 +40,8 @@ public class Utils {
     // we want to swap the offset directions when we move to far, because
     // we need to hit the side of the goal to mitigate backspin, and it's easier to
     // hit a different side in far than close
-    public final Pose2D GOAL_RED_FAR = getGoal("RED",yOffsetGoal*1.45,xOffsetGoal);
-    public final Pose2D GOAL_BLUE_FAR = getGoal("BLUE",yOffsetGoal*1.45,xOffsetGoal);
+    public final Pose2D GOAL_RED_FAR = getGoal("RED",yOffsetGoal,xOffsetGoal);
+    public final Pose2D GOAL_BLUE_FAR = getGoal("BLUE",yOffsetGoal, xOffsetGoal);
     public final Pose2D GOAL_TAG_RED = getGoal("RED",xOffsetGoalTag,yOffsetGoalTag);
     public final Pose2D GOAL_TAG_BLUE = getGoal("BLUE",xOffsetGoalTag,yOffsetGoalTag);
 

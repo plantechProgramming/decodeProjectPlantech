@@ -48,7 +48,7 @@ public class DriveTrain {
 //    private PID shortTurnPID;
     static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
 
-    public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu, GoBildaPinpointDriver odometry, String team, VoltageSensor voltageSensor) {
+    public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu, GoBildaPinpointDriver odometry, String team) {
         this.BL = BL;
         this.BR = BR;
         this.FL = FL;
@@ -58,7 +58,6 @@ public class DriveTrain {
         this.telemetry = telemetry;
         this.team = team;
         this.utils = new Utils(this.telemetry, this.odometry);
-        this.voltageSensor = voltageSensor;
         pid = new PID(Kp, Ki, Kd, Kf, Ks);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
         tagLocalization = new AprilTagLocalization(team,telemetry);
     }
@@ -79,6 +78,7 @@ public class DriveTrain {
     }
 
     public void drive(double y, double x, double rx, double botHeading, double slowRatio){
+        double rxUsable = rx;
 
         // slowRatio [0,1] - output power multiplier
 
@@ -89,21 +89,24 @@ public class DriveTrain {
 
         rotX *= 1.1;  // Counteract imperfect strafing
 
+        if(turnPow != 0){
+            rxUsable = -turnPow;
+        }
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio,
         // but only if at least one is out of the range [-1, 1]
-        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        double frontLeftPower = (rotY + rotX + rx) / denominator;
-        double backLeftPower = (rotY - rotX + rx) / denominator;
+        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rxUsable), 1);
+        double frontLeftPower = (rotY + rotX + rxUsable) / denominator;
+        double backLeftPower = (rotY - rotX + rxUsable) / denominator;
 
-        double frontRightPower = (rotY - rotX - rx) / denominator;// before - rotX
-        double backRightPower = (rotY + rotX - rx) / denominator;// before + rotX
+        double frontRightPower = (rotY - rotX - rxUsable) / denominator;// before - rotX
+        double backRightPower = (rotY + rotX - rxUsable) / denominator;// before + rotX
 
-        FL.setPower(frontLeftPower * slowRatio-turnPow);
-        BL.setPower(backLeftPower * slowRatio-turnPow);
+        FL.setPower(frontLeftPower * slowRatio);
+        BL.setPower(backLeftPower * slowRatio);
 
-        FR.setPower(frontRightPower * slowRatio+turnPow);
-        BR.setPower(backRightPower * slowRatio+turnPow);
+        FR.setPower(frontRightPower * slowRatio);
+        BR.setPower(backRightPower * slowRatio);
         turnPow = 0;
 
     }
@@ -118,7 +121,7 @@ public class DriveTrain {
     double error;
 
     double turnPow = 0;
-    public void turnToGyro(double degrees) {
+    public void turnToGyro(double degrees, double voltage) {
         double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
 
         double threshold = 0.5;
@@ -132,7 +135,7 @@ public class DriveTrain {
 //        else{
 //            power = 0;
 //        }
-            power = utils.getVoltageCompensatedPow(power, voltageSensor.getVoltage());
+            power = utils.getVoltageCompensatedPow(power, voltage);
 //        }
 //        FL.setPower(-power);
 //        FR.setPower(power);
@@ -162,7 +165,7 @@ public class DriveTrain {
         }
         else if(!usingCamForTurn){
             deg = utils.getAngleFromGoal(team);
-            turnToGyro(deg);
+            turnToGyro(deg, voltageSensor.getVoltage());
         }
         else{ // start of endless turning
             usingCamForTurn = false;
@@ -170,9 +173,9 @@ public class DriveTrain {
     }
 
     public boolean isStopped(){
-        boolean xInThresh = Math.abs(odometry.getVelX(DistanceUnit.CM)) < 7;
-        boolean yInThresh = Math.abs(odometry.getVelY(DistanceUnit.CM)) < 7;
-        boolean headInThresh = Math.abs(odometry.getHeadingVelocity(AngleUnit.DEGREES.getUnnormalized())) < 5;
+        boolean xInThresh = Math.abs(odometry.getVelX(DistanceUnit.CM)) < 3;
+        boolean yInThresh = Math.abs(odometry.getVelY(DistanceUnit.CM)) < 3;
+        boolean headInThresh = Math.abs(odometry.getHeadingVelocity(AngleUnit.DEGREES.getUnnormalized())) < 2;
         return xInThresh && yInThresh && headInThresh;
     }
 

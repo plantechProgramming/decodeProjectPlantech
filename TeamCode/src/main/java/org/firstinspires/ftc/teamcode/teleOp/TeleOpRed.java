@@ -62,8 +62,8 @@ public class TeleOpRed extends OpMode {
     @Override
     public void run(){
         Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
-        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, team,voltageSensor);
-        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry,voltageSensor);
+        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, team);
+        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
         ReadWrite readWrite = new ReadWrite();
         Utils utils = new Utils(telemetry,odometry);
         ElapsedTime elapsedTime = new ElapsedTime();
@@ -72,6 +72,7 @@ public class TeleOpRed extends OpMode {
         double turn;
         double drift;
         double botHeading;
+        double voltage;
         boolean activatedHold = false;
         boolean aang = false;
         int count = 0;
@@ -89,9 +90,10 @@ public class TeleOpRed extends OpMode {
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
+            voltage = voltageSensor.getVoltage();
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
             if(!gamepad1.x){
-                shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team);
+                shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team, voltage);
 //                shooter.shooter.setPower(0.5);
 //                shooter.shooter2.setPower(-0.5);
             }
@@ -162,7 +164,7 @@ public class TeleOpRed extends OpMode {
             }
 
             if(gamepad1.left_bumper && !gamepad1.right_bumper){
-                driveTrain.turnToGyro(utils.getAngleFromGoal(team));
+                driveTrain.turnToGyro(utils.getAngleFromGoal(team), voltage);
 
             }
 

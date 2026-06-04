@@ -46,13 +46,12 @@ public class Shooter {
     GetVelocity shooterVelocity;
     GetVelocity shooter2Velocity;
 
-    public Shooter(DcMotorEx shootMotor, Telemetry telemetry, DcMotorEx shooter2, GoBildaPinpointDriver odometry, VoltageSensor voltageSensor){
+    public Shooter(DcMotorEx shootMotor, Telemetry telemetry, DcMotorEx shooter2, GoBildaPinpointDriver odometry){
         this.shooter = shootMotor;
         this.telemetry = telemetry;
         this.shooter2 = shooter2;
         this.odometry = odometry;
         this.utils = new Utils(telemetry, odometry);
-        this.voltageSensor = voltageSensor;
 
         shooterVelocity = new GetVelocity(shooter,0.1, 8192);
         shooter2Velocity = new GetVelocity(this.shooter2,0.1,28);
@@ -85,10 +84,10 @@ public class Shooter {
     }
     PID controller = new PID(kP,kI,kD,kF,kS);
     double output;
-    public void noPhysShootHomeostasis(double x){
+    public void noPhysShootHomeostasis(double x, double voltage){
         controller.setWanted(x);
         output = controller.update(shooterVelocity.getRawVelocity()/MAX_RPM);
-        output = utils.getVoltageCompensatedPow(output, voltageSensor.getVoltage());
+        output = utils.getVoltageCompensatedPow(output, voltage);
         shooter.setPower(output);
         shooter2.setPower(-output);
     }
@@ -97,7 +96,7 @@ public class Shooter {
     boolean prevLess = false;
 
     public double power = 0;
-    public void variableSpeedShoot(boolean more, boolean less, double jumps){
+    public void variableSpeedShoot(boolean more, boolean less, double jumps, double voltage){
 
         if(more && !prevMore){power += jumps;}
         else if(less && !prevLess){
@@ -107,7 +106,7 @@ public class Shooter {
             telemetry.addData("wanted variable", power*MAX_RPM);
             prevLess = less;
             prevMore = more;
-            noPhysShootHomeostasis(power);
+            noPhysShootHomeostasis(power, voltage);
             return;
         }
         if (power >= 0.7){
@@ -116,7 +115,7 @@ public class Shooter {
         prevLess = less;
         prevMore = more;
 //        noPhysShootNext(power);
-        noPhysShootHomeostasis(power);
+        noPhysShootHomeostasis(power, voltage);
 //        telemetry.addData("wanted variable", power*6000);
 //        telemetry.addData("wanted fixed", errorFix*power*6000);
     }
@@ -144,9 +143,9 @@ public class Shooter {
 //        telemetry.addData("wanted fixed", errorFix*power*6000);
     }
 
-    public void variableInterplationSpeedShoot(boolean more, boolean less, double jumps, String Team){
+    public void variableInterplationSpeedShoot(boolean more, boolean less, double jumps, String Team, double voltage){
         double vel = getVariableInterplationSpeedShoot(more, less, jumps, Team);
-        noPhysShootHomeostasis(vel);
+        noPhysShootHomeostasis(vel, voltage);
     }
 
     public double interpolateTel(double dis){
