@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -33,15 +34,17 @@ import dev.nextftc.hardware.powerable.SetPower;
 @Configurable
 @Config
 public class NextShooter implements Subsystem {
-    public static final NextShooter INSTANCE = new NextShooter();
-    public NextShooter() {
+//    public static final NextShooter INSTANCE = new NextShooter();
+    VoltageSensor voltageSensor;
+    public NextShooter(VoltageSensor voltageSensor) {
+        this.voltageSensor = voltageSensor;
     }
     FtcDashboard dashboard = FtcDashboard.getInstance();
     Telemetry dashboardTelemetry =  dashboard.getTelemetry();
     private MotorEx shooter1 = new MotorEx("ShooterClose", -1);
     private MotorEx shooter2 = new MotorEx("ShooterFar", -1);
     double Szonedis = 0.5;
-    public static double farPow = 0.535;
+    public static double farPow = 0.544;
     public static double closePow = 0.395;
 //    public static double kp = 0, ki = 0, kd = 0, kf = 0.0000011, ks = 0.1;
     public static double kp = Shooter.kP, ki = Shooter.kI, kd = Shooter.kD, kf = Shooter.kF, ks = Shooter.kS;
@@ -101,6 +104,7 @@ public class NextShooter implements Subsystem {
 //    }
     public void setPowerPID(MotorEx motor, MotorEx motor2, double currVel){
         double pow = pid.update(currVel/6000);
+        double voltageCompensated = utils.getVoltageCompensatedPow(pow, voltageSensor.getVoltage());
         motor.setPower(pow);
         motor2.setPower(-pow);
         dashboardTelemetry.addData("pow", pow);

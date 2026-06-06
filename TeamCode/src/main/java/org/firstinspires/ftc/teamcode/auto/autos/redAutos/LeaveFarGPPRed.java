@@ -37,8 +37,8 @@ public class LeaveFarGPPRed extends NextFTCOpMode{
     public Command autoRoutine(){
         return new SequentialGroup(
                 command.startShooter(true),
-                new Delay(1),
-                command.score(path.scorePreloadFar),
+                new Delay(2.5),
+                command.scorePreload(path.scorePreloadFar),
                 command.intake(path.grabGPPFar),
                 command.score(path.scoreGPPFar),
                 new FollowPath(path.scoreLeaveFar)

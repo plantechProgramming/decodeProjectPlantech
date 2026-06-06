@@ -28,20 +28,24 @@ public class FullAutoFarLeave extends NextFTCOpMode {
         );
     }
 
-    AutoCommands command = AutoCommands.INSTANCE_RED;
+    AutoCommands command = new AutoCommands();
     PathsRed path;
 
 
     public Command autoRoutine(){
         return new SequentialGroup(
                 command.startShooter(true),
-                command.score(path.scorePreloadFar),
+                command.scorePreload(path.scorePreloadFar),
 
                 command.intake(path.grabGPPFar),
                 command.score(path.scoreGPPFar),
 
-                command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.6),
+                new Delay(3),
+                command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.7),
                 command.score(path.scoreLeftoverBallsGate),
+//
+//                    command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.7),
+//                    command.score(path.scoreLeftoverBallsGate),
 
                 new FollowPath(path.scoreLeaveFar)
         );

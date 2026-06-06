@@ -40,7 +40,7 @@ public class MegidoAuto extends NextFTCOpMode {
     public Command autoRoutine(){
         return new SequentialGroup(
                 command.startShooter(false),
-                command.score(path.scorePreload),
+                command.scorePreload(path.scorePreload),
                 command.intake(path.grabPPG),
 
                 command.score(path.scorePPG),

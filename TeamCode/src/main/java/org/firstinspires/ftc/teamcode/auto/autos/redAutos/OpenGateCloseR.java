@@ -40,7 +40,7 @@ public class OpenGateCloseR extends NextFTCOpMode {
     public Command autoRoutine(){
         return new SequentialGroup(
                 command.startShooter(false),
-                command.score(path.scorePreload),
+                command.scorePreload(path.scorePreload),
 
                 command.intake(path.grabPGP),
                 command.score(path.scorePGP),
@@ -53,7 +53,7 @@ public class OpenGateCloseR extends NextFTCOpMode {
 
                 command.intake(path.grabPPG),
                 command.score(path.leavePPGClose)
-                );
+        );
     }
     @Override
     public void onUpdate(){

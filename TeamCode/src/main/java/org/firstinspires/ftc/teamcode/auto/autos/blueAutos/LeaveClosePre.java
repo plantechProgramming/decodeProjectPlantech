@@ -24,16 +24,16 @@ public class LeaveClosePre extends NextFTCOpMode{
 
 
     private Follower follower;
-
+    AutoCommands command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
     public LeaveClosePre() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE_BLUE
+                command
+
         );
     }
 
-    AutoCommands command = AutoCommands.INSTANCE_BLUE;
     PathsBlue path;
     ReadWrite readWrite = new ReadWrite();
 
@@ -44,7 +44,7 @@ public class LeaveClosePre extends NextFTCOpMode{
         return new SequentialGroup(
                 command.startShooter(false),
                 new Delay(1),
-                command.scoreWithDelay(path.scorePreload, 1.5),
+                command.scorePreload(path.scorePreload),
                 new FollowPath(path.scoreLeaveClose)
         );
     }

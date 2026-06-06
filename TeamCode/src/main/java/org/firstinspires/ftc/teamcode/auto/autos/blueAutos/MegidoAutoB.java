@@ -22,16 +22,15 @@ import dev.nextftc.ftc.NextFTCOpMode;
 public class MegidoAutoB extends NextFTCOpMode{
 
     private Follower follower;
-
+    AutoCommands command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
     public MegidoAutoB() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE_BLUE
+                command
         );
     }
 
-    AutoCommands command = AutoCommands.INSTANCE_BLUE;
     PathsBlue path;
     ReadWrite readWrite = new ReadWrite();
 
@@ -39,7 +38,7 @@ public class MegidoAutoB extends NextFTCOpMode{
     public Command autoRoutine(){
         return new SequentialGroup(
                 command.startShooter(false),
-                command.score(path.scorePreload),
+                command.scorePreload(path.scorePreload),
                 command.intake(path.grabPPG),
 
                 command.score(path.scorePPG),
@@ -47,7 +46,7 @@ public class MegidoAutoB extends NextFTCOpMode{
 
                 command.score(path.scorePGP),
                 new FollowPath(path.scoreLeaveClose)
-                        );
+        );
     }
     @Override
     public void onUpdate(){

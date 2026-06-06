@@ -9,6 +9,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.seattlesolvers.solverslib.command.ConditionalCommand;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -43,26 +44,18 @@ public class AutoCommands implements Component{
     NextInBetween inBetween;
     NextTurret turret;
     Follower follower;
-    String team;
-    public static final AutoCommands INSTANCE_RED = new AutoCommands("RED");
-    public static final AutoCommands INSTANCE_BLUE = new AutoCommands("BLUE");
+    VoltageSensor voltageSensor;
     Utils util = new Utils();
 
-    public AutoCommands(Follower follower) {
-        shooter = new NextShooter();
+    public AutoCommands(Follower follower, VoltageSensor voltageSensor) {
+        shooter = new NextShooter(voltageSensor);
         intake = new NextIntake();
         inBetween = new NextInBetween();
         turret = new NextTurret();
         this.follower = follower;
+        this.voltageSensor = voltageSensor;
     }
 
-    public AutoCommands(String team){
-        shooter = new NextShooter();
-        intake = new NextIntake();
-        inBetween = new NextInBetween();
-        turret = new NextTurret();
-        this.team = team;
-    }
 
 
     public Command shoot(){
@@ -77,6 +70,12 @@ public class AutoCommands implements Component{
                 new FollowPath(path),
                 shoot(),
                 new Delay(0.9)
+        );
+    }
+
+    public Command scorePreload(PathChain path){
+        return new SequentialGroup(
+                scoreWithDelay(path, 1)
         );
     }
 
@@ -152,11 +151,7 @@ public class AutoCommands implements Component{
     public void postUpdate(){
         shooter.Periodic();
     }
-    public Command turnTurretToGoal(){
-        Pose pose = follower.getPose();
-        Pose2D ftcPose = util.PedroPoseConverter(pose);
-        return turret.turnToDeg(util.getPointToGoalAngle(ftcPose,team));
-    }
+
     @Override
     public void postInit(){
         shooter.stop();

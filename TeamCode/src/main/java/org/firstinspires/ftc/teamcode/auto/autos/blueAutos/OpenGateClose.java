@@ -38,7 +38,7 @@ public class OpenGateClose extends NextFTCOpMode{
     public Command autoRoutine(){
         return new SequentialGroup(
                 command.startShooter(false),
-                command.scoreWithDelay(path.scorePreload, 1),
+                command.scorePreload(path.scorePreload),
 
                 command.intake(path.grabPGP),
                 command.score(path.scorePGP),

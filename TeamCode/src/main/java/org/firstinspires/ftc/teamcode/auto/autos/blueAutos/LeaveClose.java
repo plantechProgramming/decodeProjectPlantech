@@ -18,17 +18,16 @@ import dev.nextftc.ftc.NextFTCOpMode;
 @Autonomous(name = "Leave Close Blue", group = "Blue")
 public class LeaveClose extends NextFTCOpMode {
 
-    private Follower follower;
 
+    AutoCommands command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
     public LeaveClose() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE_BLUE
+                command
         );
     }
 
-    AutoCommands command = AutoCommands.INSTANCE_BLUE;
     PathsBlue path;
     ReadWrite readWrite = new ReadWrite();
 

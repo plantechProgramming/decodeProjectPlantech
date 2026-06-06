@@ -37,8 +37,7 @@ public class LeaveClosePPGRed extends NextFTCOpMode {
     public Command autoRoutine(){
         return new SequentialGroup(
                 command.startShooter(false),
-                new Delay(1),
-                command.score(path.scorePreload),
+                command.scorePreload(path.scorePreload),
                 command.intake(path.grabPPG),
                 command.score(path.scorePPG),
                 new FollowPath(path.scoreLeaveClose)

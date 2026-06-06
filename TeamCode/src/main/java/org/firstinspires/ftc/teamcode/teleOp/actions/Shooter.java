@@ -236,4 +236,17 @@ public class Shooter {
         shooter.setPower(-.2);
         shooter2.setPower(.2);
     }
+
+//    public double getTimeBallToGoalChatGPT(){
+//        double g = 9.81;
+//        double theta = ;
+//
+//
+//        double vy = v0 * Math.sin(theta);
+//        double y =
+//
+//
+//// full version (different heights)
+//        double t = (vy + Math.sqrt(vy * vy - 2 * g * (y - h0))) / g;
+//    }
 }

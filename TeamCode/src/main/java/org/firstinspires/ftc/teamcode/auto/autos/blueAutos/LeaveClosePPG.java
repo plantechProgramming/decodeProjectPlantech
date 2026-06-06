@@ -19,16 +19,15 @@ import dev.nextftc.ftc.NextFTCOpMode;
 @Autonomous(name = "Leave Close PPG Blue", group = "Blue")
 public class LeaveClosePPG extends NextFTCOpMode {
     private Follower follower;
-
+    AutoCommands command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
     public LeaveClosePPG() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE_BLUE
+                command
         );
     }
 
-    AutoCommands command = AutoCommands.INSTANCE_BLUE;
     PathsBlue path;
     ReadWrite readWrite = new ReadWrite();
 
@@ -36,7 +35,7 @@ public class LeaveClosePPG extends NextFTCOpMode {
     public Command autoRoutine(){
         return new SequentialGroup(
                 command.startShooter(false),
-                command.scoreWithDelay(path.scorePreload,1.5),
+                command.scorePreload(path.scorePreload),
                 command.intake(path.grabPPG),
                 command.score(path.scorePPG),
                 new FollowPath(path.scoreLeaveClose)

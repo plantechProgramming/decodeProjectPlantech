@@ -40,8 +40,8 @@ public class LeaveClosePre extends NextFTCOpMode {
         return new SequentialGroup(
                 command.startShooter(false),
                 new Delay(1),
-                command.score(path.scorePreload),
-                new FollowPath(path.scoreLeaveClose,true)
+                command.scorePreload(path.scorePreload),
+                new FollowPath(path.scoreLeaveClose)
         );
     }
 

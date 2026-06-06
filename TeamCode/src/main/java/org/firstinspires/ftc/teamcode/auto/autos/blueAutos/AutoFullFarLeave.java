@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.auto.autos.blueAutos; // make sure this a
 import static dev.nextftc.extensions.pedro.PedroComponent.follower;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.PathsBlue;
@@ -18,22 +19,22 @@ import dev.nextftc.ftc.NextFTCOpMode;
 @Autonomous(name = "Full Far Blue leave", group = "Blue")
 public class AutoFullFarLeave extends NextFTCOpMode {
 
+    AutoCommands command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
     public AutoFullFarLeave() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE_BLUE
+                command
         );
     }
 
-    AutoCommands command = AutoCommands.INSTANCE_BLUE;
     PathsBlue path;
     ReadWrite readWrite = new ReadWrite();
 
         public Command autoRoutine(){
             return new SequentialGroup(
                     command.startShooter(true),
-                    command.score(path.scorePreloadFar),
+                    command.scorePreload(path.scorePreloadFar),
 
                     command.intake(path.grabGPPFar),
                     command.score(path.scoreGPPFar),
