@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.Misc.Utils;
+package org.firstinspires.ftc.teamcode.Misc.Utils.filters;
 
 import java.util.ArrayList;
 
-public class AVG extends Filter{
+public class AVG extends Filter {
 
     public double getAVGForList(ArrayList<Double> numbers) {
         double sum = 0;

@@ -119,8 +119,7 @@ public class Shooter {
     }
 
     public double getInterplationVariableShoot(boolean more, boolean less, double jumps, Alliance team) {
-        return getInterpolation(utils.getDistFromGoal(team))
-                + getVariableShoot(more, less, jumps);
+        return getInterpolation(utils.getDistFromGoal(team)) + getVariableShoot(more, less, jumps);
     }
 
     public void interplationVariableShoot(boolean more, boolean less, double jumps, Alliance team) {

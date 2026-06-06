@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Misc.Utils;
+package org.firstinspires.ftc.teamcode.Misc.Utils.filters;
 
 public abstract class Filter {
     double filtered;

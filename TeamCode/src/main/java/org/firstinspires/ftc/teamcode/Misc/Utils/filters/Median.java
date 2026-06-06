@@ -1,11 +1,9 @@
-package org.firstinspires.ftc.teamcode.Misc.Utils;
-
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+package org.firstinspires.ftc.teamcode.Misc.Utils.filters;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Median extends Filter{
+public class Median extends Filter {
     private ArrayList<Double> medianNumbers = new ArrayList<>();
     private void filter(ArrayList<Double> numbers){
         Collections.sort(numbers);

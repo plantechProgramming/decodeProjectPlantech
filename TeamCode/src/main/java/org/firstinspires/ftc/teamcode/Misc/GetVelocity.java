@@ -3,14 +3,14 @@ package org.firstinspires.ftc.teamcode.Misc;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Misc.Utils.Filters;
+import org.firstinspires.ftc.teamcode.Misc.Utils.filters.LowPass;
 
 public class GetVelocity {
-    Filters filters = new Filters();
-    Filters.LowPass lowPass = filters.new LowPass();
     DcMotorEx motor;
     double alpha;
     int ticksPerRevolution = 28;
+
+    LowPass lowPass = new LowPass();
     public GetVelocity(DcMotorEx motor, double alpha) {
         this.motor = motor;
         this.alpha = alpha;
@@ -29,7 +29,7 @@ public class GetVelocity {
     int millisecondsToMinute = 60000;
 
     public double getVelocityFilter() {
-        lowPass.startFilter(alpha);
+        lowPass.start(alpha);
         curEncoder = motor.getCurrentPosition();
         curTime = timer.milliseconds();
 
@@ -41,7 +41,7 @@ public class GetVelocity {
 
         prevTime = curTime;
         prevEncoder = curEncoder;
-        lowPass.updateFilter(velocity);
-        return lowPass.getFilter();
+        lowPass.update(velocity);
+        return lowPass.get();
     }
 }
