@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 
 public class Converters {
-    public Pose2D PedroPoseConverter(Pose pose){ // from pedro cords to the old bad Pinpoint cords
+    public static Pose2D PedroPoseConverter(Pose pose){ // from pedro cords to the old bad Pinpoint cords
         double x = pose.getX();
         double y = pose.getY();
         double hed = Math.toDegrees(pose.getHeading());

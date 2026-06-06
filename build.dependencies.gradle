@@ -28,13 +28,6 @@ dependencies {
     // FTCdashboard
 //    implementation 'com.acmerobotics.dashboard:dashboard:0.5.1'
 
-    // nextFTC
-    implementation 'dev.nextftc:ftc:1.0.1'
-    implementation 'dev.nextftc:hardware:1.0.1'
-    implementation 'dev.nextftc:control:1.0.0'
-    implementation 'dev.nextftc.extensions:pedro:1.0.0'
-
-
     // pedroPathing
     implementation 'com.pedropathing:ftc:2.0.6'
     implementation 'com.pedropathing:telemetry:1.0.0'
@@ -45,8 +38,6 @@ dependencies {
 //    implementation 'com.bylazar:fullpanels:1.0.6'
 
     // homeostasis (control lib)
-//    implementation 'com.github.Thermal-Equilibrium:homeostasis-FTC:1.0.8'
-    implementation "org.solverslib:core:0.3.4" // core
-
+    implementation 'com.github.Thermal-Equilibrium:homeostasis-FTC:1.0.8'
 }
 

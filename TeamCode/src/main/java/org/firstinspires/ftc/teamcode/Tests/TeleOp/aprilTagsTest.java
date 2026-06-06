@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
-import org.firstinspires.ftc.teamcode.teleOp.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 /**

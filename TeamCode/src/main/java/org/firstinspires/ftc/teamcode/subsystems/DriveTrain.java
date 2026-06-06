@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static com.pedropathing.ivy.groups.Groups.parallel;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.commands.Commands;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,6 +20,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Misc.Utils.AngleFunctions;
+import org.firstinspires.ftc.teamcode.Misc.Utils.Extras;
+import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
 import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.Misc.PID;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -48,7 +54,7 @@ public class DriveTrain {
         pid = new PID(Kp, Ki, Kd, Kf,t, this.telemetry);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
     }
 
-    public void drive(double y, double x, double rx, double botHeading, double slowRatio){
+    public Command drive(double y, double x, double rx, double botHeading, double slowRatio){
 
         // slowRatio [0,1] - output power multiplier
 
@@ -78,11 +84,12 @@ public class DriveTrain {
         telemetry.addData("BR", backRightPower);
         telemetry.addData("BL", backLeftPower);
 
-        FL.setPower(frontLeftPower * slowRatio);
-        BL.setPower(backLeftPower * slowRatio);
-
-        FR.setPower(frontRightPower * slowRatio);
-        BR.setPower(backRightPower * slowRatio);
+        return setPower(
+                frontLeftPower * slowRatio,
+                backLeftPower * slowRatio,
+                frontRightPower * slowRatio,
+                backRightPower * slowRatio
+        );
 
     }
     
@@ -92,28 +99,37 @@ public class DriveTrain {
         BR.setPower(0);
         BL.setPower(0);
     }
-    public void turnToGyro(double degrees) {
-        double botAngleRaw = odometry.getHeading(AngleUnit.DEGREES);
+    double turnPow = 0;
+    public Command turnToAngle(double wantedDeg, double curDeg) {
 
         double threshold = 0.55;
-        double power = 0;
-        pid.setWanted(degrees);
+        turnPow = 0;
+        pid.setWanted(wantedDeg);
 //        if(Math.abs(utils.getDiffBetweenAngles(degrees, botAngleRaw)) > threshold){ // if not in threshold
-        power = pid.updatedeg(botAngleRaw);
+        turnPow = pid.updatedeg(curDeg);
 //        }
 //        else{
 //            power = 0;
 //        }
-        FL.setPower(-power);
-        FR.setPower(power);
-
-        BR.setPower(power);
-        BL.setPower(-power);
-        telemetry.addData("pow", power);
-//        telemetry.addData("heading", botAngleRaw);
+        return turnWithPow(turnPow);
     }
 
-    public void setDriveTelemetry(Telemetry telemetry){
+    public Command setPower(double FLPow, double BLPow, double FRPow, double BRPow){
+        return parallel(
+                Commands.instant(()->FL.setPower(FLPow)),
+                Commands.instant(()->BL.setPower(BLPow)),
+                Commands.instant(()->FR.setPower(FRPow)),
+                Commands.instant(()->BR.setPower(BRPow))
+        );
+    }
+    public Command turnWithPow(double pow){
+        return setPower(-pow, -pow, pow, pow);
+    }
+
+    public void updateTelemetry(Telemetry telemetry){
+        TelemetryUtils.addTitle(telemetry, "starting drive telemetry");
+        TelemetryUtils.addVar(telemetry, turnPow);
+        TelemetryUtils.addTitle(telemetry, "ending drive telemetry");
     }
 }
 
