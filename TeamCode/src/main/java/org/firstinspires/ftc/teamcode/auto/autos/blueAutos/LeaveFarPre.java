@@ -20,21 +20,14 @@ import dev.nextftc.ftc.NextFTCOpMode;
 
 @Autonomous(name = "Leave Far Pre Blue",group = "Blue")
 public class LeaveFarPre extends NextFTCOpMode {
-    private Follower follower;
-    AutoCommands command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
+
     public LeaveFarPre() {
         addComponents(
-//                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
-                new PedroComponent(Constants::createFollower),
-                command
+                new PedroComponent(Constants::createFollower)
         );
     }
-
+    AutoCommands command;
     PathsBlue path;
-    ReadWrite readWrite = new ReadWrite();
-
-    private final Pose startPose = new Pose(56.15, 8.4, Math.toRadians(90)); // Start Pose of our robot.
-
 
     public Command autoRoutine(){
         return new SequentialGroup(
@@ -53,6 +46,10 @@ public class LeaveFarPre extends NextFTCOpMode {
     }
     @Override
     public void onStartButtonPressed() {
+        command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
+        addComponents(
+                command
+        );
         path = new PathsBlue();
         follower().setStartingPose(path.getSPoseFar());
         path.buildPaths(follower());

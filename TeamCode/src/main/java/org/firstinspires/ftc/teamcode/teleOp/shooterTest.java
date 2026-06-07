@@ -47,18 +47,18 @@ public class shooterTest extends OpMode {
 //            double forward = -gamepad1.left_stick_y;
 //            double turn = gamepad1.right_stick_x;
 //            double drift = gamepad1.left_stick_x;
-//            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01);
+            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, voltageSensor.getVoltage());
 //
 ////            shooter.shooter.setPower(0.3);
 ////            shooter.shooter2.setPower(-0.3);
 ////            shooter.noPhysShootHomeostasis(0.5);
 //
-//            if(gamepad1.a){
-//               if(shooter.isUpToGivenSpeed(shooter.power)){
-//                   intake.inBetweenInFull();
-//                   intake.intakeIn();
-//               }
-//           }
+            if(gamepad1.a){
+               if(shooter.isUpToGivenSpeed(shooter.power)){
+                   intake.inBetweenInFull();
+                   intake.intakeIn();
+               }
+           }
 //
 //
 ////           if(gamepad1.b){
@@ -67,11 +67,11 @@ public class shooterTest extends OpMode {
 ////            if(gamepad1.a) shooter.noPhysShoot(0.5);
 ////            shooter.shooter2.setPower(0.1);
 //
-//            shooter.setShooterTelemetry(dashboardTelemetry);
-//            shooter.setShooterTelemetry(telemetry);
-//            telemetry.update();
-//            dashboardTelemetry.update();
-//            odometry.update();
+            shooter.setShooterTelemetry(dashboardTelemetry);
+            shooter.setShooterTelemetry(telemetry);
+            telemetry.update();
+            dashboardTelemetry.update();
+            odometry.update();
             updateHisto(elapsedTime.milliseconds());
         }
     }

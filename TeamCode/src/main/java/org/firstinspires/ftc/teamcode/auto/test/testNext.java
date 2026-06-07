@@ -40,7 +40,7 @@ public class testNext extends NextFTCOpMode {
 
     private Command autonomousRoutine() {
         return new SequentialGroup(
-                command.startShooter(true),
+                command.startShooter(false),
 //                NextShooter.INSTANCE.setPow(),
                 NextIntake.INSTANCE.take(),
                 NextInBetween.INSTANCE.inBetweenInFull()
@@ -51,7 +51,6 @@ public class testNext extends NextFTCOpMode {
     public void onStartButtonPressed() {
         command = new AutoCommands(null, hardwareMap.voltageSensor.iterator().next());
         addComponents(
-                BulkReadComponent.INSTANCE,
                 command,
                 new SubsystemComponent(
                         NextInBetween.INSTANCE,
