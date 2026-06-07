@@ -32,20 +32,11 @@ import dev.nextftc.core.commands.CommandManager;
 @Autonomous(name = "test Next",group = "tests")
 public class testNext extends NextFTCOpMode {
 
+    AutoCommands command;
 
     public testNext() {
-        addComponents(
-                BulkReadComponent.INSTANCE,
-                AutoCommands.INSTANCE_BLUE,
-                new SubsystemComponent(
-                        NextInBetween.INSTANCE,
-                        NextIntake.INSTANCE,
-                        NextShooter.INSTANCE
-                )
-        );
 
     }
-    AutoCommands command = AutoCommands.INSTANCE_BLUE;
 
     private Command autonomousRoutine() {
         return new SequentialGroup(
@@ -58,6 +49,16 @@ public class testNext extends NextFTCOpMode {
     }
     @Override
     public void onStartButtonPressed() {
+        command = new AutoCommands(null, hardwareMap.voltageSensor.iterator().next());
+        addComponents(
+                BulkReadComponent.INSTANCE,
+                command,
+                new SubsystemComponent(
+                        NextInBetween.INSTANCE,
+                        NextIntake.INSTANCE
+                )
+        );
+
         autonomousRoutine().schedule();
     }
 

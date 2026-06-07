@@ -20,17 +20,15 @@ import dev.nextftc.ftc.NextFTCOpMode;
 @Autonomous(name = " OpenGateClose Blue", group = "Blue")
 public class OpenGateClose extends NextFTCOpMode{
 
-    private Follower follower;
-
+    AutoCommands command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
     public OpenGateClose() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE_BLUE
+                command
         );
     }
 
-    AutoCommands command = AutoCommands.INSTANCE_BLUE;
     PathsBlue path;
     ReadWrite readWrite = new ReadWrite();
 

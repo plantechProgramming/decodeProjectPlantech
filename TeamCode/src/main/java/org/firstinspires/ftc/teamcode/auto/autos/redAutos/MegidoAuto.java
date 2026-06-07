@@ -20,22 +20,17 @@ import dev.nextftc.ftc.NextFTCOpMode;
 
 @Autonomous(name = "Megido Auto Close Red", group = "Red")
 public class MegidoAuto extends NextFTCOpMode {
-    private Follower follower;
+    AutoCommands command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
 
     public MegidoAuto() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
                 new PedroComponent(Constants::createFollower),
-                AutoCommands.INSTANCE_RED
+                command
         );
     }
 
-    AutoCommands command = AutoCommands.INSTANCE_RED;
     PathsRed path;
-
-
-    private final Pose startPose = new Pose(20.1, 122.5, Math.toRadians(144)).mirror(); // Start Pose of our robot.
-
 
     public Command autoRoutine(){
         return new SequentialGroup(
