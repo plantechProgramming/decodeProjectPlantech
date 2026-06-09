@@ -62,5 +62,9 @@ public class LeaveClosePPG extends NextFTCOpMode {
     public void onStop(){
         ReadWrite readWrite = new ReadWrite();
         readWrite.writePose(follower().getPose());
+        telemetry.addData("x", follower().getPose().getX());
+        telemetry.addData("y", follower().getPose().getY());
+        telemetry.addData("heading", follower().getPose().getHeading());
+        telemetry.update();
     }
 }

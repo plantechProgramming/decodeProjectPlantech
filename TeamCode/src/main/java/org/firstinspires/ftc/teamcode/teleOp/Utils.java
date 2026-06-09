@@ -28,8 +28,8 @@ public class Utils {
     }
     public Utils(){}
     public final double LEN_FIELD = 360.172; // in cm
-    double yOffsetGoal = 17;//prev = 18
-    double xOffsetGoal = 8; // prev = 16
+    double yOffsetGoal = 21;//prev = 18
+    double xOffsetGoal = 15; // prev = 16
     double yOffsetGoalTag = 30;
     double xOffsetGoalTag = 35;
     public final Pose2D GOAL_RED_CLOSE = getGoal("RED",xOffsetGoal,yOffsetGoal);
@@ -291,7 +291,7 @@ public class Utils {
     }
     double prevVoltage = 0;
     public double getVoltageCompensatedPow(double pow, double voltage){
-        filter(0.01, voltage, prevVoltage);
+        filter(0.003, voltage, prevVoltage);
         prevVoltage = voltage;
         return pow * (14/voltage);
     }
