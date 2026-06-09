@@ -19,12 +19,11 @@ import dev.nextftc.ftc.NextFTCOpMode;
 @Autonomous(name = "Full Far Blue leave", group = "Blue")
 public class AutoFullFarLeave extends NextFTCOpMode {
 
-    AutoCommands command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
+    AutoCommands command;
     public AutoFullFarLeave() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
-                new PedroComponent(Constants::createFollower),
-                command
+                new PedroComponent(Constants::createFollower)
         );
     }
 
@@ -51,6 +50,10 @@ public class AutoFullFarLeave extends NextFTCOpMode {
         }
     @Override
     public void onStartButtonPressed() {
+        command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
+        addComponents(
+                command
+        );
         path = new PathsBlue();
         follower().setStartingPose(path.getSPoseFar());
         path.buildPaths(follower());

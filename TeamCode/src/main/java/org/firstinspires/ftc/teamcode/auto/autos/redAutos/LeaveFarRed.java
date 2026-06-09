@@ -19,12 +19,10 @@ import dev.nextftc.ftc.NextFTCOpMode;
 
 @Autonomous(name = "Leave Far Red",group = "Red")
 public class LeaveFarRed extends NextFTCOpMode {
-    AutoCommands command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
     public LeaveFarRed() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
-                new PedroComponent(Constants::createFollower),
-                command
+                new PedroComponent(Constants::createFollower)
         );
     }
     PathsRed path;

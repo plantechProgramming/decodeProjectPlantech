@@ -11,8 +11,8 @@ public class ReadWrite {
     File file = AppUtil.getInstance().getSettingsFile("lastLoc.txt");
     public void writePose(Pose pose){
         String poseString = pose.toString();
-        poseString = poseString.substring(1, poseString.length() - 1);
-        ReadWriteFile.writeFile(file, poseString); // replaces the current text
+        String noParens = poseString.substring(1, poseString.length() - 1);
+        ReadWriteFile.writeFile(file, noParens); // replaces the current text
     }
 
     public Pose readPose(){
@@ -29,7 +29,4 @@ public class ReadWrite {
 //        return posePartitions.length;
 //    }
 
-//    public void clear(){
-//        ReadWriteFile.
-//    }
 }

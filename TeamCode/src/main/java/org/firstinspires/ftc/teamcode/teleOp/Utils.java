@@ -34,8 +34,8 @@ public class Utils {
     double xOffsetGoalTag = 35;
     public final Pose2D GOAL_RED_CLOSE = getGoal("RED",xOffsetGoal,yOffsetGoal);
     public final Pose2D GOAL_BLUE_CLOSE = getGoal("BLUE",xOffsetGoal,yOffsetGoal);
-    public Pose2D GOAL_RED = getGoal("RED",xOffsetGoal,yOffsetGoal);
-    public Pose2D GOAL_BLUE = getGoal("BLUE",xOffsetGoal,yOffsetGoal);
+    public Pose2D GOAL_RED = getGoal("RED",0,0);
+    public Pose2D GOAL_BLUE = getGoal("BLUE",0,0);
 
     // we want to swap the offset directions when we move to far, because
     // we need to hit the side of the goal to mitigate backspin, and it's easier to
@@ -291,7 +291,7 @@ public class Utils {
     }
     double prevVoltage = 0;
     public double getVoltageCompensatedPow(double pow, double voltage){
-        filter(0.05, voltage, prevVoltage);
+        filter(0.01, voltage, prevVoltage);
         prevVoltage = voltage;
         return pow * (14/voltage);
     }

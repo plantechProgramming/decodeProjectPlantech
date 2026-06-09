@@ -39,7 +39,7 @@ public class DriveTrain {
     private GoBildaPinpointDriver odometry;
     ElapsedTime runtime = new ElapsedTime();
     Utils utils;
-    public static double Kp = 0.031, Ki = 0, Kd = 2.2, Kf = 0, Ks = 0.05; // prev kp = 0.0325, ki = 0, kd = 2.1, kf=0
+    public static double Kp = 0.023, Ki = 0, Kd = 1.8, Kf = 0, Ks = 0.04; // prev kp = 0.0325, ki = 0, kd = 2.1, kf=0
     static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     private PID pid;
     AprilTagLocalization tagLocalization;
@@ -48,7 +48,7 @@ public class DriveTrain {
 //    private PID shortTurnPID;
     static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
 
-    public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu, GoBildaPinpointDriver odometry, String team) {
+    public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu, GoBildaPinpointDriver odometry, String team, Utils utils) {
         this.BL = BL;
         this.BR = BR;
         this.FL = FL;
@@ -57,7 +57,7 @@ public class DriveTrain {
         this.Imu = imu;
         this.telemetry = telemetry;
         this.team = team;
-        this.utils = new Utils(this.telemetry, this.odometry);
+        this.utils = utils;
         pid = new PID(Kp, Ki, Kd, Kf, Ks);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
         tagLocalization = new AprilTagLocalization(team,telemetry);
     }
@@ -131,18 +131,20 @@ public class DriveTrain {
             power = pid.updatedeg(botAngleRaw);
             error = degrees - botAngleRaw;
 
-        }
+//        }
 //        else{
 //            power = 0;
 //        }
             power = utils.getVoltageCompensatedPow(power, voltage);
-//        }
+        }
 //        FL.setPower(-power);
 //        FR.setPower(power);
 //
 //        BR.setPower(power);
 //        BL.setPower(-power);
-        telemetry.addData("pow", power);
+//        telemetry.addData("pow", power);
+//        telemetry.addData("wanted", degrees);
+//        telemetry.addData("curr", botAngleRaw);
         turnPow = power;
 //        telemetry.addData("heading", botAngleRaw);
     }
@@ -173,9 +175,9 @@ public class DriveTrain {
     }
 
     public boolean isStopped(){
-        boolean xInThresh = Math.abs(odometry.getVelX(DistanceUnit.CM)) < 3;
-        boolean yInThresh = Math.abs(odometry.getVelY(DistanceUnit.CM)) < 3;
-        boolean headInThresh = Math.abs(odometry.getHeadingVelocity(AngleUnit.DEGREES.getUnnormalized())) < 2;
+        boolean xInThresh = Math.abs(odometry.getVelX(DistanceUnit.CM)) < 5;
+        boolean yInThresh = Math.abs(odometry.getVelY(DistanceUnit.CM)) < 5;
+        boolean headInThresh = Math.abs(odometry.getHeadingVelocity(AngleUnit.DEGREES.getUnnormalized())) < 3;
         return xInThresh && yInThresh && headInThresh;
     }
 

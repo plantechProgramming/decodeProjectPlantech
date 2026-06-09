@@ -20,12 +20,11 @@ import dev.nextftc.ftc.NextFTCOpMode;
 @Autonomous(name = "Leave Close PPG Red", group = "Red")
 public class LeaveClosePPGRed extends NextFTCOpMode {
 
-    AutoCommands command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
+    AutoCommands command;
     public LeaveClosePPGRed() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
-                new PedroComponent(Constants::createFollower),
-                command
+                new PedroComponent(Constants::createFollower)
         );
     }
 
@@ -51,6 +50,10 @@ public class LeaveClosePPGRed extends NextFTCOpMode {
     }
     @Override
     public void onStartButtonPressed() {
+        command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
+        addComponents(
+                command
+        );
         path = new PathsRed();
         follower().setStartingPose(path.getSPose());
         path.buildPaths(follower());

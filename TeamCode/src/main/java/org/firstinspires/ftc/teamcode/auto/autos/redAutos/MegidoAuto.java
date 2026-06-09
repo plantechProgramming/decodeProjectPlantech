@@ -20,13 +20,12 @@ import dev.nextftc.ftc.NextFTCOpMode;
 
 @Autonomous(name = "Megido Auto Close Red", group = "Red")
 public class MegidoAuto extends NextFTCOpMode {
-    AutoCommands command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
+    AutoCommands command;
 
     public MegidoAuto() {
         addComponents(
 //                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
-                new PedroComponent(Constants::createFollower),
-                command
+                new PedroComponent(Constants::createFollower)
         );
     }
 
@@ -54,6 +53,10 @@ public class MegidoAuto extends NextFTCOpMode {
     }
     @Override
     public void onStartButtonPressed() {
+        command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
+        addComponents(
+                command
+        );
         path = new PathsRed();
         follower().setStartingPose(path.getSPose());
         path.buildPaths(follower());
