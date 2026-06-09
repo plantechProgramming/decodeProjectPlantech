@@ -12,11 +12,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
+import org.firstinspires.ftc.teamcode.Misc.Utils.Converters;
 import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Config
@@ -41,11 +44,10 @@ public class TeleOpBlue extends TeamOpMode {
 
     @Override
     public void run(){
-        Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
-        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, "RED");
-        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
+        Intake intake  = new Intake();
+        DriveTrain driveTrain = new DriveTrain();
+        Shooter shooter = new Shooter();
         ReadWrite readWrite = new ReadWrite();
-        Utils utils = new Utils(telemetry,odometry);
         ElapsedTime elapsedTime = new ElapsedTime();
 
         double forward; //-1 to 1
@@ -55,15 +57,14 @@ public class TeleOpBlue extends TeamOpMode {
         boolean activatedHold = false;
         boolean aang = false;
         int count = 0;
-        int stopCount = 0;
         String team = "BLUE"; //TODO: change for BLUE
 //        follower.setStartingPose(readWrite.readPose());
         follower.update();
-        odometry.setPosition(driveTrain.PedroPoseConverter(readWrite.readPose()));
+        odometry.setPosition(Converters.PedroPoseConverter(readWrite.readPose()));
         odometry.update();
         Pose lastPos = follower.getPose();
-        DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -74,7 +75,7 @@ public class TeleOpBlue extends TeamOpMode {
             drift = gamepad1.left_stick_x;
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
 
-            shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team);
+            shooter.interplationVariableShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team);
 
             if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
                 driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift

@@ -19,6 +19,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.InitMotors;
+import org.firstinspires.ftc.teamcode.Misc.Alliance;
 import org.firstinspires.ftc.teamcode.Misc.Utils.AngleFunctions;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Extras;
 import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
@@ -30,27 +32,15 @@ import org.openftc.easyopencv.OpenCvCamera;
 @Config
 public class DriveTrain {
     private DcMotorEx BR, BL, FR, FL;
-    private BNO055IMU imu;
-    private IMU Imu;
-    private Telemetry telemetry;
-    private GoBildaPinpointDriver odometry;
-    ElapsedTime runtime = new ElapsedTime();
     public static double Kp = 0.034, Ki = 3e-9, Kd = 2.5, Kf = 0; // prev kp = 0.0325, ki = 0, kd = 2.1, kf=0
     public static int t = 1;
-    static final double WHEEL_DIAMETER_CM = 10.4;     // For figuring circumference
     private PID pid;
-    String team;
-    static final double COUNTS_PER_CM = 537.6 / WHEEL_DIAMETER_CM * Math.PI;//(COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_CM * PI);
 
-    public DriveTrain(DcMotorEx BR, DcMotorEx BL, DcMotorEx FR, DcMotorEx FL, Telemetry telemetry, IMU imu, GoBildaPinpointDriver odometry, String team) {
-        this.BL = BL;
-        this.BR = BR;
-        this.FL = FL;
-        this.FR = FR;
-        this.odometry = odometry;
-        this.Imu = imu;
-        this.telemetry = telemetry;
-        this.team = team;
+    public DriveTrain() {
+        this.BL = InitMotors.BL;
+        this.BR = InitMotors.BR;
+        this.FL = InitMotors.FL;
+        this.FR = InitMotors.FR;
         pid = new PID(Kp, Ki, Kd, Kf,t, this.telemetry);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
     }
 
@@ -78,11 +68,6 @@ public class DriveTrain {
 
         double frontRightPower = (rotY - rotX - rx) / denominator;// before - rotX
         double backRightPower = (rotY + rotX - rx) / denominator;// before + rotX
-
-        telemetry.addData("FL", frontLeftPower);
-        telemetry.addData("FR", frontRightPower);
-        telemetry.addData("BR", backRightPower);
-        telemetry.addData("BL", backLeftPower);
 
         return setPower(
                 frontLeftPower * slowRatio,

@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.InitMotors;
+
 public class InBetween {
     CRServo sl, sr;
     DcMotorEx inBetweenMotor;
@@ -19,18 +21,11 @@ public class InBetween {
     double STOP_POWER_MOTOR = 0;
     double IN_POWER_MOTOR = 0.95;
 
-    public InBetween(HardwareMap hardwareMap){
-        initHardware(hardwareMap);
-    }
 
-    private void initHardware(HardwareMap hardwareMap){
-        inBetweenMotor = hardwareMap.get(DcMotorEx.class, "inbetween");
-        inBetweenMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        inBetweenMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        inBetweenMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        sl = hardwareMap.get(CRServo.class,"SIBR");
-        sr = hardwareMap.get(CRServo.class,"SIBL");
+    public InBetween(){
+        inBetweenMotor = InitMotors.inBetweenMotor;
+        this.sl = InitMotors.SL;
+        this.sr = InitMotors.SR;
     }
 
     public Command inBetweenInFull(){

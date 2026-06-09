@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.InitMotors;
 import org.firstinspires.ftc.teamcode.Misc.Alliance;
 import org.firstinspires.ftc.teamcode.Misc.PID;
 import org.firstinspires.ftc.teamcode.Misc.GetVelocity;
@@ -18,19 +19,10 @@ public class Shooter {
     DcMotorEx shootMotor, shootMotorOp;
     GetVelocity shooterVel;
     double MAX_RPM = 6000;
-    public Shooter(HardwareMap hardwareMap) {
-        initHardware(hardwareMap);
+    public Shooter() {
+        shootMotor = InitMotors.shootMotor;
+        shootMotorOp = InitMotors.shootMotorOp;
         shooterVel = new GetVelocity(shootMotor, 0.1);
-    }
-
-    private void initHardware(HardwareMap hardwareMap){
-        shootMotor = hardwareMap.get(DcMotorEx.class, "shooter");
-        shootMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        shootMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-
-        shootMotorOp = hardwareMap.get(DcMotorEx.class, "shooter2");
-        shootMotorOp.setDirection(DcMotorSimple.Direction.FORWARD);
-        shootMotorOp.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     double wantedPow;
