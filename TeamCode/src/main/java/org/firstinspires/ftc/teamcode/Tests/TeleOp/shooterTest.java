@@ -10,6 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @Configurable
 @Config
@@ -23,11 +25,11 @@ public class shooterTest extends TeamOpMode {
 
     @Override
     protected void run() {
-        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
-        Intake intake  = new Intake(inBetweenMotor,shooterIBL,shooterIBR,intakeMotor,telemetry);
+        Shooter shooter = new Shooter();
+        Intake intake  = new Intake();
 //        Turret turret = new Turret(turretMotor, odometry);
         ReadWrite readWrite = new ReadWrite();
-        DriveTrain driveTrain = new DriveTrain(DriveBackRight, DriveBackLeft, DriveFrontRight, DriveFrontLeft, telemetry, Imu,odometry, "RED");
+        DriveTrain driveTrain = new DriveTrain();
         odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
         DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);

@@ -18,9 +18,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public abstract class TeamOpMode extends LinearOpMode {
     InitMotors initMotors;
 
-    private CRServo SL,SR;
-    private DcMotorEx FL, FR, BL, BR,inBetweenMotor, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
-    private Telemetry dashboardTelemetry;
+    protected CRServo SL,SR;
+    protected DcMotorEx FL, FR, BL, BR,inBetweenMotor, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
+    protected Telemetry dashboardTelemetry;
     protected GoBildaPinpointDriver odometry;
 
     private void initAll(){

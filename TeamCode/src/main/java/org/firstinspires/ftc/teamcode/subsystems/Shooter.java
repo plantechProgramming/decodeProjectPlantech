@@ -25,7 +25,7 @@ public class Shooter {
         shooterVel = new GetVelocity(shootMotor, 0.1);
     }
 
-    double wantedPow;
+    double wantedNaivePow;
     public static double farPow = 0.541;
     public static double closePow = 0.387;
 
@@ -39,19 +39,19 @@ public class Shooter {
 
     public Command naiveShooter(boolean far) {
         if (far) {
-            wantedPow = farPow;
+            wantedNaivePow = farPow;
         } else {
-            wantedPow = closePow;
+            wantedNaivePow = closePow;
         }
-        return Commands.instant(()->controller.setWanted(wantedPow));
+        return Commands.instant(()->controller.setWanted(wantedNaivePow));
     }
 
     public void updateTelemetry(Telemetry telemetry){
         TelemetryUtils.addTitle(telemetry, "staring shooter telemetry");
         telemetry.addData("current pow",getCurPower());
-        TelemetryUtils.addVar(telemetry, wantedPow);
-        telemetry.addData("wanted v", wantedPow*MAX_RPM);
         telemetry.addData("cur v", shooterVel.getVelocityFilter());
+        telemetry.addData("wanted naive vel", wantedNaivePow*MAX_RPM);
+        telemetry.addData("wanted interpolation vel", wantedVariableInterpolation*MAX_RPM);
         TelemetryUtils.addTitle(telemetry, "ending shooter telemetry");
     }
 
@@ -76,8 +76,8 @@ public class Shooter {
         shootMotorOp.setPower(-pow);
     }
 
-    public void out(){
-        setPower(-0.2);
+    public Command out(){
+        return setShooterPowerAsCommand(-0.2);
     }
 
     public double getInterpolation(double dis){
@@ -109,12 +109,13 @@ public class Shooter {
         prevMore = more;
         return variablePower;
     }
-
-    public double getInterplationVariableShoot(boolean more, boolean less, double jumps, Alliance team) {
-        return getInterpolation(utils.getDistFromGoal(team)) + getVariableShoot(more, less, jumps);
+    double wantedVariableInterpolation = 0;
+    public double getInterpolationVariableShoot(boolean more, boolean less, double jumps) {
+        wantedVariableInterpolation = getInterpolation(utils.getDistFromGoal()) + getVariableShoot(more, less, jumps);
+        return wantedVariableInterpolation;
     }
 
-    public void interplationVariableShoot(boolean more, boolean less, double jumps, Alliance team) {
-        controller.setWanted(getInterplationVariableShoot(more, less, jumps, team));
+    public void interpolationVariableShoot(boolean more, boolean less, double jumps) {
+        controller.setWanted(getInterpolationVariableShoot(more, less, jumps));
     }
 }

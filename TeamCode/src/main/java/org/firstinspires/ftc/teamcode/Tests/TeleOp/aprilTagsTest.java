@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 /**
@@ -25,7 +26,7 @@ public class aprilTagsTest  extends TeamOpMode {
             sleep(20);
         }
         tagLocalization.applySettings();
-        Shooter shooter = new Shooter(shootMotor,dashboardTelemetry,shootMotorOp, odometry);
+        Shooter shooter = new Shooter();
         int count = 0;
         int errorCounter = 0;
         double curr = -144;
@@ -33,7 +34,7 @@ public class aprilTagsTest  extends TeamOpMode {
         double sum = 0;
         while (opModeIsActive()) {
             tagLocalization.detectTags();
-            shooter.shoot(0.4);
+            shooter.setShooterPowerAsCommand(0.4);
             if(tagLocalization.goalTag != null){
 //                count++;
 //                tagLocalization.getCurrDeg(tagLocalization.goalTag);
@@ -43,20 +44,10 @@ public class aprilTagsTest  extends TeamOpMode {
 //                    tagLocalization.filteredYawPrev = -144.5;
 //                    utils.resetSum();
 //               }
-                telemetry.addData("yaw", tagLocalization.goalTag.ftcPose.yaw);
-                telemetry.addData("x", tagLocalization.goalTag.ftcPose.x);
-                telemetry.addData("y", tagLocalization.goalTag.ftcPose.y);
-                telemetry.addData("cur deg",tagLocalization.getCurrDeg(tagLocalization.goalTag));
-                telemetry.addData("xy reloc",tagLocalization.getRelocXY(tagLocalization.goalTag));
-                telemetry.addData("xy rotated",tagLocalization.getXYToTag(tagLocalization.goalTag));
-                telemetry.addData("wanted deg", Math.toDegrees(Math.atan2(tagLocalization.getXYToTag(tagLocalization.goalTag).second, tagLocalization.getXYToTag(tagLocalization.goalTag).first)));
+                tagLocalization.setCameraTelemetry(telemetry);
+                tagLocalization.setCameraTelemetry(dashboardTelemetry);
+
                 telemetry.update();
-                dashboardTelemetry.addData("yaw", tagLocalization.goalTag.ftcPose.yaw);
-                dashboardTelemetry.addData("x", tagLocalization.goalTag.ftcPose.x);
-                dashboardTelemetry.addData("y", tagLocalization.goalTag.ftcPose.y);
-                dashboardTelemetry.addData("cur deg",tagLocalization.getCurrDeg(tagLocalization.goalTag));
-                dashboardTelemetry.addData("xy reloc",tagLocalization.getRelocXY(tagLocalization.goalTag));
-                dashboardTelemetry.addData("xy rotated",tagLocalization.getXYToTag(tagLocalization.goalTag));
                 dashboardTelemetry.update();
             }
             else{

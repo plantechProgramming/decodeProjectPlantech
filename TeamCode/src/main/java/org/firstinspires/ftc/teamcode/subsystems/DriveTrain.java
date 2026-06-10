@@ -44,14 +44,9 @@ public class DriveTrain {
         pid = new PID(Kp, Ki, Kd, Kf,t, this.telemetry);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
     }
 
-    public Command drive(double y, double x, double rx, double botHeading, double slowRatio){
-
+    public Command drive(double y, double x, double rx, double botHeading, double slowRatio){ // rx in degrees
         // slowRatio [0,1] - output power multiplier
-
-        FL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        FR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        BL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rx = Math.toRadians(rx);
 
         // Rotate the movement direction counter to the bot's rotation
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);

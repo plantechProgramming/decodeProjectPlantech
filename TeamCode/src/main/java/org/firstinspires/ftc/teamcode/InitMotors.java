@@ -89,6 +89,7 @@ public class InitMotors {
         odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         odometry.setOffsets(-155,-90, DistanceUnit.MM); //x = -155, y= -90
         odometry.resetPosAndIMU();
+        odometry.recalibrateIMU();
     }
     
     public void initDashboard(){

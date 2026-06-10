@@ -20,12 +20,14 @@ public class AutoCommands{
     InBetween inBetween;
     Follower follower;
 
-    public AutoCommands(Follower follower, HardwareMap hardwareMap) {
-        shooter = new Shooter(hardwareMap);
-        intake = new Intake(hardwareMap);
-        inBetween = new InBetween(hardwareMap);
+    public AutoCommands(Follower follower) {
+        shooter = new Shooter();
+        intake = new Intake();
+        inBetween = new InBetween();
         this.follower = follower;
     }
+
+    public AutoCommands(){}
 
     public void periodic(){
         shooter.periodic();
@@ -33,7 +35,14 @@ public class AutoCommands{
 
     public Command shoot(){
         return sequential(
-                inBetween.inBetweenInFull(),
+                inBetween.inFull(),
+                intake.take()
+        );
+    }
+
+    public Command take(){
+        return parallel(
+                inBetween.inPart(),
                 intake.take()
         );
     }
@@ -46,6 +55,26 @@ public class AutoCommands{
         );
     }
 
+    public Command Out(){ // including the shooter
+        return parallel(
+                partialOut(),
+                shooter.out()
+        );
+    }
+
+    public Command partialOut(){ // not including the shooter
+        return parallel(
+                intake.out(),
+                inBetween.out()
+        );
+    }
+
+    public Command stopAll(){
+        return parallel(
+                intake.stop(),
+                inBetween.stop()
+        );
+    }
     public Command scoreWithDelay(PathChain path, double delay){
         return sequential(
                 follow(follower, path),
@@ -56,16 +85,14 @@ public class AutoCommands{
 
     public Command intake(PathChain grabPath){
         return sequential(
-                inBetween.inBetweenInPart(),
-                intake.take(),
+                take(),
                 follow(follower, grabPath),
                 stopAll()
         );
     }
     public Command intakeWithSpeed(PathChain grabPath, double speed){
         return sequential(
-                inBetween.inBetweenInPart(),
-                intake.take(),
+                take(),
                 follow(follower, grabPath, speed),
                 stopAll()
         );
@@ -73,8 +100,7 @@ public class AutoCommands{
 
     public Command intakeAndShoot(PathChain grabAndShootPath){
         return sequential(
-                inBetween.inBetweenInPart(),
-                intake.take(),
+                take(),
                 follow(follower, grabAndShootPath),
                 shoot(),
                 waitMs(1600)
@@ -86,20 +112,6 @@ public class AutoCommands{
                 shooter.naiveShooter(far)
 //                intake.take(),
 //                inBetween.inBetweenInPart()
-        );
-    }
-
-    public Command stopAll(){
-        return parallel(
-                intake.stop(),
-                inBetween.stop()
-        );
-    }
-
-    public Command take(){
-        return parallel(
-                inBetween.inBetweenInPart(),
-                intake.take()
         );
     }
 

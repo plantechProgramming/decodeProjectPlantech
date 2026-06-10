@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode.auto.autos.blueAutos.stillAutos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import dev.nextftc.ftc.NextFTCOpMode;
 
 @Autonomous(name = "still Far Blue", group = "still")
-public class FarStillAuto extends NextFTCOpMode {
+public class FarStillAuto extends LinearOpMode {
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
 
 //    @Override
 //    public void onStop(){

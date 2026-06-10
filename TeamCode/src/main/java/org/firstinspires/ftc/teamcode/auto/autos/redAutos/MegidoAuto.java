@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.auto.autos.redAutos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import dev.nextftc.ftc.NextFTCOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous(name = "Megido Auto Close Red", group = "Red")
-public class MegidoAuto extends NextFTCOpMode {
+public class MegidoAuto extends LinearOpMode {
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
 //    private Follower follower;
 //
 //    public MegidoAuto() {

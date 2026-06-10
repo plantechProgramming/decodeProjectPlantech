@@ -5,6 +5,8 @@ import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.PathChain;
 
+import org.firstinspires.ftc.teamcode.Misc.Alliance;
+
 public class Paths {
 
     public PathChain scorePreload, scorePreloadFar;
@@ -19,9 +21,9 @@ public class Paths {
     public PathChain scoreLeaveFar, leaveFar;
     public Points points;
 
-    public Paths(String team){
+    public Paths(){
          points = new Points();
-        if(team.equals("RED")) {
+        if(Alliance.get() == Alliance.RED) {
             points.setPointsToRed();
         }
     }

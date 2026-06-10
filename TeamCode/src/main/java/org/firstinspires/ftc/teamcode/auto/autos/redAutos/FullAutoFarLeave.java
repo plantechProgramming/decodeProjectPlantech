@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.auto.autos.redAutos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import dev.nextftc.ftc.NextFTCOpMode;
-
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous(name = "Full Far Red leave", group = "Red")
-public class FullAutoFarLeave extends NextFTCOpMode {
+public class FullAutoFarLeave extends LinearOpMode {
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
 //
 //    public FullAutoFarLeave() {
 //        addComponents(

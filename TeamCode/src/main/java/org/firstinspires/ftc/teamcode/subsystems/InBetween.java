@@ -28,17 +28,24 @@ public class InBetween {
         this.sr = InitMotors.SR;
     }
 
-    public Command inBetweenInFull(){
+    public Command inFull(){
         return parallel(
                 inShooterPrimers(),
                 setMotorPowerAsCommand(IN_POWER_MOTOR)
         );
     }
 
-    public Command inBetweenInPart(){
+    public Command inPart(){
         return parallel(
                 setPrimerPowerAsCommand(OUT_POWER),
                 setMotorPowerAsCommand(IN_POWER_MOTOR)
+        );
+    }
+
+    public Command out(){
+        return parallel(
+                setPrimerPowerAsCommand(OUT_POWER),
+                setMotorPowerAsCommand(OUT_POWER)
         );
     }
 

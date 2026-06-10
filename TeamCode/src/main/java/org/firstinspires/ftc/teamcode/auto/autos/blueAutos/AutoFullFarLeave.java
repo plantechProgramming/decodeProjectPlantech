@@ -8,6 +8,7 @@ import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Misc.Alliance;
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Paths;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Points;
@@ -22,20 +23,20 @@ public class AutoFullFarLeave extends LinearOpMode {
     Follower follower;
     ReadWrite readWrite = new ReadWrite();
 
-        public Command autoRoutine(){
-            return sequential(
-                command.startShooter(true),
-                command.score(path.scorePreloadFar),
+    public Command autoRoutine(){
+        return sequential(
+            command.startShooter(true),
+            command.score(path.scorePreloadFar),
 
-                command.intake(path.grabGPPFar),
-                command.score(path.scoreGPPFar),
+            command.intake(path.grabGPPFar),
+            command.score(path.scoreGPPFar),
 
-                command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.6),
-                command.score(path.scoreLeftoverBallsGate),
+            command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.6),
+            command.score(path.scoreLeftoverBallsGate),
 
-                follow(follower, path.scoreLeaveFar)
-            );
-        }
+            follow(follower, path.scoreLeaveFar)
+        );
+    }
 
     public void onStop(){
         readWrite.writePose(follower.getPose());
@@ -43,11 +44,12 @@ public class AutoFullFarLeave extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        path = new Paths("BLUE");
+        Alliance.set(Alliance.BLUE);
+        path = new Paths();
         follower = Constants.createFollower(hardwareMap);
 
         follower.setStartingPose(Points.startPoseFar);
-        command = new AutoCommands(follower, hardwareMap);
+        command = new AutoCommands(follower);
         path.buildPaths(follower);
 
         Scheduler.schedule(autoRoutine());

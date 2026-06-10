@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.auto.autos.blueAutos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import dev.nextftc.ftc.NextFTCOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous(name = "Leave Far Blue",group = "Blue")
-public class LeaveFar extends NextFTCOpMode  {
+public class LeaveFar extends LinearOpMode {
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
 //    private Follower follower;
 //
 //    public LeaveFar() {
