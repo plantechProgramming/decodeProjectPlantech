@@ -228,11 +228,11 @@ public class TeleOpBlue extends OpMode {
 //            telemetry.update();
             dashboardTelemetry.update();
             follower.update();
-//            utils.updateGoal();
+            utils.updateGoal();
         }
 
     }
-
+//
     @Override
     protected void end() {
 //        limeLight.shutDown();
