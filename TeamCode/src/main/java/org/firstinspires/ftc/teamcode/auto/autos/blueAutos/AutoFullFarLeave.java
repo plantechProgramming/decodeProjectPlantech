@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Misc.Alliance;
-import org.firstinspires.ftc.teamcode.auto.AutoCommands;
+import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Paths;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Points;
 import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;

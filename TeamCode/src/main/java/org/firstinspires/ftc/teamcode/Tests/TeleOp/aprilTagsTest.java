@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Tests.TeleOp;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.TeamOpMode;
@@ -13,7 +14,8 @@ import org.firstinspires.ftc.vision.VisionPortal;
  * reasons.
  */
 @Config
-@TeleOp(name = "aprilTags", group = "camera")
+@Disabled
+@TeleOp(group = "tests")
 public class aprilTagsTest  extends TeamOpMode {
     AprilTagLocalization tagLocalization = new AprilTagLocalization("RED", telemetry); //TODO: change here for red
 

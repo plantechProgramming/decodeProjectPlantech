@@ -5,7 +5,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -15,8 +15,7 @@ import org.firstinspires.ftc.teamcode.Misc.Alliance;
 import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Converters;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Extras;
-import org.firstinspires.ftc.teamcode.auto.AutoCommands;
-import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
+import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
@@ -24,31 +23,28 @@ import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.InBetween;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.vision.VisionPortal;
 
 @Config
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp
+@TeleOp
 public class TeleOpBlue extends TeamOpMode {
     Follower follower;
-
-    Intake intake; InBetween inBetween; Shooter shooter; DriveTrain driveTrain;
-    ReadWrite readWrite; ElapsedTime elapsedTime; AutoCommands commands;
 
     @Override
     protected void postInit() {
         Alliance.set(Alliance.BLUE);
         follower = Constants.createFollower(hardwareMap);
-        intake  = new Intake();
-        inBetween = new InBetween();
-        shooter = new Shooter();
-        driveTrain = new DriveTrain();
-        readWrite = new ReadWrite();
-        elapsedTime = new ElapsedTime();
-        commands = new AutoCommands();
     }
 
     @Override
     public void run(){
+        Intake intake  = new Intake();
+        InBetween inBetween = new InBetween();
+        Shooter shooter = new Shooter();
+        DriveTrain driveTrain = new DriveTrain();
+        ReadWrite readWrite = new ReadWrite();
+        ElapsedTime elapsedTime = new ElapsedTime();
+        AutoCommands commands = new AutoCommands();
+
 
         double forward; //-1 to 1
         double turn;
@@ -57,7 +53,7 @@ public class TeleOpBlue extends TeamOpMode {
         boolean shooting;
         boolean turning;
         boolean activatedHold = false;
-        boolean aang = false;
+        boolean activateHold = false;
 
         odometry.setPosition(Converters.PedroPoseConverter(readWrite.readPose()));
         odometry.update();
@@ -76,9 +72,9 @@ public class TeleOpBlue extends TeamOpMode {
 
             if(shooting){
                 commands.shoot();
-                if(aang){
+                if(activateHold){
                     Extras.setDriveToFloatMode();
-                    aang = false;
+                    activateHold = false;
                     lastPos = follower.getPose();
 
                 }
@@ -86,8 +82,7 @@ public class TeleOpBlue extends TeamOpMode {
                 activatedHold = true;
             }
             else {
-                lastPos = follower.getPose();
-                aang = true;
+                activateHold = true;
                 if(activatedHold){
                     activatedHold = false;
                     follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
@@ -102,7 +97,7 @@ public class TeleOpBlue extends TeamOpMode {
                         commands.partialOut();
                     }
                     else if(gamepad1.x){
-                        commands.Out();
+                        commands.out();
                     }
                     else{
                         commands.stopAll();

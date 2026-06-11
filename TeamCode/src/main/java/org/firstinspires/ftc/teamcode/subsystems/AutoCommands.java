@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import static com.pedropathing.ivy.commands.Commands.waitMs;
 import static com.pedropathing.ivy.groups.Groups.parallel;
@@ -8,11 +8,6 @@ import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.paths.PathChain;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-
-import org.firstinspires.ftc.teamcode.subsystems.InBetween;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 public class AutoCommands{
     Shooter shooter;
@@ -55,7 +50,7 @@ public class AutoCommands{
         );
     }
 
-    public Command Out(){ // including the shooter
+    public Command out(){ // including the shooter
         return parallel(
                 partialOut(),
                 shooter.out()
@@ -69,7 +64,7 @@ public class AutoCommands{
         );
     }
 
-    public Command stopAll(){
+    public Command stopAll(){ // not including the shooter
         return parallel(
                 intake.stop(),
                 inBetween.stop()

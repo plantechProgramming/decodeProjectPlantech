@@ -80,14 +80,6 @@ public class Shooter {
         return setShooterPowerAsCommand(-0.2);
     }
 
-    public double getInterpolation(double dis){
-        return (0.00000149018 * Math.pow(dis, 2) + 0.0000836022 * dis + 0.35805);
-    }
-
-    public void variableShoot(boolean more, boolean less, double jumps){
-        controller.setWanted(getVariableShoot(more, less, jumps));
-    }
-
     public boolean isUpToGivenSpeed(double wantedSpeed, double curSpeed){
         double threshold = 100; //TODO: tune!! should be the biggest reliably scoring value
         return Math.abs(curSpeed - wantedSpeed*6000) < threshold;
@@ -109,6 +101,15 @@ public class Shooter {
         prevMore = more;
         return variablePower;
     }
+
+    public void variableShoot(boolean more, boolean less, double jumps){
+        controller.setWanted(getVariableShoot(more, less, jumps));
+    }
+
+    public double getInterpolation(double dis){
+        return (0.00000149018 * Math.pow(dis, 2) + 0.0000836022 * dis + 0.35805);
+    }
+
     double wantedVariableInterpolation = 0;
     public double getInterpolationVariableShoot(boolean more, boolean less, double jumps) {
         wantedVariableInterpolation = getInterpolation(utils.getDistFromGoal()) + getVariableShoot(more, less, jumps);

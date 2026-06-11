@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Tests.TeleOp;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -9,54 +10,31 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
+import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @Configurable
 @Config
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp
+@TeleOp(group = "tests")
 public class shooterTest extends TeamOpMode {
-    @Override
-    protected void postInit() {
-        odometry.resetPosAndIMU();
-    }
-
 
     @Override
     protected void run() {
         Shooter shooter = new Shooter();
-        Intake intake  = new Intake();
-//        Turret turret = new Turret(turretMotor, odometry);
-        ReadWrite readWrite = new ReadWrite();
-        DriveTrain driveTrain = new DriveTrain();
-        odometry.setPosition(new Pose2D(DistanceUnit.CM,0,0,AngleUnit.DEGREES, 180)); //TODO: change for RED
-        DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        DriveBackRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        DriveFrontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        DriveFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        AutoCommands commands = new AutoCommands();
         while(opModeIsActive()){
-            double forward = -gamepad1.left_stick_y;
-            double turn = gamepad1.right_stick_x;
-            double drift = gamepad1.left_stick_x;
-            shooter.variableSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, .01);
-            driveTrain.drive(-forward, -drift, turn, odometry.getHeading(AngleUnit.DEGREES), 1);//TODO: change for RED -forward, -drift
+            shooter.variableShoot(gamepad1.dpad_up, gamepad1.dpad_down, .01);
 
             if(gamepad1.a){
-               if(shooter.isUpToGivenSpeed(shooter.power)){
-                   intake.inBetweenInFull();
-                   intake.intakeIn();
-               }
-           }
+                commands.shoot();
+            }
 
-            shooter.setShooterTelemetry(dashboardTelemetry);
-            shooter.setShooterTelemetry(telemetry);
-            driveTrain.setDriveTelemetry(telemetry);
-            driveTrain.setDriveTelemetry(dashboardTelemetry);
+            shooter.updateTelemetry(dashboardTelemetry);
+            shooter.updateTelemetry(telemetry);
             telemetry.update();
             dashboardTelemetry.update();
-            odometry.update();
-
         }
     }
 
