@@ -13,16 +13,21 @@ import org.firstinspires.ftc.teamcode.InitMotors;
 import org.firstinspires.ftc.teamcode.Misc.Alliance;
 import org.firstinspires.ftc.teamcode.Misc.PID;
 import org.firstinspires.ftc.teamcode.Misc.GetVelocity;
+import org.firstinspires.ftc.teamcode.Misc.RobotPose;
+import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
 import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
 
 public class Shooter {
     DcMotorEx shootMotor, shootMotorOp;
     GetVelocity shooterVel;
+
+    PoseFunctions poseFuncs;
     double MAX_RPM = 6000;
     public Shooter() {
         shootMotor = InitMotors.shootMotor;
         shootMotorOp = InitMotors.shootMotorOp;
         shooterVel = new GetVelocity(shootMotor, 0.1);
+        poseFuncs = new PoseFunctions(new RobotPose(InitMotors.odometry));
     }
 
     double wantedNaivePow;
@@ -112,7 +117,7 @@ public class Shooter {
 
     double wantedVariableInterpolation = 0;
     public double getInterpolationVariableShoot(boolean more, boolean less, double jumps) {
-        wantedVariableInterpolation = getInterpolation(utils.getDistFromGoal()) + getVariableShoot(more, less, jumps);
+        wantedVariableInterpolation = getInterpolation(poseFuncs.getDistFromGoal()) + getVariableShoot(more, less, jumps);
         return wantedVariableInterpolation;
     }
 

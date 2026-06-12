@@ -14,16 +14,8 @@ public class PoseFunctions {
 
     RobotPose robotPose;
 
-    public PoseFunctions(GoBildaPinpointDriver odometry){
-        this.robotPose = new RobotPose(odometry);
-    }
-
-    public PoseFunctions(Pair<Double, Double> posXY){
-        this.robotPose = new RobotPose(posXY);
-    }
-
-    public PoseFunctions(Pose2D pose){
-        this.robotPose = new RobotPose(pose);
+    public PoseFunctions(RobotPose robotPose){
+        this.robotPose = robotPose;
     }
 
     public static final double LEN_FIELD = 360.172; // in cm
