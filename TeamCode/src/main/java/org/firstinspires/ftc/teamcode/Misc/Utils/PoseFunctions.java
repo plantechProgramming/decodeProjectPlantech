@@ -2,68 +2,75 @@ package org.firstinspires.ftc.teamcode.Misc.Utils;
 
 import android.util.Pair;
 
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.Misc.Alliance;
+import org.firstinspires.ftc.teamcode.Misc.RobotPose;
 
 public class PoseFunctions {
 
-    public final double LEN_FIELD = 360.172; // in cm
-    double yOffsetGoal = 16;//prev = 18
-    double xOffsetGoal = 5; // prev = 16
-    public Pose2D GOAL_RED = getGoal(xOffsetGoal,yOffsetGoal);
-    public Pose2D GOAL_BLUE = getGoal(xOffsetGoal,yOffsetGoal);
-    public Pose2D getGoal(double xOffset, double yOffset){
-        double GOAL_HEADING_BLUE;
-        double GOAL_HEADING_RED;
-        if(team.equals("RED")){
-            return new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+xOffset, -LEN_FIELD/2 + yOffset,AngleUnit.DEGREES,GOAL_HEADING_RED);
+    RobotPose robotPose;
+
+    public PoseFunctions(GoBildaPinpointDriver odometry){
+        this.robotPose = new RobotPose(odometry);
+    }
+
+    public PoseFunctions(Pair<Double, Double> posXY){
+        this.robotPose = new RobotPose(posXY);
+    }
+
+    public PoseFunctions(Pose2D pose){
+        this.robotPose = new RobotPose(pose);
+    }
+
+    public static final double LEN_FIELD = 360.172; // in cm
+    public static final double GOAL_HEADING_BLUE = -126;
+    public static final double GOAL_HEADING_RED = 126;
+
+    public static Pose2D getGoal(){ // in official ftc cords
+        final double Y_GOAL_OFFSET = 16;
+        final double X_GOAL_OFFSET = 5;
+        if(Alliance.get() == Alliance.RED){
+            return new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+X_GOAL_OFFSET, LEN_FIELD/2-Y_GOAL_OFFSET,AngleUnit.DEGREES,GOAL_HEADING_RED);
         }
         else{
-            return new Pose2D(DistanceUnit.CM,LEN_FIELD/2-xOffset, -LEN_FIELD/2 + yOffset,AngleUnit.DEGREES,GOAL_HEADING_BLUE);
+            return new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+X_GOAL_OFFSET, -LEN_FIELD/2+Y_GOAL_OFFSET,AngleUnit.DEGREES,GOAL_HEADING_BLUE);
         }
     }
 
     public boolean isFar(){
-        return odometry.getPosY(DistanceUnit.CM) > 60;
+        return robotPose.getX() > 60;
     }
-    public Pair<Double, Double> getXYdistToPoint(Pose2D point){
-        double robotX = odometry.getPosX(DistanceUnit.CM);
-        double robotY = odometry.getPosY(DistanceUnit.CM);
+    public Pair<Double, Double> getXYDiffToPoint(Pose2D point){
         double pointX = point.getX(DistanceUnit.CM);
         double pointY = point.getY(DistanceUnit.CM);
-        return new Pair<>(pointX-robotX, pointY-robotY);
+        return new Pair<>(pointX-robotPose.getX(), pointY-robotPose.getY());
     }
-    public double getPointToGoalAngle(Pose2D point1, String team){
+    public double getPointToGoalAngle(Pose2D point1){
         double x1 = point1.getX(DistanceUnit.CM);
         double y1 = point1.getY(DistanceUnit.CM);
-        double goalX = getTeamGoal(team).getX(DistanceUnit.CM);
-        double goalY = getTeamGoal(team).getY(DistanceUnit.CM);
+        double goalX = getGoal().getX(DistanceUnit.CM);
+        double goalY = getGoal().getY(DistanceUnit.CM);
         return Math.toDegrees(Math.atan2(goalY-y1,goalX-x1));
     }
-    public Pose2D getTeamGoal(String team){
-        if(team.equals("BLUE")) return GOAL_BLUE;
-        if(team.equals("RED")) return GOAL_RED;
-        return null;
-    }
-    public Pair<Double,Double> getXYdistToGoal(String team){
-        if(team.equals("BLUE")){
-            return getXYdistToPoint(GOAL_BLUE);
-        }
-        return getXYdistToPoint(GOAL_RED);
+    public Pair<Double,Double> getXYdistToGoal(){
+        return getXYDiffToPoint(getGoal());
     }
     public double getDistFromPoint(Pose2D point){
-        return Math.hypot(getXYdistToPoint(point).first, getXYdistToPoint(point).second);
+        return Math.hypot(getXYDiffToPoint(point).first, getXYDiffToPoint(point).second);
     }
-    public double getDistFromGoal(String team){
-        return Math.hypot(getXYdistToGoal(team).first,getXYdistToGoal(team).second);
+    public double getDistFromGoal(){
+        return Math.hypot(getXYdistToGoal().first,getXYdistToGoal().second);
     }
 
     public double getAngleFromPoint(Pose2D point){
-        return Math.toDegrees(Math.atan2(getXYdistToPoint(point).second, getXYdistToPoint(point).first));
+        return Math.toDegrees(Math.atan2(getXYDiffToPoint(point).second, getXYDiffToPoint(point).first));
     }
-    public double getAngleFromGoal(String team){
-        double deg = Math.atan2(getXYdistToGoal(team).second, getXYdistToGoal(team).first);
+    public double getAngleFromGoal(){
+        double deg = Math.atan2(getXYdistToGoal().second, getXYdistToGoal().first);
         return Math.toDegrees(deg);
     }
     public static Pose2D subtractPoses(Pose2D pos1, Pose2D pos2){
