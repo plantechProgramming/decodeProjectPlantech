@@ -5,12 +5,9 @@ import static com.pedropathing.ivy.groups.Groups.parallel;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.commands.Commands;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.InitMotors;
+import org.firstinspires.ftc.teamcode.Misc.InitMotors;
 
 public class InBetween {
     CRServo sl, sr;

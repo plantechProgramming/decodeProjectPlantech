@@ -22,26 +22,28 @@ public class GetVelocity {
     }
 
     private static final ElapsedTime timer = new ElapsedTime();
-    public long prevEncoder = 0;
-    public long curEncoder;
-    public double prevTime = 0;
-    public double curTime;
-    int millisecondsToMinute = 60000;
+    private long prevEncoder = 0;
+    private double prevTime = 0;
+    private final int MILLISECONDS_TO_MINUTE = 60000;
 
-    public double getVelocityFilter() {
+    public double getRawVelocity() {
         lowPass.start(alpha);
-        curEncoder = motor.getCurrentPosition();
-        curTime = timer.milliseconds();
+        long curEncoder = motor.getCurrentPosition();
+        double curTime = timer.milliseconds();
 
         double timeDiff = curTime - prevTime;
         double encoderDiff = curEncoder - prevEncoder;
 
         double tickVelocity = encoderDiff / timeDiff; // ticks/milliseconds
-        double velocity = (tickVelocity * millisecondsToMinute) / ticksPerRevolution;
+        double velocity = (tickVelocity * MILLISECONDS_TO_MINUTE) / ticksPerRevolution;
 
         prevTime = curTime;
         prevEncoder = curEncoder;
         lowPass.update(velocity);
+        return velocity;
+    }
+
+    public double getVelocityFilter(){
         return lowPass.get();
     }
 }

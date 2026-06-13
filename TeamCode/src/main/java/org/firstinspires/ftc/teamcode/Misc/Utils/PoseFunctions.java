@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.Misc.Utils;
 
 import android.util.Pair;
 
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
@@ -30,6 +28,17 @@ public class PoseFunctions {
         }
         else{
             return new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+X_GOAL_OFFSET, -LEN_FIELD/2+Y_GOAL_OFFSET,AngleUnit.DEGREES,GOAL_HEADING_BLUE);
+        }
+    }
+
+    public static Pose2D getTag(){ // in official ftc cords
+        final double Y_TAG_OFFSET = 30;
+        final double X_TAG_OFFSET = 35;
+        if(Alliance.get() == Alliance.RED){
+            return new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+ X_TAG_OFFSET, LEN_FIELD/2- Y_TAG_OFFSET,AngleUnit.DEGREES,GOAL_HEADING_RED);
+        }
+        else{
+            return new Pose2D(DistanceUnit.CM,-LEN_FIELD/2+ X_TAG_OFFSET, -LEN_FIELD/2+ Y_TAG_OFFSET,AngleUnit.DEGREES,GOAL_HEADING_BLUE);
         }
     }
 
@@ -77,6 +86,11 @@ public class PoseFunctions {
         boolean yInThresh = Math.abs(subtractedPose.getY(DistanceUnit.CM)) < xyThresh;
         boolean headingInThresh = Math.abs(subtractedPose.getHeading(AngleUnit.DEGREES)) < headingThresh;
         return xInThresh && yInThresh && headingInThresh;
+    }
+
+    public static Pair<Double, Double> rotation2D(double x, double y, double deg){
+        double rad = Math.toRadians(deg);
+        return new Pair<>(x*Math.cos(rad)-y*Math.sin(rad), x*Math.sin(rad)+y*Math.cos(rad));
     }
 }
 

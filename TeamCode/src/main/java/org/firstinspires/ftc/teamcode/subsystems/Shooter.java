@@ -5,12 +5,9 @@ import static com.pedropathing.ivy.groups.Groups.parallel;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.commands.Commands;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.InitMotors;
-import org.firstinspires.ftc.teamcode.Misc.Alliance;
+import org.firstinspires.ftc.teamcode.Misc.InitMotors;
 import org.firstinspires.ftc.teamcode.Misc.PID;
 import org.firstinspires.ftc.teamcode.Misc.GetVelocity;
 import org.firstinspires.ftc.teamcode.Misc.RobotPose;
@@ -39,7 +36,6 @@ public class Shooter {
     public static double kD = 500;
     public static double kF = 1.14;
 
-    // TODO: tune
     PID controller = new PID(kP,kI,kD,kF);
 
     public Command naiveShooter(boolean far) {
@@ -86,7 +82,7 @@ public class Shooter {
     }
 
     public boolean isUpToGivenSpeed(double wantedSpeed, double curSpeed){
-        double threshold = 100; //TODO: tune!! should be the biggest reliably scoring value
+        double threshold = 100; // should be the biggest reliably scoring value
         return Math.abs(curSpeed - wantedSpeed*6000) < threshold;
     }
 

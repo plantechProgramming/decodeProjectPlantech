@@ -44,9 +44,4 @@ public class AngleFunctions {
         // multiply by 100 to pretend its an int, then divide to get the right val
         return ((num +360)*100%(360*100))/100;
     }
-
-    public static Pair<Double, Double> rotation2D(double x, double y, double deg){
-        double rad = Math.toRadians(deg);
-        return new Pair<>(x*Math.cos(rad)-y*Math.sin(rad), x*Math.sin(rad)+y*Math.cos(rad));
-    }
 }

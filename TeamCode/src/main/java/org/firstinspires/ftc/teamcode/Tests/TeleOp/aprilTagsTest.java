@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Misc.Alliance;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -17,10 +18,13 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Disabled
 @TeleOp(group = "tests")
 public class aprilTagsTest  extends TeamOpMode {
-    AprilTagLocalization tagLocalization = new AprilTagLocalization("RED", telemetry); //TODO: change here for red
+    AprilTagLocalization tagLocalization = new AprilTagLocalization(telemetry);
 
     public static int loopsPerUpdate = 150;
-
+    @Override
+    public void postInit(){
+        Alliance.set(Alliance.BLUE);
+    }
     @Override
     public void run() {
         tagLocalization.initProcessor(hardwareMap);

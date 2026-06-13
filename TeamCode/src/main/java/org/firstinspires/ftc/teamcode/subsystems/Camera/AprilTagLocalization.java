@@ -17,6 +17,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.Misc.InitMotors;
+import org.firstinspires.ftc.teamcode.Misc.Alliance;
+import org.firstinspires.ftc.teamcode.Misc.RobotPose;
+import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
+import org.firstinspires.ftc.teamcode.Misc.Utils.filters.LowPass;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -27,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 
 public class AprilTagLocalization {
 //    Utils utils = new Utils();
-    private String team;
     private int id = 0;
     public AprilTagProcessor aprilTag;
     public String Order = "NNN";
@@ -43,10 +47,13 @@ public class AprilTagLocalization {
     public VisionPortal visionPortal;
     public AprilTagDetection goalTag = null;
     Telemetry telemetry;
+    PoseFunctions poseFuncs;
+    LowPass lowPass = new LowPass();
 
-    public AprilTagLocalization(String team, Telemetry telemetry) {
-        this.team = team;
+    public AprilTagLocalization(Telemetry telemetry) {
         this.telemetry = telemetry;
+        this.poseFuncs = new PoseFunctions(new RobotPose(InitMotors.odometry));
+        lowPass.start(0.03);
     }
 
     public void initProcessor(HardwareMap hardwareMap) {
@@ -158,7 +165,7 @@ public class AprilTagLocalization {
 
     public AprilTagDetection getGoalTag(ArrayList<AprilTagDetection> detectedTags) {
         int teamid;
-        if (team.equals("BLUE")) teamid = 20;
+        if (Alliance.get() == Alliance.BLUE) teamid = 20;
         else teamid = 24;
 
         for (AprilTagDetection tag : detectedTags) {
@@ -174,18 +181,12 @@ public class AprilTagLocalization {
         return tag.id == 24 || tag.id == 20;
     }
     public double filteredYaw = 0;
-    public double filteredYawPrev = 0;
     public double getCurrDeg(AprilTagDetection tag) { // in pinpoint cords
         double yaw = tag.ftcPose.yaw;
-        filteredYaw = utils.filter(0.03,yaw,filteredYawPrev);
-//        filteredYaw = utils.updateAverage(yaw, aprilTagsTest.loopsPerUpdate);
-        filteredYawPrev = filteredYaw;
-        Pose2D goal;
-        if (team.equals("BLUE")) {
-            goal = utils.GOAL_BLUE;
-        } else {
-            goal = utils.GOAL_RED;
-        }
+        lowPass.update(yaw);
+        filteredYaw = lowPass.get();
+
+        Pose2D goal = PoseFunctions.getGoal();
         double heading = goal.getHeading(AngleUnit.DEGREES) - filteredYaw;
         if (heading < -180) {
             return heading + 360;
@@ -199,18 +200,13 @@ public class AprilTagLocalization {
         double heading = getCurrDeg(tag);
         double x = tag.ftcPose.x;
         double y = tag.ftcPose.y + 12;
-        Pair<Double, Double> rotated = utils.rotation2D(x, y, heading+90);
+        Pair<Double, Double> rotated = PoseFunctions.rotation2D(x, y, heading+90);
         Pair<Double, Double> rotFixed = new Pair<>(rotated.first, rotated.second);
         return rotFixed;
     }
 
     public Pair<Double, Double> getRelocXY(AprilTagDetection tag) { // in pinpoint cords
-        Pose2D tagPose; // in absolute ftc coords
-        if (team.equals("BLUE")) {
-            tagPose = utils.GOAL_TAG_BLUE;
-        } else {
-            tagPose = utils.GOAL_TAG_RED;
-        }
+        Pose2D tagPose = PoseFunctions.getTag(); // in absolute ftc coords
         Pair<Double, Double> xy = getXYToTag(tag); // we know what it is
         return new Pair<>(tagPose.getX(DistanceUnit.CM) + xy.first, tagPose.getX(DistanceUnit.CM) + xy.second);
     }
