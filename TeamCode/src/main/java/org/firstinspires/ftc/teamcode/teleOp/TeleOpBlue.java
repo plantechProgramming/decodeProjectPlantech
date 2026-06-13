@@ -98,7 +98,6 @@ public class TeleOpBlue extends OpMode {
             voltage = voltageSensor.getVoltage();
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
             if(!gamepad1.x){
-                shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team, voltage);
 //                shooter.shooter.setPower(0.5);
 //                shooter.shooter2.setPower(-0.5);
             }
@@ -215,6 +214,7 @@ public class TeleOpBlue extends OpMode {
             driveTrain.setDriveTelemetry(dashboardTelemetry);
 //            telemetry.addData("loop time", elapsedTime.milliseconds());
             updateHisto(elapsedTime.milliseconds());
+            telemetry.addData("voltage",voltage);
 //            shooter.setShooterTelemetry(telemetry);
 //            shooter.setShooterTelemetry(dashboardTelemetry);
 //
@@ -225,7 +225,7 @@ public class TeleOpBlue extends OpMode {
 //            telemetry.addData("time",elapsedTime.milliseconds());
 //
 //
-//            telemetry.update();
+            telemetry.update();
             dashboardTelemetry.update();
             follower.update();
             utils.updateGoal();

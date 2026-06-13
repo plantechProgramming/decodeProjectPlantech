@@ -1,0 +1,61 @@
+package org.firstinspires.ftc.teamcode.auto.autos.blueAutos;
+
+import static dev.nextftc.extensions.pedro.PedroComponent.follower;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.teamcode.auto.AutoCommands;
+import org.firstinspires.ftc.teamcode.auto.PathsBlue;
+import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
+import org.firstinspires.ftc.teamcode.auto.pedro.constants.Constants;
+
+import dev.nextftc.core.commands.Command;
+import dev.nextftc.core.commands.groups.SequentialGroup;
+import dev.nextftc.extensions.pedro.FollowPath;
+import dev.nextftc.extensions.pedro.PedroComponent;
+import dev.nextftc.ftc.NextFTCOpMode;
+
+@Autonomous
+public class FarNoGate extends NextFTCOpMode {
+    AutoCommands command;
+    PathsBlue path;
+    ReadWrite readWrite = new ReadWrite();
+
+    public FarNoGate(){
+        addComponents(
+//                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
+                new PedroComponent(Constants::createFollower)
+        );
+    }
+
+    public Command autoRoutine(){
+        return new SequentialGroup(
+                command.startShooter(true),
+//                    new Delay(0.4),
+                command.score(path.scorePreloadFar),
+                command.intake(path.grabGPPFar),
+                command.score(path.scoreGPPFar),
+
+                command.startShooter(false),
+                command.intake(path.grabPGPFar),
+                command.score(path.scorePGP),
+                new FollowPath(path.scoreLeaveFar)
+//                    command.intake(path.intakePPG,path.grabPPG,0.75)
+        );
+    }
+    @Override
+    public void onStartButtonPressed() {
+        command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
+        addComponents(
+                command
+        );
+        path = new PathsBlue();
+        follower().setStartingPose(path.getSPoseFar());
+        path.buildPaths(follower());
+        autoRoutine().schedule();
+    }
+    @Override
+    public void onStop(){
+        readWrite.writePose(follower().getPose());
+    }
+}

@@ -69,7 +69,7 @@ public class AutoCommands implements Component{
         return new SequentialGroup(
                 new FollowPath(path),
                 shoot(),
-                new Delay(0.9)
+                new Delay(0.93)
         );
     }
 
@@ -120,8 +120,8 @@ public class AutoCommands implements Component{
             delay = 1;
         }
         return new SequentialGroup(
-                new Delay(delay),
                 shooter.naiveShooter(far),
+                new Delay(delay),
                 inBetween.startAxons(),
                 intake.take()
         );
