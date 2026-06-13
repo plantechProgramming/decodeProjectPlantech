@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
+import org.firstinspires.ftc.teamcode.TeamOpMode;
+import org.firstinspires.ftc.teamcode.auto.TeamAuto;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Paths;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Points;
@@ -16,47 +18,28 @@ import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 
 @Autonomous(name = "Full Far Blue leave", group = "Blue")
-public class AutoFullFarLeave extends LinearOpMode {
+public class AutoFullFarLeave extends TeamAuto {
 
-    AutoCommands command;
-    Paths path;
-    Follower follower;
-    ReadWrite readWrite = new ReadWrite();
-
-    public Command autoRoutine(){
-        return sequential(
-            command.startShooter(true),
-            command.score(path.scorePreloadFar),
-
-            command.intake(path.grabGPPFar),
-            command.score(path.scoreGPPFar),
-
-            command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.6),
-            command.score(path.scoreLeftoverBallsGate),
-
-            follow(follower, path.scoreLeaveFar)
-        );
-    }
-
-    public void onStop(){
-        readWrite.writePose(follower.getPose());
-    }
 
     @Override
-    public void runOpMode() {
+    public void postInit() {
         Alliance.set(Alliance.BLUE);
-        path = new Paths();
-        follower = Constants.createFollower(hardwareMap);
+    }
 
-        follower.setStartingPose(Points.startPoseFar);
-        command = new AutoCommands(follower);
-        path.buildPaths(follower);
 
-        Scheduler.schedule(autoRoutine());
+    @Override
+    public Command autoRoutine() {
+        return sequential(
+                command.startShooter(true),
+                command.score(path.scorePreloadFar),
 
-        while (opModeIsActive()) {
-            command.periodic();
-            Scheduler.execute();
-        }
+                command.intake(path.grabGPPFar),
+                command.score(path.scoreGPPFar),
+
+                command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.6),
+                command.score(path.scoreLeftoverBallsGate),
+
+                follow(follower, path.scoreLeaveFar)
+        );
     }
 }
