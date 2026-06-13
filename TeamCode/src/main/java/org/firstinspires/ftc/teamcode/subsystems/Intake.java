@@ -17,13 +17,13 @@ public class Intake {
     }
 
     public Command take(){
-        return Commands.instant(()->intakeMotor.setPower(IN_POWER));
+        return setPowerAsCommand(IN_POWER);
     }
     public Command out(){
-        return Commands.instant(()->intakeMotor.setPower(OUT_POWER));
+        return setPowerAsCommand(OUT_POWER);
     }
     public Command stop(){
-        return Commands.instant(()->intakeMotor.setPower(STOP_POWER));
+        return setPowerAsCommand(STOP_POWER);
     }
 
     public Command setPowerAsCommand(double pow){

@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.Misc.Alliance;
+import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
 import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Converters;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Extras;
@@ -59,7 +59,6 @@ public class TeleOpBlue extends TeamOpMode {
         odometry.update();
         Pose lastPos = follower.getPose();
 
-        Extras.setDriveToBrakeMode();
 
         while (opModeIsActive() ) {
             elapsedTime.reset();
@@ -109,54 +108,6 @@ public class TeleOpBlue extends TeamOpMode {
             }
 
             shooter.interpolationVariableShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01);
-
-//            if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
-//                driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
-//            }
-//
-//            if(!gamepad1.right_bumper){
-//                lastPos = follower.getPose();
-//                aang = true;
-//                if(activatedHold){
-//                    activatedHold = false;
-//                    follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
-//                    Extras.setDriveToBrakeMode();
-//                }
-//
-//            }
-//
-//            if (gamepad1.right_trigger > 0){
-//                commands.take();
-//            }
-//            else if(gamepad1.left_trigger!=0) {
-//                commands.partialOut();
-//            }
-//            else if(gamepad1.x){
-//                commands.Out();
-//            }
-//            else if (gamepad1.dpad_right) {
-//                intake.inBetweenInFull();
-//            }else if (gamepad1.dpad_left){
-//                intake.intake_motor.setPower(0.5);
-//            }
-//            else if(gamepad1.right_bumper){
-//                commands.shoot();
-//                if(aang){
-//                    Extras.setDriveToFloatMode();
-//                    aang = false;
-//                    lastPos = follower.getPose();
-//
-//                }
-//                follower.holdPoint(lastPos, false);
-//                activatedHold = true;
-//            }
-//            else{
-//                intake.stop();
-//            }
-//
-//            if(gamepad1.left_bumper && !gamepad1.right_bumper){
-//                driveTrain.turnToAngle(utils.getAngleFromGoal(), botHeading);
-//            }
 
             if(gamepad1.back) {
                 odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0)); //TODO: change for RED

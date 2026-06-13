@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Misc.Colors;
+import org.firstinspires.ftc.teamcode.Misc.Utils.Colors;
 import org.firstinspires.ftc.teamcode.subsystems.Camera.colorSensorPipeline;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.opencv.core.Rect;

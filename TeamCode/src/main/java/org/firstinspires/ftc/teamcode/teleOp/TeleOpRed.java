@@ -6,18 +6,16 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
-import org.firstinspires.ftc.teamcode.Misc.Alliance;
+import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
 import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Converters;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Extras;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
-import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
@@ -25,7 +23,6 @@ import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.InBetween;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-import org.firstinspires.ftc.vision.VisionPortal;
 
 @Config
 @TeleOp
@@ -55,36 +52,37 @@ public class TeleOpRed extends TeamOpMode {
         boolean shooting;
         boolean turning;
         boolean activatedHold = false;
-        boolean activateHold = false;
+        boolean holdInitialized = false;
 
         odometry.setPosition(Converters.PedroPoseConverter(readWrite.readPose()));
         odometry.update();
         Pose lastPos = follower.getPose();
 
-        Extras.setDriveToBrakeMode();
-
         while (opModeIsActive() ) {
             elapsedTime.reset();
+
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
             shooting = gamepad1.right_bumper;
             turning = gamepad1.left_bumper;
+
             botHeading = odometry.getHeading(AngleUnit.DEGREES);
 
             if(shooting){
                 commands.shoot();
-                if(activateHold){
+                if(!holdInitialized){
                     Extras.setDriveToFloatMode();
-                    activateHold = false;
+                    holdInitialized = true;
                     lastPos = follower.getPose();
 
                 }
                 follower.holdPoint(lastPos, false);
                 activatedHold = true;
             }
+
             else {
-                activateHold = true;
+                holdInitialized = false;
                 if(activatedHold){
                     activatedHold = false;
                     follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
@@ -112,53 +110,6 @@ public class TeleOpRed extends TeamOpMode {
 
             shooter.interpolationVariableShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01);
 
-//            if(!gamepad1.left_bumper && !gamepad1.right_bumper) {
-//                driveTrain.drive(forward, drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
-//            }
-//
-//            if(!gamepad1.right_bumper){
-//                lastPos = follower.getPose();
-//                aang = true;
-//                if(activatedHold){
-//                    activatedHold = false;
-//                    follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
-//                    Extras.setDriveToBrakeMode();
-//                }
-//
-//            }
-//
-//            if (gamepad1.right_trigger > 0){
-//                commands.take();
-//            }
-//            else if(gamepad1.left_trigger!=0) {
-//                commands.partialOut();
-//            }
-//            else if(gamepad1.x){
-//                commands.Out();
-//            }
-//            else if (gamepad1.dpad_right) {
-//                intake.inBetweenInFull();
-//            }else if (gamepad1.dpad_left){
-//                intake.intake_motor.setPower(0.5);
-//            }
-//            else if(gamepad1.right_bumper){
-//                commands.shoot();
-//                if(aang){
-//                    Extras.setDriveToFloatMode();
-//                    aang = false;
-//                    lastPos = follower.getPose();
-//
-//                }
-//                follower.holdPoint(lastPos, false);
-//                activatedHold = true;
-//            }
-//            else{
-//                intake.stop();
-//            }
-//
-//            if(gamepad1.left_bumper && !gamepad1.right_bumper){
-//                driveTrain.turnToAngle(utils.getAngleFromGoal(), botHeading);
-//            }
 
             if(gamepad1.back) {
                 odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 180)); //TODO: change for RED heading 180

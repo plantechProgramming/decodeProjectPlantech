@@ -39,8 +39,8 @@ public abstract class TeamOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException  {
         initMotors = new InitMotors(hardwareMap);
-        this.initMotors();
         initAll();
+        this.initMotors();
         waitForStart();
         postInit();
 
