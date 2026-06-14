@@ -42,7 +42,7 @@ public class OpenGateClose extends NextFTCOpMode{
 
                 command.intake(path.pickUpGateFromScore),
                 command.take(),
-                new Delay(0.8),
+                new Delay(1),
                 command.stopAll(),
                 command.score(path.scorePickUpGate),
 

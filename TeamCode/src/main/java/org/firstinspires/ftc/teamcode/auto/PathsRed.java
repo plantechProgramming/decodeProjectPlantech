@@ -57,7 +57,7 @@ public class PathsRed {
     public final Pose leaveFarPose = pathsBlue.leaveFarPose.mirror();
     public final Pose gate = pathsBlue.gate.mirror();
 //    public final Pose pickUpGate = pathsBlue.pickUpGate.mirror();
-    public final Pose pickUpGate = new Pose(126, 58.5, Math.toRadians(23));
+    public final Pose pickUpGate = new Pose(125.9, 58.5, Math.toRadians(23));
     public final Pose humanPlayer = pathsBlue.humanPlayer.mirror();
     public final Pose eatLeftoverGate = pathsBlue.eatLeftoverGate.mirror();
     public final Pose controlPoseEatLeftoverGate = pathsBlue.controlPoseEatLeftoverGate.mirror();

@@ -16,7 +16,7 @@ import dev.nextftc.extensions.pedro.FollowPath;
 import dev.nextftc.extensions.pedro.PedroComponent;
 import dev.nextftc.ftc.NextFTCOpMode;
 
-@Autonomous(name = "FarNoGateRED")
+@Autonomous(name = "Far with no gate red", group = "Red")
 public class FarNoGate extends NextFTCOpMode {
     AutoCommands command;
     PathsRed path;
