@@ -45,6 +45,9 @@ public class LeaveCloseRed extends NextFTCOpMode {
         telemetry.addData("heading", follower().getPose().getHeading());
         telemetry.addData("pose file", readWrite.readPose());
         telemetry.update();
+        if(!(Math.round(follower().getPose().getY()) == 0 && Math.round(follower().getPose().getX()) == 0)){
+            readWrite.writePose(follower().getPose());
+        }
     }
     @Override
     public void onStartButtonPressed() {
@@ -56,10 +59,5 @@ public class LeaveCloseRed extends NextFTCOpMode {
         follower().setStartingPose(path.getSPose());
         path.buildPaths(follower());
         autoRoutine().schedule();
-    }
-    @Override
-    public void onStop(){
-        ReadWrite readWrite = new ReadWrite();
-        readWrite.writePose(follower().getPose());
     }
 }

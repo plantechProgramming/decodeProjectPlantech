@@ -47,15 +47,17 @@ public class PathsRed {
     public final Pose controlPoseGatePickUp = pathsBlue.controlPoseGatePickUp.mirror();
     public final Pose GPP = pathsBlue.GPP.mirror();
     public final Pose PPG = pathsBlue.PPG.mirror();
-    public final Pose PGP = pathsBlue.PGP.mirror();
+    public final Pose PGP = new Pose(100, 56.5, Math.toRadians(0));
 
     public final Pose afterPickupGPP = pathsBlue.afterPickupGPP.mirror();
     public final Pose afterPickupPPG = pathsBlue.afterPickupPPG.mirror();
-    public final Pose afterPickupPGP = pathsBlue.afterPickupPGP.mirror();
-//
+    public final Pose afterPickupPGP = new Pose(128, 56.5, Math.toRadians(0));
+
+    //
     public final Pose leaveFarPose = pathsBlue.leaveFarPose.mirror();
     public final Pose gate = pathsBlue.gate.mirror();
-    public final Pose pickUpGate = new Pose(131.1, 60.3, Math.toRadians(23));
+//    public final Pose pickUpGate = pathsBlue.pickUpGate.mirror();
+    public final Pose pickUpGate = new Pose(126, 58.5, Math.toRadians(23));
     public final Pose humanPlayer = pathsBlue.humanPlayer.mirror();
     public final Pose eatLeftoverGate = pathsBlue.eatLeftoverGate.mirror();
     public final Pose controlPoseEatLeftoverGate = pathsBlue.controlPoseEatLeftoverGate.mirror();

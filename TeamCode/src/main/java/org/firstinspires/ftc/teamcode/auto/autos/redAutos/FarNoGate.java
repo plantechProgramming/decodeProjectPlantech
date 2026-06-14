@@ -44,6 +44,16 @@ public class FarNoGate extends NextFTCOpMode {
         );
     }
     @Override
+    public void onUpdate(){
+        telemetry.addData("x", follower().getPose().getX());
+        telemetry.addData("y", follower().getPose().getY());
+        telemetry.addData("heading", follower().getPose().getHeading());
+        telemetry.update();
+        if(!(Math.round(follower().getPose().getY()) == 0 && Math.round(follower().getPose().getX()) == 0)){
+            readWrite.writePose(follower().getPose());
+        }
+    }
+    @Override
     public void onStartButtonPressed() {
         command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
         addComponents(
@@ -53,9 +63,5 @@ public class FarNoGate extends NextFTCOpMode {
         follower().setStartingPose(path.getSPoseFar());
         path.buildPaths(follower());
         autoRoutine().schedule();
-    }
-    @Override
-    public void onStop(){
-        readWrite.writePose(follower().getPose());
     }
 }

@@ -30,24 +30,34 @@ public class AutoFullFarLeave extends NextFTCOpMode {
     PathsBlue path;
     ReadWrite readWrite = new ReadWrite();
 
-        public Command autoRoutine(){
-            return new SequentialGroup(
-                    command.startShooter(true),
-                    command.scorePreload(path.scorePreloadFar),
+    public Command autoRoutine(){
+        return new SequentialGroup(
+                command.startShooter(true),
+                command.scorePreload(path.scorePreloadFar),
 
-                    command.intake(path.grabGPPFar),
-                    command.score(path.scoreGPPFar),
+                command.intake(path.grabGPPFar),
+                command.score(path.scoreGPPFar),
 
-                    new Delay(3),
-                    command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.7),
-                    command.score(path.scoreLeftoverBallsGate),
+                new Delay(3),
+                command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.7),
+                command.score(path.scoreLeftoverBallsGate),
 //
 //                    command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.7),
 //                    command.score(path.scoreLeftoverBallsGate),
 
-                    new FollowPath(path.scoreLeaveFar)
-            );
+                new FollowPath(path.scoreLeaveFar)
+        );
+    }
+    @Override
+    public void onUpdate(){
+        telemetry.addData("x", follower().getPose().getX());
+        telemetry.addData("y", follower().getPose().getY());
+        telemetry.addData("heading", follower().getPose().getHeading());
+        telemetry.update();
+        if(!(Math.round(follower().getPose().getY()) == 0 && Math.round(follower().getPose().getX()) == 0)){
+            readWrite.writePose(follower().getPose());
         }
+    }
     @Override
     public void onStartButtonPressed() {
         command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
@@ -58,9 +68,5 @@ public class AutoFullFarLeave extends NextFTCOpMode {
         follower().setStartingPose(path.getSPoseFar());
         path.buildPaths(follower());
         autoRoutine().schedule();
-    }
-    @Override
-    public void onStop(){
-        readWrite.writePose(follower().getPose());
     }
 }

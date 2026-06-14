@@ -30,6 +30,7 @@ public class MegidoAuto extends NextFTCOpMode {
     }
 
     PathsRed path;
+    ReadWrite readWrite = new ReadWrite();
 
     public Command autoRoutine(){
         return new SequentialGroup(
@@ -50,6 +51,9 @@ public class MegidoAuto extends NextFTCOpMode {
         telemetry.addData("y", follower().getPose().getY());
         telemetry.addData("heading", follower().getPose().getHeading());
         telemetry.update();
+        if(!(Math.round(follower().getPose().getY()) == 0 && Math.round(follower().getPose().getX()) == 0)){
+            readWrite.writePose(follower().getPose());
+        }
     }
     @Override
     public void onStartButtonPressed() {
@@ -63,9 +67,4 @@ public class MegidoAuto extends NextFTCOpMode {
         autoRoutine().schedule();
     }
 
-    @Override
-    public void onStop(){
-        ReadWrite readWrite = new ReadWrite();
-        readWrite.writePose(follower().getPose());
-    }
 }
