@@ -172,7 +172,7 @@ public class TeleOpRed extends OpMode {
             }
 
             if(gamepad1.start) {
-                odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 180));
+                odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 180)); //TODO: change for RED
             }
             if(gamepad1.back){
                 odometry.setPosition(new Pose2D(DistanceUnit.CM, 158, 157, AngleUnit.DEGREES, 180));
@@ -208,6 +208,7 @@ public class TeleOpRed extends OpMode {
 //            driveTrain.setDriveTelemetry(telemetry);
             driveTrain.setDriveTelemetry(dashboardTelemetry);
 //            telemetry.addData("loop time", elapsedTime.milliseconds());
+            telemetry.addData("voltage",voltage);
 //            shooter.setShooterTelemetry(telemetry);
 //            shooter.setShooterTelemetry(dashboardTelemetry);
 //
@@ -218,10 +219,10 @@ public class TeleOpRed extends OpMode {
 //            telemetry.addData("time",elapsedTime.milliseconds());
 //
 //
-//            telemetry.update();
+            telemetry.update();
             dashboardTelemetry.update();
             follower.update();
-//            utils.updateGoal();
+            utils.updateGoal();
         }
 
     }

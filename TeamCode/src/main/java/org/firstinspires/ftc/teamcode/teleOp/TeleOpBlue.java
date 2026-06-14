@@ -98,6 +98,7 @@ public class TeleOpBlue extends OpMode {
             voltage = voltageSensor.getVoltage();
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
             if(!gamepad1.x){
+                shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team, voltage);
 //                shooter.shooter.setPower(0.5);
 //                shooter.shooter2.setPower(-0.5);
             }
