@@ -12,10 +12,12 @@ import dev.nextftc.ftc.NextFTCOpMode;
 public class FarStillAuto extends NextFTCOpMode {
     private final Pose startPose = new Pose(56.15, 8.4, Math.toRadians(90)).mirror(); // Start Pose of our robot.
 
+    PathsRed path = new PathsRed();
+
+    ReadWrite readWrite = new ReadWrite();
+
     @Override
-    public void onStop(){
-        PathsRed path = new PathsRed();
-        ReadWrite readWrite = new ReadWrite();
+    public void onUpdate() {
         readWrite.writePose(path.getSPoseFar());
     }
 }

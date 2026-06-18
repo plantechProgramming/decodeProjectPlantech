@@ -54,7 +54,7 @@ public class OpenGateCloseR extends NextFTCOpMode {
     public void onUpdate(){
         telemetry.addData("x", follower().getPose().getX());
         telemetry.addData("y", follower().getPose().getY());
-        telemetry.addData("heading", follower().getPose().getHeading());
+        telemetry.addData("heading", Math.toDegrees(follower().getPose().getHeading()));
         telemetry.update();
         if(!(Math.round(follower().getPose().getY()) == 0 && Math.round(follower().getPose().getX()) == 0)){
             readWrite.writePose(follower().getPose());

@@ -149,7 +149,7 @@ public class Shooter {
     }
 
     public double interpolateTel(double dis){
-        return  -(1.9874e-7) * dis * dis + 0.000845045 * dis + 0.25047;
+        return  -(1.9874e-7) * dis * dis + 0.000845045 * dis + 0.25047 + 0.004;
     }
 
 //    / @param dis: distance from goal
@@ -227,7 +227,7 @@ public class Shooter {
     }
 
     public boolean isUpToGivenSpeed(double speed){
-        double threshold = 85; //TODO: tune!! should be the biggest reliably scoring value
+        double threshold = 90; //TODO: tune!! should be the biggest reliably scoring value
         return Math.abs(shooterVelocity.getVelocityFilter() - speed*6000) < threshold;
     }
     public void out(){

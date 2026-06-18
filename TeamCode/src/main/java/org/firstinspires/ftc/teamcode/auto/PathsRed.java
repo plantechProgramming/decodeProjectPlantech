@@ -21,7 +21,7 @@ public class PathsRed {
     // the y is way too large on purpose for localization fix
 //    private final Pose startPoseFar = new Pose(85.35,15,Math.toRadians(90)); // Start Pose of our robot.
     private final Pose startPoseFar = pathsBlue.getSPoseFar().mirror();
-    private final Pose scorePoseFar = new Pose(85, 16, Math.toRadians(66.2)); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
+    private final Pose scorePoseFar = new Pose(85, 16, Math.toRadians(67)); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
     public final Pose scorePose = pathsBlue.scorePose.mirror(); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
     public final Pose leaveClosePose = pathsBlue.leaveClosePose.mirror();
 ////
@@ -51,13 +51,13 @@ public class PathsRed {
 
     public final Pose afterPickupGPP = pathsBlue.afterPickupGPP.mirror();
     public final Pose afterPickupPPG = pathsBlue.afterPickupPPG.mirror();
-    public final Pose afterPickupPGP = new Pose(128, 56.5, Math.toRadians(0));
+    public final Pose afterPickupPGP = new Pose(127, 56.5, Math.toRadians(0));
 
     //
     public final Pose leaveFarPose = pathsBlue.leaveFarPose.mirror();
     public final Pose gate = pathsBlue.gate.mirror();
 //    public final Pose pickUpGate = pathsBlue.pickUpGate.mirror();
-    public final Pose pickUpGate = new Pose(125.9, 58.5, Math.toRadians(23));
+    public final Pose pickUpGate = new Pose(125.5, 59.2, Math.toRadians(23));
     public final Pose humanPlayer = pathsBlue.humanPlayer.mirror();
     public final Pose eatLeftoverGate = pathsBlue.eatLeftoverGate.mirror();
     public final Pose controlPoseEatLeftoverGate = pathsBlue.controlPoseEatLeftoverGate.mirror();
@@ -192,6 +192,7 @@ public class PathsRed {
         pickUpGateFromScore = follower.pathBuilder()
                 .addPath(new BezierCurve(scorePose,controlPoseGatePPG, pickUpGate))
                 .setLinearHeadingInterpolation(scorePose.getHeading(), pickUpGate.getHeading())
+                .setTimeoutConstraint(600)
                 .build();
 
         scorePickUpGate = follower.pathBuilder()
