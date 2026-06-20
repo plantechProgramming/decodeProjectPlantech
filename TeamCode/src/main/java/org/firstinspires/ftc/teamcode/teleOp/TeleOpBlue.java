@@ -164,7 +164,7 @@ public class TeleOpBlue extends OpMode {
 
                     }
 //                follower.followPath(new Path(new BezierLine(follower.getPose(), lastPos)), false);
-                    follower.holdPoint(lastPos, true);
+                    follower.holdPoint(lastPos, false);
                     activatedHold = true;
                 }
             }
