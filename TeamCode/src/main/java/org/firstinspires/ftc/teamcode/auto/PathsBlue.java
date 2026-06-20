@@ -40,7 +40,7 @@ public class PathsBlue {
     public final Pose gate = new Pose(18,65.3,Math.toRadians(180));
     public final Pose pickUpGate = new Pose(15.4, 60.1, Math.toRadians(157));
     public final Pose humanPlayer = new Pose(11.5,8.1,Math.toRadians(180));
-    public final Pose eatLeftoverGate = new Pose(8.7,45.5);
+    public final Pose eatLeftoverGate = new Pose(8.7,33.5);
     public final Pose humanPlayerControlPose = new Pose(30,18);
     public PathChain scorePreload, scorePreloadFar;
     public PathChain grabGPP, grabPGP, grabPPG;

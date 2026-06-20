@@ -54,7 +54,7 @@ public class shooterTest extends OpMode {
 ////            shooter.noPhysShootHomeostasis(0.5);
 //
             if(gamepad1.a){
-               if(shooter.isUpToGivenSpeed(shooter.power)){
+               if(shooter.isUpToGivenSpeed(shooter.power, "RED")){
                    intake.inBetweenInFull();
                    intake.intakeIn();
                }

@@ -226,8 +226,11 @@ public class Shooter {
         telemetry.addData("POW", output);
     }
 
-    public boolean isUpToGivenSpeed(double speed){
-        double threshold = 90; //TODO: tune!! should be the biggest reliably scoring value
+    public boolean isUpToGivenSpeed(double speed, String team){
+        double threshold = 10000; //TODO: tune!! should be the biggest reliably scoring value
+        if(utils.getDistFromGoal(team) > 280){
+            threshold = 75;
+        }
         return Math.abs(shooterVelocity.getVelocityFilter() - speed*6000) < threshold;
     }
     public void out(){

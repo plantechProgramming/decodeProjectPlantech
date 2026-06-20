@@ -138,7 +138,7 @@ public class TeleOpRed extends OpMode {
                     driveTrain.stop();
                 }
                 if(driveTrain.isStopped() || !aang){
-                    if(shooter.isUpToGivenSpeed(shooter.getVariableInterplationSpeedShoot(false, false, 0, team))){
+                    if(shooter.isUpToGivenSpeed(shooter.getVariableInterplationSpeedShoot(false, false, 0, team), team)){
                         intake.inBetweenInFull();
                     }
                     else{
