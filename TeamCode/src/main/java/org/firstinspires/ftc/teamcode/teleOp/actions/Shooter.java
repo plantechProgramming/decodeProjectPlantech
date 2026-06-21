@@ -229,7 +229,7 @@ public class Shooter {
     public boolean isUpToGivenSpeed(double speed, String team){
         double threshold = 10000; //TODO: tune!! should be the biggest reliably scoring value
         if(utils.getDistFromGoal(team) > 280){
-            threshold = 75;
+            threshold = 67;
         }
         return Math.abs(shooterVelocity.getVelocityFilter() - speed*6000) < threshold;
     }
