@@ -16,7 +16,7 @@ public abstract class TeamAuto extends TeamOpMode {
     protected AutoCommands command;
     protected Paths path;
     protected Follower follower;
-    protected ReadWrite readWrite = new ReadWrite();
+    protected Boolean isFar;
 
     @Override
     public abstract void postInit();
@@ -25,7 +25,12 @@ public abstract class TeamAuto extends TeamOpMode {
         path = new Paths();
         follower = Constants.createFollower(hardwareMap);
 
-        follower.setStartingPose(Points.startPoseFar);
+        if(isFar){
+            follower.setStartingPose(Points.startPoseFar);
+        }
+        else{
+            follower.setStartingPose(Points.startPose);
+        }
         command = new AutoCommands(follower);
         path.buildPaths(follower);
 
@@ -41,6 +46,6 @@ public abstract class TeamAuto extends TeamOpMode {
 
     @Override
     protected void end() {
-        readWrite.writePose(follower.getPose());
+        ReadWrite.writePose(follower.getPose());
     }
 }

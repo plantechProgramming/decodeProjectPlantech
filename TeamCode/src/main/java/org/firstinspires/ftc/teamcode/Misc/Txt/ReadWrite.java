@@ -8,14 +8,14 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import java.io.File;
 
 public class ReadWrite {
-    File file = AppUtil.getInstance().getSettingsFile("lastLoc.txt");
-    public void writePose(Pose pose){
+    static File file = AppUtil.getInstance().getSettingsFile("lastLoc.txt");
+    public static void writePose(Pose pose){
         String poseString = pose.toString();
         poseString = poseString.substring(1, poseString.length() - 1);
         ReadWriteFile.writeFile(file, poseString); // replaces the current text
     }
 
-    public Pose readPose(){
+    public static Pose readPose(){
         String[] posePartitions = ReadWriteFile.readFile(file).trim().split(", ");
         return new Pose(
                 Double.parseDouble(posePartitions[0]),

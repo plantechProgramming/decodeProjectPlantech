@@ -20,12 +20,11 @@ import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 @Autonomous(name = "Full Far Blue leave", group = "Blue")
 public class AutoFullFarLeave extends TeamAuto {
 
-
     @Override
     public void postInit() {
         Alliance.set(Alliance.BLUE);
+        isFar = true;
     }
-
 
     @Override
     public Command autoRoutine() {

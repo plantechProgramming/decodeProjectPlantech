@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
+import org.firstinspires.ftc.teamcode.auto.TeamAuto;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Paths;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Points;
 import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
@@ -18,35 +19,18 @@ import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 
 @Disabled
 @Autonomous(group="tests")
-public class test extends LinearOpMode {
+public class test extends TeamAuto {
 
-
-    AutoCommands command;
-    Paths path;
-    Follower follower;
-
-    public Command autoRoutine(){
-        return sequential(
-
-        );
+    @Override
+    public void postInit() {
+        Alliance.set(Alliance.BLUE);
+        isFar = false;
     }
 
     @Override
-    public void runOpMode() {
-        Alliance.set(Alliance.BLUE);
-        path = new Paths();
-        follower = Constants.createFollower(hardwareMap);
-
-        follower.setStartingPose(Points.startPoseFar);
-        command = new AutoCommands(follower);
-        path.buildPaths(follower);
-
-        Scheduler.schedule(autoRoutine());
-
-        while (opModeIsActive()) {
-            command.periodic();
-            Scheduler.execute();
-        }
+    public Command autoRoutine() {
+        return sequential(
+        );
     }
 
 }

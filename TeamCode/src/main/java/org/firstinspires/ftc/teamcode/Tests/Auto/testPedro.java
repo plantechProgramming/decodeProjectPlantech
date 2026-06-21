@@ -12,7 +12,15 @@ import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 public class testPedro extends LinearOpMode {
     private Follower follower;
     Paths path;
+    int counter = 0;
     public void autonomousPathUpdate() {
+        if(counter == 0){
+            //path 1
+            counter++;
+        } else if (counter == 1) {
+            //path 2
+            counter++;
+        }
     }
 
     @Override
@@ -27,7 +35,8 @@ public class testPedro extends LinearOpMode {
         while (opModeIsActive()){
             // These loop the movements of the robot, these must be called continuously in order to work
             follower.update();
-            autonomousPathUpdate();
+            if(!follower.isBusy())
+                autonomousPathUpdate();
 
             // Feedback to Driver Hub for debugging
             telemetry.addData("x", follower.getPose().getX());
