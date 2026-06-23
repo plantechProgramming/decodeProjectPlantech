@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.auto.autos.paths.Paths;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Points;
 import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 
-@Autonomous(group = "tests")
+@Autonomous(group = "autonomous tests")
 public class testPedro extends LinearOpMode {
     private Follower follower;
     Paths path;

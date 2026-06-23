@@ -14,7 +14,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
 import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Converters;
-import org.firstinspires.ftc.teamcode.Misc.Utils.Extras;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
@@ -25,7 +24,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @Config
-@TeleOp
+@TeleOp(group = "teleOp")
 public class TeleOpBlue extends TeamOpMode {
     Follower follower;
 
@@ -41,7 +40,6 @@ public class TeleOpBlue extends TeamOpMode {
         InBetween inBetween = new InBetween();
         Shooter shooter = new Shooter();
         DriveTrain driveTrain = new DriveTrain();
-        ReadWrite readWrite = new ReadWrite();
         ElapsedTime elapsedTime = new ElapsedTime();
         AutoCommands commands = new AutoCommands();
 
@@ -53,39 +51,39 @@ public class TeleOpBlue extends TeamOpMode {
         boolean shooting;
         boolean turning;
         boolean activatedHold = false;
-        boolean activateHold = false;
+        boolean holdInitialized = false;
 
-        odometry.setPosition(Converters.PedroPoseConverter(readWrite.readPose()));
+        odometry.setPosition(Converters.PedroPoseConverter(ReadWrite.readPose()));
         odometry.update();
         Pose lastPos = follower.getPose();
 
-
         while (opModeIsActive() ) {
             elapsedTime.reset();
+
             forward = -gamepad1.left_stick_y;
             turn = gamepad1.right_stick_x;
             drift = gamepad1.left_stick_x;
             shooting = gamepad1.right_bumper;
             turning = gamepad1.left_bumper;
+
             botHeading = odometry.getHeading(AngleUnit.DEGREES);
 
             if(shooting){
                 commands.shoot();
-                if(activateHold){
-                    Extras.setDriveToFloatMode();
-                    activateHold = false;
+                if(!holdInitialized){
+                    DriveTrain.setDriveToFloatMode();
+                    holdInitialized = true;
                     lastPos = follower.getPose();
-
                 }
                 follower.holdPoint(lastPos, false);
                 activatedHold = true;
             }
             else {
-                activateHold = true;
+                holdInitialized = false;
                 if(activatedHold){
                     activatedHold = false;
                     follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
-                    Extras.setDriveToBrakeMode();
+                    DriveTrain.setDriveToBrakeMode();
                 }
 
                 if(turning){
@@ -110,7 +108,7 @@ public class TeleOpBlue extends TeamOpMode {
             shooter.interpolationVariableShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01);
 
             if(gamepad1.back) {
-                odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0)); //TODO: change for RED
+                odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0)); //TODO: change for RED heading 180
             }
 
             driveTrain.updateTelemetry(telemetry);

@@ -16,7 +16,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
  */
 @Config
 @Disabled
-@TeleOp(group = "tests")
+@TeleOp(group = "teleOp tests")
 public class aprilTagsTest  extends TeamOpMode {
     AprilTagLocalization tagLocalization = new AprilTagLocalization(telemetry);
 

@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @Config
-@TeleOp
+@TeleOp(group = "teleOp")
 public class TeleOpRed extends TeamOpMode {
     Follower follower;
     @Override
@@ -40,7 +40,6 @@ public class TeleOpRed extends TeamOpMode {
         InBetween inBetween = new InBetween();
         Shooter shooter = new Shooter();
         DriveTrain driveTrain = new DriveTrain();
-        ReadWrite readWrite = new ReadWrite();
         ElapsedTime elapsedTime = new ElapsedTime();
         AutoCommands commands = new AutoCommands();
 
@@ -54,7 +53,7 @@ public class TeleOpRed extends TeamOpMode {
         boolean activatedHold = false;
         boolean holdInitialized = false;
 
-        odometry.setPosition(Converters.PedroPoseConverter(readWrite.readPose()));
+        odometry.setPosition(Converters.PedroPoseConverter(ReadWrite.readPose()));
         odometry.update();
         Pose lastPos = follower.getPose();
 
@@ -72,7 +71,7 @@ public class TeleOpRed extends TeamOpMode {
             if(shooting){
                 commands.shoot();
                 if(!holdInitialized){
-                    Extras.setDriveToFloatMode();
+                    DriveTrain.setDriveToFloatMode();
                     holdInitialized = true;
                     lastPos = follower.getPose();
 
@@ -86,7 +85,7 @@ public class TeleOpRed extends TeamOpMode {
                 if(activatedHold){
                     activatedHold = false;
                     follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
-                    Extras.setDriveToBrakeMode();
+                    DriveTrain.setDriveToBrakeMode();
                 }
 
                 if(turning){

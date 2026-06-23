@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 
 @Disabled
-@Autonomous(group="tests")
+@Autonomous(group="autonomous tests")
 public class test extends TeamAuto {
 
     @Override

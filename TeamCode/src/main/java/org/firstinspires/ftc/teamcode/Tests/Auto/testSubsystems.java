@@ -12,7 +12,7 @@ import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
-@Autonomous(group = "tests")
+@Autonomous(group = "autonomous tests")
 public class testSubsystems extends LinearOpMode {
 
     AutoCommands command;

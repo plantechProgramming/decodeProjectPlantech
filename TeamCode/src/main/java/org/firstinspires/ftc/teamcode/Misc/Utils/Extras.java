@@ -12,18 +12,5 @@ public class Extras {
         lowPass.update(voltage);
         return pow * (14/lowPass.get());
     }
-    public static void setDriveToBrakeMode(){
-        InitMotors.BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        InitMotors.BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        InitMotors.FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        InitMotors.FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    }
-
-    public static void setDriveToFloatMode(){
-        InitMotors.BL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        InitMotors.BR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        InitMotors.FR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        InitMotors.FL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-    }
 
 }
