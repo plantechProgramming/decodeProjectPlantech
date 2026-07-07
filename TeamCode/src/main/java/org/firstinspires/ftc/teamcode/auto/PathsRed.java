@@ -52,7 +52,7 @@ public class PathsRed {
     public final Pose afterPickupGPP = pathsBlue.afterPickupGPP.mirror();
     public final Pose afterPickupPPG = pathsBlue.afterPickupPPG.mirror();
     public final Pose afterPickupPGP = new Pose(127, 56.5, Math.toRadians(0));
-
+    public final Pose PGP2gate = pathsBlue.PGP2gate.mirror();
     //
     public final Pose leaveFarPose = pathsBlue.leaveFarPose.mirror();
     public final Pose gate = pathsBlue.gate.mirror();
@@ -65,6 +65,7 @@ public class PathsRed {
 
     public PathChain scorePreload, scorePreloadFar;
     public PathChain grabGPP, grabPGP, grabPPG;
+    public PathChain openGateMid;
     public PathChain scoreGPP, scorePGP, scorePPG;
     public PathChain grabGPPFar, grabPGPFar;
     public PathChain scoreGPPFar;
@@ -227,6 +228,11 @@ public class PathsRed {
         scoreLeftoverBallsGate = follower.pathBuilder()
                 .addPath(new BezierLine(eatLeftoverGate, scorePoseFar))
                 .setLinearHeadingInterpolation(eatLeftoverGate.getHeading(), scorePoseFar.getHeading())
+                .build();
+
+        openGateMid = follower.pathBuilder()
+                .addPath(new BezierLine(afterPickupPGP,PGP2gate))
+                .setLinearHeadingInterpolation(afterPickupPGP.getHeading(),PGP2gate.getHeading())
                 .build();
 //        scoreCloseGateFromScore = follower.pathBuilder()
 //                .addPath(new BezierCurve(scorePose, controlPosePGP, PGP))

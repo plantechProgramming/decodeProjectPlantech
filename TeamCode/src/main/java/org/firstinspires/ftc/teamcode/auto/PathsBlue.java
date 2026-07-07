@@ -38,10 +38,13 @@ public class PathsBlue {
     public final Pose afterPickupPPG = new Pose(18.5, PPG.getY(), Math.toRadians(180));
     public final Pose afterPickupPGP = new Pose(12, PGP.getY(), Math.toRadians(180));
     public final Pose gate = new Pose(18,65.3,Math.toRadians(180));
-    public final Pose pickUpGate = new Pose(15.4, 60.1, Math.toRadians(157));
+    public final Pose PGP2gate = new Pose(13,65.3,Math.toRadians(240));
+
+    public final Pose pickUpGate = new Pose(15.4, 60.1, Math.toRadians(160));
     public final Pose humanPlayer = new Pose(11.5,8.1,Math.toRadians(180));
     public final Pose eatLeftoverGate = new Pose(8.7,55.5);
     public final Pose humanPlayerControlPose = new Pose(30,18);
+    //---------------------------------------------------------------------
     public PathChain scorePreload, scorePreloadFar;
     public PathChain grabGPP, grabPGP, grabPPG;
     public PathChain scoreGPP, scorePGP, scorePPG;
@@ -51,7 +54,7 @@ public class PathsBlue {
     public PathChain grabLeftoverBallsGate, scoreLeftoverBallsGate;
     public PathChain scoreLeaveClose, leavePPGClose, leaveClose;
     public PathChain scoreLeaveFar, leaveFar;
-
+    public PathChain openGateMid;
     public PathChain pickUpGateFromFarStart;
 
     private Pose Mymirror(Pose pPose) {
@@ -195,6 +198,11 @@ public class PathsBlue {
         scoreLeftoverBallsGate = follower.pathBuilder()
                 .addPath(new BezierLine(eatLeftoverGate, scorePoseFar))
                 .setLinearHeadingInterpolation(eatLeftoverGate.getHeading(), scorePoseFar.getHeading())
+                .build();
+        // --------------OPEN GATE MID AUTO---------
+        openGateMid = follower.pathBuilder()
+                .addPath(new BezierLine(afterPickupPGP,PGP2gate))
+                .setLinearHeadingInterpolation(afterPickupPGP.getHeading(),PGP2gate.getHeading())
                 .build();
 
 //        scoreCloseGateFromScore = follower.pathBuilder()

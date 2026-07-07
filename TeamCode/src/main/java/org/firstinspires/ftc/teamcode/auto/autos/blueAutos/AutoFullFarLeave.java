@@ -39,9 +39,9 @@ public class AutoFullFarLeave extends NextFTCOpMode {
                 command.score(path.scoreGPPFar),
 
                 new Delay(3),
-                command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.7),
+                command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.75),
                 command.intakeAndShoot(path.scoreLeftoverBallsGate),
-//                    command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.7),
+//                    command.intakeWithSpeed(path.grabLeftoverBallsGate, 0.75),
 //                    command.score(path.scoreLeftoverBallsGate),
 
                 new FollowPath(path.scoreLeaveFar)
