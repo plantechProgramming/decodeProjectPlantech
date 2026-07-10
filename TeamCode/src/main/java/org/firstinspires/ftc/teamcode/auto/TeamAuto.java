@@ -4,7 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 
-import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
+import org.firstinspires.ftc.teamcode.Misc.DataSaving;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Paths;
@@ -46,6 +46,6 @@ public abstract class TeamAuto extends TeamOpMode {
 
     @Override
     protected void end() {
-        ReadWrite.writePose(follower.getPose());
+        DataSaving.setEndPos(follower.getPose());
     }
 }

@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.Misc.DataSaving;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
-import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Converters;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
@@ -53,7 +53,7 @@ public class TeleOpBlue extends TeamOpMode {
         boolean activatedHold = false;
         boolean holdInitialized = false;
 
-        odometry.setPosition(Converters.PedroPoseConverter(ReadWrite.readPose()));
+        odometry.setPosition(Converters.PedroPoseConverter(DataSaving.getEndPos()));
         odometry.update();
         Pose lastPos = follower.getPose();
 

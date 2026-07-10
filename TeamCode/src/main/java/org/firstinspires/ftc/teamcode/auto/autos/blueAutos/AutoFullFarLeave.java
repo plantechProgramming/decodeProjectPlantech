@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.auto.TeamAuto;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Paths;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Points;
-import org.firstinspires.ftc.teamcode.Misc.Txt.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 
 @Autonomous(name = "Full Far Blue leave", group = "Blue")
