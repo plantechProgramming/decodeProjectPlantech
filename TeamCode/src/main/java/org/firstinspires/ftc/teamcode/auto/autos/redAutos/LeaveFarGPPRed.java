@@ -5,6 +5,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.AuotoPose;
 import org.firstinspires.ftc.teamcode.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.PathsBlue;
 import org.firstinspires.ftc.teamcode.auto.PathsRed;
@@ -47,10 +48,16 @@ public class LeaveFarGPPRed extends NextFTCOpMode{
         telemetry.addData("y", follower().getPose().getY());
         telemetry.addData("heading", follower().getPose().getHeading());
         telemetry.update();
-        if(!(Math.round(follower().getPose().getY()) == 0 && Math.round(follower().getPose().getX()) == 0)){
-            readWrite.writePose(follower().getPose());
-        }
+//        if(!(Math.round(follower().getPose().getY()) == 0 && Math.round(follower().getPose().getX()) == 0)){
+//            readWrite.writePose(follower().getPose());
+//        }
     }
+
+    @Override
+    public void onStop() {
+        AuotoPose.pose = follower().getPose();
+    }
+
     @Override
     public void onStartButtonPressed() {
         command = new AutoCommands(follower(), hardwareMap.voltageSensor.iterator().next());
@@ -60,6 +67,7 @@ public class LeaveFarGPPRed extends NextFTCOpMode{
         path = new PathsRed();
         follower().setStartingPose(path.getSPoseFar());
         path.buildPaths(follower());
+        AuotoPose.pose = follower().getPose();
         autoRoutine().schedule();
     }
 }

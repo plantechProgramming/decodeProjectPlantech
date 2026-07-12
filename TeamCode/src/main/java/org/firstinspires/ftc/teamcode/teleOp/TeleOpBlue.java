@@ -22,6 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.AuotoPose;
 import org.firstinspires.ftc.teamcode.auto.autos.ReadWrite;
 import org.firstinspires.ftc.teamcode.auto.camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.auto.camera.colorsensor.ColorSensorTest;
@@ -81,7 +82,7 @@ public class TeleOpBlue extends OpMode {
         boolean activatedHold = false;
         double voltage;
         boolean aang = false;
-        odometry.setPosition(utils.PedroPoseConverter(readWrite.readPose()));
+        odometry.setPosition(utils.PedroPoseConverter(AuotoPose.pose));
         odometry.update();
         Pose lastPos = follower.getPose();
         DriveBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -98,7 +99,7 @@ public class TeleOpBlue extends OpMode {
             voltage = voltageSensor.getVoltage();
             botHeading = odometry.getHeading(AngleUnit.RADIANS);
             if(!gamepad1.x){
-                shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01, team, voltage);
+                shooter.variableInterplationSpeedShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.005, team, voltage);
 //                shooter.shooter.setPower(0.5);
 //                shooter.shooter2.setPower(-0.5);
             }

@@ -54,7 +54,7 @@ public class PathsBlue {
     public PathChain grabLeftoverBallsGate, scoreLeftoverBallsGate;
     public PathChain scoreLeaveClose, leavePPGClose, leaveClose;
     public PathChain scoreLeaveFar, leaveFar;
-    public PathChain openGateMid;
+    public PathChain PGPandOpen;
     public PathChain pickUpGateFromFarStart;
 
     private Pose Mymirror(Pose pPose) {
@@ -200,9 +200,11 @@ public class PathsBlue {
                 .setLinearHeadingInterpolation(eatLeftoverGate.getHeading(), scorePoseFar.getHeading())
                 .build();
         // --------------OPEN GATE MID AUTO---------
-        openGateMid = follower.pathBuilder()
+        PGPandOpen = follower.pathBuilder()
                 .addPath(new BezierLine(afterPickupPGP,PGP2gate))
                 .setLinearHeadingInterpolation(afterPickupPGP.getHeading(),PGP2gate.getHeading())
+                .addPath(new BezierCurve(PGP2gate, controlPosePGP, scorePose))
+                .setLinearHeadingInterpolation(PGP2gate.getHeading(), scorePose.getHeading())
                 .build();
 
 //        scoreCloseGateFromScore = follower.pathBuilder()

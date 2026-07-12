@@ -65,7 +65,7 @@ public class PathsRed {
 
     public PathChain scorePreload, scorePreloadFar;
     public PathChain grabGPP, grabPGP, grabPPG;
-    public PathChain openGateMid;
+    public PathChain openGateMid,scoreFromGate;
     public PathChain scoreGPP, scorePGP, scorePPG;
     public PathChain grabGPPFar, grabPGPFar;
     public PathChain scoreGPPFar;
@@ -73,7 +73,7 @@ public class PathsRed {
     public PathChain scoreHumanPlayer, grabHumanPlayer, grabHumanPlayerTangent;
     public PathChain grabLeftoverBallsGate, scoreLeftoverBallsGate;
     public PathChain scoreLeaveClose, leavePPGClose, leaveClose;
-    public PathChain scoreLeaveFar, leaveFar;
+    public PathChain scoreLeaveFar, leaveFar, PGPandOpen;
     private Pose Mymirror(Pose pPose) {
         Pose k = pPose;
         return new Pose(141.5 - k.getX(), k.getY()-2, MathFunctions.normalizeAngle(Math.PI - k.getHeading()), PedroCoordinates.INSTANCE);
@@ -230,9 +230,15 @@ public class PathsRed {
                 .setLinearHeadingInterpolation(eatLeftoverGate.getHeading(), scorePoseFar.getHeading())
                 .build();
 
-        openGateMid = follower.pathBuilder()
+        PGPandOpen = follower.pathBuilder()
                 .addPath(new BezierLine(afterPickupPGP,PGP2gate))
                 .setLinearHeadingInterpolation(afterPickupPGP.getHeading(),PGP2gate.getHeading())
+                .addPath(new BezierCurve(PGP2gate, controlPosePGP, scorePose))
+                .setLinearHeadingInterpolation(PGP2gate.getHeading(), scorePose.getHeading())
+                .build();
+        scoreFromGate = follower.pathBuilder()
+                .addPath(new BezierLine(PGP2gate, scorePose))
+                .setLinearHeadingInterpolation(PGP2gate.getHeading(), scorePose.getHeading())
                 .build();
 //        scoreCloseGateFromScore = follower.pathBuilder()
 //                .addPath(new BezierCurve(scorePose, controlPosePGP, PGP))
