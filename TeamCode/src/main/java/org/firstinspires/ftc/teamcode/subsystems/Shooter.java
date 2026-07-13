@@ -27,13 +27,13 @@ public class Shooter {
         poseFuncs = new PoseFunctions(new RobotPose(InitMotors.odometry));
     }
 
-    double wantedNaivePow;
+    double wantedNaivePow = 0;
     public static double farPow = 0.541;
     public static double closePow = 0.387;
 
-    public static double kP = 20;
+    public static double kP = 5;
     public static double kI = 0;
-    public static double kD = 500;
+    public static double kD = 0;
     public static double kF = 1.14;
 
     PID controller = new PID(kP,kI,kD,kF);
@@ -50,9 +50,12 @@ public class Shooter {
     public void updateTelemetry(Telemetry telemetry){
         TelemetryUtils.addTitle(telemetry, "staring shooter telemetry");
         telemetry.addData("current pow",getCurPower());
-        telemetry.addData("cur v", shooterVel.getVelocityFilter());
+        telemetry.addData("cur v", shooterVel.getRawVelocity());
         telemetry.addData("wanted naive vel", wantedNaivePow*MAX_RPM);
         telemetry.addData("wanted interpolation vel", wantedVariableInterpolation*MAX_RPM);
+        telemetry.addData("wanted variable vel", variablePower*MAX_RPM);
+        telemetry.addData("controller wanted", controller.wanted);
+        telemetry.addData("controller pow", controller.update(getCurPower()));
         TelemetryUtils.addTitle(telemetry, "ending shooter telemetry");
     }
 
@@ -63,12 +66,11 @@ public class Shooter {
         );
     }
     public double getCurPower(){
-        return shooterVel.getVelocityFilter()/MAX_RPM;
+        return shooterVel.getRawVelocity()/MAX_RPM;
     }
 
     public void periodic(){
-        double output = controller.update(getCurPower());
-        setPower(output);
+        setPower(controller.update(getCurPower()));
     }
 
     public void setPower(double pow){

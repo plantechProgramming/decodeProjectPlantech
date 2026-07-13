@@ -22,7 +22,10 @@ public class AutoCommands{
         this.follower = follower;
     }
 
-    public AutoCommands(){}
+    public AutoCommands(){
+        shooter = new Shooter();
+        intake = new Intake();
+        inBetween = new InBetween();}
 
     public void periodic(){
         shooter.periodic();

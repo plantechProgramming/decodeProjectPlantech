@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Misc.Utils.filters.LowPass;
 public class GetVelocity {
     DcMotorEx motor;
     double alpha;
-    int ticksPerRevolution = 28;
+    int ticksPerRevolution = 8192;
 
     LowPass lowPass = new LowPass();
     public GetVelocity(DcMotorEx motor, double alpha) {

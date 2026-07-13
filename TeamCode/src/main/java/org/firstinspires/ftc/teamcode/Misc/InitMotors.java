@@ -55,8 +55,10 @@ public class InitMotors {
     }
     
     public void initInBetween(){
-        SL = hardwareMap.get(CRServo.class,"SIBR");
-        SR = hardwareMap.get(CRServo.class,"SIBL");
+        SL = hardwareMap.get(CRServo.class,"SL");
+        SL.setDirection(CRServo.Direction.REVERSE);
+        SR = hardwareMap.get(CRServo.class,"SR");
+        SR.setDirection(CRServo.Direction.REVERSE);
 
         inBetweenMotor = hardwareMap.get(DcMotorEx.class, "inbetween");
         inBetweenMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -70,15 +72,15 @@ public class InitMotors {
     }
     
     public void initShooter(){
-        shootMotor = hardwareMap.get(DcMotorEx.class, "shooter");
-        shootMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-//        shootMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        shootMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-
-        shootMotorOp = hardwareMap.get(DcMotorEx.class, "shooter2");
+        shootMotorOp = hardwareMap.get(DcMotorEx.class, "ShooterFar");
         shootMotorOp.setDirection(DcMotorSimple.Direction.FORWARD);
-//        shootMotorOp.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+//        shootMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shootMotorOp.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
+        shootMotor = hardwareMap.get(DcMotorEx.class, "ShooterClose");
+        shootMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+//        shootMotorOp.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        shootMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
     
     public void initPinpiont(){
