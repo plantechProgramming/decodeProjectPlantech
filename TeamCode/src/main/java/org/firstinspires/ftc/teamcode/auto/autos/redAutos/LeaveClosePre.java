@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.auto.autos.redAutos;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import dev.nextftc.ftc.NextFTCOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous(name = "Leave Close Pre Red",group = "Red")
-public class LeaveClosePre extends NextFTCOpMode {
+public class LeaveClosePre extends LinearOpMode {
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
 //    private Follower follower;
 //
 //    public LeaveClosePre() {

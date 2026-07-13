@@ -1,64 +1,59 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import static com.pedropathing.ivy.groups.Groups.parallel;
-import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kD;
-import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kF;
-import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kI;
-import static org.firstinspires.ftc.teamcode.teleOp.actions.Shooter.kP;
 
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.commands.Commands;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.teleOp.PID;
-import org.firstinspires.ftc.teamcode.teleOp.actions.GetVelocity;
+import org.firstinspires.ftc.teamcode.Misc.InitMotors;
+import org.firstinspires.ftc.teamcode.Misc.PID;
+import org.firstinspires.ftc.teamcode.Misc.GetVelocity;
+import org.firstinspires.ftc.teamcode.Misc.RobotPose;
+import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
+import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
 
 public class Shooter {
     DcMotorEx shootMotor, shootMotorOp;
     GetVelocity shooterVel;
+
+    PoseFunctions poseFuncs;
     double MAX_RPM = 6000;
-    public Shooter(HardwareMap hardwareMap) {
-        initHardware(hardwareMap);
+    public Shooter() {
+        shootMotor = InitMotors.shootMotor;
+        shootMotorOp = InitMotors.shootMotorOp;
         shooterVel = new GetVelocity(shootMotor, 0.1);
+        poseFuncs = new PoseFunctions(new RobotPose(InitMotors.odometry));
     }
 
-    private void initHardware(HardwareMap hardwareMap){
-        shootMotor = hardwareMap.get(DcMotorEx.class, "shooter");
-        shootMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-        shootMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-
-        shootMotorOp = hardwareMap.get(DcMotorEx.class, "shooter2");
-        shootMotorOp.setDirection(DcMotorSimple.Direction.FORWARD);
-        shootMotorOp.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    double wantedPow;
+    double wantedNaivePow;
     public static double farPow = 0.541;
     public static double closePow = 0.387;
 
-    // TODO: tune
+    public static double kP = 20;
+    public static double kI = 0;
+    public static double kD = 500;
+    public static double kF = 1.14;
+
     PID controller = new PID(kP,kI,kD,kF);
 
     public Command naiveShooter(boolean far) {
         if (far) {
-            wantedPow = farPow;
+            wantedNaivePow = farPow;
         } else {
-            wantedPow = closePow;
+            wantedNaivePow = closePow;
         }
-        return Commands.instant(()->controller.setWanted(wantedPow));
+        return Commands.instant(()->controller.setWanted(wantedNaivePow));
     }
 
     public void updateTelemetry(Telemetry telemetry){
+        TelemetryUtils.addTitle(telemetry, "staring shooter telemetry");
         telemetry.addData("current pow",getCurPower());
-        telemetry.addData("wanted pow", wantedPow);
-        telemetry.addData("wanted v", wantedPow*MAX_RPM);
         telemetry.addData("cur v", shooterVel.getVelocityFilter());
-        telemetry.addData("pid wanted", controller.wanted);
-        telemetry.addData("pow motor", shootMotor.getPower());
-        telemetry.update();
+        telemetry.addData("wanted naive vel", wantedNaivePow*MAX_RPM);
+        telemetry.addData("wanted interpolation vel", wantedVariableInterpolation*MAX_RPM);
+        TelemetryUtils.addTitle(telemetry, "ending shooter telemetry");
     }
 
     public Command setShooterPowerAsCommand(double pow){
@@ -73,12 +68,54 @@ public class Shooter {
 
     public void periodic(){
         double output = controller.update(getCurPower());
-//        return infinite(() -> {setPower(output);});
         setPower(output);
     }
 
     public void setPower(double pow){
         shootMotor.setPower(pow);
         shootMotorOp.setPower(-pow);
+    }
+
+    public Command out(){
+        return setShooterPowerAsCommand(-0.2);
+    }
+
+    public boolean isUpToGivenSpeed(double wantedSpeed, double curSpeed){
+        double threshold = 100; // should be the biggest reliably scoring value
+        return Math.abs(curSpeed - wantedSpeed*6000) < threshold;
+    }
+
+    boolean prevMore = false;
+    boolean prevLess = false;
+    double variablePower = 0;
+    public double getVariableShoot(boolean more, boolean less, double jumps){
+        if(more && !prevMore){variablePower += jumps;}
+        else if(less && !prevLess){
+            variablePower -= jumps;
+        }
+        if (variablePower >= 0.7){
+            variablePower = 0.7;
+        }
+        prevLess = less;
+        prevMore = more;
+        return variablePower;
+    }
+
+    public void variableShoot(boolean more, boolean less, double jumps){
+        controller.setWanted(getVariableShoot(more, less, jumps));
+    }
+
+    public double getInterpolation(double dis){
+        return (0.00000149018 * Math.pow(dis, 2) + 0.0000836022 * dis + 0.35805);
+    }
+
+    double wantedVariableInterpolation = 0;
+    public double getInterpolationVariableShoot(boolean more, boolean less, double jumps) {
+        wantedVariableInterpolation = getInterpolation(poseFuncs.getDistFromGoal()) + getVariableShoot(more, less, jumps);
+        return wantedVariableInterpolation;
+    }
+
+    public void interpolationVariableShoot(boolean more, boolean less, double jumps) {
+        controller.setWanted(getInterpolationVariableShoot(more, less, jumps));
     }
 }

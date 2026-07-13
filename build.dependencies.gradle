@@ -28,13 +28,6 @@ dependencies {
     // FTCdashboard
 //    implementation 'com.acmerobotics.dashboard:dashboard:0.5.1'
 
-    // nextFTC
-    implementation 'dev.nextftc:ftc:1.0.1'
-    implementation 'dev.nextftc:hardware:1.0.1'
-    implementation 'dev.nextftc:control:1.0.0'
-    implementation 'dev.nextftc.extensions:pedro:1.0.0'
-
-
     // pedroPathing
     implementation 'com.pedropathing:ftc:2.0.6'
     implementation 'com.pedropathing:telemetry:1.0.0'

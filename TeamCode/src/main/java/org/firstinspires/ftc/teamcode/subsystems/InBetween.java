@@ -5,10 +5,9 @@ import static com.pedropathing.ivy.groups.Groups.parallel;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.commands.Commands;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.Misc.InitMotors;
 
 public class InBetween {
     CRServo sl, sr;
@@ -19,31 +18,31 @@ public class InBetween {
     double STOP_POWER_MOTOR = 0;
     double IN_POWER_MOTOR = 0.95;
 
-    public InBetween(HardwareMap hardwareMap){
-        initHardware(hardwareMap);
+
+    public InBetween(){
+        inBetweenMotor = InitMotors.inBetweenMotor;
+        this.sl = InitMotors.SL;
+        this.sr = InitMotors.SR;
     }
 
-    private void initHardware(HardwareMap hardwareMap){
-        inBetweenMotor = hardwareMap.get(DcMotorEx.class, "inbetween");
-        inBetweenMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        inBetweenMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        inBetweenMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        sl = hardwareMap.get(CRServo.class,"SIBR");
-        sr = hardwareMap.get(CRServo.class,"SIBL");
-    }
-
-    public Command inBetweenInFull(){
+    public Command inFull(){
         return parallel(
                 inShooterPrimers(),
                 setMotorPowerAsCommand(IN_POWER_MOTOR)
         );
     }
 
-    public Command inBetweenInPart(){
+    public Command inPart(){
         return parallel(
                 setPrimerPowerAsCommand(OUT_POWER),
                 setMotorPowerAsCommand(IN_POWER_MOTOR)
+        );
+    }
+
+    public Command out(){
+        return parallel(
+                setPrimerPowerAsCommand(OUT_POWER),
+                setMotorPowerAsCommand(OUT_POWER)
         );
     }
 
