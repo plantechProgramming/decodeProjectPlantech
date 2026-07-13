@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
+import static com.pedropathing.ivy.Scheduler.schedule;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -37,9 +39,6 @@ public class TeleOpRed extends TeamOpMode {
 
     @Override
     public void run(){
-        Intake intake  = new Intake();
-        InBetween inBetween = new InBetween();
-        Shooter shooter = new Shooter();
         DriveTrain driveTrain = new DriveTrain();
         ElapsedTime elapsedTime = new ElapsedTime();
         AutoCommands commands = new AutoCommands();
@@ -70,7 +69,7 @@ public class TeleOpRed extends TeamOpMode {
             botHeading = odometry.getHeading(AngleUnit.DEGREES);
 
             if(shooting){
-                commands.shoot();
+                schedule(commands.shoot());
                 if(!holdInitialized){
                     DriveTrain.setDriveToFloatMode();
                     holdInitialized = true;
@@ -80,7 +79,6 @@ public class TeleOpRed extends TeamOpMode {
                 follower.holdPoint(lastPos, false);
                 activatedHold = true;
             }
-
             else {
                 holdInitialized = false;
                 if(activatedHold){
@@ -91,24 +89,24 @@ public class TeleOpRed extends TeamOpMode {
 
                 if(turning){
                     if (gamepad1.right_trigger > 0){
-                        commands.take();
+                        schedule(commands.take());
                     }
                     else if(gamepad1.left_trigger!=0) {
-                        commands.partialOut();
+                        schedule(commands.partialOut());
                     }
                     else if(gamepad1.x){
-                        commands.out();
+                        schedule(commands.out());
                     }
                     else{
-                        commands.stopAll();
+                        schedule(commands.stopAll());
                     }
                 }
                 else{
-                    driveTrain.drive(-forward, -drift, turn, botHeading, 1);//TODO: change for RED -forward, -drift
+                    schedule(driveTrain.drive(-forward, -drift, turn, botHeading, 1));//TODO: change for RED -forward, -drift
                 }
             }
 
-            shooter.interpolationVariableShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01);
+            commands.shooter.interpolationVariableShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.01);
 
 
             if(gamepad1.back) {
@@ -118,13 +116,14 @@ public class TeleOpRed extends TeamOpMode {
             driveTrain.updateTelemetry(telemetry);
             driveTrain.updateTelemetry(dashboardTelemetry);
 
-            shooter.updateTelemetry(telemetry);
-            shooter.updateTelemetry(dashboardTelemetry);
+            commands.shooter.updateTelemetry(telemetry);
+            commands.shooter.updateTelemetry(dashboardTelemetry);
 
             telemetry.update();
             dashboardTelemetry.update();
             commands.periodic();
             follower.update();
+            Scheduler.execute();
         }
 
     }

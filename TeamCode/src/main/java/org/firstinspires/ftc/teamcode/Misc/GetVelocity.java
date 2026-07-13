@@ -24,6 +24,7 @@ public class GetVelocity {
     private static final ElapsedTime timer = new ElapsedTime();
     private long prevEncoder = 0;
     private double prevTime = 0;
+    private double prevVelocity = 0;
     private final int MILLISECONDS_TO_MINUTE = 60000;
 
     public double getRawVelocity() {
@@ -32,13 +33,18 @@ public class GetVelocity {
         double curTime = timer.milliseconds();
 
         double timeDiff = curTime - prevTime;
-        double encoderDiff = curEncoder - prevEncoder;
+        long encoderDiff = curEncoder - prevEncoder;
 
         double tickVelocity = encoderDiff / timeDiff; // ticks/milliseconds
         double velocity = (tickVelocity * MILLISECONDS_TO_MINUTE) / ticksPerRevolution;
 
+        if(encoderDiff == 0){
+            return prevVelocity;
+        }
+
         prevTime = curTime;
         prevEncoder = curEncoder;
+        prevVelocity = velocity;
         lowPass.update(velocity);
         return velocity;
     }

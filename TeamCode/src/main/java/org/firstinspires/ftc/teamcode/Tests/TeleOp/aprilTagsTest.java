@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.Tests.TeleOp;
 
+import static com.pedropathing.ivy.Scheduler.schedule;
+
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -40,7 +43,7 @@ public class aprilTagsTest  extends TeamOpMode {
         double sum = 0;
         while (opModeIsActive()) {
             tagLocalization.detectTags();
-            shooter.setShooterPowerAsCommand(0.4);
+            schedule(shooter.setShooterPowerAsCommand(0.4));
             if(tagLocalization.goalTag != null){
 //                count++;
 //                tagLocalization.getCurrDeg(tagLocalization.goalTag);
@@ -59,7 +62,7 @@ public class aprilTagsTest  extends TeamOpMode {
             else{
                 errorCounter++;
             }
-
+            Scheduler.execute();
         }
     }
 

@@ -10,9 +10,9 @@ import com.pedropathing.ivy.Command;
 import com.pedropathing.paths.PathChain;
 
 public class AutoCommands{
-    Shooter shooter;
-    Intake intake;
-    InBetween inBetween;
+    public Shooter shooter;
+    public Intake intake;
+    public InBetween inBetween;
     Follower follower;
 
     public AutoCommands(Follower follower) {
@@ -25,7 +25,8 @@ public class AutoCommands{
     public AutoCommands(){
         shooter = new Shooter();
         intake = new Intake();
-        inBetween = new InBetween();}
+        inBetween = new InBetween();
+    }
 
     public void periodic(){
         shooter.periodic();

@@ -22,20 +22,18 @@ public class shooterTest extends TeamOpMode {
 
     @Override
     protected void run() {
-        Shooter shooter = new Shooter();
-        Intake intake = new Intake();
         AutoCommands commands = new AutoCommands();
         while(opModeIsActive()){
-            shooter.variableShoot(gamepad1.dpad_up, gamepad1.dpad_down, .01);
+            commands.shooter.variableShoot(gamepad1.dpad_up, gamepad1.dpad_down, .01);
 
             if(gamepad1.a){
                 schedule(commands.shoot());
             }
-            shooter.updateTelemetry(dashboardTelemetry);
-            shooter.updateTelemetry(telemetry);
+            commands.shooter.updateTelemetry(dashboardTelemetry);
+            commands.shooter.updateTelemetry(telemetry);
             telemetry.update();
             dashboardTelemetry.update();
-            shooter.periodic();
+            commands.periodic();
             Scheduler.execute();
         }
     }
