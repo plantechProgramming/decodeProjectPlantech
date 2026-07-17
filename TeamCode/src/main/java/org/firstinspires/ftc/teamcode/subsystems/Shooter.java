@@ -50,27 +50,28 @@ public class Shooter {
     public void updateTelemetry(Telemetry telemetry){
         TelemetryUtils.addTitle(telemetry, "staring shooter telemetry");
         telemetry.addData("current pow",getCurPower());
-        telemetry.addData("cur v", shooterVel.getRawVelocity());
+        telemetry.addData("cur v", shooterVel.getVelocityFilter());
+//        telemetry.addData("raw vel", shooterVel.getRawVelocity());
         telemetry.addData("wanted naive vel", wantedNaivePow*MAX_RPM);
         telemetry.addData("wanted interpolation vel", wantedVariableInterpolation*MAX_RPM);
         telemetry.addData("wanted variable vel", variablePower*MAX_RPM);
-        telemetry.addData("controller wanted", controller.wanted);
+        telemetry.addData("controller wanted vel", controller.wanted*MAX_RPM);
         telemetry.addData("controller pow", controller.update(getCurPower()));
         TelemetryUtils.addTitle(telemetry, "ending shooter telemetry");
     }
 
-    public Command setShooterPowerAsCommand(double pow){
+    public Command setPowerAsCommand(double pow){
         return parallel(
                 Commands.instant(()->shootMotor.setPower(pow)),
                 Commands.instant(()->shootMotorOp.setPower(-pow))
         );
     }
     public double getCurPower(){
-        return shooterVel.getRawVelocity()/MAX_RPM;
+        return shooterVel.getVelocityFilter()/MAX_RPM;
     }
 
-    public void periodic(){
-        setPower(controller.update(getCurPower()));
+    public Command periodic(){
+        return setPowerAsCommand(controller.update(getCurPower()));
     }
 
     public void setPower(double pow){
@@ -79,7 +80,7 @@ public class Shooter {
     }
 
     public Command out(){
-        return setShooterPowerAsCommand(-0.2);
+        return setPowerAsCommand(-0.2);
     }
 
     public boolean isUpToGivenSpeed(double wantedSpeed, double curSpeed){

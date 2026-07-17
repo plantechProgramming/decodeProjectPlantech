@@ -68,7 +68,7 @@ public class Points {
 
     public void setPointsToRed() {
         startPose = startPose.mirror(); // Start Pose of our robot.
-        startPoseFar = scorePoseFar.mirror();
+        startPoseFar = startPoseFar.mirror();
         scorePoseFar = scorePoseFar.mirror(); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
         scorePose = scorePose.mirror(); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.
         leaveClosePose = leaveClosePose.mirror();

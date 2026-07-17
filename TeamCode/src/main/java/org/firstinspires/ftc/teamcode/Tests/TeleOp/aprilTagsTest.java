@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
+import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -35,7 +36,7 @@ public class aprilTagsTest  extends TeamOpMode {
             sleep(20);
         }
         tagLocalization.applySettings();
-        Shooter shooter = new Shooter();
+        AutoCommands commands = new AutoCommands();
         int count = 0;
         int errorCounter = 0;
         double curr = -144;
@@ -43,7 +44,7 @@ public class aprilTagsTest  extends TeamOpMode {
         double sum = 0;
         while (opModeIsActive()) {
             tagLocalization.detectTags();
-            schedule(shooter.setShooterPowerAsCommand(0.4));
+            schedule(commands.shooter.setPowerAsCommand(0.4));
             if(tagLocalization.goalTag != null){
 //                count++;
 //                tagLocalization.getCurrDeg(tagLocalization.goalTag);
@@ -62,6 +63,7 @@ public class aprilTagsTest  extends TeamOpMode {
             else{
                 errorCounter++;
             }
+            schedule(commands.periodic());
             Scheduler.execute();
         }
     }

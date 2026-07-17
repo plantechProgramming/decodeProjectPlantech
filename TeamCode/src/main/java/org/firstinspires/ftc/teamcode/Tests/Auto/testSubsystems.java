@@ -20,7 +20,7 @@ public class testSubsystems extends LinearOpMode {
 
     public Command autoRoutine(){
         return sequential(
-            shooter.setShooterPowerAsCommand(0.1)
+            shooter.setPowerAsCommand(0.1)
         );
     }
 

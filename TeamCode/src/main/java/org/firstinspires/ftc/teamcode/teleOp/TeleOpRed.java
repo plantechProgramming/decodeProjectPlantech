@@ -15,9 +15,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Misc.DataSaving;
+import org.firstinspires.ftc.teamcode.Misc.RobotPose;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Converters;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Extras;
+import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
@@ -42,27 +44,28 @@ public class TeleOpRed extends TeamOpMode {
         DriveTrain driveTrain = new DriveTrain();
         ElapsedTime elapsedTime = new ElapsedTime();
         AutoCommands commands = new AutoCommands();
+        PoseFunctions poseFunctions = new PoseFunctions(new RobotPose(odometry));
 
-
-        double forward; //-1 to 1
-        double turn;
-        double drift;
+        double gamepadForward; //-1 to 1
+        double gamepadTurn;
+        double gamepadDrift;
         double botHeading;
         boolean shooting;
         boolean turning;
         boolean activatedHold = false;
         boolean holdInitialized = false;
 
-        odometry.setPosition(Converters.PedroPoseConverter(DataSaving.getEndPos()));
+        odometry.setPosition(Converters.pedroToFTC(DataSaving.getEndPos()));
         odometry.update();
         Pose lastPos = follower.getPose();
+        DriveTrain.setDriveToBrakeMode();
 
         while (opModeIsActive() ) {
             elapsedTime.reset();
 
-            forward = -gamepad1.left_stick_y;
-            turn = gamepad1.right_stick_x;
-            drift = gamepad1.left_stick_x;
+            gamepadForward = -gamepad1.left_stick_y;
+            gamepadTurn = gamepad1.right_stick_x;
+            gamepadDrift = gamepad1.left_stick_x;
             shooting = gamepad1.right_bumper;
             turning = gamepad1.left_bumper;
 
@@ -86,23 +89,25 @@ public class TeleOpRed extends TeamOpMode {
                     follower.followPath(new Path(new BezierLine(follower.getPose(), follower.getPose())), false);
                     DriveTrain.setDriveToBrakeMode();
                 }
-
                 if(turning){
-                    if (gamepad1.right_trigger > 0){
-                        schedule(commands.take());
-                    }
-                    else if(gamepad1.left_trigger!=0) {
-                        schedule(commands.partialOut());
-                    }
-                    else if(gamepad1.x){
-                        schedule(commands.out());
-                    }
-                    else{
-                        schedule(commands.stopAll());
-                    }
+                    schedule(driveTrain.turnToAngle(poseFunctions.getAngleFromGoal(), botHeading));
                 }
                 else{
-                    schedule(driveTrain.drive(-forward, -drift, turn, botHeading, 1));//TODO: change for RED -forward, -drift
+                    // bot heading + 90 to fit driving direction
+                    schedule(driveTrain.drive(-gamepadForward, -gamepadDrift, gamepadTurn, botHeading+90, 1));//TODO: change for RED -forward, -drift, +90
+                }
+
+                if (gamepad1.right_trigger > 0){
+                    schedule(commands.take());
+                }
+                else if(gamepad1.left_trigger!=0) {
+                    schedule(commands.partialOut());
+                }
+                else if(gamepad1.x){
+                    schedule(commands.out());
+                }
+                else {
+                    schedule(commands.stopAll());
                 }
             }
 
@@ -110,7 +115,7 @@ public class TeleOpRed extends TeamOpMode {
 
 
             if(gamepad1.back) {
-                odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 180)); //TODO: change for RED heading 180
+                odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0));
             }
 
             driveTrain.updateTelemetry(telemetry);
@@ -118,10 +123,11 @@ public class TeleOpRed extends TeamOpMode {
 
             commands.shooter.updateTelemetry(telemetry);
             commands.shooter.updateTelemetry(dashboardTelemetry);
-
+            telemetry.addData("endPose", DataSaving.getEndPos());
+            telemetry.addData("pose", Converters.PedroPoseConverter(DataSaving.getEndPos()));
             telemetry.update();
             dashboardTelemetry.update();
-            commands.periodic();
+            schedule(commands.periodic());
             follower.update();
             Scheduler.execute();
         }

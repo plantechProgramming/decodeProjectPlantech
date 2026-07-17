@@ -42,6 +42,12 @@ public class AngleFunctions {
         // java doesnt do mod well for negatives and doubles, so:
         // add 360 to normalize to [0,360)
         // multiply by 100 to pretend its an int, then divide to get the right val
-        return ((num +360)*100%(360*100))/100;
+        double modded =  ((num +360)*100%(360*100))/100;
+        if(modded -360 > -180){
+            return modded - 360;
+        }
+        return modded;
     }
+
+
 }

@@ -28,8 +28,8 @@ public class AutoCommands{
         inBetween = new InBetween();
     }
 
-    public void periodic(){
-        shooter.periodic();
+    public Command periodic(){
+        return shooter.periodic();
     }
 
     public Command shoot(){

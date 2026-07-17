@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Misc;
 
 import android.util.Pair;
 
+import com.pedropathing.follower.Follower;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;

@@ -38,11 +38,12 @@ public class GetVelocity {
         double tickVelocity = encoderDiff / timeDiff; // ticks/milliseconds
         double velocity = (tickVelocity * MILLISECONDS_TO_MINUTE) / ticksPerRevolution;
 
+        prevTime = curTime;
+
         if(encoderDiff == 0){
             return prevVelocity;
         }
 
-        prevTime = curTime;
         prevEncoder = curEncoder;
         prevVelocity = velocity;
         lowPass.update(velocity);
@@ -50,6 +51,7 @@ public class GetVelocity {
     }
 
     public double getVelocityFilter(){
+        getRawVelocity();
         return lowPass.get();
     }
 }

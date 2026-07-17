@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Misc.InitMotors;
 import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
 import org.firstinspires.ftc.teamcode.Misc.PID;
@@ -28,9 +30,10 @@ public class DriveTrain {
         pid = new PID(Kp, Ki, Kd, Kf);// prev GOOD p = 0.022, i = 0.00000001, d = 0.000001, f = 0
     }
 
-    public Command drive(double y, double x, double rx, double botHeading, double slowRatio){ // rx in degrees
+
+    public Command drive(double y, double x, double rx, double botHeading, double slowRatio){ // bot heading in degrees
         // slowRatio [0,1] - output power multiplier
-        rx = Math.toRadians(rx);
+        botHeading = Math.toRadians(botHeading);
 
         // Rotate the movement direction counter to the bot's rotation
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -105,8 +108,11 @@ public class DriveTrain {
     }
 
     public void updateTelemetry(Telemetry telemetry){
+        telemetry.addData("odo x", InitMotors.odometry.getPosX(DistanceUnit.CM));
+        telemetry.addData("odo y", InitMotors.odometry.getPosY(DistanceUnit.CM));
+        telemetry.addData("heading", InitMotors.odometry.getHeading(AngleUnit.DEGREES));
         TelemetryUtils.addTitle(telemetry, "starting drive telemetry");
-        TelemetryUtils.addVar(telemetry, turnPow);
+        telemetry.addData("turnPow", turnPow);
         TelemetryUtils.addTitle(telemetry, "ending drive telemetry");
     }
 }

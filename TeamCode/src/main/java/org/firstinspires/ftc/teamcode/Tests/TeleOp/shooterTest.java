@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @Configurable
 @Config
-@TeleOp(group = "telOp tests")
+@TeleOp(group = "teleOp tests")
 public class shooterTest extends TeamOpMode {
 
     @Override
@@ -33,7 +33,7 @@ public class shooterTest extends TeamOpMode {
             commands.shooter.updateTelemetry(telemetry);
             telemetry.update();
             dashboardTelemetry.update();
-            commands.periodic();
+            schedule(commands.periodic());
             Scheduler.execute();
         }
     }
