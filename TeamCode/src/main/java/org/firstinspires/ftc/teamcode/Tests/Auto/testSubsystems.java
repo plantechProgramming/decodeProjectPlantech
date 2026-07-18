@@ -9,29 +9,37 @@ import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.groups.Groups.*;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
+import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @Autonomous(group = "autonomous tests")
-public class testSubsystems extends LinearOpMode {
+public class testSubsystems extends TeamOpMode {
 
     AutoCommands command;
-    Shooter shooter;
 
     public Command autoRoutine(){
         return sequential(
-            shooter.setPowerAsCommand(0.1)
+            command.shooter.setPowerAsCommand(0.1)
         );
     }
 
     @Override
-    public void runOpMode() {
+    public void postInit() {
         command = new AutoCommands();
-        shooter = new Shooter();
+    }
+
+    @Override
+    protected void run() {
         Scheduler.schedule(autoRoutine());
         while (opModeIsActive()) {
             command.periodic();
             Scheduler.execute();
         }
+    }
+
+    @Override
+    protected void end() {
+
     }
 }

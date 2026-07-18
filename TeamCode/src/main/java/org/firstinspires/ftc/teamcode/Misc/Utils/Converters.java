@@ -24,17 +24,16 @@ public class Converters {
         return new Pose2D(DistanceUnit.CM, newx, newy, AngleUnit.DEGREES, hed);
     }
 
-    public static Pose2D pedroToFTC(Pose pose){
-        Pair<Double, Double> scaleXY = new Pair<>(DistanceUnit.CM.fromInches(pose.getX()),
-                DistanceUnit.CM.fromInches(pose.getY()));
-
-        Pair<Double, Double> rotScaledXY = PoseFunctions.rotation2D(scaleXY.first,scaleXY.second,90);
-        rotScaledXY = new Pair<>(rotScaledXY.first, -rotScaledXY.second);
-
-        Pair<Double, Double> moveRotatedScaledXY = new Pair<>(rotScaledXY.first + PoseFunctions.LEN_FIELD/2,
-                rotScaledXY.second + PoseFunctions.LEN_FIELD/2);
-
-        double newHeading = AngleFunctions.angleModulo(Math.toDegrees(pose.getHeading()) + 90);
-        return new Pose2D(DistanceUnit.CM, moveRotatedScaledXY.first, moveRotatedScaledXY.second, AngleUnit.DEGREES, newHeading);
-    }
+    // the following function doesn't work if you want to do the conversion use pedro's built in coordinate system convertors
+//    public static Pose2D pedroToFTC(Pose pose){
+//        double scaledX = DistanceUnit.CM.fromInches(pose.getX());
+//        double scaledY = DistanceUnit.CM.fromInches(pose.getY());
+//
+//        Pair<Double, Double> rotatedXY = PoseFunctions.rotation2D(scaledX,scaledY,90);
+//        double newX = rotatedXY.first + PoseFunctions.LEN_FIELD/2;
+//        double newY = rotatedXY.second + PoseFunctions.LEN_FIELD/2;
+//
+//        double newHeading = AngleFunctions.angleModulo(Math.toDegrees(pose.getHeading()) + 90);
+//        return new Pose2D(DistanceUnit.CM, newX, newY, AngleUnit.DEGREES, newHeading);
+//    }
 }

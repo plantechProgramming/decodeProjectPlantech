@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Misc.Utils;
 
 import android.util.Pair;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
@@ -90,6 +91,13 @@ public class PoseFunctions {
     public static Pair<Double, Double> rotation2D(double x, double y, double deg){
         double rad = Math.toRadians(deg);
         return new Pair<>(x*Math.cos(rad)-y*Math.sin(rad), x*Math.sin(rad)+y*Math.cos(rad));
+    }
+
+    public void updateTelemetry(Telemetry telemetry){
+        TelemetryUtils.addTitle(telemetry, "starting pose functions telemetry");
+        telemetry.addData("dis to goal", getDistFromGoal());
+        telemetry.addData("angle to goal", getAngleFromGoal());
+        TelemetryUtils.addTitle(telemetry, "ending pose functions telemetry");
     }
 }
 

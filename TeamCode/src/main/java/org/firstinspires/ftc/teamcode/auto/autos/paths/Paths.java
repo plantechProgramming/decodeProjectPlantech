@@ -32,12 +32,12 @@ public class Paths {
         //-------------PRELOAD------------------
 
         scorePreload = follower.pathBuilder()
-                .addPath(new BezierLine(Points.startPose, points.scorePose))
-                .setLinearHeadingInterpolation(Points.startPose.getHeading(), points.scorePose.getHeading())
+                .addPath(new BezierLine(points.startPose, points.scorePose))
+                .setLinearHeadingInterpolation(points.startPose.getHeading(), points.scorePose.getHeading())
                 .build();
         scorePreloadFar =  follower.pathBuilder()
-                .addPath(new BezierLine(Points.startPoseFar, points.scorePoseFar))
-                .setLinearHeadingInterpolation(Points.startPoseFar.getHeading(), points.scorePoseFar.getHeading())
+                .addPath(new BezierLine(points.startPoseFar, points.scorePoseFar))
+                .setLinearHeadingInterpolation(points.startPoseFar.getHeading(), points.scorePoseFar.getHeading())
                 .build();
 
         //-------------GRAB && SCORE --CLOSE------------------
@@ -103,8 +103,8 @@ public class Paths {
                 .build();
 
         leaveClose = follower.pathBuilder()
-                .addPath(new BezierLine(Points.startPose, points.leaveClosePose))
-                .setLinearHeadingInterpolation(Points.startPose.getHeading(), points.leaveClosePose.getHeading())
+                .addPath(new BezierLine(points.startPose, points.leaveClosePose))
+                .setLinearHeadingInterpolation(points.startPose.getHeading(), points.leaveClosePose.getHeading())
                 .build();
 
         leavePPGClose = follower.pathBuilder()
@@ -118,8 +118,8 @@ public class Paths {
                 .build();
 
         leaveFar = follower.pathBuilder()
-                .addPath(new BezierLine(Points.startPose, points.leaveFarPose))
-                .setLinearHeadingInterpolation(Points.startPose.getHeading(), points.leaveFarPose.getHeading())
+                .addPath(new BezierLine(points.startPose, points.leaveFarPose))
+                .setLinearHeadingInterpolation(points.startPose.getHeading(), points.leaveFarPose.getHeading())
                 .build();
 
         //-------------Gate------------------

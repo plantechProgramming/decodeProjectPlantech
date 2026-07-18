@@ -5,7 +5,7 @@ import com.pedropathing.geometry.Pose;
 public class DataSaving {
     private static Pose endPos = null;
     public static void setEndPos(Pose pose){
-        endPos = pose.copy();
+        endPos = pose;
     }
 
     public static Pose getEndPos() throws NullPointerException{

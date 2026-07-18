@@ -4,6 +4,8 @@ import static com.pedropathing.ivy.Scheduler.schedule;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.ftc.InvertedFTCCoordinates;
+import com.pedropathing.ftc.PoseConverter;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.ivy.Scheduler;
@@ -55,7 +57,7 @@ public class TeleOpBlue extends TeamOpMode {
         boolean activatedHold = false;
         boolean holdInitialized = false;
 
-        odometry.setPosition(Converters.pedroToFTC(DataSaving.getEndPos()));
+        odometry.setPosition(PoseConverter.poseToPose2D(DataSaving.getEndPos(), InvertedFTCCoordinates.INSTANCE));
         odometry.update();
         Pose lastPos = follower.getPose();
         DriveTrain.setDriveToBrakeMode();
@@ -93,7 +95,6 @@ public class TeleOpBlue extends TeamOpMode {
                     schedule(driveTrain.turnToAngle(poseFunctions.getAngleFromGoal(), botHeading));
                 }
                 else{
-                    // bot heading + 90 to fit driving direction
                     schedule(driveTrain.drive(-gamepadForward, -gamepadDrift, gamepadTurn, botHeading-90, 1));//TODO: change for RED  +90
                 }
 
@@ -123,8 +124,12 @@ public class TeleOpBlue extends TeamOpMode {
 
             commands.shooter.updateTelemetry(telemetry);
             commands.shooter.updateTelemetry(dashboardTelemetry);
+
+            poseFunctions.updateTelemetry(telemetry);
+            poseFunctions.updateTelemetry(dashboardTelemetry);
+
             telemetry.addData("endPose", DataSaving.getEndPos());
-            telemetry.addData("pose", Converters.PedroPoseConverter(DataSaving.getEndPos()));
+
             telemetry.update();
             dashboardTelemetry.update();
             schedule(commands.periodic());

@@ -8,6 +8,9 @@ public enum Alliance {
     private static Alliance currentAlliance = UNKNOWN;
 
     public static Alliance get(){
+        if(currentAlliance == Alliance.UNKNOWN){
+            throw new NullPointerException("alliance is unknown");
+        }
         return currentAlliance;
     }
 

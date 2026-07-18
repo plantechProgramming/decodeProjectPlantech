@@ -10,8 +10,8 @@ import com.pedropathing.paths.PathChain;
 
 public class Points {
     // we have commented out code here in case gemini hallucinated adding public Pose
-    public static Pose startPose = new Pose(20.2, 122.5, Math.toRadians(144));
-    public static Pose startPoseFar = new Pose(56.5, 8.1, Math.toRadians(180));
+    public Pose startPose = new Pose(20.2, 122.5, Math.toRadians(144));
+    public Pose startPoseFar = new Pose(56.5, 8.1, Math.toRadians(180));
     public Pose scorePoseFar = new Pose(59, 16, Math.toRadians(112));
     public Pose scorePose = new Pose(47.5, 95, Math.toRadians(135));
     public Pose controlPosePPG = new Pose(70, 60);
@@ -67,7 +67,9 @@ public class Points {
 //    humanPlayerControlPose = new Pose(30,18);
 
     public void setPointsToRed() {
+        System.out.println("before"+startPose);
         startPose = startPose.mirror(); // Start Pose of our robot.
+        System.out.println("after"+startPose);
         startPoseFar = startPoseFar.mirror();
         scorePoseFar = scorePoseFar.mirror(); // Scoring Pose of our robot. It is facing the goal at a 115 degree angle.
         scorePose = scorePose.mirror(); // Scoring Pose of our robot. It is facing the goal at a 135 degree angle.

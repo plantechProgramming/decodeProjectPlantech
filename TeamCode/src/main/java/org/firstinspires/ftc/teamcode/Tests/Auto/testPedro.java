@@ -15,10 +15,10 @@ public class testPedro extends LinearOpMode {
     int counter = 0;
     public void autonomousPathUpdate() {
         if(counter == 0){
-            //path 1
+            follower.followPath(path.scorePreloadFar);
             counter++;
         } else if (counter == 1) {
-            //path 2
+            follower.followPath(path.grabGPPFar);
             counter++;
         }
     }
@@ -29,9 +29,9 @@ public class testPedro extends LinearOpMode {
         path = new Paths();
         follower = Constants.createFollower(hardwareMap);
 
-        follower.setStartingPose(Points.startPoseFar);
+        follower.setStartingPose(path.points.startPoseFar);
         path.buildPaths(follower);
-
+        waitForStart();
         while (opModeIsActive()){
             // These loop the movements of the robot, these must be called continuously in order to work
             follower.update();

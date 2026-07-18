@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Misc.Utils;
 
+import com.pedropathing.follower.Follower;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.ArrayList;
@@ -16,19 +18,10 @@ public class TelemetryUtils {
     public static void addTelemetry(Telemetry telemetry){
         telemetries.add(telemetry);
     }
-    public static <V> void addVar(Telemetry telemetry, V var){
-        telemetry.addData(""+var, var);
-    }
 
     public static void addTitle(Telemetry telemetry, String title){
         String dashes = "------------";
         telemetry.addLine(dashes + title + dashes);
-    }
-
-    public static <V> void addVarToAllTelemetries(V var){
-        for(Telemetry telemetry : telemetries){
-            addVar(telemetry, var);
-        }
     }
 
     public static void addTitleToAllTelemetries(String title){
@@ -41,5 +34,13 @@ public class TelemetryUtils {
         for(Telemetry telemetry : telemetries){
             telemetry.update();
         }
+    }
+
+    public static void updatePedroTelemetry(Telemetry telemetry, Follower follower){
+        TelemetryUtils.addTitle(telemetry, "starting pedro telemetry");
+        telemetry.addData("robot x", follower.getPose().getX()); // in inches
+        telemetry.addData("robot y", follower.getPose().getY()); // in inches
+        telemetry.addData("robot heading(degrees)", follower.getPose().getY()); // in deg
+        TelemetryUtils.addTitle(telemetry, "ending pedro telemetry");
     }
 }

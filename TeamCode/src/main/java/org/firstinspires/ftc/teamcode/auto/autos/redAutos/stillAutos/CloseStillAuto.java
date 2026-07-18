@@ -18,7 +18,6 @@ public class CloseStillAuto extends TeamOpMode {
     }
     @Override
     protected void run() {
-
     }
 
     @Override

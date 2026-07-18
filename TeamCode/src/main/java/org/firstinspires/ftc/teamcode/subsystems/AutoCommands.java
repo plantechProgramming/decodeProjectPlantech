@@ -107,8 +107,13 @@ public class AutoCommands{
     }
 
     public Command startShooter(boolean far){
-        return parallel(
-                shooter.naiveShooter(far)
+        int delay = 500;
+        if(far){
+            delay = 1200;
+        }
+        return sequential(
+                shooter.naiveShooter(far),
+                waitMs(delay)
 //                intake.take(),
 //                inBetween.inBetweenInPart()
         );
