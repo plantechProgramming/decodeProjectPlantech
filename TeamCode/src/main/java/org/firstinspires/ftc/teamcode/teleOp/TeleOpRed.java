@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Converters;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Extras;
 import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
+import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
@@ -96,7 +97,7 @@ public class TeleOpRed extends TeamOpMode {
                     schedule(driveTrain.turnToAngle(poseFunctions.getAngleFromGoal(), botHeading));
                 }
                 else{
-                    schedule(driveTrain.drive(-gamepadForward, -gamepadDrift, gamepadTurn, botHeading+90, 1));//TODO: change for RED +90
+                    schedule(driveTrain.drive(gamepadForward, gamepadDrift, gamepadTurn, botHeading-90, 1));//TODO: change for RED -90
                 }
 
                 if (gamepad1.right_trigger > 0){
@@ -120,21 +121,12 @@ public class TeleOpRed extends TeamOpMode {
                 odometry.setPosition(new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0));
             }
 
-            driveTrain.updateTelemetry(telemetry);
-            driveTrain.updateTelemetry(dashboardTelemetry);
-
-            commands.shooter.updateTelemetry(telemetry);
-            commands.shooter.updateTelemetry(dashboardTelemetry);
-
-            poseFunctions.updateTelemetry(telemetry);
-            poseFunctions.updateTelemetry(dashboardTelemetry);
-            telemetry.addData("endPose", DataSaving.getEndPos());
-
+            TelemetryUtils.updateCertainTelemtries(telemetry, driveTrain, commands.shooter, poseFunctions);
             telemetry.update();
-            dashboardTelemetry.update();
+
             schedule(commands.periodic());
-            follower.update();
             Scheduler.execute();
+            follower.update();
         }
 
     }

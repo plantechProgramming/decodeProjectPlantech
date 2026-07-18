@@ -1,39 +1,30 @@
 package org.firstinspires.ftc.teamcode.Misc.Utils;
 
+import com.pedropathing.Drivetrain;
 import com.pedropathing.follower.Follower;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TelemetryUtils {
 
-    private static ArrayList<Telemetry> telemetries;
-
-    public static void setTelemetries(ArrayList<Telemetry> telemetries){
-        TelemetryUtils.telemetries = new ArrayList<>(telemetries);
-    }
-
-    public static void addTelemetry(Telemetry telemetry){
-        telemetries.add(telemetry);
-    }
-
     public static void addTitle(Telemetry telemetry, String title){
         String dashes = "------------";
         telemetry.addLine(dashes + title + dashes);
     }
 
-    public static void addTitleToAllTelemetries(String title){
-        for(Telemetry telemetry : telemetries){
-            addTitle(telemetry, title);
-        }
+    public static void updateCertainTelemtries(Telemetry telemetry, Follower follower, Shooter shooter){
+        updatePedroTelemetry(telemetry, follower);
+        shooter.updateTelemetry(telemetry);
     }
-
-    public static void updateAll(){
-        for(Telemetry telemetry : telemetries){
-            telemetry.update();
-        }
+    public static void updateCertainTelemtries(Telemetry telemetry, DriveTrain drivetrain, Shooter shooter, PoseFunctions poseFunctions){
+        drivetrain.updateTelemetry(telemetry);
+        shooter.updateTelemetry(telemetry);
+        poseFunctions.updateTelemetry(telemetry);
     }
 
     public static void updatePedroTelemetry(Telemetry telemetry, Follower follower){

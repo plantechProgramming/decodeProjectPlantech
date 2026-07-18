@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.auto.autos.blueAutos; // make sure this aligns with class location
+import static com.pedropathing.ivy.commands.Commands.instant;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -34,6 +35,7 @@ public abstract class TeamOpMode extends LinearOpMode {
         intakeMotor = InitMotors.intakeMotor;
         dashboardTelemetry = InitMotors.dashboardTelemetry;
         odometry = InitMotors.odometry;
+        telemetry = new MultipleTelemetry(telemetry, dashboardTelemetry);
 
     }
     @Override
