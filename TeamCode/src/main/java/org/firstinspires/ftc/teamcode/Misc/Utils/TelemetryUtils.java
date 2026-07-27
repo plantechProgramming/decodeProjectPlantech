@@ -27,6 +27,13 @@ public class TelemetryUtils {
         poseFunctions.updateTelemetry(telemetry);
     }
 
+    public static void updateCertainTelemtries(Telemetry telemetry, DriveTrain drivetrain, Shooter shooter, PoseFunctions poseFunctions, Follower follower){
+        drivetrain.updateTelemetry(telemetry);
+        shooter.updateTelemetry(telemetry);
+        poseFunctions.updateTelemetry(telemetry);
+        updatePedroTelemetry(telemetry, follower);
+    }
+
     public static void updatePedroTelemetry(Telemetry telemetry, Follower follower){
         TelemetryUtils.addTitle(telemetry, "starting pedro telemetry");
         telemetry.addData("robot x", follower.getPose().getX()); // in inches

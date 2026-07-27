@@ -32,8 +32,6 @@ public class InitMotors {
     
     public void initIntake(){
         intakeMotor = hardwareMap.get(DcMotorEx.class,"Intake");
-        intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     
@@ -45,32 +43,20 @@ public class InitMotors {
 
         inBetweenMotor = hardwareMap.get(DcMotorEx.class, "inbetween");
         inBetweenMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        inBetweenMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        inBetweenMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        odometry = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
-        odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-        odometry.setOffsets(-155,-90, DistanceUnit.MM); //x = -155, y= -90
     }
     
     public void initShooter(){
         shootMotorOp = hardwareMap.get(DcMotorEx.class, "ShooterFar");
         shootMotorOp.setDirection(DcMotorSimple.Direction.FORWARD);
-//        shootMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shootMotorOp.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         shootMotor = hardwareMap.get(DcMotorEx.class, "ShooterClose");
         shootMotor.setDirection(DcMotorSimple.Direction.FORWARD);
-//        shootMotorOp.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         shootMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
     
-    public void initPinpiont(){
+    public void initPinpoint(){ // the initialisation of the pinpoint is in pedro
         odometry = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
-        odometry.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        odometry.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-        odometry.setOffsets(-155,-90, DistanceUnit.MM); //x = -155, y= -90
     }
     
     public void initDashboard(){
