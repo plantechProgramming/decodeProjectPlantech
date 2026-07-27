@@ -1,56 +1,33 @@
 package org.firstinspires.ftc.teamcode.auto.autos.redAutos;
 
+import static com.pedropathing.ivy.groups.Groups.sequential;
+import static com.pedropathing.ivy.pedro.PedroCommands.follow;
+
+import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name = "Leave Close PPG Red", group = "Red")
-public class LeaveClosePPGRed extends LinearOpMode {
-    @Override
-    public void runOpMode() throws InterruptedException {
+import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
+import org.firstinspires.ftc.teamcode.auto.TeamAuto;
 
+@Autonomous(name = "Leave Close PPG Red", group = "Red")
+public class LeaveClosePPGRed extends TeamAuto {
+    @Override
+    public void postInit() {
+        Alliance.set(Alliance.RED);
+        isFar = false;
     }
-//    private Follower follower;
-//
-//    public LeaveClosePPGRed() {
-//        addComponents(
-////                new SubsystemComponent(NextShooter.INSTANCE, NextInBetween.INSTANCE),
-//                new PedroComponent(Constants::createFollower),
-//                AutoCommands.INSTANCE_RED
-//        );
-//    }
-//
-//    AutoCommands command = AutoCommands.INSTANCE_RED;
-//    PathsRed path;
-//    ReadWrite readWrite = new ReadWrite();
-//
-//
-//    public Command autoRoutine(){
-//        return new SequentialGroup(
-//                command.startShooter(false),
-//                new Delay(1),
-//                command.score(path.scorePreload),
-//                command.intake(path.grabPPG),
-//                command.score(path.scorePPG),
-//                new FollowPath(path.scoreLeaveClose)
-//        );
-//    }
-//    @Override
-//    public void onUpdate(){
-//        telemetry.addData("x", follower().getPose().getX());
-//        telemetry.addData("y", follower().getPose().getY());
-//        telemetry.addData("heading", follower().getPose().getHeading());
-//        telemetry.update();
-//    }
-//    @Override
-//    public void onStartButtonPressed() {
-//        path = new PathsRed();
-//        follower().setStartingPose(path.getSPose());
-//        path.buildPaths(follower());
-//        autoRoutine().schedule();
-//    }
-//    @Override
-//    public void onStop(){
-//        ReadWrite readWrite = new ReadWrite();
-//        readWrite.writePose(follower().getPose());
-//    }
+
+    @Override
+    public Command autoRoutine() {
+        return sequential(
+                command.startShooter(false),
+                command.score(path.scorePreload),
+
+                command.intake(path.grabPPG),
+                command.score(path.scorePPG),
+
+                follow(follower, path.scoreLeaveClose)
+        );
+    }
 }

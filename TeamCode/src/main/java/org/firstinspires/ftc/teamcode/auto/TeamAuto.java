@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Misc.DataSaving;
+import org.firstinspires.ftc.teamcode.Misc.InitMotors;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Extras;
 import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
@@ -29,8 +30,6 @@ public abstract class TeamAuto extends TeamOpMode {
     ElapsedTime elapsedTime;
 
     @Override
-    public abstract void postInit();
-    @Override
     public void run(){
         extras.startHistogram(1000, 0.1);
         elapsedTime = new ElapsedTime();
@@ -49,10 +48,11 @@ public abstract class TeamAuto extends TeamOpMode {
         schedule(autoRoutine());
 
         while (opModeIsActive()) {
+//            telemetry.addData("mode", InitMotors.BL.getZeroPowerBehavior());
 //            elapsedTime.reset();
 
 //            TelemetryUtils.updateCertainTelemtries(telemetry, follower, command.shooter);
-//            telemetry.update();
+            telemetry.update();
 
             DataSaving.setEndPos(follower.getPose());
             schedule(command.periodic());

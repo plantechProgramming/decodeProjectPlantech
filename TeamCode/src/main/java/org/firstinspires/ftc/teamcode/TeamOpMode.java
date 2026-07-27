@@ -14,7 +14,7 @@ public abstract class TeamOpMode extends LinearOpMode {
     InitMotors initMotors;
 
     protected CRServo SL,SR;
-    protected DcMotorEx FL, FR, BL, BR,inBetweenMotor, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
+    protected DcMotorEx FL, FR, BL, BR,inBetweenMotor, shootMotor, shootMotorOp,intakeMotor;
     protected Telemetry dashboardTelemetry;
     protected GoBildaPinpointDriver odometry;
 
@@ -42,9 +42,9 @@ public abstract class TeamOpMode extends LinearOpMode {
     public void runOpMode() throws InterruptedException  {
         initMotors = new InitMotors(hardwareMap);
         initAll();
-        this.initMotors();
-        waitForStart();
+        initMotors();
         postInit();
+        waitForStart();
 
         if (opModeIsActive()) {
             run();

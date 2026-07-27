@@ -16,36 +16,18 @@ public class InitMotors {
     HardwareMap hardwareMap;
 
     public static CRServo SL,SR;
-    public static DcMotorEx FL, FR, BL, BR,inBetweenMotor, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
+    public static DcMotorEx FL, FR, BL, BR; //odometry is for testing purposes
+    public static DcMotorEx inBetweenMotor, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
     public static Telemetry dashboardTelemetry;
     public static GoBildaPinpointDriver odometry;
     public InitMotors(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
     }
-    public void initDriveTrain(){
+    public void initDriveTrain(){ // the initialisation of the drivetrain motor is in pedro
         FL = hardwareMap.get(DcMotorEx.class, "FL");
-        FL.setDirection(DcMotorEx.Direction.REVERSE);
-        FL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        FL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        FL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-
         FR = hardwareMap.get(DcMotorEx.class, "FR");
-        FR.setDirection(DcMotorEx.Direction.FORWARD);
-        FR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        FR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        FR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER );
-
         BL = hardwareMap.get(DcMotorEx.class, "BL");
-        BL.setDirection(DcMotorEx.Direction.REVERSE);
-        BL.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        BL.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        BL.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-
         BR = hardwareMap.get(DcMotorEx.class, "BR");
-        BR.setDirection(DcMotorEx.Direction.FORWARD);
-        BR.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        BR.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        BR.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
     
     public void initIntake(){
