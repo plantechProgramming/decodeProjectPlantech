@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @Configurable
 @Config
-@TeleOp(group = "teleOp tests")
+@TeleOp(group = "teleop tests")
 public class shooterTest extends TeamOpMode {
 
     @Override

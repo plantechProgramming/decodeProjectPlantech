@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.subsystems.Camera.AprilTagLocalization;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 /**
@@ -20,8 +19,8 @@ import org.firstinspires.ftc.vision.VisionPortal;
  */
 @Config
 @Disabled
-@TeleOp(group = "teleOp tests")
-public class aprilTagsTest  extends TeamOpMode {
+@TeleOp(group = "teleop tests")
+public class aprilTagLogiCamTest extends TeamOpMode {
     AprilTagLocalization tagLocalization = new AprilTagLocalization(telemetry);
 
     public static int loopsPerUpdate = 150;

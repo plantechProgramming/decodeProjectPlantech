@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Misc;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -19,6 +20,9 @@ public class InitMotors {
     public static DcMotorEx FL, FR, BL, BR; //odometry is for testing purposes
     public static DcMotorEx inBetweenMotor, shootMotor, shootMotorOp,intakeMotor; //odometry is for testing purposes
     public static Telemetry dashboardTelemetry;
+    public static Limelight3A ll;
+    public static FtcDashboard dashboard;
+
     public static GoBildaPinpointDriver odometry;
     public InitMotors(HardwareMap hardwareMap){
         this.hardwareMap = hardwareMap;
@@ -60,7 +64,13 @@ public class InitMotors {
     }
     
     public void initDashboard(){
-        FtcDashboard dashboard = FtcDashboard.getInstance();
+        dashboard = FtcDashboard.getInstance();
         dashboardTelemetry = dashboard.getTelemetry();
+    }
+
+    public void initLL() {
+        ll = hardwareMap.get(Limelight3A.class, "limelight");
+        ll.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
+        ll.pipelineSwitch(0);
     }
 }

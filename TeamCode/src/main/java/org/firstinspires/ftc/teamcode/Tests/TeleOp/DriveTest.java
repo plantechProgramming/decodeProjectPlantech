@@ -2,19 +2,28 @@ package org.firstinspires.ftc.teamcode.Tests.TeleOp;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
 
+import com.pedropathing.follower.Follower;
+import com.pedropathing.ftc.InvertedFTCCoordinates;
+import com.pedropathing.ftc.PoseConverter;
 import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.Misc.DataSaving;
+import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
+import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 
-@TeleOp(group = "teleOp tests")
+@TeleOp(group = "teleop tests")
 public class DriveTest extends TeamOpMode {
 
     @Override
     protected void postInit(){
+        Follower follower = Constants.createFollower(hardwareMap); // this line and the next line initialises the drivetrain motors
+        follower.update();
         odometry.resetPosAndIMU();
         sleep(250);
     }
@@ -22,6 +31,7 @@ public class DriveTest extends TeamOpMode {
     protected void run() {
 
         DriveTrain driveTrain = new DriveTrain();
+        DriveTrain.setDriveToBrakeMode();
 
         double gamepadForward; //-1 to 1
         double gamepadTurn;
@@ -34,15 +44,14 @@ public class DriveTest extends TeamOpMode {
             gamepadDrift = gamepad1.left_stick_x;
 
             botHeading = odometry.getHeading(AngleUnit.DEGREES);
-            schedule(driveTrain.drive(-gamepadForward, -gamepadDrift, gamepadTurn, botHeading, 1));//TODO: change for RED -forward, -drift
+            schedule(driveTrain.drive(gamepadForward, gamepadDrift, gamepadTurn, botHeading+90, 1));//TODO: change for RED  -90
 
             driveTrain.updateTelemetry(telemetry);
-            driveTrain.updateTelemetry(dashboardTelemetry);
-
+            TelemetryUtils.setRobotPosToDraw(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM),
+                    AngleUnit.DEGREES, odometry.getHeading(AngleUnit.DEGREES));
             telemetry.update();
-            odometry.update();
-            dashboardTelemetry.update();
             Scheduler.execute();
+            odometry.update();
         }
     }
 

@@ -108,11 +108,15 @@ public class DriveTrain {
     }
 
     public void updateTelemetry(Telemetry telemetry){
+        TelemetryUtils.addTitle(telemetry, "starting drive telemetry");
         telemetry.addData("odo x", InitMotors.odometry.getPosX(DistanceUnit.CM));
         telemetry.addData("odo y", InitMotors.odometry.getPosY(DistanceUnit.CM));
         telemetry.addData("heading", InitMotors.odometry.getHeading(AngleUnit.DEGREES));
-        TelemetryUtils.addTitle(telemetry, "starting drive telemetry");
         telemetry.addData("turnPow", turnPow);
+        telemetry.addData("FL pow", InitMotors.FL.getPower());
+        telemetry.addData("FR pow", InitMotors.FR.getPower());
+        telemetry.addData("BL pow", InitMotors.BL.getPower());
+        telemetry.addData("BR pow", InitMotors.BR.getPower());
         TelemetryUtils.addTitle(telemetry, "ending drive telemetry");
     }
 }

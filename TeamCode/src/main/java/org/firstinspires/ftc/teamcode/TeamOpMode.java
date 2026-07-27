@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -17,6 +18,7 @@ public abstract class TeamOpMode extends LinearOpMode {
     protected DcMotorEx FL, FR, BL, BR,inBetweenMotor, shootMotor, shootMotorOp,intakeMotor;
     protected Telemetry dashboardTelemetry;
     protected GoBildaPinpointDriver odometry;
+    protected Limelight3A ll;
 
     private void initAll(){
         initMotors.initDriveTrain();
@@ -25,6 +27,7 @@ public abstract class TeamOpMode extends LinearOpMode {
         initMotors.initShooter();
         initMotors.initPinpoint();
         initMotors.initDashboard();
+        initMotors.initLL();
     }
 
     private void initMotors(){
@@ -35,8 +38,9 @@ public abstract class TeamOpMode extends LinearOpMode {
         intakeMotor = InitMotors.intakeMotor;
         dashboardTelemetry = InitMotors.dashboardTelemetry;
         odometry = InitMotors.odometry;
+        ll = InitMotors.ll;
         telemetry = new MultipleTelemetry(telemetry, dashboardTelemetry);
-
+        InitMotors.dashboard.startCameraStream(ll, 60);
     }
     @Override
     public void runOpMode() throws InterruptedException  {
