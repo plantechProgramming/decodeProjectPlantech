@@ -48,12 +48,11 @@ public class AprilTagLocalization {
     public AprilTagDetection goalTag = null;
     Telemetry telemetry;
     PoseFunctions poseFuncs;
-    LowPass lowPass = new LowPass();
+    LowPass lowPass = new LowPass(0.03);
 
     public AprilTagLocalization(Telemetry telemetry) {
         this.telemetry = telemetry;
         this.poseFuncs = new PoseFunctions(new RobotPose(InitMotors.odometry));
-        lowPass.start(0.03);
     }
 
     public void initProcessor(HardwareMap hardwareMap) {

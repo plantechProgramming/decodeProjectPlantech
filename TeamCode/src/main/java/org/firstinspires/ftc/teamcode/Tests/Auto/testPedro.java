@@ -36,7 +36,7 @@ public class testPedro extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         extras = new Extras();
         elapsedTime = new ElapsedTime();
-        extras.startHistogram(1000, 0.1);
+        extras.startHistogram(0.1);
         Alliance.set(Alliance.BLUE);
         path = new Paths();
         follower = Constants.createFollower(hardwareMap);
@@ -58,7 +58,7 @@ public class testPedro extends LinearOpMode {
             telemetry.update();
             extras.updateHistogram(elapsedTime.milliseconds());
         }
-        System.out.println("auto loop time: " + Arrays.toString(extras.getHistogram()));
+        System.out.println("auto loop time: " + extras.getHistogram());
     }
 
 }

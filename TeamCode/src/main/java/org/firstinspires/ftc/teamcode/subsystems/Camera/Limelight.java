@@ -3,40 +3,33 @@ package org.firstinspires.ftc.teamcode.subsystems.Camera;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Misc.InitMotors;
-import org.firstinspires.ftc.teamcode.Misc.Utils.filters.AngleLowPass;
+import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
+import org.firstinspires.ftc.teamcode.Misc.Utils.filters.PoseLowPass;
 
 public class Limelight {
     Limelight3A ll;
-
-    AngleLowPass angleLowPass = new AngleLowPass();
+    PoseLowPass poseLowPass = new PoseLowPass(0.05, 0.03);
     public Limelight() {
         ll = InitMotors.ll;
-        angleLowPass.start(0.03);
     }
 
     public Pose3D getLatestBotpose() throws NullPointerException{ // LLCords
         LLResult result = ll.getLatestResult();
         if (result != null) {
             if (result.isValid()) {
+                poseLowPass.update(PoseFunctions.pose3DToPose2D(result.getBotpose(), AngleUnit.DEGREES));
                 return result.getBotpose();
             }
         }
         throw new NullPointerException("No valid apriltag found");
     }
 
-    public double getRawHeading() throws NullPointerException{ // LLCords
-        Pose3D botPose = getLatestBotpose();
-        return botPose.getOrientation().getYaw();
-    }
-
-    public double getFilteredHeading() throws NullPointerException{ // LLCords
-        return angleLowPass.get();
-    }
-
-    public void updateHeadingFilter() throws NullPointerException{ // LLCords
-        double heading = getRawHeading();
-        angleLowPass.update(heading);
+    public Pose2D getFilteredBotPose() throws NullPointerException{
+        getLatestBotpose();
+        return poseLowPass.get();
     }
 }

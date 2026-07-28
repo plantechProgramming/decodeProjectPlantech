@@ -47,8 +47,7 @@ public class DriveTest extends TeamOpMode {
             schedule(driveTrain.drive(gamepadForward, gamepadDrift, gamepadTurn, botHeading+90, 1));//TODO: change for RED  -90
 
             driveTrain.updateTelemetry(telemetry);
-            TelemetryUtils.setRobotPosToDraw(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM),
-                    AngleUnit.DEGREES, odometry.getHeading(AngleUnit.DEGREES));
+            TelemetryUtils.drawRobotAsCircle(odometry.getPosition());
             telemetry.update();
             Scheduler.execute();
             odometry.update();

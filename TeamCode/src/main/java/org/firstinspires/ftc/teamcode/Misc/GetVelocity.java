@@ -7,17 +7,16 @@ import org.firstinspires.ftc.teamcode.Misc.Utils.filters.LowPass;
 
 public class GetVelocity {
     DcMotorEx motor;
-    double alpha;
     int ticksPerRevolution = 8192;
 
-    LowPass lowPass = new LowPass();
+    LowPass lowPass;
     public GetVelocity(DcMotorEx motor, double alpha) {
         this.motor = motor;
-        this.alpha = alpha;
+        lowPass = new LowPass(alpha);
     }
     public GetVelocity(DcMotorEx motor, double alpha, int ticksPerRevolution) {
         this.motor = motor;
-        this.alpha = alpha;
+        lowPass = new LowPass(alpha);
         this.ticksPerRevolution = ticksPerRevolution;
     }
 
@@ -28,7 +27,6 @@ public class GetVelocity {
     private final int MILLISECONDS_TO_MINUTE = 60000;
 
     public double getRawVelocity() {
-        lowPass.start(alpha);
         long curEncoder = motor.getCurrentPosition();
         double curTime = timer.milliseconds();
 

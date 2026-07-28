@@ -31,7 +31,7 @@ public abstract class TeamAuto extends TeamOpMode {
 
     @Override
     public void run(){
-        extras.startHistogram(1000, 0.1);
+        extras.startHistogram(0.1);
         elapsedTime = new ElapsedTime();
         path = new Paths();
         follower = Constants.createFollower(hardwareMap);

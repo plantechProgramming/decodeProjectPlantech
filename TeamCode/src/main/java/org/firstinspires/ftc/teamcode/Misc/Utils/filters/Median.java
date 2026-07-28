@@ -3,30 +3,18 @@ package org.firstinspires.ftc.teamcode.Misc.Utils.filters;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Median extends Filter {
+public class Median extends Filter<Double> {
     private ArrayList<Double> medianNumbers = new ArrayList<>();
-    private void filter(ArrayList<Double> numbers){
-        Collections.sort(numbers);
-        int size = numbers.size();
-        if(size % 2 == 0){
-            filtered = (numbers.get(size/2) + numbers.get(size/2 - 1) / 2);
-        }
-        filtered = numbers.get(size/2);
-    }
-
 
     @Override
-    @Deprecated
-    public void filter(double curr) {}
-
-    @Override
-    @Deprecated
-    public void start() {}
-
-    @Override
-    public void update(double curr) {
+    public void update(Double curr) {
         medianNumbers.add(curr);
-        filter(medianNumbers);
+        Collections.sort(medianNumbers);
+        int size = medianNumbers.size();
+        if(size % 2 == 0){
+            filtered = (medianNumbers.get(size/2) + medianNumbers.get(size/2 - 1) / 2);
+        }
+        filtered = medianNumbers.get(size/2);
     }
 
     @Override

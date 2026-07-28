@@ -6,7 +6,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.teamcode.Misc.RobotPose;
+import org.firstinspires.ftc.teamcode.Misc.Utils.filters.PoseLowPass;
 
 public class PoseFunctions {
 
@@ -91,6 +93,12 @@ public class PoseFunctions {
     public static Pair<Double, Double> rotation2D(double x, double y, double deg){
         double rad = Math.toRadians(deg);
         return new Pair<>(x*Math.cos(rad)-y*Math.sin(rad), x*Math.sin(rad)+y*Math.cos(rad));
+    }
+
+    public static Pose2D pose3DToPose2D(Pose3D pose3D, AngleUnit angleUnit){
+        DistanceUnit disUnit = pose3D.getPosition().unit;
+        return new Pose2D(disUnit, pose3D.getPosition().x, pose3D.getPosition().y,
+                angleUnit, pose3D.getOrientation().getYaw());
     }
 
     public void updateTelemetry(Telemetry telemetry){

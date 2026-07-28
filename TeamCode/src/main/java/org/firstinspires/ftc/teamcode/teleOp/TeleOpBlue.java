@@ -121,16 +121,15 @@ public class TeleOpBlue extends TeamOpMode {
             }
 
             TelemetryUtils.updateCertainTelemtries(telemetry, driveTrain, commands.shooter, poseFunctions);
-            TelemetryUtils.setRobotPosToDraw(DistanceUnit.CM, odometry.getPosX(DistanceUnit.CM), odometry.getPosY(DistanceUnit.CM),
-                    AngleUnit.DEGREES, odometry.getHeading(AngleUnit.DEGREES));
+            TelemetryUtils.drawRobotPrecisly(odometry.getPosition());
             telemetry.update();
+
             schedule(commands.periodic());
             Scheduler.execute();
             follower.update();
         }
 
     }
-
 
     @Override
     protected void end() {

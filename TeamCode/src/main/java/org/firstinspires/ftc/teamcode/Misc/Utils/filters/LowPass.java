@@ -1,29 +1,20 @@
 package org.firstinspires.ftc.teamcode.Misc.Utils.filters;
 
-public class LowPass extends Filter {
-    double alpha = 0.1;
+public class LowPass extends Filter<Double> {
+    double alpha;
+    public LowPass(double alpha) {
+        this.alpha = alpha;
+    }
+
+
     @Override
-    public void filter(double curr){
+    public void update(Double curr) {
         filtered = alpha * curr + (1 - alpha) * filtered;
     }
 
     @Override
-    @Deprecated
-    public void start() {
-
-    }
-    public void start(double alpha){
-        this.alpha = alpha;
-    }
-
-    @Override
-    public void update(double val){
-        filter(val);
-    }
-
-    @Override
     public void reset(){
-        filtered = 0;
+        filtered = 0.0;
     }
 
 }

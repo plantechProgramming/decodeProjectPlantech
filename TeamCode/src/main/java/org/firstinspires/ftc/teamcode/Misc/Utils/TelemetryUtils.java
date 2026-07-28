@@ -1,21 +1,20 @@
 package org.firstinspires.ftc.teamcode.Misc.Utils;
 
+import static org.firstinspires.ftc.teamcode.Misc.Utils.Extras.ROBOT_SIZE;
+
 import android.util.Pair;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.RobotStatus;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.pedropathing.Drivetrain;
 import com.pedropathing.follower.Follower;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.Misc.RobotPose;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TelemetryUtils {
 
@@ -23,16 +22,33 @@ public class TelemetryUtils {
         String dashes = "------------";
         telemetry.addLine(dashes + title + dashes);
     }
-    private static final Pair<Double, Double> ROBOT_SIZE = new Pair<>(15.43, 17.32); // width, height in that order, in inches
-    public static void setRobotPosToDraw(DistanceUnit distanceUnit, double x, double y, AngleUnit angleUnit, double heading){
-        double xInInches = distanceUnit.toInches(x);
-        double yInInches = distanceUnit.toInches(y);
-        double headingInRedians = angleUnit.toRadians(heading);
+    public static void drawRobotPrecisly(Pose2D pose){ // the robot is a represented by a square
+        double x = pose.getX(DistanceUnit.INCH);
+        double y = pose.getY(DistanceUnit.INCH);
+        double heading = pose.getHeading(AngleUnit.RADIANS);
+        // TODO: make it so that the square that represents the robot rotates depending on the heading of the robot
         TelemetryPacket telemetryPacket = new TelemetryPacket();
         telemetryPacket.fieldOverlay()
                 .setStroke("#FF0000")
                 .setStrokeWidth(1)
-                .strokeRect(xInInches-ROBOT_SIZE.first/2, yInInches-ROBOT_SIZE.second/2, ROBOT_SIZE.first, ROBOT_SIZE.second);
+                .strokeRect(x -ROBOT_SIZE.first/2, y -ROBOT_SIZE.second/2,
+                        ROBOT_SIZE.first, ROBOT_SIZE.second);
+        FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
+    }
+    private static final double ROBOT_RADIUS = Math.min(ROBOT_SIZE.first, ROBOT_SIZE.second)/2; // in inches
+    // the robot is represented as a circle and the angle is shown by a line from the center of the robot
+    public static void drawRobotAsCircle(Pose2D pose){
+        double x = pose.getX(DistanceUnit.INCH);
+        double y = pose.getY(DistanceUnit.INCH);
+        double heading = pose.getHeading(AngleUnit.RADIANS);
+
+        double endX = ROBOT_RADIUS/1.5*Math.cos(heading); // the 1.5 is to make the line not go all the way
+        double endY = ROBOT_RADIUS/1.5*Math.sin(heading); // the 1.5 is to make the line not go all the way
+        TelemetryPacket telemetryPacket = new TelemetryPacket();
+        telemetryPacket.fieldOverlay()
+                .setStroke("#FF0000")
+                .strokeCircle(x, y, ROBOT_RADIUS)
+                .strokeLine(x, y, endX, endY);
         FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
     }
 

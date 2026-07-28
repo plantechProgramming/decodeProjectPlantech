@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
+import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
 import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
@@ -41,7 +42,7 @@ public class aprilTagLLTest extends TeamOpMode {
             catch (NullPointerException e){
                 telemetry.addLine("No apriltag found");
             }
-            TelemetryUtils.setRobotPosToDraw(DistanceUnit.METER, latestLLPos.getPosition().x, latestLLPos.getPosition().y, AngleUnit.DEGREES, latestLLPos.getOrientation().getYaw());
+            TelemetryUtils.drawRobotAsCircle(PoseFunctions.pose3DToPose2D(latestLLPos, AngleUnit.DEGREES));
             telemetry.addData("robotPose", latestLLPos);
             telemetry.update();
             schedule(commands.periodic());
