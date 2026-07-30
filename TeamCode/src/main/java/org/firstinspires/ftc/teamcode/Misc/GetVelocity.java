@@ -44,6 +44,7 @@ public class GetVelocity {
 
         prevEncoder = curEncoder;
         prevVelocity = velocity;
+        System.out.println(velocity);
         lowPass.update(velocity);
         return velocity;
     }

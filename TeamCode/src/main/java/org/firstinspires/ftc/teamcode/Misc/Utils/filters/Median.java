@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Median extends Filter<Double> {
+    public Median(){
+        filtered = 0.0;
+    }
     private ArrayList<Double> medianNumbers = new ArrayList<>();
 
     @Override

@@ -4,6 +4,7 @@ public class LowPass extends Filter<Double> {
     double alpha;
     public LowPass(double alpha) {
         this.alpha = alpha;
+        filtered = 0.0;
     }
 
 

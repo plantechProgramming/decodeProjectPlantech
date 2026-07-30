@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.Misc.DataSaving;
 import org.firstinspires.ftc.teamcode.Misc.RobotPose;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Converters;
+import org.firstinspires.ftc.teamcode.Misc.Utils.DashboardCanvas;
 import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
 import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
@@ -121,7 +122,9 @@ public class TeleOpBlue extends TeamOpMode {
             }
 
             TelemetryUtils.updateCertainTelemtries(telemetry, driveTrain, commands.shooter, poseFunctions);
-            TelemetryUtils.drawRobotPrecisly(odometry.getPosition());
+            new DashboardCanvas()
+                    .addPreciseRobot(odometry.getPosition())
+                    .draw();
             telemetry.update();
 
             schedule(commands.periodic());

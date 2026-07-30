@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Misc.DataSaving;
+import org.firstinspires.ftc.teamcode.Misc.Utils.DashboardCanvas;
+import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
 import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
@@ -47,7 +49,9 @@ public class DriveTest extends TeamOpMode {
             schedule(driveTrain.drive(gamepadForward, gamepadDrift, gamepadTurn, botHeading+90, 1));//TODO: change for RED  -90
 
             driveTrain.updateTelemetry(telemetry);
-            TelemetryUtils.drawRobotAsCircle(odometry.getPosition());
+            new DashboardCanvas()
+                    .addRobotAsCircle(odometry.getPosition())
+                    .draw();
             telemetry.update();
             Scheduler.execute();
             odometry.update();

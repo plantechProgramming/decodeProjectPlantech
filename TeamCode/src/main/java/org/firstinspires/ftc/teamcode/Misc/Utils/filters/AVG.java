@@ -4,6 +4,9 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 
 public class AVG extends Filter<Double> {
+    public AVG(){
+        filtered = 0.0;
+    }
 
     public double getAVGForList(ArrayList<Double> numbers) {
         double sum = 0;

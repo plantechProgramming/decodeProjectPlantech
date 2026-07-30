@@ -14,6 +14,7 @@ public class PoseLowPass extends Filter<Pose2D> {
         xlowPass = new LowPass(XYAlpha);
         ylowPass = new LowPass(XYAlpha);
         angleLowPass = new AngleLowPass(headingAlpha);
+        filtered = new Pose2D(DistanceUnit.CM, 0, 0, AngleUnit.DEGREES, 0);
     }
 
     @Override
