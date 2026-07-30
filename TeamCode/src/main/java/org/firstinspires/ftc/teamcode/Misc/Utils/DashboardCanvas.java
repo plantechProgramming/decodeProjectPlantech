@@ -34,23 +34,6 @@ public class DashboardCanvas {
                         ROBOT_SIZE.second, ROBOT_SIZE.first);
         return this;
     }
-
-//    public static void drawRobotPrecisly(Pose2D pose){ // the robot is a represented by a square
-//        double x = pose.getX(DistanceUnit.INCH);
-//        double y = pose.getY(DistanceUnit.INCH);
-//        double heading = pose.getHeading(AngleUnit.RADIANS);
-//
-//        // TODO: make it so that the square that represents the robot rotates depending on the heading of the robot
-//        TelemetryPacket telemetryPacket = new TelemetryPacket();
-//        telemetryPacket.fieldOverlay()
-//                .setStroke("#FF0000")
-//                .setStrokeWidth(1)
-//                .setTranslation(x, y)
-//                .setRotation(heading)
-//                .strokeRect(-ROBOT_SIZE.second/2, -ROBOT_SIZE.first/2,
-//                        ROBOT_SIZE.second, ROBOT_SIZE.first);
-//        FtcDashboard.getInstance().sendTelemetryPacket(telemetryPacket);
-//    }
     private static final double ROBOT_RADIUS = Math.min(ROBOT_SIZE.first, ROBOT_SIZE.second)/2; // in inches
     // the robot is represented as a circle and the angle is shown by a line from the center of the robot
     public DashboardCanvas addRobotAsCircle(Pose2D pose){

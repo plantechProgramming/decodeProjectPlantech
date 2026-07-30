@@ -3,20 +3,13 @@ package org.firstinspires.ftc.teamcode.Tests.TeleOp;
 import static com.pedropathing.ivy.Scheduler.schedule;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.ftc.InvertedFTCCoordinates;
-import com.pedropathing.ftc.PoseConverter;
 import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Misc.DataSaving;
 import org.firstinspires.ftc.teamcode.Misc.Utils.DashboardCanvas;
-import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
-import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
-import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
+import org.firstinspires.ftc.teamcode.Misc.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 
 @TeleOp(group = "teleop tests")

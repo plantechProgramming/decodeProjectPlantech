@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto.pedro;
+package org.firstinspires.ftc.teamcode.Misc.pedro;
 
 import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.follower.Follower;

@@ -1,19 +1,13 @@
 package org.firstinspires.ftc.teamcode.Tests.Auto; // make sure this aligns with class location
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Misc.InitMotors;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Extras;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Paths;
-import org.firstinspires.ftc.teamcode.auto.autos.paths.Points;
-import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
-
-import java.util.Arrays;
+import org.firstinspires.ftc.teamcode.Misc.pedro.Constants;
 
 @Autonomous(group = "autonomous tests")
 public class testPedro extends LinearOpMode {

@@ -19,19 +19,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Misc.DataSaving;
 import org.firstinspires.ftc.teamcode.Misc.RobotPose;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
-import org.firstinspires.ftc.teamcode.Misc.Utils.Converters;
 import org.firstinspires.ftc.teamcode.Misc.Utils.DashboardCanvas;
-import org.firstinspires.ftc.teamcode.Misc.Utils.Extras;
 import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
 import org.firstinspires.ftc.teamcode.Misc.Utils.TelemetryUtils;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
-import org.firstinspires.ftc.teamcode.auto.pedro.Constants;
+import org.firstinspires.ftc.teamcode.Misc.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveTrain;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
-
-import org.firstinspires.ftc.teamcode.subsystems.InBetween;
-import org.firstinspires.ftc.teamcode.subsystems.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 
 @Config
 @TeleOp(group = "teleOp")

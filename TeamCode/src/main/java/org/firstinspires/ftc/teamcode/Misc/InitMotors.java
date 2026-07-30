@@ -71,6 +71,6 @@ public class InitMotors {
     public void initLL() {
         ll = hardwareMap.get(Limelight3A.class, "limelight");
         ll.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
-        ll.pipelineSwitch(0);
+        ll.pipelineSwitch(1);
     }
 }
