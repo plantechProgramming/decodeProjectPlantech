@@ -39,24 +39,24 @@ public abstract class TeamAuto extends TeamOpMode {
         path.buildPaths(follower);
 
         schedule(autoRoutine());
-
         while (opModeIsActive()) {
+
 //            telemetry.addData("mode", InitMotors.BL.getZeroPowerBehavior());
 //            elapsedTime.reset();
 
 //            TelemetryUtils.updateCertainTelemtries(telemetry, follower, command.shooter);
-            telemetry.update();
+
 
             DataSaving.setEndPos(follower.getPose());
             schedule(command.periodic());
             Scheduler.execute();
             follower.update();
+            telemetry.update();
 //            extras.updateHistogram(elapsedTime.milliseconds());
         }
     }
 
     public abstract Command autoRoutine();
-
     @Override
     protected void end() {
 //        System.out.println("auto loop time: " + Arrays.toString(extras.getHistogram()));

@@ -18,16 +18,14 @@ public class test extends TeamAuto {
     public void postInit(){
         isFar = true;
         Alliance.set(Alliance.BLUE);
+        ll.start();
     }
 
     @Override
     public Command autoRoutine() {
         return sequential(
                 follow(follower, path.scorePreloadFar),
-                waitMs(1000),
-                follow(follower, path.grabGPPFar),
-                follow(follower, path.scoreGPPFar)
+                waitMs(2000)
         );
     }
-
 }

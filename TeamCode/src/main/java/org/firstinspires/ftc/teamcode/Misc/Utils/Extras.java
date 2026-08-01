@@ -18,13 +18,13 @@ public class Extras {
         return pow * (14/voltageLowPass.get());
     }
     double jumps;
-    ArrayList<Integer> histoList= new ArrayList<>();
+    ArrayList<Integer> histoList = new ArrayList<>();
     public void startHistogram(double jumps){
         this.jumps = jumps;
     }
     public void updateHistogram(double num){
         int currIndex = (int)(num/jumps)-1;
-        for(int i=histoList.size(); i<=currIndex; i++) {
+        for(int i = histoList.size(); i <= currIndex; i++) {
             histoList.add(0);
         }
         histoList.add(currIndex, histoList.get(currIndex)+1);

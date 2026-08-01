@@ -2,11 +2,18 @@ package org.firstinspires.ftc.teamcode.Misc.Utils;
 
 import android.util.Pair;
 
+import com.pedropathing.ftc.FTCCoordinates;
+import com.pedropathing.ftc.InvertedFTCCoordinates;
+import com.pedropathing.ftc.PoseConverter;
+import com.pedropathing.geometry.PedroCoordinates;
+import com.pedropathing.geometry.Pose;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.Misc.DataSaving;
 import org.firstinspires.ftc.teamcode.Misc.RobotPose;
 import org.firstinspires.ftc.teamcode.Misc.Utils.filters.PoseLowPass;
 
@@ -99,6 +106,15 @@ public class PoseFunctions {
         DistanceUnit disUnit = pose3D.getPosition().unit;
         return new Pose2D(disUnit, pose3D.getPosition().x, pose3D.getPosition().y,
                 angleUnit, pose3D.getOrientation().getYaw());
+    }
+
+    public static Pose2D poseToPose2D(Pose pose){
+        Pose2D pose2D = PoseConverter.poseToPose2D(pose, InvertedFTCCoordinates.INSTANCE);
+        return new Pose2D(DistanceUnit.CM, pose2D.getX(DistanceUnit.CM), pose2D.getY(DistanceUnit.CM),
+                AngleUnit.DEGREES, pose2D.getHeading(AngleUnit.DEGREES));
+    }
+    public static Pose pose2DToPose(Pose2D pose2D){
+        return PoseConverter.pose2DToPose(pose2D, InvertedFTCCoordinates.INSTANCE).getAsCoordinateSystem(PedroCoordinates.INSTANCE);
     }
 
     public void updateTelemetry(Telemetry telemetry){

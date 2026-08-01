@@ -6,30 +6,61 @@ import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
 import com.pedropathing.ivy.Command;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
+
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
+import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
+import org.firstinspires.ftc.teamcode.subsystems.Camera.Limelight;
 
 public class AutoCommands{
     public Shooter shooter;
     public Intake intake;
     public InBetween inBetween;
     Follower follower;
+    Limelight limelight;
 
     public AutoCommands(Follower follower) {
         shooter = new Shooter();
         intake = new Intake();
         inBetween = new InBetween();
         this.follower = follower;
+        limelight = new Limelight();
     }
 
     public AutoCommands(){
         shooter = new Shooter();
         intake = new Intake();
         inBetween = new InBetween();
+        limelight = new Limelight();
     }
 
     public Command periodic(){
-        return shooter.periodic();
+        return parallel(shooter.periodic(), take());
+    }
+
+    public Command getPathToBlob(){
+        Pose target;
+        try{
+            target =PoseFunctions.pose2DToPose(
+                    limelight.getBestBlob(PoseFunctions.poseToPose2D(follower.getPose())));
+            System.out.println(target);
+        }
+        catch (Exception e){
+            return null;
+        }
+        PathChain path = follower.pathBuilder()
+                .addPath(new BezierLine(follower.getPose(), target))
+                .setTangentHeadingInterpolation()
+                .build();
+        return sequential(
+                follow(follower, path)
+        );
+
     }
 
     public Command shoot(){

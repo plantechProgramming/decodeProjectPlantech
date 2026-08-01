@@ -15,7 +15,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 /**
  * FILE IS NOT USED. here for "what if we need it for some reason in comp"
- * reasons.
+ * reasons. old logitech cam.
  */
 @Config
 @Disabled
