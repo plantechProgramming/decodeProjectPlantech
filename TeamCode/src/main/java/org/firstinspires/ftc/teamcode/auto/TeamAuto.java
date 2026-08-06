@@ -23,7 +23,7 @@ public abstract class TeamAuto extends TeamOpMode {
     protected Paths path;
     protected Follower follower;
     protected Boolean isFar;
-    Pose targetArtifact = null;
+    protected Pose targetArtifact = null;
     protected Boolean checkForArtifacts = false;
     Limelight limelight;
     Extras extras = new Extras();
@@ -52,9 +52,10 @@ public abstract class TeamAuto extends TeamOpMode {
                 try{
                     targetArtifact = PoseFunctions.pose2DToPose(
                             limelight.getBestBlob(PoseFunctions.poseToPose2D(follower.getPose())));
-                    if (targetArtifact != null ){
+                    if (targetArtifact != null){
                         schedule(command.getPathToTarget(targetArtifact));
                         checkForArtifacts = false;
+                        targetArtifact = null;
                     }
                 }
                 catch (NullPointerException e){
