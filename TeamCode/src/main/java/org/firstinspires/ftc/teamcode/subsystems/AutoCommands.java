@@ -43,16 +43,7 @@ public class AutoCommands{
         return parallel(shooter.periodic(), take());
     }
 
-    public Command getPathToBlob(){
-        Pose target;
-        try{
-            target =PoseFunctions.pose2DToPose(
-                    limelight.getBestBlob(PoseFunctions.poseToPose2D(follower.getPose())));
-            System.out.println(target);
-        }
-        catch (Exception e){
-            return null;
-        }
+    public Command getPathToTarget(Pose target){
         PathChain path = follower.pathBuilder()
                 .addPath(new BezierLine(follower.getPose(), target))
                 .setTangentHeadingInterpolation()

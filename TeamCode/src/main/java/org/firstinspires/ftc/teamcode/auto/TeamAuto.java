@@ -1,29 +1,37 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
+import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Misc.DataSaving;
 import org.firstinspires.ftc.teamcode.Misc.Utils.Extras;
+import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
 import org.firstinspires.ftc.teamcode.TeamOpMode;
 import org.firstinspires.ftc.teamcode.auto.autos.paths.Paths;
 import org.firstinspires.ftc.teamcode.Misc.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.AutoCommands;
+import org.firstinspires.ftc.teamcode.subsystems.Camera.Limelight;
 
 public abstract class TeamAuto extends TeamOpMode {
     protected AutoCommands command;
     protected Paths path;
     protected Follower follower;
     protected Boolean isFar;
+    Pose targetArtifact = null;
+    protected Boolean checkForArtifacts = false;
+    Limelight limelight;
     Extras extras = new Extras();
     ElapsedTime elapsedTime;
 
     @Override
     public void run(){
+        limelight = new Limelight();
         extras.startHistogram(0.1);
         elapsedTime = new ElapsedTime();
         path = new Paths();
@@ -40,6 +48,19 @@ public abstract class TeamAuto extends TeamOpMode {
 
         schedule(autoRoutine());
         while (opModeIsActive()) {
+            if(checkForArtifacts){
+                try{
+                    targetArtifact = PoseFunctions.pose2DToPose(
+                            limelight.getBestBlob(PoseFunctions.poseToPose2D(follower.getPose())));
+                    if (targetArtifact != null ){
+                        schedule(command.getPathToTarget(targetArtifact));
+                        checkForArtifacts = false;
+                    }
+                }
+                catch (NullPointerException e){
+                }
+            }
+
 
 //            telemetry.addData("mode", InitMotors.BL.getZeroPowerBehavior());
 //            elapsedTime.reset();

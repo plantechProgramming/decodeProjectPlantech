@@ -4,11 +4,8 @@ import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import android.util.Pair;
 
-import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.Pose;
-import com.pedropathing.ivy.Command;
 import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.LLResultTypes;
+import com.qualcomm.hardware.limelightvision.LLResultTypes.*;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -41,7 +38,7 @@ public class Limelight {
         throw new NullPointerException("No valid apriltag found");
     }
 
-    public List<LLResultTypes.ColorResult>  getLatestColorDetection() throws NullPointerException{ // LLCords
+    public List<ColorResult>  getLatestColorDetection() throws NullPointerException{ // LLCords
         LLResult result = ll.getLatestResult();
         if (result != null && result.isValid()) {
             return result.getColorResults();
@@ -49,31 +46,53 @@ public class Limelight {
         throw new NullPointerException("No valid color detection found");
     }
 
+    public List<DetectorResult> getLatestDetectionResult() throws NullPointerException{ // LLCords
+        LLResult result = ll.getLatestResult();
+        if (result != null && result.isValid()) {
+            return result.getDetectorResults();
+        }
+        throw new NullPointerException("No valid detection result found");
+    }
+
     public Pose2D getFilteredBotPose() throws NullPointerException{
         getLatestBotpose();
         return poseLowPass.get();
     }
 
-    public List<Pose2D> getColorDetectionAsPose2D() throws NullPointerException{ // relative to robot
+
+    private Pose2D getPose2DFromXYAngle(double xDeg, double yDeg){ // the angle x and y to the target, x and y angle in deg
+        double llForwardOffset = -10;// cm from lens to middle of robot
         double llHeight = 39; // cm
         double artifactHeight = 8; // approximately in cm
-        List<Pose2D> XYlist = new ArrayList<>();
-        List<LLResultTypes.ColorResult> colorDetections = getLatestColorDetection();
-        for(LLResultTypes.ColorResult colorDetection : colorDetections){
-            double xRad = Math.toRadians(colorDetection.getTargetXDegrees());
-            double yRad = Math.toRadians(colorDetection.getTargetYDegrees());
-            double heightDiff = llHeight - artifactHeight;
+        double heightDiff = llHeight - artifactHeight;
 
-            double groundDis = heightDiff / Math.tan(yRad); // from cam to target
-            double actualY = Math.cos(xRad) * groundDis;
-            double actualX = Math.sin(xRad) * groundDis;
-            XYlist.add(new Pose2D(DistanceUnit.CM,actualX,actualY,AngleUnit.DEGREES, Math.toDegrees(xRad)));
+        double xRad = Math.toRadians(xDeg);
+        double yRad = Math.toRadians(yDeg);
+
+        double groundDis = heightDiff / Math.tan(yRad); // from cam to target
+        double actualY = Math.cos(xRad) * groundDis;
+        double actualX = Math.sin(xRad) * groundDis;
+        return new Pose2D(DistanceUnit.CM,actualX,actualY+llForwardOffset,AngleUnit.DEGREES, xDeg);
+    }
+
+    public List<Pose2D> getColorDetectionAsPose2D() throws NullPointerException{ // relative to robot
+        List<Pose2D> XYlist = new ArrayList<>();
+        List<ColorResult> colorDetections = getLatestColorDetection();
+        for(ColorResult colorDetection : colorDetections){
+            XYlist.add(getPose2DFromXYAngle(colorDetection.getTargetXDegrees(), colorDetection.getTargetYDegrees()));
         }
         return XYlist;
     }
 
-    public List<Pose2D> getRotatedColorDetection(double robotAngle){
-        List<Pose2D> detectionPoses = getColorDetectionAsPose2D();
+    public List<Pose2D> getDetectionResultAsPose2D() throws NullPointerException{ // relative to robot
+        List<Pose2D> XYlist = new ArrayList<>();
+        List<DetectorResult> detectionResults = getLatestDetectionResult();
+        for(DetectorResult detectionResult : detectionResults){
+            XYlist.add(getPose2DFromXYAngle(detectionResult.getTargetXDegrees(), detectionResult.getTargetYDegrees()));
+        }
+        return XYlist;
+    }
+    private List<Pose2D> getRotatedDetection(double robotAngle, List<Pose2D> detectionPoses){
         List<Pose2D> rotatedDetections = new ArrayList<>();
         for(Pose2D detectionPose : detectionPoses){
             double detectionAngle = detectionPose.getHeading(AngleUnit.DEGREES);
@@ -85,8 +104,15 @@ public class Limelight {
         return rotatedDetections;
     }
 
-    public List<Pose2D> getAbsoluteColorDetection(Pose2D robotPose){ // ftc coords
-        List<Pose2D> rotatedDetections = getRotatedColorDetection(robotPose.getHeading(AngleUnit.DEGREES));
+    public List<Pose2D> getRotatedColorDetection(double robotAngle){
+        return getRotatedDetection(robotAngle, getColorDetectionAsPose2D());
+    }
+
+    public List<Pose2D> getRotatedDetectionResult(double robotAngle){
+        return getRotatedDetection(robotAngle, getDetectionResultAsPose2D());
+    }
+
+    private List<Pose2D> getAbsoluteDetection(Pose2D robotPose, List<Pose2D> rotatedDetections){ // ftc coords
         List<Pose2D> absoluteDetections = new ArrayList<>();
         for(Pose2D pose : rotatedDetections){
             double absPoseX = -pose.getY(DistanceUnit.CM) + robotPose.getX(DistanceUnit.CM);
@@ -96,8 +122,16 @@ public class Limelight {
         return absoluteDetections;
     }
 
+    public List<Pose2D> getAbsoluteColorDetection(Pose2D robotPose){ // ftc coords
+        return getAbsoluteDetection(robotPose, getRotatedColorDetection(robotPose.getHeading(AngleUnit.DEGREES)));
+    }
+
+    public List<Pose2D> getAbsoluteDetectionResult(Pose2D robotPose){ // ftc coords
+        return getAbsoluteDetection(robotPose, getRotatedDetectionResult(robotPose.getHeading(AngleUnit.DEGREES)));
+    }
+
     public Pose2D getBestBlob(Pose2D rPose){
-        List<Pose2D> poseOfDetections = getAbsoluteColorDetection(rPose);
+        List<Pose2D> poseOfDetections = getAbsoluteDetectionResult(rPose);
         // TODO: make fancier
         return poseOfDetections.get(0);
     }

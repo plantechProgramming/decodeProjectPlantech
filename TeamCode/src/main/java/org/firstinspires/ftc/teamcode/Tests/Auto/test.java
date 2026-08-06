@@ -6,6 +6,7 @@ import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import static com.pedropathing.ivy.pedro.PedroCommands.hold;
 
 import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.commands.Commands;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
@@ -25,7 +26,7 @@ public class test extends TeamAuto {
     public Command autoRoutine() {
         return sequential(
                 follow(follower, path.scorePreloadFar),
-                waitMs(2000)
+                Commands.instant(() -> checkForArtifacts = true)
         );
     }
 }

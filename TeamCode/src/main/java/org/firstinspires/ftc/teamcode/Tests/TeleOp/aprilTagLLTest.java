@@ -41,18 +41,19 @@ public class aprilTagLLTest extends TeamOpMode {
 
     @Override
     protected void run() {
-        AutoCommands commands = new AutoCommands();
+//        AutoCommands commands = new AutoCommands();
         Limelight limelight = new Limelight();
         ll.start();
         Pose3D latestLLPos = null;
         Pose2D latestFilteredLLPos = null;
         while (opModeIsActive()){
-            commands.shooter.variableShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.005);
+//            commands.shooter.variableShoot(gamepad1.dpad_up, gamepad1.dpad_down, 0.005);
             try{
 //                latestLLPos = limelight.getLatestBotpose();
 //                latestFilteredLLPos = limelight.getFilteredBotPose();
-                telemetry.addData("XY field coords", limelight.getAbsoluteColorDetection(odometry.getPosition()));
-                telemetry.addData("XY robot coords", limelight.getRotatedColorDetection(odometry.getHeading(AngleUnit.DEGREES)));
+//                telemetry.addData("XY field coords(moved)", limelight.getAbsoluteDetectionResult(odometry.getPosition()));
+//                telemetry.addData("XY field coords(not moved)", limelight.getRotatedDetectionResult(odometry.getHeading(AngleUnit.DEGREES)));
+//                telemetry.addData("XY robot coords", limelight.getDetectionResultAsPose2D());
                 telemetry.addData("odo heading", odometry.getHeading(AngleUnit.DEGREES));
                 telemetry.addData("odo x", odometry.getPosX(DistanceUnit.CM));
                 telemetry.addData("odo y", odometry.getPosY(DistanceUnit.CM));
@@ -62,11 +63,11 @@ public class aprilTagLLTest extends TeamOpMode {
 //                        .draw();
             }
             catch (NullPointerException e){
-                telemetry.addLine("No apriltag found");
+//                telemetry.addLine("No apriltag found");
             }
 //            telemetry.addData("robotPose", latestLLPos);
             telemetry.update();
-            schedule(commands.periodic());
+//            schedule(commands.periodic());
             Scheduler.execute();
             odometry.update();
 
