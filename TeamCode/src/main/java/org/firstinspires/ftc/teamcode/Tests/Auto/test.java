@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode.Tests.Auto;
 
+import static com.pedropathing.ivy.commands.Commands.infinite;
+import static com.pedropathing.ivy.commands.Commands.lazy;
 import static com.pedropathing.ivy.commands.Commands.waitMs;
 import static com.pedropathing.ivy.groups.Groups.repeat;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import static com.pedropathing.ivy.pedro.PedroCommands.hold;
 
+import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.ivy.Command;
-import com.pedropathing.ivy.commands.Commands;
-import com.pedropathing.ivy.groups.Groups;
+import com.pedropathing.paths.Path;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Misc.Utils.Alliance;
@@ -27,9 +30,14 @@ public class test extends TeamAuto {
     @Override
     public Command autoRoutine() {
         return sequential(
-                follow(follower, path.scorePreloadFar),
-                Commands.instant(() -> checkForArtifacts = true),
-                Commands.waitUntil(() -> targetArtifact != null)
+                command.startShooter(true),
+                waitMs(3000),
+                repeat(sequential(
+                        command.goToDetectedBlob(),
+                        command.scoreDetectedBlob(path),
+                        follow(follower, follower.pathBuilder().addPath(new BezierLine(path.points.scorePoseFar, path.points.startPoseFar))
+                                .setLinearHeadingInterpolation(path.points.scorePoseFar.getHeading(), path.points.startPoseFar.getHeading()).build())
+                ), 15)
         );
     }
 }

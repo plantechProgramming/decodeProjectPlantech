@@ -89,12 +89,21 @@ public class PoseFunctions {
         double subtractedHeading = AngleFunctions.getDiffBetweenAngles(pos1.getHeading(AngleUnit.DEGREES), pos2.getHeading(AngleUnit.DEGREES));
         return new Pose2D(DistanceUnit.CM, subtractedX, subtractedY, AngleUnit.DEGREES, subtractedHeading);
     }
-    public static boolean PoseThreshold(Pose2D pos1, Pose2D pos2, double xyThresh, double headingThresh) {
+    public static boolean poseThreshold(Pose2D pos1, Pose2D pos2, double xyThresh, double headingThresh) {
         Pose2D subtractedPose = subtractPoses(pos1, pos2);
         boolean xInThresh = Math.abs(subtractedPose.getX(DistanceUnit.CM)) < xyThresh;
         boolean yInThresh = Math.abs(subtractedPose.getY(DistanceUnit.CM)) < xyThresh;
         boolean headingInThresh = Math.abs(subtractedPose.getHeading(AngleUnit.DEGREES)) < headingThresh;
         return xInThresh && yInThresh && headingInThresh;
+    }
+
+    public static double disBetweenPoses(Pose2D pose1, Pose2D pose2){ // dis in cm, this function doesn't use the angle
+        Pose2D subtractedPose = subtractPoses(pose1, pose2);
+        return Math.hypot(subtractedPose.getX(DistanceUnit.CM), subtractedPose.getY(DistanceUnit.CM));
+    }
+
+    public static boolean areEqualPoses(Pose2D pose1, Pose2D pose2){
+        return poseThreshold(pose1, pose2, 0.00001, 0.00001);
     }
 
     public static Pair<Double, Double> rotation2D(double x, double y, double deg){
@@ -114,7 +123,7 @@ public class PoseFunctions {
                 AngleUnit.DEGREES, pose2D.getHeading(AngleUnit.DEGREES));
     }
     public static Pose pose2DToPose(Pose2D pose2D){
-        return PoseConverter.pose2DToPose(pose2D, InvertedFTCCoordinates.INSTANCE).getAsCoordinateSystem(PedroCoordinates.INSTANCE);
+        return PoseConverter.pose2DToPose(pose2D, FTCCoordinates.INSTANCE).getAsCoordinateSystem(PedroCoordinates.INSTANCE);
     }
 
     public void updateTelemetry(Telemetry telemetry){

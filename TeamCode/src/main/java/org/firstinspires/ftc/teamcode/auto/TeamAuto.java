@@ -23,15 +23,11 @@ public abstract class TeamAuto extends TeamOpMode {
     protected Paths path;
     protected Follower follower;
     protected Boolean isFar;
-    protected Pose targetArtifact = null;
-    protected Boolean checkForArtifacts = false;
-    Limelight limelight;
     Extras extras = new Extras();
     ElapsedTime elapsedTime;
 
     @Override
     public void run(){
-        limelight = new Limelight();
         extras.startHistogram(0.1);
         elapsedTime = new ElapsedTime();
         path = new Paths();
@@ -48,22 +44,6 @@ public abstract class TeamAuto extends TeamOpMode {
 
         schedule(autoRoutine());
         while (opModeIsActive()) {
-            if(checkForArtifacts){
-                try{
-                    targetArtifact = PoseFunctions.pose2DToPose(
-                            limelight.getBestBlob(PoseFunctions.poseToPose2D(follower.getPose())));
-                    if (targetArtifact != null){
-                        schedule(command.getPathToTarget(targetArtifact));
-                        checkForArtifacts = false;
-                        targetArtifact = null;
-                    }
-                }
-                catch (NullPointerException e){
-                }
-            }
-
-
-//            telemetry.addData("mode", InitMotors.BL.getZeroPowerBehavior());
 //            elapsedTime.reset();
 
 //            TelemetryUtils.updateCertainTelemtries(telemetry, follower, command.shooter);

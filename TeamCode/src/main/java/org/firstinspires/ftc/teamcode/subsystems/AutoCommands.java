@@ -1,20 +1,21 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static com.pedropathing.ivy.commands.Commands.infinite;
+import static com.pedropathing.ivy.commands.Commands.instant;
+import static com.pedropathing.ivy.commands.Commands.lazy;
 import static com.pedropathing.ivy.commands.Commands.waitMs;
 import static com.pedropathing.ivy.groups.Groups.parallel;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.ivy.Command;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.Misc.Utils.PoseFunctions;
+import org.firstinspires.ftc.teamcode.auto.autos.paths.Paths;
 import org.firstinspires.ftc.teamcode.subsystems.Camera.Limelight;
 
 public class AutoCommands{
@@ -40,18 +41,39 @@ public class AutoCommands{
     }
 
     public Command periodic(){
-        return parallel(shooter.periodic(), take());
+        return parallel(shooter.periodic());
     }
 
-    public Command getPathToTarget(Pose target){
+    private Command goToBlob(){
+        Pose targetArtifact;
+        try{
+            targetArtifact = PoseFunctions.pose2DToPose(
+                            limelight.getBestPoseForPickup(PoseFunctions.poseToPose2D(follower.getPose())));
+        }
+        catch (NullPointerException e){
+            return null;
+        }
         PathChain path = follower.pathBuilder()
-                .addPath(new BezierLine(follower.getPose(), target))
+                .addPath(new BezierLine(follower.getPose(), targetArtifact))
                 .setTangentHeadingInterpolation()
+                .setTValueConstraint(0.5)
                 .build();
-        return sequential(
-                follow(follower, path)
-        );
 
+        return intake(path);
+
+    }
+    Command goToArtifact = null;
+    public Command goToDetectedBlob(){
+        goToArtifact = null;
+        return sequential(
+                lazy(() -> infinite(() -> goToArtifact = goToBlob()).until(() -> goToArtifact != null)),
+                lazy(() -> goToArtifact)
+        );
+    }
+
+    public Command scoreDetectedBlob(Paths path){ // far score
+        return lazy(() -> score(follower.pathBuilder().addPath(new BezierLine(follower.getPose(), path.points.scorePoseFar))
+                        .setLinearHeadingInterpolation(follower.getHeading(), path.points.scorePoseFar.getHeading()).build()));
     }
 
     public Command shoot(){
